@@ -1,0 +1,13 @@
+name: Greetings
+on:
+  - pull_request
+  - issues
+jobs:
+  Greetings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: 'Please, use the [issue template](ISSUE_TEMPLATE.md) to help you, and us, fix this issue.'
+          pr-message: 'Please, use the [pull request template](PULL_REQUEST_TEMPLATE.md) to help you, and us, ship this wonderful feature. Remember, contributions to this repository should follow its [contributing guidelines](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md) to ensure consistency over the quality.'
