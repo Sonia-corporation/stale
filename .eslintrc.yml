@@ -14,7 +14,6 @@ extends:
   - 'plugin:import/typescript'
   - 'plugin:jsdoc/recommended'
   - 'plugin:prettier/recommended'
-  - 'plugin:rxjs/recommended'
 globals:
   Atomics: readonly
   SharedArrayBuffer: readonly
@@ -32,7 +31,6 @@ plugins:
   - progress
   - jsdoc
   - import
-  - rxjs
 settings:
   import/extensions:
     - .js
@@ -376,38 +374,6 @@ rules:
         - const
         - let
         - var
-  rxjs/finnish:
-    - error
-    - functions: true
-      methods: true
-      parameters: true
-      properties: true
-      variables: true
-      strict: true
-  rxjs/no-async-subscribe: error
-  rxjs/no-compat: error
-  rxjs/no-create: error
-  rxjs/no-explicit-generics: off
-  rxjs/no-exposed-subjects:
-    - error
-    - allowProtected: true
-  rxjs/no-ignored-error: off
-  rxjs/no-ignored-notifier: error
-  rxjs/no-ignored-observable: error
-  rxjs/no-ignored-replay-buffer: error
-  rxjs/no-ignored-subscribe: off
-  rxjs/no-ignored-subscription: error
-  rxjs/no-ignored-takewhile-value: error
-  rxjs/no-implicit-any-catch: error
-  rxjs/no-index: error
-  rxjs/no-internal: error
-  rxjs/no-nested-subscribe: error
-  rxjs/no-topromise: off
-  rxjs/no-unbound-methods: error
-  rxjs/no-unsafe-subject-next: error
-  rxjs/no-unsafe-takeuntil: error
-  rxjs/prefer-observer: error
-  rxjs/throw-error: error
 overrides:
   - files:
       - '*.js'
