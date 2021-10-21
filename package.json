@@ -44,7 +44,7 @@
     }
   },
   "engines": {
-    "node": "14.18.0",
+    "node": "12.22",
     "npm": "7.24.2"
   },
   "private": false,
@@ -58,12 +58,12 @@
     "package-lock.json",
     "README.md"
   ],
-  "main": "./src/index.ts",
+  "main": "./src/main.ts",
   "scripts": {
     "\n# RUN SCRIPTS:": "",
     "start": "cross-env NODE_ENV=development ts-node-dev --debounce --clear --cache-directory dist-local-dev --respawn --transpile-only .",
     "\n# BUILD SCRIPTS:": "",
-    "build": "npm run clean:dist && parcel build ./src/index.ts --target node",
+    "build": "npm run clean:dist && parcel build ./src/main.ts --target node",
     "tsc": "tsc",
     "\n# TEST SCRIPTS:": "",
     "test": "jest",

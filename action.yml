@@ -1,0 +1,11 @@
+name: 'Close Stale Issues'
+description: 'A GitHub action to stale and close automatically your issues and pull requests.'
+author: 'C0ZEN'
+inputs:
+  github-token:
+    description: 'The GitHub token used to perform the API calls to GitHub to stale and close. Usually, `{{ secrets.GITHUB_TOKEN }}`.'
+    required: true
+    default: ${{ github.token }}
+runs:
+  using: 'node12'
+  main: 'dist/main.js'
