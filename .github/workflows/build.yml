@@ -171,4 +171,3 @@ jobs:
         run: npm run build
         env:
           CI: true
-          GITHUB_PERSONAL_ACCESS_TOKEN: ${{ secrets.GITHUB_PERSONAL_ACCESS_TOKEN }}
