@@ -2,7 +2,7 @@
 
 Please check if your PR fulfils the following requirements:
 
-- [ ] The commit message follows our [guidelines](https://github.com/Sonia-corporation/sonia-discord/blob/master/CONTRIBUTING.md)
+- [ ] The commit message follows our [guidelines](https://github.com/Sonia-corporation/stale/blob/master/CONTRIBUTING.md)
 - [ ] Tests for the changes have been added/updated (for bugfix/feature)
 - [ ] Docs have been added/updated (for bugfix/feature)
 

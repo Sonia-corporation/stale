@@ -4,12 +4,11 @@
 
 **Quality:**  
 ![GitHub last commit](https://img.shields.io/github/last-commit/sonia-corporation/stale?style=flat-square)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a15731adba332ed97275/maintainability?style=flat-square)](https://codeclimate.com/github/Sonia-corporation/stale/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/cb424a8e5fc5fe80b750/maintainability?style=flat-square)](https://codeclimate.com/github/Sonia-corporation/stale/maintainability)
 [![CodeFactor](https://www.codefactor.io/repository/github/sonia-corporation/stale/badge)](https://www.codefactor.io/repository/github/sonia-corporation/stale)
-[![DeepScan grade](https://deepscan.io/api/teams/10568/projects/13410/branches/225363/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=10568&pid=13410&bid=225363)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a15731adba332ed97275/test_coverage?style=flat-square)](https://codeclimate.com/github/Sonia-corporation/stale/test_coverage)
+[![DeepScan grade](https://deepscan.io/api/teams/10568/projects/19009/branches/480513/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=10568&pid=19009&bid=480513)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/cb424a8e5fc5fe80b750/test_coverage?style=flat-square)](https://codeclimate.com/github/Sonia-corporation/stale/test_coverage)
 [![codecov](https://codecov.io/gh/Sonia-corporation/stale/branch/develop/graph/badge.svg?token=S4MUQF1TIY)](https://codecov.io/gh/Sonia-corporation/stale)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat-square&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FSonia-corporation%2Fstale%2Fdevelop)](https://dashboard.stryker-mutator.io/reports/github.com/Sonia-corporation/stale/develop)
 ![GitHub issues](https://img.shields.io/github/issues-raw/sonia-corporation/stale?style=flat-square)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/sonia-corporation/stale?style=flat-square)
 ![Build](https://github.com/Sonia-corporation/stale/workflows/Build/badge.svg?style=flat-square)
