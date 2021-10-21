@@ -1,0 +1,61 @@
+name: Merge develop into master
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  HasLabel:
+    name: Check if the push contains the label "merge-into-master"
+    runs-on: ubuntu-latest
+    outputs:
+      HAS_LABEL: ${{ steps.save-has-label.outputs.HAS_LABEL }}
+    steps:
+      - name: Check labels
+        id: check_labels
+        uses: shioyang/check-pr-labels-on-push-action@v1.0.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          labels: '["merge-into-master"]'
+      - name: Save has label result
+        id: save-has-label
+        run: echo '::set-output name=HAS_LABEL::${{ steps.check_labels.outputs.result }}'
+      - name: Label present
+        if: steps.check_labels.outputs.result == 'true'
+        run: echo 'The label "merge-into-master" is present'
+      - name: Label missing
+        if: steps.check_labels.outputs.result == 'false'
+        run: echo 'The label "merge-into-master" is missing'
+  PR:
+    runs-on: ubuntu-latest
+    needs: [HasLabel]
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: Reset branch
+        run: |
+          git fetch origin develop:develop
+          git reset --hard develop
+      - name: Show has label state
+        run: echo 'Has label? ${{ needs.HasLabel.outputs.HAS_LABEL }}'
+      - name: Should create the PR
+        if: needs.HasLabel.outputs.HAS_LABEL == 'true'
+        run: echo 'The PR should be created'
+      - name: Should not create the PR
+        if: needs.HasLabel.outputs.HAS_LABEL == 'false'
+        run: echo 'The PR should not be created'
+      - name: Create PR from develop to master
+        if: needs.HasLabel.outputs.HAS_LABEL == 'true'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'chore(master): merge develop into master'
+          branch: feature/merge-develop-into-master
+          assignees: C0ZEN
+          labels: auto-merge
+          commit-message: 'chore(master): merge develop into master'
+          body: |
+            :tada: This PR was generated after pushing into develop with the label "merge-into-master" :tada:
+
+            Your **github-actions** bot :rocket:
