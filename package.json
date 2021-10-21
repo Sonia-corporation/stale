@@ -1,0 +1,152 @@
+{
+  "name": "@sonia-corporation/stale",
+  "version": "0.0.0",
+  "author": {
+    "email": "geoffrey.testelin@gmail.com",
+    "name": "Geoffrey 'C0ZEN' Testelin",
+    "url": "https://github.com/C0ZEN"
+  },
+  "contributors": [
+    {
+      "email": "geoffrey.testelin@gmail.com",
+      "name": "Geoffrey 'C0ZEN' Testelin",
+      "url": "https://github.com/C0ZEN"
+    }
+  ],
+  "description": "A GitHub action to stale and close automatically your issues and pull requests.",
+  "homepage": "https://github.com/Sonia-corporation/stale",
+  "maintainers": [
+    {
+      "email": "geoffrey.testelin@gmail.com",
+      "name": "Geoffrey 'C0ZEN' Testelin",
+      "url": "https://github.com/C0ZEN"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "github",
+    "action",
+    "stale"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sonia-corporation/stale.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Sonia-corporation/stale/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "./scripts/commitizen.js"
+    }
+  },
+  "engines": {
+    "node": "14.18.0",
+    "npm": "7.24.2"
+  },
+  "private": false,
+  "files": [
+    "dist/*",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "package.json",
+    "package-lock.json",
+    "README.md"
+  ],
+  "main": "./src/index.ts",
+  "scripts": {
+    "\n# RUN SCRIPTS:": "",
+    "start": "cross-env NODE_ENV=development ts-node-dev --debounce --clear --cache-directory dist-local-dev --respawn --transpile-only .",
+    "\n# BUILD SCRIPTS:": "",
+    "build": "npm run clean:dist && parcel build ./src/index.ts --target node",
+    "tsc": "tsc",
+    "\n# TEST SCRIPTS:": "",
+    "test": "jest",
+    "test:watch": "jest --watch-all",
+    "test:watch:no-cache": "jest --watch-all --no-cache",
+    "test:leaks": "jest --detect-leaks",
+    "test:ci": "jest --bail=1 --ci",
+    "test:ci:coverage": "jest --collect-coverage --bail=1 --ci",
+    "test:clear-cache": "jest --clear-cache",
+    "\n# LINT SCRIPTS:": "",
+    "lint:ts": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet **/*.{js,ts}",
+    "lint:ts:ci": "eslint --quiet **/*.{js,ts}",
+    "lint:ts:hook": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet",
+    "lint:other": "prettier --write --ignore-unknown **/*.{md,json,yml,html}",
+    "lint:other:ci": "prettier --check --ignore-unknown **/*.{md,json,yml,html}",
+    "lint:other:hook": "prettier --write --ignore-unknown --loglevel warn",
+    "lint:all": "npm run concurrently -- \"npm:lint:ts\" \"npm:lint:other\"",
+    "lint:all:ci": "npm run concurrently -- \"npm:lint:ts:ci\" \"npm:lint:other:ci\"",
+    "\n# UTILS SCRIPTS:": "",
+    "cz": "git add . && git-cz && npm run git:push",
+    "semver": "semantic-release",
+    "clean:dist": "rimraf dist",
+    "commit": "npm run cz",
+    "git:push": "git push-upstream",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "concurrently": "concurrently --kill-others-on-fail --prefix '[{name}][{time}]' --timestamp-format 'HH:mm:ss'",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged",
+    "commit-msg": "cross-env LOGGING_LEVEL=debug cz-customizable-ghooks",
+    "post-commit": "git update-index --again",
+    "install-git-hooks": "husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks"
+  },
+  "dependencies": {
+    "lodash": "4.17.21"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/git": "9.0.1",
+    "@semantic-release/github": "7.2.3",
+    "@sonia-corporation/conventional-changelog": "1.0.1",
+    "@types/faker": "5.5.8",
+    "@types/jest": "26.0.24",
+    "@types/lodash": "4.14.175",
+    "@types/node": "14.17.21",
+    "@typescript-eslint/eslint-plugin": "4.33.0",
+    "@typescript-eslint/parser": "4.33.0",
+    "all-contributors-cli": "6.20.0",
+    "commitizen": "4.2.4",
+    "concurrently": "6.3.0",
+    "cross-env": "7.0.3",
+    "cz-customizable": "6.3.0",
+    "cz-customizable-ghooks": "2.0.0",
+    "eslint": "7.32.0",
+    "eslint-config-google": "0.14.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-config-recommended": "4.1.0",
+    "eslint-import-resolver-typescript": "2.5.0",
+    "eslint-plugin-import": "2.24.2",
+    "eslint-plugin-jest": "24.3.7",
+    "eslint-plugin-jsdoc": "36.1.1",
+    "eslint-plugin-prettier": "3.4.1",
+    "eslint-plugin-progress": "0.0.1",
+    "eslint-plugin-typescript-sort-keys": "1.8.0",
+    "faker": "5.5.3",
+    "husky": "7.0.2",
+    "jest": "27.2.5",
+    "jest-extended": "0.11.5",
+    "jest-silent-reporter": "0.5.0",
+    "jest-ts-auto-mock": "2.0.0",
+    "lint-staged": "11.2.3",
+    "node-notifier": "10.0.0",
+    "parcel-bundler": "1.12.5",
+    "prettier": "2.4.1",
+    "rimraf": "3.0.2",
+    "semantic-release": "17.4.7",
+    "shx": "0.3.3",
+    "ts-auto-mock": "3.5.0",
+    "ts-jest": "27.0.4",
+    "ts-node-dev": "1.1.8",
+    "tsconfig-paths": "3.11.0",
+    "ttypescript": "1.5.12",
+    "typescript": "4.4.3",
+    "weak-napi": "2.0.2"
+  }
+}
