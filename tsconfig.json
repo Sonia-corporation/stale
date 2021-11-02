@@ -27,6 +27,7 @@
     "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
     "plugins": [
       {
         "transform": "ts-auto-mock/transformer",

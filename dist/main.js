@@ -1,16 +1,163 @@
-parcelRequire=function(e,r,t,n){var i,o="function"==typeof parcelRequire&&parcelRequire,u="function"==typeof require&&require;function f(t,n){if(!r[t]){if(!e[t]){var i="function"==typeof parcelRequire&&parcelRequire;if(!n&&i)return i(t,!0);if(o)return o(t,!0);if(u&&"string"==typeof t)return u(t);var c=new Error("Cannot find module '"+t+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[t][1][r]||r},p.cache={};var l=r[t]=new f.Module(t);e[t][0].call(l.exports,p,l,l.exports,this)}return r[t].exports;function p(e){return f(p.resolve(e))}}f.isParcelRequire=!0,f.Module=function(e){this.id=e,this.bundle=f,this.exports={}},f.modules=e,f.cache=r,f.parent=o,f.register=function(r,t){e[r]=[function(e,r){r.exports=t},{}]};for(var c=0;c<t.length;c++)try{f(t[c])}catch(e){i||(i=e)}if(t.length){var l=f(t[t.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=l:"function"==typeof define&&define.amd?define(function(){return l}):n&&(this[n]=l)}if(parcelRequire=f,i)throw i;return f}({"Vcky":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.LoggerFormatService=void 0;const t=require("tslib"),r=(0,t.__importDefault)(require("ansi-styles"));class e{static whiteBright(t){return this._format(t,"whiteBright")}static yellowBright(t){return this._format(t,"yellowBright")}static magenta(t){return this._format(t,"magenta")}static cyan(t){return this._format(t,"cyan")}static yellow(t){return this._format(t,"yellow")}static white(t){return this._format(t,"white")}static green(t){return this._format(t,"green")}static red(t){return this._format(t,"red")}static blue(t){return this._format(t,"blue")}static bold(t){return this._format(t,"bold")}static _format(t,e){return`${r.default[e].open}${t}${r.default[e].close}`}}exports.LoggerFormatService=e;
-},{}],"AHx2":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createLink=void 0;const e=require("tslib"),t=(0,e.__importDefault)(require("terminal-link"));function r(e,r){return(0,t.default)(e,r)}exports.createLink=r;
-},{}],"Lg13":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.createInputLink=void 0;const e=require("./create-link");function t(t){return(0,e.createLink)(t,`https://github.com/@sonia-corporation/stale#${t}`)}exports.createInputLink=t;
-},{"./create-link":"AHx2"}],"egcv":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.LoggerService=void 0;const e=require("tslib"),r=require("./logger-format.service"),t=require("../link/create-input-link"),i=(0,e.__importDefault)(require("@actions/core"));class o{static debug(...e){return i.default.debug(r.LoggerFormatService.whiteBright(e.join(" "))),this}static notice(...e){return i.default.notice(r.LoggerFormatService.whiteBright(e.join(" "))),this}static warning(...e){return i.default.warning(r.LoggerFormatService.whiteBright(e.join(" "))),this}static error(...e){return i.default.error(r.LoggerFormatService.whiteBright(e.join(" "))),this}static group(t,o){return(0,e.__awaiter)(this,void 0,void 0,function*(){return i.default.group(r.LoggerFormatService.whiteBright(t),o)})}static startGroup(e){return i.default.startGroup(r.LoggerFormatService.whiteBright(e)),this}static endGroup(){return i.default.endGroup(),this}static input(e){return r.LoggerFormatService.magenta((0,t.createInputLink)(e))}}exports.LoggerService=o;
-},{"./logger-format.service":"Vcky","../link/create-input-link":"Lg13"}],"whzF":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.InputsService=void 0;const e=require("tslib"),t=require("../../utils/logger/logger-format.service"),r=require("../../utils/logger/logger.service"),i=(0,e.__importDefault)(require("@actions/core")),u=(0,e.__importDefault)(require("lodash"));class s{static initialize(){return s.setInputs(),this}static setInputs(){return s.inputs={githubToken:i.default.getInput("github-token",{required:!0})},s.inputs}static logInputs(){return r.LoggerService.startGroup("Inputs"),u.default.forEach(this.inputs,(e,i)=>{r.LoggerService.debug(t.LoggerFormatService.white("├──"),r.LoggerService.input(u.default.kebabCase(i)),t.LoggerFormatService.cyan(e))}),r.LoggerService.endGroup(),s}}exports.InputsService=s,s.inputs=void 0;
-},{"../../utils/logger/logger-format.service":"Vcky","../../utils/logger/logger.service":"egcv"}],"T7j8":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.StaleService=void 0;const e=require("./inputs/inputs.service");class i{static initialize(){return e.InputsService.initialize(),this}}exports.StaleService=i;
-},{"./inputs/inputs.service":"whzF"}],"ZCfc":[function(require,module,exports) {
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0});const e=require("./core/stale.service");function i(){e.StaleService.initialize()}i();
-},{"./core/stale.service":"T7j8"}]},{},["ZCfc"], null)
-//# sourceMappingURL=/main.js.map
+var $bOypn$actionscore = require("@actions/core");
+var $bOypn$lodash = require("lodash");
+var $bOypn$ansistyles = require("ansi-styles");
+var $bOypn$terminallink = require("terminal-link");
+
+function $parcel$interopDefault(a) {
+  return a && a.__esModule ? a.default : a;
+}
+
+class $339250d0e5c3ca0b$export$c6af1de458cd0882 {
+    static whiteBright(message) {
+        return this._format(message, `whiteBright`);
+    }
+    static yellowBright(message) {
+        return this._format(message, `yellowBright`);
+    }
+    /**
+   * @description
+   * Used for the links
+   * @param {Readonly<IMessage>} message The message to display in magenta
+   * @returns {string} The message in magenta
+   */ static magenta(message) {
+        return this._format(message, `magenta`);
+    }
+    /**
+   * @description
+   * Used for the values to highlight
+   * @param {Readonly<IMessage>} message The message to display in cyan
+   * @returns {string} The message in cyan
+   */ static cyan(message) {
+        return this._format(message, `cyan`);
+    }
+    static yellow(message) {
+        return this._format(message, `yellow`);
+    }
+    /**
+   * @description
+   * Used for standard text which is not important
+   * @param {Readonly<IMessage>} message The message to display in white
+   * @returns {string} The message in white
+   */ static white(message) {
+        return this._format(message, `white`);
+    }
+    /**
+   * @description
+   * Used for the successful messages
+   * @param {Readonly<IMessage>} message The message to display in green
+   * @returns {string} The message in green
+   */ static green(message) {
+        return this._format(message, `green`);
+    }
+    /**
+   * @description
+   * Used for the error messages
+   * @param {Readonly<IMessage>} message The message to display in red
+   * @returns {string} The message in red
+   */ static red(message) {
+        return this._format(message, `red`);
+    }
+    static blue(message) {
+        return this._format(message, `blue`);
+    }
+    static bold(message) {
+        return this._format(message, `bold`);
+    }
+    static _format(message, style) {
+        return `${$parcel$interopDefault($bOypn$ansistyles)[style].open}${message}${$parcel$interopDefault($bOypn$ansistyles)[style].close}`;
+    }
+}
+
+
+
+
+function $a184f2d5db98a48a$export$cdda5b1be25f9499(name, link) {
+    return $parcel$interopDefault($bOypn$terminallink)(name, link);
+}
+
+
+function $a587e6ef7bfcb900$export$85a7e0e731c30c52(input) {
+    return $a184f2d5db98a48a$export$cdda5b1be25f9499(input, `https://github.com/@sonia-corporation/stale#${input}`);
+}
+
+
+
+class $11e14372fbaa238c$export$b25e7459bf5ba06 {
+    static debug(...message) {
+        $parcel$interopDefault($bOypn$actionscore).debug($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(message.join(` `)));
+        return this;
+    }
+    static notice(...message) {
+        $parcel$interopDefault($bOypn$actionscore).notice($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(message.join(` `)));
+        return this;
+    }
+    static warning(...message) {
+        $parcel$interopDefault($bOypn$actionscore).warning($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(message.join(` `)));
+        return this;
+    }
+    static error(...message) {
+        $parcel$interopDefault($bOypn$actionscore).error($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(message.join(` `)));
+        return this;
+    }
+    static async group(message, fn) {
+        return $parcel$interopDefault($bOypn$actionscore).group($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(message), fn);
+    }
+    static startGroup(name) {
+        $parcel$interopDefault($bOypn$actionscore).startGroup($339250d0e5c3ca0b$export$c6af1de458cd0882.whiteBright(name));
+        return this;
+    }
+    static endGroup() {
+        $parcel$interopDefault($bOypn$actionscore).endGroup();
+        return this;
+    }
+    static input(input) {
+        return $339250d0e5c3ca0b$export$c6af1de458cd0882.magenta($a587e6ef7bfcb900$export$85a7e0e731c30c52(input));
+    }
+}
+
+
+
+
+class $743dc34edb58b3ed$export$7243f85ae6a5018a {
+    static initialize() {
+        $743dc34edb58b3ed$export$7243f85ae6a5018a.setInputs();
+        return this;
+    }
+    static setInputs() {
+        $743dc34edb58b3ed$export$7243f85ae6a5018a.inputs = {
+            githubToken: $parcel$interopDefault($bOypn$actionscore).getInput(`github-token`, {
+                required: true
+            })
+        };
+        return $743dc34edb58b3ed$export$7243f85ae6a5018a.inputs;
+    }
+    static logInputs() {
+        $11e14372fbaa238c$export$b25e7459bf5ba06.startGroup(`Inputs`);
+        $parcel$interopDefault($bOypn$lodash).forEach(this.inputs, (value, key)=>{
+            $11e14372fbaa238c$export$b25e7459bf5ba06.debug($339250d0e5c3ca0b$export$c6af1de458cd0882.white(`├──`), $11e14372fbaa238c$export$b25e7459bf5ba06.input($parcel$interopDefault($bOypn$lodash).kebabCase(key)), $339250d0e5c3ca0b$export$c6af1de458cd0882.cyan(value));
+        });
+        $11e14372fbaa238c$export$b25e7459bf5ba06.endGroup();
+        return $743dc34edb58b3ed$export$7243f85ae6a5018a;
+    }
+}
+$743dc34edb58b3ed$export$7243f85ae6a5018a.inputs = undefined;
+
+
+class $8a3acc4147624da6$export$48c1d9548a86bcc5 {
+    static initialize() {
+        $743dc34edb58b3ed$export$7243f85ae6a5018a.initialize();
+        return this;
+    }
+}
+
+
+/**
+ * @description
+ * Start the main logic of this action
+ */ function $222c4231a1dd86a5$var$initialize() {
+    $8a3acc4147624da6$export$48c1d9548a86bcc5.initialize();
+}
+$222c4231a1dd86a5$var$initialize();
+
+
+//# sourceMappingURL=main.js.map
