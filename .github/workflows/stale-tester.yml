@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Test the stale action in dry-run mode
     steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
       - name: Stale
         id: stale
         uses: ./
