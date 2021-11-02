@@ -1,8 +1,11 @@
+import { StaleService } from './core/stale.service';
+
 /**
- *
+ * @description
+ * Start the main logic of this action
  */
 function initialize(): void {
-  console.log();
+  StaleService.initialize();
 }
 
 void initialize();
