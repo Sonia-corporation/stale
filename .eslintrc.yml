@@ -374,6 +374,7 @@ rules:
         - const
         - let
         - var
+  '@typescript-eslint/explicit-member-accessibility': error
 overrides:
   - files:
       - '*.js'
