@@ -81,7 +81,7 @@ module.exports = {
   // modulePathIgnorePatterns: [],
 
   // An array of file extensions your modules use
-  moduleFileExtensions: [`js`, `json`, `ts`, `node`],
+  moduleFileExtensions: [`js`, `ts`],
 
   // Activates notifications for test results
   notify: true,
@@ -131,7 +131,7 @@ module.exports = {
   roots: [`./src`, `./scripts`],
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: [`./jest/config.ts`, `./jest/helpers.js`],
+  setupFiles: [`./jest/config.ts`],
 
   // A list of paths to snapshot serializer modules Jest should use for snapshot testing
   // snapshotSerializers: [],
@@ -152,10 +152,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  // testMatch: [
-  //   "**/__tests__/**/*.[jt]s?(x)",
-  //   "**/?(*.)+(spec|test).[tj]s?(x)"
-  // ],
+  testMatch: [`**/*.spec.ts`],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
@@ -179,18 +176,16 @@ module.exports = {
   // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
   timers: `fake`,
 
+  // A map from regular expressions to paths to transformers
+  transform: {
+    '^.+\\.ts?$': `ts-jest`,
+  },
+
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  // transformIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
-  // ],
+  transformIgnorePatterns: [`node_modules/(?!terminal-link)/`],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
-
-  // A map from regular expressions to paths to transformers
-  transform: {
-    '.ts': `ts-jest`,
-  },
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],
