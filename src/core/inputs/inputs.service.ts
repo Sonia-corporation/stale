@@ -2,7 +2,7 @@ import { EInputs } from './inputs.enum';
 import { IInputs } from './inputs.interface';
 import { LoggerFormatService } from '../../utils/logger/logger-format.service';
 import { LoggerService } from '../../utils/logger/logger.service';
-import core from '@actions/core';
+import * as core from '@actions/core';
 import _ from 'lodash';
 
 export class InputsService {

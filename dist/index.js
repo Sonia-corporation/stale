@@ -19781,7 +19781,7 @@ exports.InputsService = void 0;
 const tslib_1 = __nccwpck_require__(351);
 const logger_format_service_1 = __nccwpck_require__(191);
 const logger_service_1 = __nccwpck_require__(553);
-const core_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(186));
+const core = (0, tslib_1.__importStar)(__nccwpck_require__(186));
 const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
 class InputsService {
     static initialize() {
@@ -19790,7 +19790,7 @@ class InputsService {
     }
     static setInputs() {
         InputsService.inputs = {
-            githubToken: core_1.default.getInput(`github-token`, { required: true }),
+            githubToken: core.getInput(`github-token`, { required: true }),
         };
         return InputsService.inputs;
     }
@@ -19967,39 +19967,39 @@ exports.LoggerService = void 0;
 const tslib_1 = __nccwpck_require__(351);
 const logger_format_service_1 = __nccwpck_require__(191);
 const create_input_link_1 = __nccwpck_require__(114);
-const core_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(186));
+const core = (0, tslib_1.__importStar)(__nccwpck_require__(186));
 /**
  * @description
  * Utility to log
  */
 class LoggerService {
     static debug(...message) {
-        core_1.default.debug(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
+        core.debug(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
         return this;
     }
     static notice(...message) {
-        core_1.default.notice(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
+        core.notice(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
         return this;
     }
     static warning(...message) {
-        core_1.default.warning(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
+        core.warning(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
         return this;
     }
     static error(...message) {
-        core_1.default.error(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
+        core.error(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
         return this;
     }
     static group(message, fn) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            return core_1.default.group(logger_format_service_1.LoggerFormatService.whiteBright(message), fn);
+            return core.group(logger_format_service_1.LoggerFormatService.whiteBright(message), fn);
         });
     }
     static startGroup(name) {
-        core_1.default.startGroup(logger_format_service_1.LoggerFormatService.whiteBright(name));
+        core.startGroup(logger_format_service_1.LoggerFormatService.whiteBright(name));
         return this;
     }
     static endGroup() {
-        core_1.default.endGroup();
+        core.endGroup();
         return this;
     }
     static input(input) {

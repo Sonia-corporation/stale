@@ -1,7 +1,7 @@
 import { LoggerFormatService } from './logger-format.service';
 import { EInputs } from '../../core/inputs/inputs.enum';
 import { createInputLink } from '../link/create-input-link';
-import core from '@actions/core';
+import * as core from '@actions/core';
 
 /**
  * @description

@@ -51,12 +51,7 @@
   "files": [
     "dist/*",
     "CHANGELOG.md",
-    "CODE_OF_CONDUCT.md",
-    "CONTRIBUTING.md",
-    "LICENSE",
-    "package.json",
-    "package-lock.json",
-    "README.md"
+    "LICENSE"
   ],
   "main": "./src/main.ts",
   "scripts": {
