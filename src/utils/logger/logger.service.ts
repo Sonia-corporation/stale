@@ -48,6 +48,12 @@ export class LoggerService {
     return LoggerService;
   }
 
+  /**
+   * @description
+   * Very specific log used to show an input as a link
+   * @param {Readonly<EInputs>} input The input to display
+   * @returns {string} The input as a link in magenta
+   */
   public static input(input: Readonly<EInputs>): string {
     return LoggerFormatService.magenta(createInputLink(input));
   }

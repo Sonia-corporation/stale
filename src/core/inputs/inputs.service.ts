@@ -5,6 +5,10 @@ import { LoggerService } from '../../utils/logger/logger.service';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
+/**
+ * @description
+ * Used to get the inputs coming from action
+ */
 export class InputsService {
   public static inputs: IInputs | undefined = undefined;
 

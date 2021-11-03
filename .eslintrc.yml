@@ -317,7 +317,7 @@ rules:
   '@typescript-eslint/restrict-template-expressions':
     - error
     - allowNumber: false
-      allowBoolean: false
+      allowBoolean: true
       allowAny: false
       allowNullish: false
   '@typescript-eslint/ban-types': error
