@@ -19786,6 +19786,7 @@ const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
 class InputsService {
     static initialize() {
         InputsService.setInputs();
+        InputsService.logInputs();
         return this;
     }
     static setInputs() {

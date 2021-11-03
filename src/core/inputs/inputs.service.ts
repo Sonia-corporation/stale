@@ -10,6 +10,7 @@ export class InputsService {
 
   public static initialize(): InputsService {
     InputsService.setInputs();
+    InputsService.logInputs();
 
     return this;
   }

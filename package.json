@@ -57,7 +57,6 @@
   "scripts": {
     "\n# BUILD SCRIPTS:": "",
     "build": "npm run clean:dist && ncc build --license licenses.txt --source-map",
-    "tsc": "tsc",
     "\n# TEST SCRIPTS:": "",
     "test": "jest",
     "test:watch": "jest --watch-all",
