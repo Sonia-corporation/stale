@@ -14,6 +14,12 @@ export class LoggerService {
     return LoggerService;
   }
 
+  public static info(...message: ReadonlyArray<string>): LoggerService {
+    core.info(LoggerFormatService.whiteBright(message.join(` `)));
+
+    return LoggerService;
+  }
+
   public static notice(...message: ReadonlyArray<string>): LoggerService {
     core.notice(LoggerFormatService.whiteBright(message.join(` `)));
 

@@ -31,7 +31,7 @@ export class InputsService {
     LoggerService.startGroup(`Inputs`);
 
     _.forEach(InputsService.inputs, (value: Readonly<string | boolean>, key: Readonly<string>): void => {
-      LoggerService.debug(
+      LoggerService.info(
         LoggerFormatService.white(`├──`),
         LoggerService.input(_.kebabCase(key) as EInputs),
         LoggerFormatService.cyan(value)

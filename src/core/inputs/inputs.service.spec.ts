@@ -78,7 +78,7 @@ describe(`InputsService`, (): void => {
 
   describe(`logInputs()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
-    let loggerServiceDebugSpy: jest.SpyInstance;
+    let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceInputSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
     let loggerFormatServiceWhiteSpy: jest.SpyInstance;
@@ -86,7 +86,7 @@ describe(`InputsService`, (): void => {
 
     beforeEach((): void => {
       loggerServiceStartGroupSpy = jest.spyOn(LoggerService, `startGroup`).mockImplementation();
-      loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`);
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`);
       loggerServiceInputSpy = jest.spyOn(LoggerService, `input`);
       loggerServiceEndGroupSpy = jest.spyOn(LoggerService, `endGroup`).mockImplementation();
       loggerFormatServiceWhiteSpy = jest.spyOn(LoggerFormatService, `white`);
@@ -112,7 +112,7 @@ describe(`InputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceDebugSpy).not.toHaveBeenCalled();
+        expect(loggerServiceInfoSpy).not.toHaveBeenCalled();
         expect(loggerServiceInputSpy).not.toHaveBeenCalled();
         expect(loggerFormatServiceWhiteSpy).not.toHaveBeenCalled();
         expect(loggerFormatServiceCyanSpy).not.toHaveBeenCalled();
@@ -131,12 +131,8 @@ describe(`InputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
-          `white-├──`,
-          `input-github-token`,
-          `cyan-dummy-github-token`
-        );
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`white-├──`, `input-github-token`, `cyan-dummy-github-token`);
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceInputSpy).toHaveBeenCalledWith(`github-token`);
         expect(loggerFormatServiceWhiteSpy).toHaveBeenCalledTimes(1);

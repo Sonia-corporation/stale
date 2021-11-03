@@ -19802,7 +19802,7 @@ class InputsService {
     static logInputs() {
         logger_service_1.LoggerService.startGroup(`Inputs`);
         lodash_1.default.forEach(InputsService.inputs, (value, key) => {
-            logger_service_1.LoggerService.debug(logger_format_service_1.LoggerFormatService.white(`├──`), logger_service_1.LoggerService.input(lodash_1.default.kebabCase(key)), logger_format_service_1.LoggerFormatService.cyan(value));
+            logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.white(`├──`), logger_service_1.LoggerService.input(lodash_1.default.kebabCase(key)), logger_format_service_1.LoggerFormatService.cyan(value));
         });
         logger_service_1.LoggerService.endGroup();
         return InputsService;
@@ -19848,7 +19848,7 @@ const create_link_1 = __nccwpck_require__(671);
  * @returns {string} A link in the markdown format pointing to the given input anchor in the README.md
  */
 function createInputLink(input) {
-    return (0, create_link_1.createLink)(input, `https://github.com/@sonia-corporation/stale#${input}`);
+    return (0, create_link_1.createLink)(input, `https://github.com/Sonia-corporation/stale#${input}`);
 }
 exports.createInputLink = createInputLink;
 
@@ -19980,6 +19980,10 @@ const core = (0, tslib_1.__importStar)(__nccwpck_require__(186));
 class LoggerService {
     static debug(...message) {
         core.debug(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
+        return LoggerService;
+    }
+    static info(...message) {
+        core.info(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
         return LoggerService;
     }
     static notice(...message) {

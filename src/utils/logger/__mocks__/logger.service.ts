@@ -5,6 +5,10 @@ export class LoggerService {
     return LoggerService;
   }
 
+  public static info(): LoggerService {
+    return LoggerService;
+  }
+
   public static notice(): LoggerService {
     return LoggerService;
   }
