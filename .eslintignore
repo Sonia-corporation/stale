@@ -7,4 +7,3 @@ dist-local-dev
 node_modules
 coverage
 reports
-.parcel-cache

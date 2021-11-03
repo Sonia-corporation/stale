@@ -58,11 +58,10 @@
     "package-lock.json",
     "README.md"
   ],
-  "source": "./src/main.ts",
-  "main": "./dist/main.js",
+  "main": "./src/main.ts",
   "scripts": {
     "\n# BUILD SCRIPTS:": "",
-    "build": "npm run clean:dist && parcel build",
+    "build": "npm run clean:dist && ncc build --license licenses.txt --source-map",
     "tsc": "tsc",
     "\n# TEST SCRIPTS:": "",
     "test": "jest",
@@ -104,9 +103,6 @@
     "tslib": "2.3.1"
   },
   "devDependencies": {
-    "@parcel/config-default": "2.0.0",
-    "@parcel/transformer-typescript-tsc": "2.0.0",
-    "@parcel/validator-typescript": "2.0.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.1",
     "@semantic-release/github": "7.2.3",
@@ -117,6 +113,7 @@
     "@types/node": "14.17.21",
     "@typescript-eslint/eslint-plugin": "4.33.0",
     "@typescript-eslint/parser": "4.33.0",
+    "@vercel/ncc": "0.31.1",
     "all-contributors-cli": "6.20.0",
     "commitizen": "4.2.4",
     "concurrently": "6.3.0",
@@ -142,7 +139,6 @@
     "jest-ts-auto-mock": "2.0.0",
     "lint-staged": "11.2.3",
     "node-notifier": "10.0.0",
-    "parcel": "2.0.0",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
     "semantic-release": "17.4.7",
