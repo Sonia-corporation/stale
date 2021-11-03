@@ -8,5 +8,5 @@ import { EInputs } from '../../core/inputs/inputs.enum';
  * @returns {string} A link in the markdown format pointing to the given input anchor in the README.md
  */
 export function createInputLink(input: Readonly<EInputs>): string {
-  return createLink(input, `https://github.com/@sonia-corporation/stale#${input}`);
+  return createLink(input, `https://github.com/Sonia-corporation/stale#${input}`);
 }

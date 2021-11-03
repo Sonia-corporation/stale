@@ -21,7 +21,7 @@ describe(`createInputLink()`, (): void => {
     expect(createLinkSpy).toHaveBeenCalledTimes(1);
     expect(createLinkSpy).toHaveBeenCalledWith(
       `github-token`,
-      `https://github.com/@sonia-corporation/stale#github-token`
+      `https://github.com/Sonia-corporation/stale#github-token`
     );
     expect(result).toStrictEqual(`fake-input-link`);
   });

@@ -19783,6 +19783,10 @@ const logger_format_service_1 = __nccwpck_require__(191);
 const logger_service_1 = __nccwpck_require__(553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(186));
 const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
+/**
+ * @description
+ * Used to get the inputs coming from action
+ */
 class InputsService {
     static initialize() {
         InputsService.setInputs();
@@ -20003,6 +20007,12 @@ class LoggerService {
         core.endGroup();
         return LoggerService;
     }
+    /**
+     * @description
+     * Very specific log used to show an input as a link
+     * @param {Readonly<EInputs>} input The input to display
+     * @returns {string} The input as a link in magenta
+     */
     static input(input) {
         return logger_format_service_1.LoggerFormatService.magenta((0, create_input_link_1.createInputLink)(input));
     }
