@@ -47,3 +47,4 @@ exclude_patterns:
   - '**/*.spec.ts'
   - '**/__mocks__/*.ts'
   - '**/__mocks__/'
+  - 'dist/'
