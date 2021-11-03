@@ -11,25 +11,25 @@ export class LoggerService {
   public static debug(...message: ReadonlyArray<string>): LoggerService {
     core.debug(LoggerFormatService.whiteBright(message.join(` `)));
 
-    return this;
+    return LoggerService;
   }
 
   public static notice(...message: ReadonlyArray<string>): LoggerService {
     core.notice(LoggerFormatService.whiteBright(message.join(` `)));
 
-    return this;
+    return LoggerService;
   }
 
   public static warning(...message: ReadonlyArray<string>): LoggerService {
     core.warning(LoggerFormatService.whiteBright(message.join(` `)));
 
-    return this;
+    return LoggerService;
   }
 
   public static error(...message: ReadonlyArray<string>): LoggerService {
     core.error(LoggerFormatService.whiteBright(message.join(` `)));
 
-    return this;
+    return LoggerService;
   }
 
   public static async group(message: Readonly<string>, fn: () => Promise<void>): Promise<void> {
@@ -39,13 +39,13 @@ export class LoggerService {
   public static startGroup(name: Readonly<string>): LoggerService {
     core.startGroup(LoggerFormatService.whiteBright(name));
 
-    return this;
+    return LoggerService;
   }
 
   public static endGroup(): LoggerService {
     core.endGroup();
 
-    return this;
+    return LoggerService;
   }
 
   public static input(input: Readonly<EInputs>): string {

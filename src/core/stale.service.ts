@@ -4,6 +4,6 @@ export class StaleService {
   public static initialize(): StaleService {
     InputsService.initialize();
 
-    return this;
+    return StaleService;
   }
 }

@@ -12,7 +12,7 @@ export class InputsService {
     InputsService.setInputs();
     InputsService.logInputs();
 
-    return this;
+    return InputsService;
   }
 
   public static setInputs(): IInputs {
@@ -26,7 +26,7 @@ export class InputsService {
   public static logInputs(): InputsService {
     LoggerService.startGroup(`Inputs`);
 
-    _.forEach(this.inputs, (value: Readonly<string | boolean>, key: Readonly<string>): void => {
+    _.forEach(InputsService.inputs, (value: Readonly<string | boolean>, key: Readonly<string>): void => {
       LoggerService.debug(
         LoggerFormatService.white(`├──`),
         LoggerService.input(_.kebabCase(key) as EInputs),

@@ -19787,7 +19787,7 @@ class InputsService {
     static initialize() {
         InputsService.setInputs();
         InputsService.logInputs();
-        return this;
+        return InputsService;
     }
     static setInputs() {
         InputsService.inputs = {
@@ -19797,7 +19797,7 @@ class InputsService {
     }
     static logInputs() {
         logger_service_1.LoggerService.startGroup(`Inputs`);
-        lodash_1.default.forEach(this.inputs, (value, key) => {
+        lodash_1.default.forEach(InputsService.inputs, (value, key) => {
             logger_service_1.LoggerService.debug(logger_format_service_1.LoggerFormatService.white(`├──`), logger_service_1.LoggerService.input(lodash_1.default.kebabCase(key)), logger_format_service_1.LoggerFormatService.cyan(value));
         });
         logger_service_1.LoggerService.endGroup();
@@ -19821,7 +19821,7 @@ const inputs_service_1 = __nccwpck_require__(954);
 class StaleService {
     static initialize() {
         inputs_service_1.InputsService.initialize();
-        return this;
+        return StaleService;
     }
 }
 exports.StaleService = StaleService;
@@ -19976,19 +19976,19 @@ const core = (0, tslib_1.__importStar)(__nccwpck_require__(186));
 class LoggerService {
     static debug(...message) {
         core.debug(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
-        return this;
+        return LoggerService;
     }
     static notice(...message) {
         core.notice(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
-        return this;
+        return LoggerService;
     }
     static warning(...message) {
         core.warning(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
-        return this;
+        return LoggerService;
     }
     static error(...message) {
         core.error(logger_format_service_1.LoggerFormatService.whiteBright(message.join(` `)));
-        return this;
+        return LoggerService;
     }
     static group(message, fn) {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -19997,11 +19997,11 @@ class LoggerService {
     }
     static startGroup(name) {
         core.startGroup(logger_format_service_1.LoggerFormatService.whiteBright(name));
-        return this;
+        return LoggerService;
     }
     static endGroup() {
         core.endGroup();
-        return this;
+        return LoggerService;
     }
     static input(input) {
         return logger_format_service_1.LoggerFormatService.magenta((0, create_input_link_1.createInputLink)(input));
