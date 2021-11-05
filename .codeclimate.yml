@@ -44,7 +44,6 @@ exclude_patterns:
   - 'coverage/'
   - 'node_modules/'
   - '.eslintcache'
-  - '**/*.spec.ts'
-  - '**/__mocks__/*.ts'
+  - '**.spec.ts'
   - '**/__mocks__/'
   - 'dist/'
