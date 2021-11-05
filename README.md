@@ -42,6 +42,11 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
+## Debug the action
+
+If you have an issue, you could help yourself to save some time by enabling the debug mode of the actions by adding the `ACTIONS_STEP_DEBUG` GitHub secret to `true` in your repository.  
+Follow this [documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) if you need more details.
+
 ## Contributing
 
 Check out the [contributing](CONTRIBUTING.md) file before helping us.
