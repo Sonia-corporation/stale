@@ -1,0 +1,9 @@
+.cache
+.cache-jest
+.git
+.github
+dist
+dist-local-dev
+node_modules
+coverage
+reports

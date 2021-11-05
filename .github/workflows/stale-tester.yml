@@ -1,0 +1,20 @@
+name: Stale tester
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - develop
+jobs:
+  Stale:
+    runs-on: ubuntu-latest
+    name: Test the stale action in dry-run mode
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Stale
+        id: stale
+        uses: ./
+        with:
+          github-token: 'fake-token'

@@ -1,0 +1,9 @@
+{
+  "*.{ts,js}": [
+    "npm run lint:ts:hook",
+    "npm run build"
+  ],
+  "*.{md,json,yml,html}": [
+    "npm run lint:other:hook"
+  ]
+}

@@ -1,0 +1,9 @@
+CHANGELOG.md
+.cache
+.cache-jest
+dist
+dist-local-dev
+node_modules
+.eslintcache
+package-lock.json
+coverage
