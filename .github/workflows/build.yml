@@ -176,7 +176,7 @@ jobs:
         id: verify-changed-files
         with:
           files: dist
-      - name: Perform action when dist changes
+      - name: Exit job when differences
         if: contains(steps.verify-changed-files.outputs.changed_files, 'dist')
         run: |
           echo "dist has changed. Run `npm run build` locally to build the distribution and push the changes."
