@@ -42,6 +42,18 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
+## All the issues options
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+|        |             |         |
+
+## All the Pull Requests options
+
+| Option | Description | Default |
+| ------ | ----------- | ------- |
+|        |             |         |
+
 ## Configure the action
 
 Checkout the [Wiki](https://github.com/Sonia-corporation/stale/wiki) to know everything about this action.
