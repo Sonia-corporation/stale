@@ -42,6 +42,10 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
+## Configure the action
+
+Checkout the [Wiki](https://github.com/Sonia-corporation/stale/wiki) to know everything about this action.
+
 ## Debug the action
 
 If you have an issue, you could help yourself to save some time by enabling the debug mode of the actions by adding the `ACTIONS_STEP_DEBUG` GitHub secret to `true` in your repository.  
