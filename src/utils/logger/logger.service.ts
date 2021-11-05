@@ -38,8 +38,8 @@ export class LoggerService {
     return LoggerService;
   }
 
-  public static async group(message: Readonly<string>, fn: () => Promise<void>): Promise<void> {
-    return core.group(LoggerFormatService.whiteBright(message), fn);
+  public static async group(name: Readonly<string>, fn: () => Promise<void>): Promise<void> {
+    return core.group(LoggerFormatService.whiteBright(name), fn);
   }
 
   public static startGroup(name: Readonly<string>): LoggerService {
