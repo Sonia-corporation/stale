@@ -1,4 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# This workflow will do a clean installation of node dependencies, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Build
@@ -171,3 +171,13 @@ jobs:
         run: npm run build
         env:
           CI: true
+      - name: Differences
+        uses: tj-actions/verify-changed-files@v8.3
+        id: verify-changed-files
+        with:
+          files: dist
+      - name: Perform action when dist changes
+        if: contains(steps.verify-changed-files.outputs.changed_files, 'dist')
+        run: |
+          echo "dist has changed. Run `npm run build` locally to build the distribution and push the changes."
+          exit 1
