@@ -1,13 +1,11 @@
 export interface IGithubApiIssues {
-  readonly data: {
-    readonly repository: {
-      readonly issues: {
-        readonly nodes: IGitHubApiIssue[];
-        readonly pageInfo: {
-          readonly hasNextPage: boolean;
-        };
-        readonly totalCount: number;
+  readonly repository: {
+    readonly issues: {
+      readonly nodes: IGitHubApiIssue[];
+      readonly pageInfo: {
+        readonly hasNextPage: boolean;
       };
+      readonly totalCount: number;
     };
   };
 }

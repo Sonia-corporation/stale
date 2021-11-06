@@ -39,11 +39,16 @@ export class GithubApiIssuesService {
         }
       )
       .then((response: Readonly<IGithubApiIssues>): IGithubApiIssues => {
-        const { totalCount } = response.data.repository.issues;
+        const { totalCount } = response.repository.issues;
 
         LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
 
         return response;
+      })
+      .catch((error: Readonly<Error>): never => {
+        LoggerService.error(`Failed to fetch the issues`);
+
+        throw error;
       });
   }
 }

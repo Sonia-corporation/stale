@@ -26577,7 +26577,7 @@ class IssuesService {
     static process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
             const issues = yield github_api_issues_service_1.GithubApiIssuesService.fetchIssues();
-            for (const issue of issues.data.repository.issues.nodes) {
+            for (const issue of issues.repository.issues.nodes) {
                 // Note: we do not wish to have a blazing fast action
                 // The goal is to process a single issue at a time
                 // eslint-disable-next-line no-await-in-loop
@@ -26674,9 +26674,13 @@ class GithubApiIssuesService {
             repository: github_1.context.repo.repo,
         })
             .then((response) => {
-            const { totalCount } = response.data.repository.issues;
+            const { totalCount } = response.repository.issues;
             logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
             return response;
+        })
+            .catch((error) => {
+            logger_service_1.LoggerService.error(`Failed to fetch the issues`);
+            throw error;
         });
     }
 }
