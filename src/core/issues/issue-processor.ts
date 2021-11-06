@@ -1,15 +1,24 @@
-import { IGitHubApiIssue } from '../../github/api/github-api-issues.interface';
-import { LoggerService } from '../../utils/logger/logger.service';
+import { IssueLogger } from './issue-logger';
+import { IGitHubApiIssue } from '../../github/api/github-api-issue.interface';
+import { createLink } from '../../utils/link/create-link';
+import { LoggerFormatService } from '../../utils/logger/logger-format.service';
+import _ from 'lodash';
 
 export class IssueProcessor {
-  public githubIssue$$: IGitHubApiIssue;
+  public readonly githubIssue$$: IGitHubApiIssue;
+  public readonly logger$$: IssueLogger;
 
   public constructor(issue: Readonly<IGitHubApiIssue>) {
     this.githubIssue$$ = issue;
+    this.logger$$ = new IssueLogger(this.githubIssue$$.number);
   }
 
   public async process(): Promise<void> {
-    LoggerService.info(`Processing issue ${this.githubIssue$$.number}`);
+    this.logger$$.info(
+      `Processing issue ${LoggerFormatService.magenta(
+        createLink(_.toString(this.githubIssue$$.number), this.githubIssue$$.url)
+      )}...`
+    );
 
     return Promise.resolve();
   }

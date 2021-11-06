@@ -1,6 +1,7 @@
 import { IssueProcessor } from './issue-processor';
 import { IssuesService } from './issues.service';
-import { IGithubApiIssues, IGitHubApiIssue } from '../../github/api/github-api-issues.interface';
+import { IGitHubApiIssue } from '../../github/api/github-api-issue.interface';
+import { IGithubApiIssues } from '../../github/api/github-api-issues.interface';
 import { GithubApiIssuesService } from '../../github/api/github-api-issues.service';
 import { LoggerService } from '../../utils/logger/logger.service';
 import { createHydratedMock } from 'ts-auto-mock';

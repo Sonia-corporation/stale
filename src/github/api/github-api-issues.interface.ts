@@ -1,3 +1,5 @@
+import { IGitHubApiIssue } from './github-api-issue.interface';
+
 export interface IGithubApiIssues {
   readonly repository: {
     readonly issues: {
@@ -8,12 +10,4 @@ export interface IGithubApiIssues {
       readonly totalCount: number;
     };
   };
-}
-
-export interface IGitHubApiIssue {
-  readonly createdAt: string;
-  readonly locked: boolean;
-  readonly number: number;
-  readonly updatedAt: string;
-  readonly url: string;
 }
