@@ -1,6 +1,5 @@
 import { LoggerFormatService } from './logger-format.service';
 import { EInputs } from '../../core/inputs/inputs.enum';
-import { createInputLink } from '../link/create-input-link';
 import * as core from '@actions/core';
 
 /**
@@ -61,6 +60,6 @@ export class LoggerService {
    * @returns {string} The input as a link in magenta
    */
   public static input(input: Readonly<EInputs>): string {
-    return LoggerFormatService.magenta(createInputLink(input));
+    return LoggerFormatService.magenta(input);
   }
 }

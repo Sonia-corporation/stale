@@ -1,6 +1,5 @@
 import { LoggerService } from './logger.service';
 import { EInputs } from '../../core/inputs/inputs.enum';
-import * as CreateInputLinkModule from '../link/create-input-link';
 import * as core from '@actions/core';
 
 jest.mock(`./logger-format.service`);
@@ -265,20 +264,12 @@ describe(`LoggerService`, (): void => {
   });
 
   describe(`input()`, (): void => {
-    let createInputLinkSpy: jest.SpyInstance;
-
-    beforeEach((): void => {
-      createInputLinkSpy = jest.spyOn(CreateInputLinkModule, `createInputLink`).mockReturnValue(`dummy-link`);
-    });
-
-    it(`should create the input as a link and return the input in magenta`, (): void => {
-      expect.assertions(3);
+    it(`should return the input in magenta`, (): void => {
+      expect.assertions(1);
 
       const result = LoggerService.input(EInputs.GITHUB_TOKEN);
 
-      expect(createInputLinkSpy).toHaveBeenCalledTimes(1);
-      expect(createInputLinkSpy).toHaveBeenCalledWith(`github-token`);
-      expect(result).toStrictEqual(`magenta-dummy-link`);
+      expect(result).toStrictEqual(`magenta-github-token`);
     });
   });
 });
