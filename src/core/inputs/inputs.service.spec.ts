@@ -2,6 +2,7 @@ import { IInputs } from './inputs.interface';
 import { InputsService } from './inputs.service';
 import { LoggerService } from '../../utils/logger/logger.service';
 import * as core from '@actions/core';
+import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`../../utils/logger/logger.service`);
 jest.mock(`../../utils/logger/logger-format.service`);
@@ -47,7 +48,7 @@ describe(`InputsService`, (): void => {
     let coreGetInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      InputsService.inputs = {
+      InputsService.inputs$$ = {
         githubToken: `github-token`,
       };
 
@@ -61,7 +62,7 @@ describe(`InputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
       expect(coreGetInputSpy).toHaveBeenCalledWith(`github-token`, { required: true });
-      expect(InputsService.inputs?.githubToken).toStrictEqual(`dummy-github-token`);
+      expect(InputsService.inputs$$?.githubToken).toStrictEqual(`dummy-github-token`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {
@@ -99,7 +100,7 @@ describe(`InputsService`, (): void => {
 
     describe(`when the inputs are not set`, (): void => {
       beforeEach((): void => {
-        delete InputsService.inputs;
+        delete InputsService.inputs$$;
       });
 
       it(`should not log`, (): void => {
@@ -114,7 +115,7 @@ describe(`InputsService`, (): void => {
 
     describe(`when the inputs are set`, (): void => {
       beforeEach((): void => {
-        InputsService.inputs = {
+        InputsService.inputs$$ = {
           githubToken: `dummy-github-token`,
         };
       });
@@ -146,6 +147,37 @@ describe(`InputsService`, (): void => {
       const result = InputsService.logInputs();
 
       expect(result).toStrictEqual(InputsService);
+    });
+  });
+
+  describe(`getInputs()`, (): void => {
+    describe(`when the inputs are unset`, (): void => {
+      beforeEach((): void => {
+        delete InputsService.inputs$$;
+      });
+
+      it(`should throw an error`, (): void => {
+        expect.assertions(1);
+
+        expect((): IInputs => InputsService.getInputs()).toThrow(new Error(`The inputs are unset`));
+      });
+    });
+
+    describe(`when the inputs are set`, (): void => {
+      let inputs: IInputs;
+
+      beforeEach((): void => {
+        inputs = createHydratedMock<IInputs>();
+        InputsService.inputs$$ = inputs;
+      });
+
+      it(`should return the inputs`, (): void => {
+        expect.assertions(1);
+
+        const result = InputsService.getInputs();
+
+        expect(result).toStrictEqual(inputs);
+      });
     });
   });
 });

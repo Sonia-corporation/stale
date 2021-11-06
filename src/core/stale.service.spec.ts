@@ -1,17 +1,20 @@
 import { InputsService } from './inputs/inputs.service';
 import { StaleService } from './stale.service';
+import { OctokitService } from '../github/octokit/octokit.service';
 import { LoggerService } from '../utils/logger/logger.service';
 import * as core from '@actions/core';
 
 describe(`StaleService`, (): void => {
   describe(`initialize()`, (): void => {
     let inputsServiceInitializeSpy: jest.SpyInstance;
+    let octokitServiceInitializeSpy: jest.SpyInstance;
     let coreSetFailedSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
+      octokitServiceInitializeSpy = jest.spyOn(OctokitService, `initialize`).mockImplementation();
       coreSetFailedSpy = jest.spyOn(core, `setFailed`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
@@ -24,6 +27,15 @@ describe(`StaleService`, (): void => {
 
       expect(inputsServiceInitializeSpy).toHaveBeenCalledTimes(1);
       expect(inputsServiceInitializeSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should create the GitHub octokit`, (): void => {
+      expect.assertions(2);
+
+      StaleService.initialize();
+
+      expect(octokitServiceInitializeSpy).toHaveBeenCalledTimes(1);
+      expect(octokitServiceInitializeSpy).toHaveBeenCalledWith();
     });
 
     describe(`when an error occur`, (): void => {
