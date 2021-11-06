@@ -27138,13 +27138,16 @@ var __webpack_exports__ = {};
 var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const tslib_1 = __nccwpck_require__(4351);
 const stale_service_1 = __nccwpck_require__(1933);
 /**
  * @description
  * Start the main logic of this action
  */
 function initialize() {
-    stale_service_1.StaleService.initialize();
+    return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+        yield stale_service_1.StaleService.initialize();
+    });
 }
 void initialize();
 
