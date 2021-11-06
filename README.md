@@ -42,25 +42,23 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
-## Required configuration
+## All the common inputs
 
-This action require some inputs to be set-up.
+All the inputs that are used both for issues and Pull Requests.
 
-| Input        | Description                                                                                                   | Default |
-| ------------ | ------------------------------------------------------------------------------------------------------------- | ------- |
-| github-token | Usually `${{ secrets.GITHUB_TOKEN }}`. Required to perform the API calls to GitHub through `@actions/github`. |         |
+| Input        | Description                                                                                                              | Default               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| github-token | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`. | `${{ github.token }}` |
 
 ## All the issues inputs
 
 | Input | Description | Default |
 | ----- | ----------- | ------- |
-|       |             |         |
 
 ## All the Pull Requests inputs
 
 | Input | Description | Default |
 | ----- | ----------- | ------- |
-|       |             |         |
 
 ## Debug the action
 

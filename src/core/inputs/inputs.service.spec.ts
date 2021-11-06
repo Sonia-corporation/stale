@@ -46,23 +46,35 @@ describe(`InputsService`, (): void => {
 
   describe(`setInputs()`, (): void => {
     let coreGetInputSpy: jest.SpyInstance;
+    let coreGetBooleanInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      InputsService.inputs$$ = {
+      InputsService.inputs$$ = createHydratedMock<IInputs>({
         githubToken: `github-token`,
-      };
+      });
 
       coreGetInputSpy = jest.spyOn(core, `getInput`).mockImplementation((name: string): string => `dummy-${name}`);
+      coreGetBooleanInputSpy = jest.spyOn(core, `getBooleanInput`).mockReturnValue(false);
     });
 
-    it(`should get the github-token input (as mandatory), parse it and set it`, (): void => {
+    it(`should get the github-token input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       InputsService.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
-      expect(coreGetInputSpy).toHaveBeenCalledWith(`github-token`, { required: true });
+      expect(coreGetInputSpy).toHaveBeenCalledWith(`github-token`, { required: false });
       expect(InputsService.inputs$$?.githubToken).toStrictEqual(`dummy-github-token`);
+    });
+
+    it(`should get the dry-run input, parse it and set it`, (): void => {
+      expect.assertions(3);
+
+      InputsService.setInputs();
+
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(1);
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledWith(`dry-run`, { required: false });
+      expect(InputsService.inputs$$?.isDryRun).toBeFalse();
     });
 
     it(`should return the list of parsed inputs`, (): void => {
@@ -72,6 +84,7 @@ describe(`InputsService`, (): void => {
 
       expect(result).toStrictEqual({
         githubToken: `dummy-github-token`,
+        isDryRun: false,
       } as IInputs);
     });
   });
@@ -115,9 +128,10 @@ describe(`InputsService`, (): void => {
 
     describe(`when the inputs are set`, (): void => {
       beforeEach((): void => {
-        InputsService.inputs$$ = {
+        InputsService.inputs$$ = createHydratedMock<IInputs>({
           githubToken: `dummy-github-token`,
-        };
+          isDryRun: false,
+        });
       });
 
       it(`should log the github token input`, (): void => {
@@ -125,10 +139,26 @@ describe(`InputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`white-├──`, `input-github-token`, `cyan-dummy-github-token`);
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceInputSpy).toHaveBeenCalledWith(`github-token`);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `white-├──`,
+          `input-github-token`,
+          `cyan-dummy-github-token`
+        );
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(1, `github-token`);
+      });
+
+      it(`should log the dry run input`, (): void => {
+        expect.assertions(4);
+
+        InputsService.logInputs();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `white-├──`, `input-is-dry-run`, `cyan-false`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(2, `is-dry-run`);
       });
     });
 
