@@ -3,7 +3,7 @@ description: 'A GitHub action to stale and close automatically your issues and p
 author: 'C0ZEN'
 inputs:
   github-token:
-    description: 'A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`.'
+    description: 'A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `{{ secrets.GITHUB_TOKEN }}`.'
     required: false
     default: ${{ github.token }}
   dry-run:

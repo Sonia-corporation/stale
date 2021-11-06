@@ -6,7 +6,7 @@ import { context } from '@actions/github';
 const ISSUES_PER_PAGE = 20;
 
 export class GithubApiIssuesService {
-  public static issuesPerPage = ISSUES_PER_PAGE;
+  public static readonly issuesPerPage = ISSUES_PER_PAGE;
 
   public static fetchIssues(): Promise<IGithubApiIssues> {
     LoggerService.info(`Fetching the issues from GitHub...`);
