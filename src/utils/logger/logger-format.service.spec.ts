@@ -182,20 +182,12 @@ describe(`LoggerFormatService`, (): void => {
   });
 
   describe(`format()`, (): void => {
-    let formatSpy: jest.SpyInstance;
-
-    beforeEach((): void => {
-      formatSpy = jest.spyOn(LoggerFormatService, `format`).mockReturnValue(`formatted message`);
-    });
-
     it(`should return the message formatted with the given style`, (): void => {
-      expect.assertions(3);
+      expect.assertions(1);
 
       const result = LoggerFormatService.format(`dummy message`, `bold`);
 
-      expect(formatSpy).toHaveBeenCalledTimes(1);
-      expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `bold`);
-      expect(result).toContain(`formatted message`);
+      expect(result).toContain(`dummy message`);
     });
   });
 });
