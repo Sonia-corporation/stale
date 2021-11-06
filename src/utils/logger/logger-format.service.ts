@@ -35,6 +35,12 @@ export class LoggerFormatService {
     return this.format(message, `cyan`);
   }
 
+  /**
+   * @description
+   * Used for the warning messages
+   * @param {Readonly<IMessage>} message The message to display in yellow
+   * @returns {string} The message in yellow
+   */
   public static yellow(message: Readonly<IMessage>): string {
     return this.format(message, `yellow`);
   }
