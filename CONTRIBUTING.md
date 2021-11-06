@@ -114,3 +114,20 @@ Also, the local version of this stale action is tested also in the CI in every s
 
 This action is using GraphQL to perform the GitHub API calls.  
 Refer to the [explorer playground](https://docs.github.com/en/graphql/overview/explorer) to test your queries before.
+
+## Implementation
+
+To help us have a clear vision over the workflow and also for you if you are just curious.
+
+### Initialization
+
+- Reach and parse the inputs from the job
+- Authenticate to GitHub API by using the `github-token`
+
+### Issues
+
+- Fetch all the open issues per batch of 20, sorted by update date from the oldest first
+
+### Error handling
+
+- Any error will be caught globally, logged as error and will force the action to stop and fail

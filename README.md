@@ -46,9 +46,9 @@
 
 This action require some inputs to be set-up.
 
-| Input        | Description                                                                                                  | Default |
-| ------------ | ------------------------------------------------------------------------------------------------------------ | ------- |
-| github-token | Usually `${{ secrets.GITHUB_TOKEN }}`. Required to perform the API calls to GitHub through `@actions/github` |         |
+| Input        | Description                                                                                                   | Default |
+| ------------ | ------------------------------------------------------------------------------------------------------------- | ------- |
+| github-token | Usually `${{ secrets.GITHUB_TOKEN }}`. Required to perform the API calls to GitHub through `@actions/github`. |         |
 
 ## All the issues inputs
 
