@@ -1,13 +1,15 @@
 import { InputsService } from './inputs/inputs.service';
+import { IssuesService } from './issues/issues.service';
 import { OctokitService } from '../github/octokit/octokit.service';
 import { LoggerService } from '../utils/logger/logger.service';
 import * as core from '@actions/core';
 
 export class StaleService {
-  public static initialize(): StaleService {
+  public static async initialize(): Promise<StaleService> {
     try {
       InputsService.initialize();
       OctokitService.initialize();
+      await IssuesService.process();
     } catch (error: unknown) {
       if (error instanceof Error) {
         LoggerService.error(`[${error.name}] ${error.message}`);

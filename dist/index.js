@@ -26538,6 +26538,59 @@ InputsService.inputs$$ = undefined;
 
 /***/ }),
 
+/***/ 9064:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Issue = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+const logger_service_1 = __nccwpck_require__(9553);
+class Issue {
+    constructor(issue) {
+        this.githubIssue$$ = issue;
+    }
+    process() {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            logger_service_1.LoggerService.info(`Processing issue ${this.githubIssue$$.number}`);
+            return Promise.resolve();
+        });
+    }
+}
+exports.Issue = Issue;
+
+
+/***/ }),
+
+/***/ 209:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.IssuesService = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+const issue_1 = __nccwpck_require__(9064);
+const github_api_issues_service_1 = __nccwpck_require__(3038);
+class IssuesService {
+    static process() {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            const issues = yield github_api_issues_service_1.GithubApiIssuesService.fetchIssues();
+            for (const issue of issues.data.repository.issues.nodes) {
+                // Note: we do not wish to have a blazing fast action
+                // The goal is to process a single issue at a time
+                // eslint-disable-next-line no-await-in-loop
+                yield new issue_1.Issue(issue).process();
+            }
+        });
+    }
+}
+exports.IssuesService = IssuesService;
+
+
+/***/ }),
+
 /***/ 1933:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -26547,33 +26600,88 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.StaleService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const inputs_service_1 = __nccwpck_require__(8954);
+const issues_service_1 = __nccwpck_require__(209);
 const octokit_service_1 = __nccwpck_require__(9467);
 const logger_service_1 = __nccwpck_require__(9553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 class StaleService {
     static initialize() {
-        try {
-            inputs_service_1.InputsService.initialize();
-            octokit_service_1.OctokitService.initialize();
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                logger_service_1.LoggerService.error(`[${error.name}] ${error.message}`);
-                if (error.stack) {
-                    logger_service_1.LoggerService.debug(error.stack);
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            try {
+                inputs_service_1.InputsService.initialize();
+                octokit_service_1.OctokitService.initialize();
+                yield issues_service_1.IssuesService.process();
+            }
+            catch (error) {
+                if (error instanceof Error) {
+                    logger_service_1.LoggerService.error(`[${error.name}] ${error.message}`);
+                    if (error.stack) {
+                        logger_service_1.LoggerService.debug(error.stack);
+                    }
+                    core.setFailed(`Stale action failed with error ${error.message}`);
                 }
-                core.setFailed(`Stale action failed with error ${error.message}`);
+                else {
+                    const errorMessage = `Stale action failed with error ${error}`;
+                    logger_service_1.LoggerService.error(errorMessage);
+                    core.setFailed(errorMessage);
+                }
             }
-            else {
-                const errorMessage = `Stale action failed with error ${error}`;
-                logger_service_1.LoggerService.error(errorMessage);
-                core.setFailed(errorMessage);
-            }
-        }
-        return StaleService;
+            return StaleService;
+        });
     }
 }
 exports.StaleService = StaleService;
+
+
+/***/ }),
+
+/***/ 3038:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubApiIssuesService = void 0;
+const logger_service_1 = __nccwpck_require__(9553);
+const octokit_service_1 = __nccwpck_require__(9467);
+const github_1 = __nccwpck_require__(5438);
+const ISSUES_PER_PAGE = 20;
+class GithubApiIssuesService {
+    static fetchIssues() {
+        logger_service_1.LoggerService.info(`Fetching the issues from GitHub...`);
+        return octokit_service_1.OctokitService.getOctokit()
+            .graphql(`
+        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!) {
+          repository(name: $repository, owner: $owner) {
+            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage) {
+              pageInfo {
+                hasNextPage
+              }
+              totalCount
+              nodes {
+                locked
+                createdAt
+                number
+                updatedAt
+                url
+              }
+            }
+          }
+        }
+      `, {
+            issuesPerPage: GithubApiIssuesService.issuesPerPage,
+            owner: github_1.context.repo.owner,
+            repository: github_1.context.repo.repo,
+        })
+            .then((response) => {
+            const { totalCount } = response.data.repository.issues;
+            logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+            return response;
+        });
+    }
+}
+exports.GithubApiIssuesService = GithubApiIssuesService;
+GithubApiIssuesService.issuesPerPage = ISSUES_PER_PAGE;
 
 
 /***/ }),
