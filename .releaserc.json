@@ -61,18 +61,7 @@
         "message": "build(release): new version ${nextRelease.version}"
       }
     ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": [
-          {
-            "path": "dist/index.js",
-            "name": "stale-${nextRelease.gitTag}.js",
-            "label": "Stale v${nextRelease.gitTag} distribution"
-          }
-        ]
-      }
-    ]
+    "@semantic-release/github"
   ],
   "dryRun": false,
   "ci": true,
