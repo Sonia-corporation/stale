@@ -8,11 +8,11 @@ type IMessage = string | boolean;
  */
 export class LoggerFormatService {
   public static whiteBright(message: Readonly<IMessage>): string {
-    return this._format(message, `whiteBright`);
+    return this.format(message, `whiteBright`);
   }
 
   public static yellowBright(message: Readonly<IMessage>): string {
-    return this._format(message, `yellowBright`);
+    return this.format(message, `yellowBright`);
   }
 
   /**
@@ -22,7 +22,7 @@ export class LoggerFormatService {
    * @returns {string} The message in magenta
    */
   public static magenta(message: Readonly<IMessage>): string {
-    return this._format(message, `magenta`);
+    return this.format(message, `magenta`);
   }
 
   /**
@@ -32,11 +32,11 @@ export class LoggerFormatService {
    * @returns {string} The message in cyan
    */
   public static cyan(message: Readonly<IMessage>): string {
-    return this._format(message, `cyan`);
+    return this.format(message, `cyan`);
   }
 
   public static yellow(message: Readonly<IMessage>): string {
-    return this._format(message, `yellow`);
+    return this.format(message, `yellow`);
   }
 
   /**
@@ -46,7 +46,7 @@ export class LoggerFormatService {
    * @returns {string} The message in white
    */
   public static white(message: Readonly<IMessage>): string {
-    return this._format(message, `white`);
+    return this.format(message, `white`);
   }
 
   /**
@@ -56,7 +56,7 @@ export class LoggerFormatService {
    * @returns {string} The message in green
    */
   public static green(message: Readonly<IMessage>): string {
-    return this._format(message, `green`);
+    return this.format(message, `green`);
   }
 
   /**
@@ -66,18 +66,18 @@ export class LoggerFormatService {
    * @returns {string} The message in red
    */
   public static red(message: Readonly<IMessage>): string {
-    return this._format(message, `red`);
+    return this.format(message, `red`);
   }
 
   public static blue(message: Readonly<IMessage>): string {
-    return this._format(message, `blue`);
+    return this.format(message, `blue`);
   }
 
   public static bold(message: Readonly<IMessage>): string {
-    return this._format(message, `bold`);
+    return this.format(message, `bold`);
   }
 
-  private static _format(message: Readonly<IMessage>, style: keyof Modifier | keyof ForegroundColor): string {
+  public static format(message: Readonly<IMessage>, style: keyof Modifier | keyof ForegroundColor): string {
     return `${styles[style].open}${message}${styles[style].close}`;
   }
 }
