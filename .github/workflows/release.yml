@@ -19,7 +19,9 @@ jobs:
           git reset --hard master
       - name: Get current tag
         id: current-tag
-        uses: WyriHaximus/github-action-get-previous-tag@master
+        uses: WyriHaximus/github-action-get-previous-tag@v1.1.0
+        with:
+          fallback: 1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Save current tag
@@ -72,7 +74,7 @@ jobs:
           git reset --hard master
       - name: Get latest tag
         id: latest-tag
-        uses: WyriHaximus/github-action-get-previous-tag@master
+        uses: WyriHaximus/github-action-get-previous-tag@v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Show current tag
