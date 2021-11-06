@@ -27,13 +27,13 @@ export class LoggerService {
   }
 
   public static warning(...message: ReadonlyArray<string>): LoggerService {
-    core.warning(LoggerFormatService.whiteBright(message.join(` `)));
+    core.warning(LoggerFormatService.yellow(message.join(` `)));
 
     return LoggerService;
   }
 
   public static error(...message: ReadonlyArray<string>): LoggerService {
-    core.error(LoggerFormatService.whiteBright(message.join(` `)));
+    core.error(LoggerFormatService.red(message.join(` `)));
 
     return LoggerService;
   }

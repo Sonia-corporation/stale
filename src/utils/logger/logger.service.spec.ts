@@ -128,24 +128,24 @@ describe(`LoggerService`, (): void => {
     });
 
     describe(`when there is one given message`, (): void => {
-      it(`should log the message in white bright`, (): void => {
+      it(`should log the message in yellow`, (): void => {
         expect.assertions(2);
 
         LoggerService.warning(`dummy message`);
 
         expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`whiteBright-dummy message`);
+        expect(coreWarningSpy).toHaveBeenCalledWith(`yellow-dummy message`);
       });
     });
 
     describe(`when there is multiple given messages`, (): void => {
-      it(`should merge, separate by a space and log the messages in white bright`, (): void => {
+      it(`should merge, separate by a space and log the messages in yellow`, (): void => {
         expect.assertions(2);
 
         LoggerService.warning(`dummy message 1`, `dummy message 2`);
 
         expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`whiteBright-dummy message 1 dummy message 2`);
+        expect(coreWarningSpy).toHaveBeenCalledWith(`yellow-dummy message 1 dummy message 2`);
       });
     });
 
@@ -166,24 +166,24 @@ describe(`LoggerService`, (): void => {
     });
 
     describe(`when there is one given message`, (): void => {
-      it(`should log the message in white bright`, (): void => {
+      it(`should log the message in red`, (): void => {
         expect.assertions(2);
 
         LoggerService.error(`dummy message`);
 
         expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`whiteBright-dummy message`);
+        expect(coreErrorSpy).toHaveBeenCalledWith(`red-dummy message`);
       });
     });
 
     describe(`when there is multiple given messages`, (): void => {
-      it(`should merge, separate by a space and log the messages in white bright`, (): void => {
+      it(`should merge, separate by a space and log the messages in red`, (): void => {
         expect.assertions(2);
 
         LoggerService.error(`dummy message 1`, `dummy message 2`);
 
         expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`whiteBright-dummy message 1 dummy message 2`);
+        expect(coreErrorSpy).toHaveBeenCalledWith(`red-dummy message 1 dummy message 2`);
       });
     });
 
