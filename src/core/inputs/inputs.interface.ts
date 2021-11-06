@@ -1,3 +1,3 @@
 export interface IInputs {
-  githubToken: string;
+  readonly githubToken: string;
 }

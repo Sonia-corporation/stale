@@ -100,3 +100,17 @@ The footer should contain any information about **Breaking Changes**.
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines.  
 The rest of the commit message is then used for this.
+
+## Stale
+
+### Always build before committing
+
+Everytime you alter the code base, the action may change.  
+To trigger some possible mistakes as soon as possible, it's preferable to always build the action before creating a commit.  
+Note that the CI build step will perform a difference check and will be considered as failing if one is found.  
+Also, the local version of this stale action is tested also in the CI in every single branch in a dry-run mode.
+
+### GitHub API
+
+This action is using GraphQL to perform the GitHub API calls.  
+Refer to the [explorer playground](https://docs.github.com/en/graphql/overview/explorer) to test your queries before.

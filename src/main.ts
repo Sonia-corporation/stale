@@ -4,8 +4,8 @@ import { StaleService } from './core/stale.service';
  * @description
  * Start the main logic of this action
  */
-function initialize(): void {
-  StaleService.initialize();
+async function initialize(): Promise<void> {
+  await StaleService.initialize();
 }
 
 void initialize();

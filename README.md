@@ -42,21 +42,25 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
-## All the issues options
+## Required configuration
 
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-|        |             |         |
+This action require some inputs to be set-up.
 
-## All the Pull Requests options
+| Input        | Description                                                                                                  | Default |
+| ------------ | ------------------------------------------------------------------------------------------------------------ | ------- |
+| github-token | Usually `${{ secrets.GITHUB_TOKEN }}`. Required to perform the API calls to GitHub through `@actions/github` |         |
 
-| Option | Description | Default |
-| ------ | ----------- | ------- |
-|        |             |         |
+## All the issues inputs
 
-## Configure the action
+| Input | Description | Default |
+| ----- | ----------- | ------- |
+|       |             |         |
 
-Checkout the [Wiki](https://github.com/Sonia-corporation/stale/wiki) to know everything about this action.
+## All the Pull Requests inputs
+
+| Input | Description | Default |
+| ----- | ----------- | ------- |
+|       |             |         |
 
 ## Debug the action
 

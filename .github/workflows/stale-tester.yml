@@ -17,4 +17,4 @@ jobs:
         id: stale
         uses: ./
         with:
-          github-token: 'fake-token'
+          github-token: ${{ secrets.GITHUB_TOKEN }}

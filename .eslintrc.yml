@@ -254,6 +254,9 @@ rules:
     - error
     - enforceConst: true
       detectObjects: false
+      ignore:
+        - 0
+        - 1
   prettier/prettier:
     - error
     - printWidth: 120
