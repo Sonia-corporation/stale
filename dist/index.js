@@ -26597,6 +26597,12 @@ class OctokitService {
         OctokitService.octokit$$ = github.getOctokit(inputs_service_1.InputsService.getInputs().githubToken);
         return OctokitService.octokit$$;
     }
+    static getOctokit() {
+        if (!OctokitService.octokit$$) {
+            throw new Error(`The octokit is unset`);
+        }
+        return OctokitService.octokit$$;
+    }
 }
 exports.OctokitService = OctokitService;
 OctokitService.octokit$$ = undefined;

@@ -92,6 +92,7 @@
   "dependencies": {
     "@actions/core": "1.6.0",
     "@actions/github": "5.0.0",
+    "@octokit/webhooks-definitions": "3.67.3",
     "ansi-styles": "6.1.0",
     "lodash": "4.17.21",
     "terminal-link": "3.0.0",

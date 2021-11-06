@@ -16,4 +16,12 @@ export class OctokitService {
 
     return OctokitService.octokit$$;
   }
+
+  public static getOctokit(): InstanceType<typeof GitHub> | never {
+    if (!OctokitService.octokit$$) {
+      throw new Error(`The octokit is unset`);
+    }
+
+    return OctokitService.octokit$$;
+  }
 }

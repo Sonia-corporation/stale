@@ -39,7 +39,7 @@ describe(`OctokitService`, (): void => {
     let inputsServiceGetInputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      githubInstance = createHydratedMock<InstanceType<typeof GitHub>>();
+      githubInstance = createHydratedMock<InstanceType<typeof GitHub>>({});
       inputs = createHydratedMock<IInputs>({
         githubToken: `dummy github token`,
       });
@@ -66,6 +66,39 @@ describe(`OctokitService`, (): void => {
       const result = OctokitService.setOctokit();
 
       expect(result).toStrictEqual(githubInstance);
+    });
+  });
+
+  describe(`getOctokit()`, (): void => {
+    describe(`when the inputs are unset`, (): void => {
+      beforeEach((): void => {
+        delete OctokitService.octokit$$;
+      });
+
+      it(`should throw an error`, (): void => {
+        expect.assertions(1);
+
+        expect((): InstanceType<typeof GitHub> => OctokitService.getOctokit()).toThrow(
+          new Error(`The octokit is unset`)
+        );
+      });
+    });
+
+    describe(`when the octokit is set`, (): void => {
+      let githubInstance: InstanceType<typeof GitHub>;
+
+      beforeEach((): void => {
+        githubInstance = createHydratedMock<InstanceType<typeof GitHub>>({});
+        OctokitService.octokit$$ = githubInstance;
+      });
+
+      it(`should return the octokit`, (): void => {
+        expect.assertions(1);
+
+        const result = OctokitService.getOctokit();
+
+        expect(result).toStrictEqual(githubInstance);
+      });
     });
   });
 });
