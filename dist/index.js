@@ -26489,6 +26489,22 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 9986:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EInputs = void 0;
+var EInputs;
+(function (EInputs) {
+    EInputs["GITHUB_TOKEN"] = "github-token";
+    EInputs["DRY_RUN"] = "dry-run";
+})(EInputs = exports.EInputs || (exports.EInputs = {}));
+
+
+/***/ }),
+
 /***/ 8954:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -26497,6 +26513,7 @@ function wrappy (fn, cb) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputsService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
+const inputs_enum_1 = __nccwpck_require__(9986);
 const logger_format_service_1 = __nccwpck_require__(1191);
 const logger_service_1 = __nccwpck_require__(9553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
@@ -26513,7 +26530,8 @@ class InputsService {
     }
     static setInputs() {
         InputsService.inputs$$ = {
-            githubToken: core.getInput(`github-token`, { required: true }),
+            githubToken: core.getInput(inputs_enum_1.EInputs.GITHUB_TOKEN, { required: false }),
+            isDryRun: core.getBooleanInput(inputs_enum_1.EInputs.DRY_RUN, { required: false }),
         };
         return InputsService.inputs$$;
     }
@@ -26675,7 +26693,12 @@ class GithubApiIssuesService {
         })
             .then((response) => {
             const { totalCount } = response.repository.issues;
-            logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+            if (totalCount === 0) {
+                logger_service_1.LoggerService.notice(`No issue fetched`);
+            }
+            else {
+                logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+            }
             return response;
         })
             .catch((error) => {

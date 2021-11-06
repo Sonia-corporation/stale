@@ -41,7 +41,11 @@ export class GithubApiIssuesService {
       .then((response: Readonly<IGithubApiIssues>): IGithubApiIssues => {
         const { totalCount } = response.repository.issues;
 
-        LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+        if (totalCount === 0) {
+          LoggerService.notice(`No issue fetched`);
+        } else {
+          LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+        }
 
         return response;
       })

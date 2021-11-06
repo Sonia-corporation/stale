@@ -5,6 +5,9 @@ import { OctokitService } from '../github/octokit/octokit.service';
 import { LoggerService } from '../utils/logger/logger.service';
 import * as core from '@actions/core';
 
+jest.mock(`../utils/logger/logger.service`);
+jest.mock(`../utils/logger/logger-format.service`);
+
 describe(`StaleService`, (): void => {
   describe(`initialize()`, (): void => {
     let inputsServiceInitializeSpy: jest.SpyInstance;
