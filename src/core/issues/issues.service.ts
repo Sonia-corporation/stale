@@ -1,6 +1,8 @@
-import { Issue } from './issue';
+import { IssueProcessor } from './issue-processor';
 import { IGithubApiIssues } from '../../github/api/github-api-issues.interface';
 import { GithubApiIssuesService } from '../../github/api/github-api-issues.service';
+import { LoggerFormatService } from '../../utils/logger/logger-format.service';
+import { LoggerService } from '../../utils/logger/logger.service';
 
 export class IssuesService {
   public static async process(): Promise<void> {
@@ -10,7 +12,9 @@ export class IssuesService {
       // Note: we do not wish to have a blazing fast action
       // The goal is to process a single issue at a time
       // eslint-disable-next-line no-await-in-loop
-      await new Issue(issue).process();
+      await new IssueProcessor(issue).process();
     }
+
+    LoggerService.info(LoggerFormatService.green(`All issues were processed`));
   }
 }

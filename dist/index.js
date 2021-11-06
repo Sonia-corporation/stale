@@ -26098,16 +26098,16 @@ InputsService.inputs$$ = undefined;
 
 /***/ }),
 
-/***/ 9064:
+/***/ 6554:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Issue = void 0;
+exports.IssueProcessor = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const logger_service_1 = __nccwpck_require__(9553);
-class Issue {
+class IssueProcessor {
     constructor(issue) {
         this.githubIssue$$ = issue;
     }
@@ -26118,7 +26118,7 @@ class Issue {
         });
     }
 }
-exports.Issue = Issue;
+exports.IssueProcessor = IssueProcessor;
 
 
 /***/ }),
@@ -26131,8 +26131,10 @@ exports.Issue = Issue;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssuesService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
-const issue_1 = __nccwpck_require__(9064);
+const issue_processor_1 = __nccwpck_require__(6554);
 const github_api_issues_service_1 = __nccwpck_require__(3038);
+const logger_format_service_1 = __nccwpck_require__(1191);
+const logger_service_1 = __nccwpck_require__(9553);
 class IssuesService {
     static process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -26141,8 +26143,9 @@ class IssuesService {
                 // Note: we do not wish to have a blazing fast action
                 // The goal is to process a single issue at a time
                 // eslint-disable-next-line no-await-in-loop
-                yield new issue_1.Issue(issue).process();
+                yield new issue_processor_1.IssueProcessor(issue).process();
             }
+            logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.green(`All issues were processed`));
         });
     }
 }
@@ -26162,6 +26165,7 @@ const tslib_1 = __nccwpck_require__(4351);
 const inputs_service_1 = __nccwpck_require__(8954);
 const issues_service_1 = __nccwpck_require__(209);
 const octokit_service_1 = __nccwpck_require__(9467);
+const logger_format_service_1 = __nccwpck_require__(1191);
 const logger_service_1 = __nccwpck_require__(9553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 class StaleService {
@@ -26171,6 +26175,7 @@ class StaleService {
                 inputs_service_1.InputsService.initialize();
                 octokit_service_1.OctokitService.initialize();
                 yield issues_service_1.IssuesService.process();
+                logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.green(`The stale processing is over`));
             }
             catch (error) {
                 if (error instanceof Error) {

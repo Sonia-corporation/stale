@@ -1,6 +1,7 @@
 import { InputsService } from './inputs/inputs.service';
 import { IssuesService } from './issues/issues.service';
 import { OctokitService } from '../github/octokit/octokit.service';
+import { LoggerFormatService } from '../utils/logger/logger-format.service';
 import { LoggerService } from '../utils/logger/logger.service';
 import * as core from '@actions/core';
 
@@ -10,6 +11,8 @@ export class StaleService {
       InputsService.initialize();
       OctokitService.initialize();
       await IssuesService.process();
+
+      LoggerService.info(LoggerFormatService.green(`The stale processing is over`));
     } catch (error: unknown) {
       if (error instanceof Error) {
         LoggerService.error(`[${error.name}] ${error.message}`);
