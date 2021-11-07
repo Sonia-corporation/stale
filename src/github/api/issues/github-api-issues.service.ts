@@ -10,7 +10,7 @@ const ISSUES_PER_PAGE = 20;
 export class GithubApiIssuesService {
   public static readonly issuesPerPage = ISSUES_PER_PAGE;
 
-  public static fetchIssues(): Promise<IGithubApiIssues> {
+  public static fetchIssues(): Promise<IGithubApiIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
 
     return OctokitService.getOctokit()

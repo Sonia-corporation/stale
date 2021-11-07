@@ -6,7 +6,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 
 export class IssuesService {
   public static async process(): Promise<void> {
-    const issues: IGithubApiIssues = await GithubApiIssuesService.fetchIssues();
+    const issues: IGithubApiIssues | never = await GithubApiIssuesService.fetchIssues();
 
     for (const issue of issues.repository.issues.nodes) {
       // Note: we do not wish to have a blazing fast action
