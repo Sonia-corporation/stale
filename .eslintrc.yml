@@ -40,7 +40,16 @@ settings:
       - .ts
   import/cache:
     lifetime: Infinity
+  import/resolver:
+    typescript:
+      alwaysTryTypes: true
+      project:
+        - ./tsconfig.json
 rules:
+  no-restricted-imports:
+    - error
+    - patterns:
+        - '.*' # Ban relative imports
   progress/activate: 1
   '@typescript-eslint/member-ordering':
     - error

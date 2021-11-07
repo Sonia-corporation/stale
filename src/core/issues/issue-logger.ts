@@ -1,6 +1,6 @@
-import { IGithubApiIssueNumber } from '../../github/api/issues/github-api-issue-number';
-import { LoggerFormatService } from '../../utils/loggers/logger-format.service';
-import { LoggerService } from '../../utils/loggers/logger.service';
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
+import { LoggerService } from '@utils/loggers/logger.service';
 
 export class IssueLogger {
   public readonly issueNumber: IGithubApiIssueNumber;

@@ -1,5 +1,5 @@
-import { LoggerFormatService } from './logger-format.service';
-import { EInputs } from '../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import * as core from '@actions/core';
 
 /**

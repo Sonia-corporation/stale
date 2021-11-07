@@ -1,6 +1,6 @@
-import { createInputLink } from './create-input-link';
-import * as CreateLinkModule from './create-link';
-import { EInputs } from '../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { createInputLink } from '@utils/links/create-input-link';
+import * as CreateLinkModule from '@utils/links/create-link';
 
 describe(`createInputLink()`, (): void => {
   let input: EInputs;

@@ -1,4 +1,4 @@
-import { StaleService } from './core/stale.service';
+import { StaleService } from '@core/stale.service';
 
 /**
  * @description

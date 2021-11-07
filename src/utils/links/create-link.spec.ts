@@ -1,4 +1,4 @@
-import { createLink } from './create-link';
+import { createLink } from '@utils/links/create-link';
 import * as faker from 'faker';
 import * as TerminalLinkModule from 'terminal-link';
 

@@ -1,5 +1,5 @@
-import { createLink } from './create-link';
-import { EInputs } from '../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { createLink } from '@utils/links/create-link';
 
 /**
  * @description

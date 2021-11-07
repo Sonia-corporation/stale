@@ -1,6 +1,6 @@
-import { IGithubApiIssues } from './github-api-issues.interface';
-import { LoggerService } from '../../../utils/loggers/logger.service';
-import { OctokitService } from '../../octokit/octokit.service';
+import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
+import { OctokitService } from '@github/octokit/octokit.service';
+import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 
 const ISSUES_PER_PAGE = 20;
