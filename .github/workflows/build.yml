@@ -191,12 +191,10 @@ jobs:
         env:
           CI: true
       - name: Differences
-        uses: tj-actions/verify-changed-files@v8.6
         id: verify-changed-files
-        with:
-          files: dist
-      - name: Exit job when differences
-        if: contains(steps.verify-changed-files.outputs.changed_files, 'dist')
         run: |
-          echo "dist has changed. Run the npm script `build` locally to build the distribution and then push the changes."
-          exit 1
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "dist has changed. Run the npm script `build` locally to build the distribution and then push the changes."
+            exit 1
+          fi
