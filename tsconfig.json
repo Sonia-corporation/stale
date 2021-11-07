@@ -24,7 +24,6 @@
     "target": "es2015",
     "typeRoots": ["node_modules/@types", "node_modules/@types/", "types"],
     "lib": ["es2018", "dom"],
-    "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -34,8 +33,11 @@
         "cacheBetweenTests": false,
         "debug": false
       }
-    ]
-  },
-  "include": ["./src/**/*.ts", "./scripts/**/*.js", "./jest/*.js", "./jest/*.ts", "./jest.config.js"],
-  "exclude": ["./src/**.*.spec.ts", "./jest/test.ts"]
+    ],
+    "paths": {
+      "@core/*": ["src/core/*"],
+      "@github/*": ["src/github/*"],
+      "@utils/*": ["src/utils/*"]
+    }
+  }
 }

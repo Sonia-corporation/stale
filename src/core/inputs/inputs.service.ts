@@ -1,8 +1,8 @@
-import { EInputs } from './inputs.enum';
-import { IInputs } from './inputs.interface';
-import { LoggerFormatService } from '../../utils/loggers/logger-format.service';
-import { LoggerService } from '../../utils/loggers/logger.service';
-import { ETreeRows } from '../../utils/trees/tree-rows.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { IInputs } from '@core/inputs/inputs.interface';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
+import { LoggerService } from '@utils/loggers/logger.service';
+import { ETreeRows } from '@utils/trees/tree-rows.enum';
 import * as core from '@actions/core';
 import _ from 'lodash';
 

@@ -1,4 +1,4 @@
-import { LoggerFormatService } from './logger-format.service';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 
 describe(`LoggerFormatService`, (): void => {
   describe(`whiteBright()`, (): void => {

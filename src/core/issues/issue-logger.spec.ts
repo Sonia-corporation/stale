@@ -1,9 +1,9 @@
-import { IssueLogger } from './issue-logger';
-import { IGithubApiIssueNumber } from '../../github/api/issues/github-api-issue-number';
-import { LoggerService } from '../../utils/loggers/logger.service';
+import { IssueLogger } from '@core/issues/issue-logger';
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
+import { LoggerService } from '@utils/loggers/logger.service';
 
-jest.mock(`../../utils/loggers/logger.service`);
-jest.mock(`../../utils/loggers/logger-format.service`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`IssueLogger`, (): void => {
   let issueNumber: IGithubApiIssueNumber;

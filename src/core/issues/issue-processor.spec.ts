@@ -1,14 +1,14 @@
-import { IssueLogger } from './issue-logger';
-import { IssueProcessor } from './issue-processor';
-import { IGitHubApiIssue } from '../../github/api/issues/github-api-issue.interface';
-import * as CreateLinkModule from '../../utils/links/create-link';
+import { IssueLogger } from '@core/issues/issue-logger';
+import { IssueProcessor } from '@core/issues/issue-processor';
+import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import * as CreateLinkModule from '@utils/links/create-link';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
 
-jest.mock(`../../utils/loggers/logger.service`);
-jest.mock(`../../utils/loggers/logger-format.service`);
-jest.mock(`./issue-logger`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
+jest.mock(`@core/issues/issue-logger`);
 
 describe(`IssueProcessor`, (): void => {
   let gitHubApiIssue: IGitHubApiIssue;

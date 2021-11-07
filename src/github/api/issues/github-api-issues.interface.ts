@@ -1,4 +1,4 @@
-import { IGitHubApiIssue } from './github-api-issue.interface';
+import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
 
 export interface IGithubApiIssues {
   readonly repository: {

@@ -1,4 +1,4 @@
-import { EInputs } from '../../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
 
 export class LoggerService {
   public static debug(): LoggerService {

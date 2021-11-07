@@ -1,11 +1,11 @@
-import { IInputs } from './inputs.interface';
-import { InputsService } from './inputs.service';
-import { LoggerService } from '../../utils/loggers/logger.service';
+import { IInputs } from '@core/inputs/inputs.interface';
+import { InputsService } from '@core/inputs/inputs.service';
+import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 import { createHydratedMock } from 'ts-auto-mock';
 
-jest.mock(`../../utils/loggers/logger.service`);
-jest.mock(`../../utils/loggers/logger-format.service`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`InputsService`, (): void => {
   describe(`initialize()`, (): void => {

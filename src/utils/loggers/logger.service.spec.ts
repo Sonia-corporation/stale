@@ -1,8 +1,8 @@
-import { LoggerService } from './logger.service';
-import { EInputs } from '../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 
-jest.mock(`./logger-format.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`LoggerService`, (): void => {
   describe(`debug()`, (): void => {
