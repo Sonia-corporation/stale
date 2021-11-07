@@ -168,7 +168,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build
+        run: npm run build:dirty
         env:
           CI: true
       - name: Differences
@@ -179,5 +179,5 @@ jobs:
       - name: Exit job when differences
         if: contains(steps.verify-changed-files.outputs.changed_files, 'dist')
         run: |
-          echo "dist has changed. Run `npm run build` locally to build the distribution and push the changes."
+          echo "dist has changed. Run the npm script `build` locally to build the distribution and then push the changes."
           exit 1
