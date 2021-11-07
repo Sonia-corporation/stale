@@ -15,9 +15,8 @@ export class IssueProcessor {
 
   public async process(): Promise<void> {
     this.logger$$.startGroup(
-      `Processing issue ${LoggerFormatService.magenta(
-        createLink(_.toString(this.githubIssue$$.number), this.githubIssue$$.url)
-      )}...`
+      `Processing issue`,
+      LoggerFormatService.magenta(createLink(_.toString(this.githubIssue$$.number), this.githubIssue$$.url))
     );
     this.logger$$.endGroup();
 

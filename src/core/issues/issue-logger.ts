@@ -43,8 +43,8 @@ export class IssueLogger {
     return LoggerService.group(`${this.getPrefix$$()} ${name}`, fn);
   }
 
-  public startGroup(name: Readonly<string>): IssueLogger {
-    LoggerService.startGroup(`${this.getPrefix$$()} ${name}`);
+  public startGroup(...name: ReadonlyArray<string>): IssueLogger {
+    LoggerService.startGroup(`${this.getPrefix$$()}`, ...name);
 
     return this;
   }
