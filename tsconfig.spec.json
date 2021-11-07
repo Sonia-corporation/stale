@@ -4,5 +4,5 @@
     "outDir": "../../out-tsc/spec",
     "types": ["jest", "node"]
   },
-  "include": ["**.*.spec.ts"]
+  "include": ["tests", "**.*.spec.ts", "**/__mocks__"]
 }
