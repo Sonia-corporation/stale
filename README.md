@@ -97,3 +97,9 @@ Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification.  
 Contributions of any kind are welcome!
+
+## Related project
+
+[Geoffrey 'C0ZEN' Testelin](https://github.com/C0ZEN) was originally a contributor of [@actions/stale](https://github.com/actions/stale) (see the [contributors](https://github.com/actions/stale/graphs/contributors)).  
+Due to slower cadence and different opinions over how the project should go forward, he decided to start from scratch on his own.  
+The main difference is that this project aims to provide the best stale action as possible, the lack of skills is the limit. ;)
