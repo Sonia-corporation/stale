@@ -26489,6 +26489,22 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 9986:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EInputs = void 0;
+var EInputs;
+(function (EInputs) {
+    EInputs["GITHUB_TOKEN"] = "github-token";
+    EInputs["DRY_RUN"] = "dry-run";
+})(EInputs = exports.EInputs || (exports.EInputs = {}));
+
+
+/***/ }),
+
 /***/ 8954:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -26497,6 +26513,7 @@ function wrappy (fn, cb) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputsService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
+const inputs_enum_1 = __nccwpck_require__(9986);
 const logger_format_service_1 = __nccwpck_require__(1191);
 const logger_service_1 = __nccwpck_require__(9553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
@@ -26513,7 +26530,8 @@ class InputsService {
     }
     static setInputs() {
         InputsService.inputs$$ = {
-            githubToken: core.getInput(`github-token`, { required: true }),
+            githubToken: core.getInput(inputs_enum_1.EInputs.GITHUB_TOKEN, { required: false }),
+            isDryRun: core.getBooleanInput(inputs_enum_1.EInputs.DRY_RUN, { required: false }),
         };
         return InputsService.inputs$$;
     }
@@ -26538,27 +26556,88 @@ InputsService.inputs$$ = undefined;
 
 /***/ }),
 
-/***/ 9064:
+/***/ 3281:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Issue = void 0;
+exports.IssueLogger = void 0;
 const tslib_1 = __nccwpck_require__(4351);
+const logger_format_service_1 = __nccwpck_require__(1191);
 const logger_service_1 = __nccwpck_require__(9553);
-class Issue {
+class IssueLogger {
+    constructor(issueNumber) {
+        this.issueNumber = issueNumber;
+    }
+    debug(...message) {
+        logger_service_1.LoggerService.debug(this.getPrefix$$(), ...message);
+        return this;
+    }
+    info(...message) {
+        logger_service_1.LoggerService.info(this.getPrefix$$(), ...message);
+        return this;
+    }
+    notice(...message) {
+        logger_service_1.LoggerService.notice(this.getPrefix$$(), ...message);
+        return this;
+    }
+    warning(...message) {
+        logger_service_1.LoggerService.warning(this.getPrefix$$(), ...message);
+        return this;
+    }
+    error(...message) {
+        logger_service_1.LoggerService.error(this.getPrefix$$(), ...message);
+        return this;
+    }
+    group(name, fn) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
+            return logger_service_1.LoggerService.group(`${this.getPrefix$$()} ${name}`, fn);
+        });
+    }
+    startGroup(name) {
+        logger_service_1.LoggerService.startGroup(`${this.getPrefix$$()} ${name}`);
+        return this;
+    }
+    endGroup() {
+        logger_service_1.LoggerService.endGroup();
+        return this;
+    }
+    getPrefix$$() {
+        return logger_format_service_1.LoggerFormatService.red(`[#${this.issueNumber}]`);
+    }
+}
+exports.IssueLogger = IssueLogger;
+
+
+/***/ }),
+
+/***/ 6554:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.IssueProcessor = void 0;
+const tslib_1 = __nccwpck_require__(4351);
+const issue_logger_1 = __nccwpck_require__(3281);
+const create_link_1 = __nccwpck_require__(9671);
+const logger_format_service_1 = __nccwpck_require__(1191);
+const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
+class IssueProcessor {
     constructor(issue) {
         this.githubIssue$$ = issue;
+        this.logger$$ = new issue_logger_1.IssueLogger(this.githubIssue$$.number);
     }
     process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            logger_service_1.LoggerService.info(`Processing issue ${this.githubIssue$$.number}`);
+            this.logger$$.startGroup(`Processing issue ${logger_format_service_1.LoggerFormatService.magenta((0, create_link_1.createLink)(lodash_1.default.toString(this.githubIssue$$.number), this.githubIssue$$.url))}...`);
+            this.logger$$.endGroup();
             return Promise.resolve();
         });
     }
 }
-exports.Issue = Issue;
+exports.IssueProcessor = IssueProcessor;
 
 
 /***/ }),
@@ -26571,8 +26650,10 @@ exports.Issue = Issue;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssuesService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
-const issue_1 = __nccwpck_require__(9064);
+const issue_processor_1 = __nccwpck_require__(6554);
 const github_api_issues_service_1 = __nccwpck_require__(3038);
+const logger_format_service_1 = __nccwpck_require__(1191);
+const logger_service_1 = __nccwpck_require__(9553);
 class IssuesService {
     static process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -26581,8 +26662,9 @@ class IssuesService {
                 // Note: we do not wish to have a blazing fast action
                 // The goal is to process a single issue at a time
                 // eslint-disable-next-line no-await-in-loop
-                yield new issue_1.Issue(issue).process();
+                yield new issue_processor_1.IssueProcessor(issue).process();
             }
+            logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.green(`All issues were processed`));
         });
     }
 }
@@ -26602,6 +26684,7 @@ const tslib_1 = __nccwpck_require__(4351);
 const inputs_service_1 = __nccwpck_require__(8954);
 const issues_service_1 = __nccwpck_require__(209);
 const octokit_service_1 = __nccwpck_require__(9467);
+const logger_format_service_1 = __nccwpck_require__(1191);
 const logger_service_1 = __nccwpck_require__(9553);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 class StaleService {
@@ -26611,6 +26694,7 @@ class StaleService {
                 inputs_service_1.InputsService.initialize();
                 octokit_service_1.OctokitService.initialize();
                 yield issues_service_1.IssuesService.process();
+                logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.green(`The stale processing is over`));
             }
             catch (error) {
                 if (error instanceof Error) {
@@ -26675,7 +26759,12 @@ class GithubApiIssuesService {
         })
             .then((response) => {
             const { totalCount } = response.repository.issues;
-            logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+            if (totalCount === 0) {
+                logger_service_1.LoggerService.notice(`No issue fetched`);
+            }
+            else {
+                logger_service_1.LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+            }
             return response;
         })
             .catch((error) => {
@@ -26718,28 +26807,6 @@ class OctokitService {
 }
 exports.OctokitService = OctokitService;
 OctokitService.octokit$$ = undefined;
-
-
-/***/ }),
-
-/***/ 1114:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createInputLink = void 0;
-const create_link_1 = __nccwpck_require__(9671);
-/**
- * @description
- * Utility to create a link based on an input coming from the README.md
- * @param {Readonly<EInputs>} input The input to link to
- * @returns {string} A link in the markdown format pointing to the given input anchor in the README.md
- */
-function createInputLink(input) {
-    return (0, create_link_1.createLink)(input, `https://github.com/Sonia-corporation/stale#${input}`);
-}
-exports.createInputLink = createInputLink;
 
 
 /***/ }),
@@ -26866,7 +26933,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LoggerService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const logger_format_service_1 = __nccwpck_require__(1191);
-const create_input_link_1 = __nccwpck_require__(1114);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 /**
  * @description
@@ -26913,7 +26979,7 @@ class LoggerService {
      * @returns {string} The input as a link in magenta
      */
     static input(input) {
-        return logger_format_service_1.LoggerFormatService.magenta((0, create_input_link_1.createInputLink)(input));
+        return logger_format_service_1.LoggerFormatService.magenta(input);
     }
 }
 exports.LoggerService = LoggerService;

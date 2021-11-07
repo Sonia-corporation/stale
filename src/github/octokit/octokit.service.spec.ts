@@ -5,6 +5,9 @@ import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import { createHydratedMock } from 'ts-auto-mock';
 
+jest.mock(`../../utils/logger/logger.service`);
+jest.mock(`../../utils/logger/logger-format.service`);
+
 describe(`OctokitService`, (): void => {
   describe(`initialize()`, (): void => {
     let setOctokitSpy: jest.SpyInstance;

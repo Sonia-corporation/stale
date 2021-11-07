@@ -8,7 +8,7 @@ on:
 jobs:
   Stale:
     runs-on: ubuntu-latest
-    name: Run stale # Test to run the current local stale action in dry-run mode (to detect possible issues)
+    name: Run dry-run stale # Test to run the current local stale action in dry-run mode (to detect possible issues)
     steps:
       - name: Checkout
         id: checkout
@@ -17,4 +17,4 @@ jobs:
         id: stale
         uses: ./
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: true

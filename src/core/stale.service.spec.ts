@@ -5,6 +5,9 @@ import { OctokitService } from '../github/octokit/octokit.service';
 import { LoggerService } from '../utils/logger/logger.service';
 import * as core from '@actions/core';
 
+jest.mock(`../utils/logger/logger.service`);
+jest.mock(`../utils/logger/logger-format.service`);
+
 describe(`StaleService`, (): void => {
   describe(`initialize()`, (): void => {
     let inputsServiceInitializeSpy: jest.SpyInstance;
@@ -13,6 +16,7 @@ describe(`StaleService`, (): void => {
     let coreSetFailedSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
+    let loggerServiceInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
@@ -21,33 +25,7 @@ describe(`StaleService`, (): void => {
       coreSetFailedSpy = jest.spyOn(core, `setFailed`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
-    });
-
-    it(`should read and parse the inputs from the job`, async (): Promise<void> => {
-      expect.assertions(2);
-
-      await StaleService.initialize();
-
-      expect(inputsServiceInitializeSpy).toHaveBeenCalledTimes(1);
-      expect(inputsServiceInitializeSpy).toHaveBeenCalledWith();
-    });
-
-    it(`should create the GitHub octokit`, async (): Promise<void> => {
-      expect.assertions(2);
-
-      await StaleService.initialize();
-
-      expect(octokitServiceInitializeSpy).toHaveBeenCalledTimes(1);
-      expect(octokitServiceInitializeSpy).toHaveBeenCalledWith();
-    });
-
-    it(`should process the issues`, async (): Promise<void> => {
-      expect.assertions(2);
-
-      await StaleService.initialize();
-
-      expect(issuesServiceProcessSpy).toHaveBeenCalledTimes(1);
-      expect(issuesServiceProcessSpy).toHaveBeenCalledWith();
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
     });
 
     describe(`when an error occur`, (): void => {
@@ -119,6 +97,42 @@ describe(`StaleService`, (): void => {
           expect(coreSetFailedSpy).toHaveBeenCalledWith(`Stale action failed with error inputs error`);
         });
       });
+    });
+
+    it(`should read and parse the inputs from the job`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(inputsServiceInitializeSpy).toHaveBeenCalledTimes(1);
+      expect(inputsServiceInitializeSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should create the GitHub octokit`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(octokitServiceInitializeSpy).toHaveBeenCalledTimes(1);
+      expect(octokitServiceInitializeSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should process the issues`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(issuesServiceProcessSpy).toHaveBeenCalledTimes(1);
+      expect(issuesServiceProcessSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should log when the process is finished`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`green-The stale processing is over`);
     });
 
     it(`should return the service`, async (): Promise<void> => {

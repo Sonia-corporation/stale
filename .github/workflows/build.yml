@@ -12,7 +12,18 @@ on:
       - master
       - develop
 jobs:
+  PreJob:
+    runs-on: ubuntu-latest
+    outputs:
+      SHOULD_SKIP: ${{ steps.skip-check.outputs.should_skip }}
+    steps:
+      - id: skip-check
+        uses: fkirc/skip-duplicate-actions@v3.4.1
+        with:
+          concurrent_skipping: 'same_content_newer'
   Lint:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -42,6 +53,8 @@ jobs:
       - name: Lint
         run: npm run lint:all:ci
   Test:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -71,6 +84,8 @@ jobs:
       - name: Test
         run: npm run test:ci
   CoverageCodeClimate:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -105,6 +120,8 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
   CoverageCodecov:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -141,6 +158,8 @@ jobs:
           flags: integration
           name: Stale
   Build:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -168,16 +187,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build
+        run: npm run build:dirty
         env:
           CI: true
       - name: Differences
-        uses: tj-actions/verify-changed-files@v8.3
+        uses: tj-actions/verify-changed-files@v8.6
         id: verify-changed-files
         with:
           files: dist
       - name: Exit job when differences
         if: contains(steps.verify-changed-files.outputs.changed_files, 'dist')
         run: |
-          echo "dist has changed. Run `npm run build` locally to build the distribution and push the changes."
+          echo "dist has changed. Run the npm script `build` locally to build the distribution and then push the changes."
           exit 1
