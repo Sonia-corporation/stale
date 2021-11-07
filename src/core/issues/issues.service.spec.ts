@@ -1,6 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesService } from '@core/issues/issues.service';
-import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
 import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -15,8 +15,8 @@ jest.mock(`@core/issues/issue-processor`);
 describe(`IssuesService`, (): void => {
   describe(`process()`, (): void => {
     const mockedIssueProcessor: MockedObjectDeep<typeof IssueProcessor> = mocked(IssueProcessor, true);
-    let gitHubApiIssue1: IGitHubApiIssue;
-    let gitHubApiIssue2: IGitHubApiIssue;
+    let gitHubApiIssue1: IGithubApiIssue;
+    let gitHubApiIssue2: IGithubApiIssue;
     let githubApiIssues: IGithubApiIssues;
 
     let githubApiIssuesServiceFetchIssuesSpy: jest.SpyInstance;
@@ -24,8 +24,8 @@ describe(`IssuesService`, (): void => {
 
     beforeEach((): void => {
       mockedIssueProcessor.mockClear();
-      gitHubApiIssue1 = createHydratedMock<IGitHubApiIssue>();
-      gitHubApiIssue2 = createHydratedMock<IGitHubApiIssue>();
+      gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+      gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
       githubApiIssues = createHydratedMock<IGithubApiIssues>({
         repository: {
           issues: {

@@ -1,9 +1,9 @@
-import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
 
 export interface IGithubApiIssues {
   readonly repository: {
     readonly issues: {
-      readonly nodes: IGitHubApiIssue[];
+      readonly nodes: IGithubApiIssue[];
       readonly pageInfo: {
         readonly hasNextPage: boolean;
       };

@@ -1,7 +1,7 @@
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
 import * as CreateLinkModule from '@utils/links/create-link';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
@@ -13,10 +13,10 @@ jest.mock(`@core/issues/issue-logger`);
 jest.mock(`@core/issues/issue-ignore-processor`);
 
 describe(`IssueProcessor`, (): void => {
-  let gitHubApiIssue: IGitHubApiIssue;
+  let gitHubApiIssue: IGithubApiIssue;
 
   beforeEach((): void => {
-    gitHubApiIssue = createHydratedMock<IGitHubApiIssue>();
+    gitHubApiIssue = createHydratedMock<IGithubApiIssue>();
   });
 
   describe(`constructor()`, (): void => {
@@ -31,7 +31,7 @@ describe(`IssueProcessor`, (): void => {
     it(`should create a logger just for this issue`, (): void => {
       expect.assertions(3);
       const mockedIssueLogger: MockedObjectDeep<typeof IssueLogger> = mocked(IssueLogger, true);
-      gitHubApiIssue = createHydratedMock<IGitHubApiIssue>({
+      gitHubApiIssue = createHydratedMock<IGithubApiIssue>({
         number: 8,
       });
 
@@ -47,7 +47,7 @@ describe(`IssueProcessor`, (): void => {
     let issueProcessor: IssueProcessor;
 
     beforeEach((): void => {
-      gitHubApiIssue = createHydratedMock<IGitHubApiIssue>({
+      gitHubApiIssue = createHydratedMock<IGithubApiIssue>({
         number: 8,
         url: `dummy-url`,
       });
