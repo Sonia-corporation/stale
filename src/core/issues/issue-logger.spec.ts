@@ -145,7 +145,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.startGroup(`dummy name`);
 
         expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8] dummy name`);
+        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy name`);
       });
     });
 

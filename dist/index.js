@@ -26597,8 +26597,8 @@ class IssueLogger {
             return logger_service_1.LoggerService.group(`${this.getPrefix$$()} ${name}`, fn);
         });
     }
-    startGroup(name) {
-        logger_service_1.LoggerService.startGroup(`${this.getPrefix$$()} ${name}`);
+    startGroup(...name) {
+        logger_service_1.LoggerService.startGroup(`${this.getPrefix$$()}`, ...name);
         return this;
     }
     endGroup() {
@@ -26633,7 +26633,7 @@ class IssueProcessor {
     }
     process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
-            this.logger$$.startGroup(`Processing issue ${logger_format_service_1.LoggerFormatService.magenta((0, create_link_1.createLink)(lodash_1.default.toString(this.githubIssue$$.number), this.githubIssue$$.url))}...`);
+            this.logger$$.startGroup(`Processing issue`, logger_format_service_1.LoggerFormatService.magenta((0, create_link_1.createLink)(lodash_1.default.toString(this.githubIssue$$.number), this.githubIssue$$.url)));
             this.logger$$.endGroup();
             return Promise.resolve();
         });
@@ -26966,8 +26966,8 @@ class LoggerService {
             return core.group(logger_format_service_1.LoggerFormatService.whiteBright(name), fn);
         });
     }
-    static startGroup(name) {
-        core.startGroup(logger_format_service_1.LoggerFormatService.whiteBright(name));
+    static startGroup(...name) {
+        core.startGroup(logger_format_service_1.LoggerFormatService.whiteBright(name.join(` `)));
         return LoggerService;
     }
     static endGroup() {

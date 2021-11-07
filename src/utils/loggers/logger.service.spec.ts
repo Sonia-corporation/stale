@@ -220,13 +220,26 @@ describe(`LoggerService`, (): void => {
       coreStartGroupSpy = jest.spyOn(core, `startGroup`).mockImplementation();
     });
 
-    it(`should log the group name in white bright`, (): void => {
-      expect.assertions(2);
+    describe(`when there is one given group name`, (): void => {
+      it(`should log the group name in white bright`, (): void => {
+        expect.assertions(2);
 
-      LoggerService.startGroup(`dummy name`);
+        LoggerService.startGroup(`dummy name`);
 
-      expect(coreStartGroupSpy).toHaveBeenCalledTimes(1);
-      expect(coreStartGroupSpy).toHaveBeenCalledWith(`whiteBright-dummy name`);
+        expect(coreStartGroupSpy).toHaveBeenCalledTimes(1);
+        expect(coreStartGroupSpy).toHaveBeenCalledWith(`whiteBright-dummy name`);
+      });
+    });
+
+    describe(`when there is multiple given group names`, (): void => {
+      it(`should log the group name in white bright`, (): void => {
+        expect.assertions(2);
+
+        LoggerService.startGroup(`dummy name 1`, `dummy name 2`);
+
+        expect(coreStartGroupSpy).toHaveBeenCalledTimes(1);
+        expect(coreStartGroupSpy).toHaveBeenCalledWith(`whiteBright-dummy name 1 dummy name 2`);
+      });
     });
 
     it(`should return the service`, (): void => {

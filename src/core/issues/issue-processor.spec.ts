@@ -71,7 +71,7 @@ describe(`IssueProcessor`, (): void => {
         expect(createLinkSpy).toHaveBeenCalledTimes(1);
         expect(createLinkSpy).toHaveBeenCalledWith(`8`, `dummy-url`);
         expect(loggerStartGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerStartGroupSpy).toHaveBeenCalledWith(`Processing issue magenta-dummy-link...`);
+        expect(loggerStartGroupSpy).toHaveBeenCalledWith(`Processing issue`, `magenta-dummy-link`);
       });
 
       it(`should stop to group logger for this issue`, async (): Promise<void> => {
