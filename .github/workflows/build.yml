@@ -195,6 +195,6 @@ jobs:
         run: |
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
             git diff
-            echo "dist has changed. Run the npm script `build` locally to build the distribution and then push the changes."
+            echo "dist has changed. Run the npm script build locally to build the distribution and then push the changes."
             exit 1
           fi
