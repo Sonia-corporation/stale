@@ -1,12 +1,12 @@
 import { IGithubApiIssues } from './github-api-issues.interface';
 import { GithubApiIssuesService } from './github-api-issues.service';
-import { LoggerService } from '../../utils/logger/logger.service';
-import { OctokitService } from '../octokit/octokit.service';
+import { LoggerService } from '../../../utils/loggers/logger.service';
+import { OctokitService } from '../../octokit/octokit.service';
 import { context } from '@actions/github';
 import { createHydratedMock } from 'ts-auto-mock';
 
-jest.mock(`../../utils/logger/logger.service`);
-jest.mock(`../../utils/logger/logger-format.service`);
+jest.mock(`../../../utils/loggers/logger.service`);
+jest.mock(`../../../utils/loggers/logger-format.service`);
 
 describe(`GithubApiIssuesService`, (): void => {
   it(`should load 20 issues per batch`, (): void => {

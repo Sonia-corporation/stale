@@ -26514,8 +26514,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InputsService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const inputs_enum_1 = __nccwpck_require__(9986);
-const logger_format_service_1 = __nccwpck_require__(1191);
-const logger_service_1 = __nccwpck_require__(9553);
+const logger_format_service_1 = __nccwpck_require__(8099);
+const logger_service_1 = __nccwpck_require__(67);
+const tree_rows_enum_1 = __nccwpck_require__(3406);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
 /**
@@ -26537,8 +26538,9 @@ class InputsService {
     }
     static logInputs() {
         logger_service_1.LoggerService.startGroup(`Inputs`);
-        lodash_1.default.forEach(InputsService.inputs$$, (value, key) => {
-            logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.white(`├──`), logger_service_1.LoggerService.input(lodash_1.default.kebabCase(key)), logger_format_service_1.LoggerFormatService.cyan(value));
+        lodash_1.default.forIn(InputsService.inputs$$, (value, inputName, inputs) => {
+            const lastInputName = lodash_1.default.findLastKey(inputs, () => true);
+            logger_service_1.LoggerService.info(logger_format_service_1.LoggerFormatService.white(inputName === lastInputName ? tree_rows_enum_1.ETreeRows.LAST : tree_rows_enum_1.ETreeRows.ANY), logger_service_1.LoggerService.input(lodash_1.default.kebabCase(inputName)), logger_format_service_1.LoggerFormatService.cyan(value));
         });
         logger_service_1.LoggerService.endGroup();
         return InputsService;
@@ -26564,8 +26566,8 @@ InputsService.inputs$$ = undefined;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssueLogger = void 0;
 const tslib_1 = __nccwpck_require__(4351);
-const logger_format_service_1 = __nccwpck_require__(1191);
-const logger_service_1 = __nccwpck_require__(9553);
+const logger_format_service_1 = __nccwpck_require__(8099);
+const logger_service_1 = __nccwpck_require__(67);
 class IssueLogger {
     constructor(issueNumber) {
         this.issueNumber = issueNumber;
@@ -26621,8 +26623,8 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssueProcessor = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const issue_logger_1 = __nccwpck_require__(3281);
-const create_link_1 = __nccwpck_require__(9671);
-const logger_format_service_1 = __nccwpck_require__(1191);
+const create_link_1 = __nccwpck_require__(3244);
+const logger_format_service_1 = __nccwpck_require__(8099);
 const lodash_1 = (0, tslib_1.__importDefault)(__nccwpck_require__(250));
 class IssueProcessor {
     constructor(issue) {
@@ -26651,9 +26653,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IssuesService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
 const issue_processor_1 = __nccwpck_require__(6554);
-const github_api_issues_service_1 = __nccwpck_require__(3038);
-const logger_format_service_1 = __nccwpck_require__(1191);
-const logger_service_1 = __nccwpck_require__(9553);
+const github_api_issues_service_1 = __nccwpck_require__(9032);
+const logger_format_service_1 = __nccwpck_require__(8099);
+const logger_service_1 = __nccwpck_require__(67);
 class IssuesService {
     static process() {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function* () {
@@ -26684,8 +26686,8 @@ const tslib_1 = __nccwpck_require__(4351);
 const inputs_service_1 = __nccwpck_require__(8954);
 const issues_service_1 = __nccwpck_require__(209);
 const octokit_service_1 = __nccwpck_require__(9467);
-const logger_format_service_1 = __nccwpck_require__(1191);
-const logger_service_1 = __nccwpck_require__(9553);
+const logger_format_service_1 = __nccwpck_require__(8099);
+const logger_service_1 = __nccwpck_require__(67);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 class StaleService {
     static initialize() {
@@ -26719,14 +26721,14 @@ exports.StaleService = StaleService;
 
 /***/ }),
 
-/***/ 3038:
+/***/ 9032:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GithubApiIssuesService = void 0;
-const logger_service_1 = __nccwpck_require__(9553);
+const logger_service_1 = __nccwpck_require__(67);
 const octokit_service_1 = __nccwpck_require__(9467);
 const github_1 = __nccwpck_require__(5438);
 const ISSUES_PER_PAGE = 20;
@@ -26811,7 +26813,7 @@ OctokitService.octokit$$ = undefined;
 
 /***/ }),
 
-/***/ 9671:
+/***/ 3244:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -26835,7 +26837,7 @@ exports.createLink = createLink;
 
 /***/ }),
 
-/***/ 1191:
+/***/ 8099:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -26924,7 +26926,7 @@ exports.LoggerFormatService = LoggerFormatService;
 
 /***/ }),
 
-/***/ 9553:
+/***/ 67:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -26932,7 +26934,7 @@ exports.LoggerFormatService = LoggerFormatService;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LoggerService = void 0;
 const tslib_1 = __nccwpck_require__(4351);
-const logger_format_service_1 = __nccwpck_require__(1191);
+const logger_format_service_1 = __nccwpck_require__(8099);
 const core = (0, tslib_1.__importStar)(__nccwpck_require__(2186));
 /**
  * @description
@@ -26983,6 +26985,22 @@ class LoggerService {
     }
 }
 exports.LoggerService = LoggerService;
+
+
+/***/ }),
+
+/***/ 3406:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ETreeRows = void 0;
+var ETreeRows;
+(function (ETreeRows) {
+    ETreeRows["ANY"] = "\u251C\u2500\u2500";
+    ETreeRows["LAST"] = "\u2514\u2500\u2500";
+})(ETreeRows = exports.ETreeRows || (exports.ETreeRows = {}));
 
 
 /***/ }),

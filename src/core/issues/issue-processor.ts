@@ -1,7 +1,7 @@
 import { IssueLogger } from './issue-logger';
-import { IGitHubApiIssue } from '../../github/api/github-api-issue.interface';
-import { createLink } from '../../utils/link/create-link';
-import { LoggerFormatService } from '../../utils/logger/logger-format.service';
+import { IGitHubApiIssue } from '../../github/api/issues/github-api-issue.interface';
+import { createLink } from '../../utils/links/create-link';
+import { LoggerFormatService } from '../../utils/loggers/logger-format.service';
 import _ from 'lodash';
 
 export class IssueProcessor {

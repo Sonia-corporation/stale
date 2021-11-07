@@ -2,11 +2,11 @@ import { InputsService } from './inputs/inputs.service';
 import { IssuesService } from './issues/issues.service';
 import { StaleService } from './stale.service';
 import { OctokitService } from '../github/octokit/octokit.service';
-import { LoggerService } from '../utils/logger/logger.service';
+import { LoggerService } from '../utils/loggers/logger.service';
 import * as core from '@actions/core';
 
-jest.mock(`../utils/logger/logger.service`);
-jest.mock(`../utils/logger/logger-format.service`);
+jest.mock(`../utils/loggers/logger.service`);
+jest.mock(`../utils/loggers/logger-format.service`);
 
 describe(`StaleService`, (): void => {
   describe(`initialize()`, (): void => {

@@ -1,8 +1,8 @@
 import { IssueProcessor } from './issue-processor';
-import { IGithubApiIssues } from '../../github/api/github-api-issues.interface';
-import { GithubApiIssuesService } from '../../github/api/github-api-issues.service';
-import { LoggerFormatService } from '../../utils/logger/logger-format.service';
-import { LoggerService } from '../../utils/logger/logger.service';
+import { IGithubApiIssues } from '../../github/api/issues/github-api-issues.interface';
+import { GithubApiIssuesService } from '../../github/api/issues/github-api-issues.service';
+import { LoggerFormatService } from '../../utils/loggers/logger-format.service';
+import { LoggerService } from '../../utils/loggers/logger.service';
 
 export class IssuesService {
   public static async process(): Promise<void> {
