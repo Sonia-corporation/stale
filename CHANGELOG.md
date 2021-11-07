@@ -1,5 +1,18 @@
 # Semantic Versioning Changelog
 
+# [1.3.0](https://github.com/Sonia-corporation/stale/compare/1.2.0...1.3.0) (2021-11-07)
+
+
+### :bug: Bug Fixes
+
+* **issue:** display the issue link in purple ([a8f4687](https://github.com/Sonia-corporation/stale/commit/a8f4687ed016117b8a8c2902e6f2d2584d1aad06))
+* **log:** display the proper end of tree symbol when logging the inputs ([0b53d66](https://github.com/Sonia-corporation/stale/commit/0b53d66576d032bf8ea9dd0ce99e5a3cc1b2c768))
+
+
+### :rocket: Features
+
+* **issue:** skip if locked ([05325a1](https://github.com/Sonia-corporation/stale/commit/05325a196632580f8b8adcae1bf455478a7e1103))
+
 # [1.2.0](https://github.com/Sonia-corporation/stale/compare/1.1.0...1.2.0) (2021-11-07)
 
 
