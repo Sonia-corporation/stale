@@ -1,7 +1,9 @@
 import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
+import _ from 'lodash';
 
 const ISSUES_PER_PAGE = 20;
 
@@ -44,7 +46,10 @@ export class GithubApiIssuesService {
         if (totalCount === 0) {
           LoggerService.notice(`No issue fetched`);
         } else {
-          LoggerService.info(`${totalCount} issue${totalCount > 1 ? `s` : ``} fetched`);
+          LoggerService.info(
+            LoggerFormatService.cyan(_.toString(totalCount)),
+            `issue${totalCount > 1 ? `s` : ``} fetched`
+          );
         }
 
         return response;
