@@ -127,6 +127,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 ### Issues
 
 - Fetch all the open issues per batch of 20, sorted by update date from the oldest first
+- Check if the issue is locked and stop the processing if this is the case
 
 ### Error handling
 
