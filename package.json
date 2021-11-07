@@ -56,8 +56,8 @@
   "main": "./src/main.ts",
   "scripts": {
     "\n# BUILD SCRIPTS:": "",
-    "build": "npm run clean:dist && ncc build --license licenses.txt",
-    "build:dirty": "ncc build --license licenses.txt",
+    "build": "npm run clean:dist && ncc build --license licenses.txt --minify",
+    "build:dirty": "ncc build --license licenses.txt --minify",
     "\n# TEST SCRIPTS:": "",
     "test": "jest",
     "test:watch": "jest --watch-all",
