@@ -1,14 +1,13 @@
 import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/issues-per-page';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 import _ from 'lodash';
 
-const ISSUES_PER_PAGE = 20;
-
 export class GithubApiIssuesService {
-  public static readonly issuesPerPage = ISSUES_PER_PAGE;
+  public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
 
   public static fetchIssues(): Promise<IGithubApiIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
