@@ -17,6 +17,7 @@ describe(`No issue`, (): void => {
 
       await issueSut.process();
 
+      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
       expect(true).toBeTrue();
     });
   });

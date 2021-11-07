@@ -7,6 +7,7 @@ import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
+import faker from 'faker';
 import _ from 'lodash';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -27,13 +28,12 @@ export class IssueSut {
    * You can pass the parameters to override the default inputs
    * @param {Readonly<Partial<IInputs>>} inputs The override inputs
    */
-  public constructor(
-    inputs: Readonly<Partial<IInputs>> = {
+  public constructor(inputs?: Readonly<Partial<IInputs>>) {
+    this._inputs = createHydratedMock<IInputs>({
       dryRun: false,
-      githubToken: `dummy-github-token`,
-    }
-  ) {
-    this._inputs = createHydratedMock<IInputs>(inputs);
+      githubToken: faker.datatype.uuid(),
+      ...inputs,
+    });
   }
 
   /**
@@ -54,8 +54,17 @@ export class IssueSut {
    * @param {Readonly<Partial<IGithubApiIssue>>} issue The issue to add
    * @returns {IssueSut} The class
    */
-  public addIssue(issue: Readonly<Partial<IGithubApiIssue>> = {}): IssueSut {
-    this._githubApiIssues.push(createHydratedMock<IGithubApiIssue>(issue));
+  public addIssue(issue?: Readonly<Partial<IGithubApiIssue>>): IssueSut {
+    this._githubApiIssues.push(
+      createHydratedMock<IGithubApiIssue>({
+        createdAt: faker.date.past().toISOString(),
+        locked: faker.datatype.boolean(),
+        number: faker.datatype.number(),
+        updatedAt: faker.date.recent().toISOString(),
+        url: faker.internet.url(),
+        ...issue,
+      })
+    );
 
     return this;
   }
@@ -93,8 +102,8 @@ export class IssueSut {
 
     // Useful for the calls to the GitHub API
     jest.spyOn(context, `repo`, `get`).mockReturnValue({
-      owner: `dummy-owner`,
-      repo: `dummy-repo`,
+      owner: faker.random.word(),
+      repo: faker.random.word(),
     });
 
     // Mock the GitHub API fetch of issues
