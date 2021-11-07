@@ -1,5 +1,13 @@
 # Semantic Versioning Changelog
 
+# [1.2.0](https://github.com/Sonia-corporation/stale/compare/1.1.0...1.2.0) (2021-11-07)
+
+
+### :rocket: Features
+
+* **logs:** add more logs to track the processing ([80afa14](https://github.com/Sonia-corporation/stale/commit/80afa14a5168b099e4e0db78284938f0d5ca08cb))
+* **dry-run:** add new input dry-run and remove the required github-token ([71ad840](https://github.com/Sonia-corporation/stale/commit/71ad84010b317981c0deb3d7953be4b93060a0b6))
+
 # [1.1.0](https://github.com/Sonia-corporation/stale/compare/1.0.0...1.1.0) (2021-11-06)
 
 
