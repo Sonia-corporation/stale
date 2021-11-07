@@ -1,12 +1,12 @@
-import { OctokitService } from './octokit.service';
-import { IInputs } from '../../core/inputs/inputs.interface';
-import { InputsService } from '../../core/inputs/inputs.service';
+import { IInputs } from '@core/inputs/inputs.interface';
+import { InputsService } from '@core/inputs/inputs.service';
+import { OctokitService } from '@github/octokit/octokit.service';
 import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import { createHydratedMock } from 'ts-auto-mock';
 
-jest.mock(`../../utils/logger/logger.service`);
-jest.mock(`../../utils/logger/logger-format.service`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`OctokitService`, (): void => {
   describe(`initialize()`, (): void => {

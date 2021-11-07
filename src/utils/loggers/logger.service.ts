@@ -1,5 +1,5 @@
-import { LoggerFormatService } from './logger-format.service';
-import { EInputs } from '../../core/inputs/inputs.enum';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import * as core from '@actions/core';
 
 /**
@@ -41,8 +41,8 @@ export class LoggerService {
     return core.group(LoggerFormatService.whiteBright(name), fn);
   }
 
-  public static startGroup(name: Readonly<string>): LoggerService {
-    core.startGroup(LoggerFormatService.whiteBright(name));
+  public static startGroup(...name: ReadonlyArray<string>): LoggerService {
+    core.startGroup(LoggerFormatService.whiteBright(name.join(` `)));
 
     return LoggerService;
   }

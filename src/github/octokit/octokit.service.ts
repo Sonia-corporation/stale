@@ -1,4 +1,4 @@
-import { InputsService } from '../../core/inputs/inputs.service';
+import { InputsService } from '@core/inputs/inputs.service';
 import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 

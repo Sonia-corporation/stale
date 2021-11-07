@@ -1,16 +1,16 @@
-import { IssueProcessor } from './issue-processor';
-import { IssuesService } from './issues.service';
-import { IGitHubApiIssue } from '../../github/api/github-api-issue.interface';
-import { IGithubApiIssues } from '../../github/api/github-api-issues.interface';
-import { GithubApiIssuesService } from '../../github/api/github-api-issues.service';
-import { LoggerService } from '../../utils/logger/logger.service';
+import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssuesService } from '@core/issues/issues.service';
+import { IGitHubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
+import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { LoggerService } from '@utils/loggers/logger.service';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
 
-jest.mock(`../../utils/logger/logger.service`);
-jest.mock(`../../utils/logger/logger-format.service`);
-jest.mock(`./issue-processor`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
+jest.mock(`@core/issues/issue-processor`);
 
 describe(`IssuesService`, (): void => {
   describe(`process()`, (): void => {

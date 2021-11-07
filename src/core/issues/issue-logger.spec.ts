@@ -1,9 +1,9 @@
-import { IssueLogger } from './issue-logger';
-import { IGithubApiIssueNumber } from '../../github/api/github-api-issue-number';
-import { LoggerService } from '../../utils/logger/logger.service';
+import { IssueLogger } from '@core/issues/issue-logger';
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
+import { LoggerService } from '@utils/loggers/logger.service';
 
-jest.mock(`../../utils/logger/logger.service`);
-jest.mock(`../../utils/logger/logger-format.service`);
+jest.mock(`@utils/loggers/logger.service`);
+jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`IssueLogger`, (): void => {
   let issueNumber: IGithubApiIssueNumber;
@@ -145,7 +145,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.startGroup(`dummy name`);
 
         expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8] dummy name`);
+        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy name`);
       });
     });
 

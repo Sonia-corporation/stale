@@ -1,4 +1,4 @@
-import { IGithubApiIssueNumber } from './github-api-issue-number';
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 
 export interface IGitHubApiIssue {
   readonly createdAt: string;

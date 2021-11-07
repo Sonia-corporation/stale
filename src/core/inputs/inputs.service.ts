@@ -1,7 +1,8 @@
-import { EInputs } from './inputs.enum';
-import { IInputs } from './inputs.interface';
-import { LoggerFormatService } from '../../utils/logger/logger-format.service';
-import { LoggerService } from '../../utils/logger/logger.service';
+import { EInputs } from '@core/inputs/inputs.enum';
+import { IInputs } from '@core/inputs/inputs.interface';
+import { LoggerFormatService } from '@utils/loggers/logger-format.service';
+import { LoggerService } from '@utils/loggers/logger.service';
+import { ETreeRows } from '@utils/trees/tree-rows.enum';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
@@ -31,13 +32,18 @@ export class InputsService {
   public static logInputs(): InputsService {
     LoggerService.startGroup(`Inputs`);
 
-    _.forEach(InputsService.inputs$$, (value: Readonly<string | boolean>, key: Readonly<string>): void => {
-      LoggerService.info(
-        LoggerFormatService.white(`├──`),
-        LoggerService.input(_.kebabCase(key) as EInputs),
-        LoggerFormatService.cyan(value)
-      );
-    });
+    _.forIn(
+      InputsService.inputs$$,
+      (value: Readonly<string | boolean>, inputName: Readonly<string>, inputs: Readonly<IInputs>): void => {
+        const lastInputName: string | undefined = _.findLastKey(inputs, (): true => true);
+
+        LoggerService.info(
+          LoggerFormatService.white(inputName === lastInputName ? ETreeRows.LAST : ETreeRows.ANY),
+          LoggerService.input(_.kebabCase(inputName) as EInputs),
+          LoggerFormatService.cyan(value)
+        );
+      }
+    );
 
     LoggerService.endGroup();
 
