@@ -172,7 +172,7 @@ jobs:
         env:
           CI: true
       - name: Differences
-        uses: tj-actions/verify-changed-files@v8.3
+        uses: tj-actions/verify-changed-files@v8.6
         id: verify-changed-files
         with:
           files: dist
