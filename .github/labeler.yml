@@ -1,5 +1,6 @@
 documentation:
   - .all-contributorsrc
+  - CHANGELOG.md
   - CODE_OF_CONDUCT.md
   - CONTRIBUTING.md
   - ISSUE_TEMPLATE.md
@@ -10,3 +11,12 @@ documentation:
 test:
   - src/**/*.spec.ts
   - src/**/*.spec.js
+
+CI:
+  - .github/workflows/**
+  - .github/config.yml
+  - .github/issue_label_bot.yaml
+  - .github/labeler.yml
+  - .github/semantic.yml
+  - .codeclimate.yml
+  - .renovaterc.json
