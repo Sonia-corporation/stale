@@ -5,6 +5,7 @@ export interface IGithubApiIssues {
     readonly issues: {
       readonly nodes: IGithubApiIssue[];
       readonly pageInfo: {
+        readonly endCursor: string;
         readonly hasNextPage: boolean;
       };
       readonly totalCount: number;

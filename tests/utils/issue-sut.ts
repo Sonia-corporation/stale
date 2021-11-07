@@ -119,6 +119,7 @@ export class IssueSut {
                 issues: {
                   nodes: this._githubApiIssues,
                   pageInfo: {
+                    endCursor: faker.datatype.uuid(),
                     hasNextPage: this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE,
                   },
                   totalCount: this._githubApiIssues.length,

@@ -9,15 +9,15 @@ import _ from 'lodash';
 export class GithubApiIssuesService {
   public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
 
-  public static fetchIssues(): Promise<IGithubApiIssues> | never {
+  public static fetchIssues(fromPageCursor?: Readonly<string>): Promise<IGithubApiIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
 
     return OctokitService.getOctokit()
       .graphql<IGithubApiIssues>(
         `
-        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!) {
+        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!, $afterCursor: String) {
           repository(name: $repository, owner: $owner) {
-            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage) {
+            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
               pageInfo {
                 hasNextPage
               }
@@ -34,21 +34,25 @@ export class GithubApiIssuesService {
         }
       `,
         {
+          afterCursor: fromPageCursor,
           issuesPerPage: GithubApiIssuesService.issuesPerPage,
           owner: context.repo.owner,
           repository: context.repo.repo,
         }
       )
       .then((response: Readonly<IGithubApiIssues>): IGithubApiIssues => {
-        const { totalCount } = response.repository.issues;
+        // Only log the first time (when we do not have some pagination yet)
+        if (!fromPageCursor) {
+          const { totalCount } = response.repository.issues;
 
-        if (totalCount === 0) {
-          LoggerService.notice(`No issue fetched`);
-        } else {
-          LoggerService.info(
-            LoggerFormatService.cyan(_.toString(totalCount)),
-            `issue${totalCount > 1 ? `s` : ``} fetched`
-          );
+          if (totalCount === 0) {
+            LoggerService.notice(`No issue can be processed`);
+          } else {
+            LoggerService.info(
+              LoggerFormatService.cyan(_.toString(totalCount)),
+              LoggerFormatService.whiteBright(`issue${totalCount > 1 ? `s` : ``} can be processed`)
+            );
+          }
         }
 
         return response;

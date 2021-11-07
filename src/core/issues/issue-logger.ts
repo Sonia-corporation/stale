@@ -10,41 +10,41 @@ export class IssueLogger {
   }
 
   public debug(...message: ReadonlyArray<string>): IssueLogger {
-    LoggerService.debug(this.getPrefix$$(), ...message);
+    LoggerService.debug(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
 
     return this;
   }
 
   public info(...message: ReadonlyArray<string>): IssueLogger {
-    LoggerService.info(this.getPrefix$$(), ...message);
+    LoggerService.info(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
 
     return this;
   }
 
   public notice(...message: ReadonlyArray<string>): IssueLogger {
-    LoggerService.notice(this.getPrefix$$(), ...message);
+    LoggerService.notice(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
 
     return this;
   }
 
   public warning(...message: ReadonlyArray<string>): IssueLogger {
-    LoggerService.warning(this.getPrefix$$(), ...message);
+    LoggerService.warning(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
 
     return this;
   }
 
   public error(...message: ReadonlyArray<string>): IssueLogger {
-    LoggerService.error(this.getPrefix$$(), ...message);
+    LoggerService.error(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
 
     return this;
   }
 
   public async group(name: Readonly<string>, fn: () => Promise<void>): Promise<void> {
-    return LoggerService.group(`${this.getPrefix$$()} ${name}`, fn);
+    return LoggerService.group(`${this.getPrefix$$()} ${LoggerFormatService.whiteBright(name)}`, fn);
   }
 
   public startGroup(...name: ReadonlyArray<string>): IssueLogger {
-    LoggerService.startGroup(`${this.getPrefix$$()}`, ...name);
+    LoggerService.startGroup(`${this.getPrefix$$()}`, LoggerFormatService.whiteBright(name.join(` `)));
 
     return this;
   }
