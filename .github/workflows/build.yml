@@ -12,7 +12,18 @@ on:
       - master
       - develop
 jobs:
+  PreJob:
+    runs-on: ubuntu-latest
+    outputs:
+      SHOULD_SKIP: ${{ steps.skip-check.outputs.should_skip }}
+    steps:
+      - id: skip-check
+        uses: fkirc/skip-duplicate-actions@v3.4.1
+        with:
+          concurrent_skipping: 'same_content_newer'
   Lint:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -42,6 +53,8 @@ jobs:
       - name: Lint
         run: npm run lint:all:ci
   Test:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -71,6 +84,8 @@ jobs:
       - name: Test
         run: npm run test:ci
   CoverageCodeClimate:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -105,6 +120,8 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
   CoverageCodecov:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -141,6 +158,8 @@ jobs:
           flags: integration
           name: Stale
   Build:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
