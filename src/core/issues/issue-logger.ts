@@ -39,6 +39,22 @@ export class IssueLogger {
     return this;
   }
 
+  public async group(name: Readonly<string>, fn: () => Promise<void>): Promise<void> {
+    return LoggerService.group(`${this.getPrefix$$()} ${name}`, fn);
+  }
+
+  public startGroup(name: Readonly<string>): IssueLogger {
+    LoggerService.startGroup(`${this.getPrefix$$()} ${name}`);
+
+    return this;
+  }
+
+  public endGroup(): IssueLogger {
+    LoggerService.endGroup();
+
+    return this;
+  }
+
   public getPrefix$$(): string {
     return LoggerFormatService.red(`[#${this.issueNumber}]`);
   }

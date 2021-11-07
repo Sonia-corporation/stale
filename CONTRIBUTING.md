@@ -131,3 +131,10 @@ To help us have a clear vision over the workflow and also for you if you are jus
 ### Error handling
 
 - Any error will be caught globally, logged as error and will force the action to stop and fail
+
+## Code style
+
+### $$ suffix
+
+If you came across some methods or properties suffixed by $$, it's to highlight the fact that the code is public, but is an internal code.  
+It's a way to facilitate the tests with a lot of public code instead of private and in the meantime still say: don't touch that!
