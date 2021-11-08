@@ -90,7 +90,7 @@
     },
     {
       "groupName": "Semantic release dependencies",
-      "matchPackagePatterns": ["^@semantic-release$", "^semantic-release$"],
+      "matchPackagePatterns": ["^@semantic-release/", "^semantic-release$"],
       "matchUpdateTypes": ["major"]
     }
   ]
