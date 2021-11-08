@@ -413,10 +413,9 @@ overrides:
       jest/require-hook: error
       jest/no-done-callback: error
       jest/no-disabled-tests: warn
-      jest/lowercase-name:
+      jest/prefer-lowercase-title:
         - error
-        - ignore:
-            - describe
+        - ignoreTopLevelDescribe: true
       jest/no-hooks:
         - error
         - allow:
