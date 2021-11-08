@@ -1,14 +1,7 @@
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssuesPagination } from '@github/api/issues/github-api-issues-pagination.interface';
 
 export interface IGithubApiIssues {
   readonly repository: {
-    readonly issues: {
-      readonly nodes: IGithubApiIssue[];
-      readonly pageInfo: {
-        readonly endCursor: string;
-        readonly hasNextPage: boolean;
-      };
-      readonly totalCount: number;
-    };
+    readonly issues: IGithubApiIssuesPagination;
   };
 }

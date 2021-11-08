@@ -70,7 +70,7 @@ describe(`IssuesService`, (): void => {
       await IssuesService.processBatches();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Fetching the issues batch cyan-1whiteBright-...`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Fetching the batch of issues cyan-#1whiteBright-...`);
     });
 
     it(`should fetch the issues to process`, async (): Promise<void> => {
@@ -110,7 +110,13 @@ describe(`IssuesService`, (): void => {
         await IssuesService.processBatches();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Found`, `cyan-1`, `whiteBright-issue in this batch`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `Found`,
+          `cyan-1`,
+          `whiteBright-issue in the batch`,
+          `cyan-#1`
+        );
       });
 
       it(`should process the two issues`, async (): Promise<void> => {
@@ -155,7 +161,13 @@ describe(`IssuesService`, (): void => {
         await IssuesService.processBatches();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Found`, `cyan-2`, `whiteBright-issues in this batch`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `Found`,
+          `cyan-2`,
+          `whiteBright-issues in the batch`,
+          `cyan-#1`
+        );
       });
 
       it(`should process the two issues`, async (): Promise<void> => {
@@ -178,7 +190,7 @@ describe(`IssuesService`, (): void => {
       await IssuesService.processBatches();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `green-Issues batch`, `cyan-1`, `green-processed`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `green-Batch of issues`, `cyan-#1`, `green-processed`);
     });
 
     describe(`when this batch does not contains more issues to process`, (): void => {
