@@ -18,7 +18,7 @@ import { createHydratedMock } from 'ts-auto-mock';
  * The goal is to mock the least among of code to have the real code called
  * So the logs are visible and we have a local way to test a feature
  */
-export class IssueSut {
+export class FakeIssuesProcessor {
   private readonly _inputs: IInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
 
@@ -52,9 +52,9 @@ export class IssueSut {
    * @description
    * Add a new issue to the list of issues
    * @param {Readonly<Partial<IGithubApiIssue>>} issue The issue to add
-   * @returns {IssueSut} The class
+   * @returns {FakeIssuesProcessor} The class
    */
-  public addIssue(issue?: Readonly<Partial<IGithubApiIssue>>): IssueSut {
+  public addIssue(issue?: Readonly<Partial<IGithubApiIssue>>): FakeIssuesProcessor {
     this._githubApiIssues.push(
       createHydratedMock<IGithubApiIssue>({
         createdAt: faker.date.past().toISOString(),
@@ -72,9 +72,9 @@ export class IssueSut {
   /**
    * @description
    * Remove all the issues
-   * @returns {IssueSut} The class
+   * @returns {FakeIssuesProcessor} The class
    */
-  public removeAllIssues(): IssueSut {
+  public removeAllIssues(): FakeIssuesProcessor {
     this._githubApiIssues = [];
 
     return this;

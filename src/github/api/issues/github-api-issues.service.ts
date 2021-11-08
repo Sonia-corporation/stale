@@ -9,7 +9,7 @@ import _ from 'lodash';
 export class GithubApiIssuesService {
   public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
 
-  public static fetchIssues(fromPageCursor?: Readonly<string>): Promise<IGithubApiIssues> | never {
+  public static fetchIssues(fromPageId?: Readonly<string>): Promise<IGithubApiIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
 
     return OctokitService.getOctokit()
@@ -34,7 +34,7 @@ export class GithubApiIssuesService {
         }
       `,
         {
-          afterCursor: fromPageCursor,
+          afterCursor: fromPageId,
           issuesPerPage: GithubApiIssuesService.issuesPerPage,
           owner: context.repo.owner,
           repository: context.repo.repo,
@@ -42,7 +42,7 @@ export class GithubApiIssuesService {
       )
       .then((response: Readonly<IGithubApiIssues>): IGithubApiIssues => {
         // Only log the first time (when we do not have some pagination yet)
-        if (!fromPageCursor) {
+        if (!fromPageId) {
           const { totalCount } = response.repository.issues;
 
           if (totalCount === 0) {

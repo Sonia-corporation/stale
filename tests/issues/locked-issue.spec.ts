@@ -1,10 +1,10 @@
-import { IssueSut } from '@tests/utils/issue-sut';
+import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 
 describe(`Locked issue`, (): void => {
-  let issueSut: IssueSut;
+  let issueSut: FakeIssuesProcessor;
 
   beforeEach((): void => {
-    issueSut = new IssueSut();
+    issueSut = new FakeIssuesProcessor();
   });
 
   describe(`when an issue is locked`, (): void => {

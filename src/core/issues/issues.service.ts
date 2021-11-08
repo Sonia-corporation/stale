@@ -12,14 +12,14 @@ export class IssuesService {
     LoggerService.info(LoggerFormatService.green(`All the issues were processed`));
   }
 
-  public static async processBatches(batch: Readonly<number> = 1, fromPageCursor?: Readonly<string>): Promise<void> {
+  public static async processBatches(batch: Readonly<number> = 1, fromPageId?: Readonly<string>): Promise<void> {
     LoggerService.info(
       `Fetching the issues batch ${LoggerFormatService.cyan(_.toString(batch))}${LoggerFormatService.whiteBright(
         `...`
       )}`
     );
 
-    const issues: IGithubApiIssues | never = await GithubApiIssuesService.fetchIssues(fromPageCursor);
+    const issues: IGithubApiIssues | never = await GithubApiIssuesService.fetchIssues(fromPageId);
     const issuesCount: number = issues.repository.issues.nodes.length;
 
     LoggerService.info(
