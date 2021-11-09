@@ -28,6 +28,15 @@ describe(`StaleService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
     });
 
+    it(`should log starting the stale process`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Starting the stale process...`);
+    });
+
     describe(`when an error occur`, (): void => {
       beforeEach((): void => {
         inputsServiceInitializeSpy.mockImplementation((): void => {
@@ -131,8 +140,8 @@ describe(`StaleService`, (): void => {
 
       await StaleService.initialize();
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`green-The stale processing is over`);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `green-The stale processing is over`);
     });
 
     it(`should return the service`, async (): Promise<void> => {

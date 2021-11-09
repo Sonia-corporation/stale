@@ -49,6 +49,7 @@ All the inputs that are used both for issues and Pull Requests.
 | Input        | Description                                                                                                              | Default               |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | github-token | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`. | `${{ github.token }}` |
+| dry-run      | A mode where any Data Manipulation Language will be skipped. Useful to debug.                                            | `false`               |
 
 ## All the issues inputs
 

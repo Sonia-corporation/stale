@@ -3,6 +3,7 @@ import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.ser
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
+import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`@utils/loggers/logger.service`);
@@ -51,9 +52,9 @@ describe(`GithubApiIssuesService`, (): void => {
       expect(graphqlMock).toHaveBeenCalledTimes(1);
       expect(graphqlMock).toHaveBeenCalledWith(
         `
-        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!) {
+        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!, $afterCursor: String) {
           repository(name: $repository, owner: $owner) {
-            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage) {
+            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
               pageInfo {
                 hasNextPage
               }
@@ -70,6 +71,7 @@ describe(`GithubApiIssuesService`, (): void => {
         }
       `,
         {
+          afterCursor: undefined,
           issuesPerPage: 20,
           owner: `dummy-owner`,
           repository: `dummy-repo`,
@@ -114,13 +116,25 @@ describe(`GithubApiIssuesService`, (): void => {
           );
         });
 
-        it(`should log that zero issue was fetched`, async (): Promise<void> => {
-          expect.assertions(2);
+        describe(`when the issues are fetched from the start`, (): void => {
+          it(`should log that zero issue was fetched`, async (): Promise<void> => {
+            expect.assertions(2);
 
-          await GithubApiIssuesService.fetchIssues();
+            await GithubApiIssuesService.fetchIssues();
 
-          expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`No issue fetched`);
+            expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`No issue can be processed`);
+          });
+        });
+
+        describe(`when the issues are fetched from the a previous page`, (): void => {
+          it(`should not log the number of fetched issues`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+          });
         });
       });
 
@@ -137,13 +151,25 @@ describe(`GithubApiIssuesService`, (): void => {
           );
         });
 
-        it(`should log the number of fetched issues`, async (): Promise<void> => {
-          expect.assertions(2);
+        describe(`when the issues are fetched from the start`, (): void => {
+          it(`should log the number of fetched issues`, async (): Promise<void> => {
+            expect.assertions(2);
 
-          await GithubApiIssuesService.fetchIssues();
+            await GithubApiIssuesService.fetchIssues();
 
-          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `1 issue fetched`);
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-1`, `whiteBright-issue can be processed`);
+          });
+        });
+
+        describe(`when the issues are fetched from the a previous page`, (): void => {
+          it(`should not log the number of fetched issues`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+          });
         });
       });
 
@@ -160,13 +186,25 @@ describe(`GithubApiIssuesService`, (): void => {
           );
         });
 
-        it(`should log the number of fetched issues`, async (): Promise<void> => {
-          expect.assertions(2);
+        describe(`when the issues are fetched from the start`, (): void => {
+          it(`should log the number of fetched issues`, async (): Promise<void> => {
+            expect.assertions(2);
 
-          await GithubApiIssuesService.fetchIssues();
+            await GithubApiIssuesService.fetchIssues();
 
-          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `2 issues fetched`);
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-2`, `whiteBright-issues can be processed`);
+          });
+        });
+
+        describe(`when the issues are fetched from the a previous page`, (): void => {
+          it(`should not log the number of fetched issues`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+          });
         });
       });
 

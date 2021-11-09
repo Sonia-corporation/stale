@@ -36,6 +36,7 @@ plugins:
       - '.eslintcache'
       - '!src/**/*.ts'
       - '!src/**/*.js'
+      - '!tests/**/*.ts'
       - '!scripts/**/*.ts'
       - '!scripts/**/*.js'
 exclude_patterns:

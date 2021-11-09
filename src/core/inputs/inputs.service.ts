@@ -22,8 +22,8 @@ export class InputsService {
 
   public static setInputs(): IInputs {
     InputsService.inputs$$ = {
+      dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
-      isDryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
     };
 
     return InputsService.inputs$$;
