@@ -53,8 +53,9 @@ All the inputs that are used both for issues and Pull Requests.
 
 ## All the issues inputs
 
-| Input | Description | Default |
-| ----- | ----------- | ------- |
+| Input             | Description                                                 | Default |
+| ----------------- | ----------------------------------------------------------- | ------- |
+| issue-stale-label | The label that will be added to the issue when it is stale. | `stale` |
 
 ## All the Pull Requests inputs
 
