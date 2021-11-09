@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.4.0](https://github.com/Sonia-corporation/stale/compare/1.3.0...1.4.0) (2021-11-09)
+
+
+### :rocket: Features
+
+* **logs:** add a log when the process start ([ec78887](https://github.com/Sonia-corporation/stale/commit/ec78887de476e7fb93a59a7accd5d52f5b9904fb))
+* **issues:** add pagination ([4c1395b](https://github.com/Sonia-corporation/stale/commit/4c1395b1bb469740047d3fada26643359d5a43b8))
+* **logs:** highlight the number of fetched issues ([df09f18](https://github.com/Sonia-corporation/stale/commit/df09f18ef920c88c7e6131e5825eaa790e6d36a0))
+
 # [1.3.0](https://github.com/Sonia-corporation/stale/compare/1.2.0...1.3.0) (2021-11-07)
 
 
