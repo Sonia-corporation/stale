@@ -65,6 +65,8 @@
     "test:leaks": "jest --detect-leaks",
     "test:ci": "jest --bail=1 --ci",
     "test:ci:coverage": "jest --collect-coverage --bail=1 --ci",
+    "test:ci:coverage:integration": "npm run test:ci:coverage -- tests",
+    "test:ci:coverage:unit": "npm run test:ci:coverage -- src",
     "test:clear-cache": "jest --clear-cache",
     "\n# LINT SCRIPTS:": "",
     "lint:ts": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet **/*.{js,ts}",

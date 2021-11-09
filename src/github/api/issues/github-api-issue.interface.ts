@@ -1,6 +1,6 @@
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 
-export interface IGitHubApiIssue {
+export interface IGithubApiIssue {
   readonly createdAt: string;
   readonly locked: boolean;
   readonly number: IGithubApiIssueNumber;

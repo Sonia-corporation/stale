@@ -7,6 +7,8 @@ Please check if your PR fulfils the following requirements:
 - [ ] Docs have been added/updated (for bugfix/feature)
 - [ ] Contributing implementation have been added/updated (for bugfix/feature)
 
+<!-- [Contributing implementation link](CONTRIBUTING.md#implementation) -->
+
 ## PR Type
 
 What kind of change does this PR introduce?
@@ -37,3 +39,5 @@ What kind of change does this PR introduce?
 <!-- If this PR contains a breaking change, please describe the impact and migration path for existing applications below. -->
 
 ## Other information
+
+<!-- Usually, the link to the related issue -->

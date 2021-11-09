@@ -1,5 +1,5 @@
 import { createLink } from '@utils/links/create-link';
-import * as faker from 'faker';
+import faker from 'faker';
 import * as TerminalLinkModule from 'terminal-link';
 
 describe(`createLink()`, (): void => {

@@ -84,6 +84,7 @@ module.exports = {
   moduleNameMapper: {
     '@core/(.*)': `<rootDir>/src/core/$1`,
     '@github/(.*)': `<rootDir>/src/github/$1`,
+    '@tests/(.*)': `<rootDir>/tests/$1`,
     '@utils/(.*)': `<rootDir>/src/utils/$1`,
   },
 
@@ -132,7 +133,7 @@ module.exports = {
   // runner: "jest-runner",
 
   // A list of paths to directories that Jest should use to search for files in
-  roots: [`./src`, `./scripts`],
+  roots: [`./src`, `./scripts`, `./tests`],
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
   setupFiles: [`./jest/config.ts`],
