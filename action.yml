@@ -10,6 +10,10 @@ inputs:
     description: 'A mode where any Data Manipulation Language will be skipped. Useful to debug.'
     required: false
     default: 'false'
+  issue-stale-label:
+    description: 'The label that will be added to the issue when it is stale.'
+    required: false
+    default: 'stale'
 runs:
   using: 'node12'
   main: 'dist/index.js'

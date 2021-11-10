@@ -11,6 +11,7 @@ documentation:
 test:
   - src/**/*.spec.ts
   - src/**/*.spec.js
+  - tests/**
 
 CI:
   - .github/workflows/**

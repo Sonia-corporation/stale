@@ -37,7 +37,8 @@
     "paths": {
       "@core/*": ["src/core/*"],
       "@github/*": ["src/github/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@tests/*": ["tests/*"]
     }
   }
 }

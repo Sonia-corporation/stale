@@ -42,7 +42,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.debug(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceDebugSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy message 1`, `dummy message 2`);
+        expect(loggerServiceDebugSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -59,7 +59,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.info(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy message 1`, `dummy message 2`);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -76,7 +76,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.notice(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy message 1`, `dummy message 2`);
+        expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -93,7 +93,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.warning(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceWarningSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceWarningSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy message 1`, `dummy message 2`);
+        expect(loggerServiceWarningSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -110,7 +110,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.error(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy message 1`, `dummy message 2`);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -127,7 +127,7 @@ describe(`IssueLogger`, (): void => {
         await issueLogger.group(`dummy name`, (): Promise<void> => Promise.resolve());
 
         expect(loggerServiceGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceGroupSpy.mock.calls[0][0]).toStrictEqual(`red-[#8] dummy name`);
+        expect(loggerServiceGroupSpy.mock.calls[0][0]).toStrictEqual(`red-[#8] whiteBright-dummy name`);
         expect(loggerServiceGroupSpy.mock.calls[0][1]).toBeFunction();
       });
     });
@@ -145,7 +145,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.startGroup(`dummy name`);
 
         expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8]`, `dummy name`);
+        expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy name`);
       });
     });
 
