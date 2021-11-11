@@ -78,9 +78,7 @@ describe(`issueStaleProcessor`, (): void => {
     });
 
     describe(`stale()`, (): void => {
-      beforeEach((): void => {});
-
-      it.todo(``);
+      it.todo(`should`);
     });
 
     describe(`isStaleByUpdateDate$$()`, (): void => {

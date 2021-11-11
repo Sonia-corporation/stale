@@ -65,6 +65,7 @@ describe(`GithubApiIssuesService`, (): void => {
                 number
                 updatedAt
                 url
+                id
               }
             }
           }

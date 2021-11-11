@@ -28,6 +28,7 @@ export class GithubApiIssuesService {
                 number
                 updatedAt
                 url
+                id
               }
             }
           }
