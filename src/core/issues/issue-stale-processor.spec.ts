@@ -6,6 +6,7 @@ import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.ser
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IUuid } from '@utils/dates/uuid';
+import { LoggerService } from '@utils/loggers/logger.service';
 import faker from 'faker';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -39,20 +40,24 @@ describe(`issueStaleProcessor`, (): void => {
 
     describe(`shouldStale()`, (): void => {
       let isStaleByUpdateDateSpy: jest.SpyInstance;
+      let loggerServiceInfoSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
 
         isStaleByUpdateDateSpy = jest.spyOn(issueStaleProcessor, `isStaleByUpdateDate$$`).mockImplementation();
+        loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       });
 
       it(`should check if the issue is stale based on the update date`, (): void => {
-        expect.assertions(2);
+        expect.assertions(4);
 
         issueStaleProcessor.shouldStale();
 
         expect(isStaleByUpdateDateSpy).toHaveBeenCalledTimes(1);
         expect(isStaleByUpdateDateSpy).toHaveBeenCalledWith();
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`Checking if the issue should be stale...`);
       });
 
       describe(`when the issue should not be stale`, (): void => {
@@ -92,6 +97,7 @@ describe(`issueStaleProcessor`, (): void => {
       let githubApiLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let inputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
+      let loggerServiceInfoSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -126,10 +132,11 @@ describe(`issueStaleProcessor`, (): void => {
         githubApiLabelsServiceAddLabelToIssueSpy = jest
           .spyOn(GithubApiLabelsService, `addLabelToIssue`)
           .mockImplementation();
+        loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(9);
 
         await issueStaleProcessor.stale();
 
@@ -137,20 +144,39 @@ describe(`issueStaleProcessor`, (): void => {
         expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Adding the stale state to this issue...`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `Fetching the stale label`,
+          `cyan-${issueStaleLabel}`,
+          `whiteBright-to apply...`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `The stale label was fetched`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Adding the stale label to this issue...`);
       });
 
       it(`should add the stale label on the issue`, async (): Promise<void> => {
-        expect.assertions(2);
+        expect.assertions(5);
 
         await issueStaleProcessor.stale();
 
         expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
         expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(6, `green-The issue is now stale`);
       });
     });
 
     describe(`isStaleByUpdateDate$$()`, (): void => {
       let issueProcessorGetUpdatedAtMock: jest.Mock;
+
+      let loggerServiceInfoSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      });
 
       describe(`when the issue was updated more than 30 days ago`, (): void => {
         beforeEach((): void => {
@@ -167,11 +193,27 @@ describe(`issueStaleProcessor`, (): void => {
         });
 
         it(`should return true`, (): void => {
-          expect.assertions(1);
+          expect.assertions(5);
 
           const result = issueStaleProcessor.isStaleByUpdateDate$$();
 
           expect(result).toBeTrue();
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            1,
+            `Checking if the issue should be stale based on the update date...`
+          );
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The issue was updated for the last time on`,
+            `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+          );
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The issue should be stale since it was not updated in the last`,
+            `cyan-30`,
+            `whiteBright-days`
+          );
         });
       });
 
@@ -190,11 +232,27 @@ describe(`issueStaleProcessor`, (): void => {
         });
 
         it(`should return false`, (): void => {
-          expect.assertions(1);
+          expect.assertions(5);
 
           const result = issueStaleProcessor.isStaleByUpdateDate$$();
 
           expect(result).toBeFalse();
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            1,
+            `Checking if the issue should be stale based on the update date...`
+          );
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The issue was updated for the last time on`,
+            `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+          );
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The issue should not be stale since it was updated in the last`,
+            `cyan-30`,
+            `whiteBright-days`
+          );
         });
       });
     });
