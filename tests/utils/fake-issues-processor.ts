@@ -1,8 +1,8 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';

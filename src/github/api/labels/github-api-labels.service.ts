@@ -1,4 +1,4 @@
-import { IGithubApiGetLabel } from '@github/api/labels/github-api-get-label.interface';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';

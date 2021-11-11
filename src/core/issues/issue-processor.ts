@@ -1,7 +1,7 @@
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { createLink } from '@utils/links/create-link';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import _ from 'lodash';

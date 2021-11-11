@@ -2,7 +2,7 @@ import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import * as CreateLinkModule from '@utils/links/create-link';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
