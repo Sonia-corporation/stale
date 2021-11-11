@@ -1,7 +1,8 @@
-import { IGithubApiLabel } from '@github/api/labels/github-api-label.interface';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { IUuid } from '@utils/dates/uuid';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 import faker from 'faker';
@@ -304,6 +305,105 @@ describe(`GithubApiLabelsService`, (): void => {
             );
           });
         });
+      });
+    });
+  });
+
+  describe(`addLabelToIssue()`, (): void => {
+    let issueId: IUuid;
+    let labelId: IUuid;
+    let graphqlMock: jest.Mock;
+
+    let loggerServiceInfoSpy: jest.SpyInstance;
+    let loggerServiceErrorSpy: jest.SpyInstance;
+    let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      issueId = faker.datatype.uuid();
+      labelId = faker.datatype.uuid();
+      graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
+      octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+        // @ts-ignore
+        graphql: graphqlMock,
+      });
+    });
+
+    it(`should add the label on the issue`, async (): Promise<void> => {
+      expect.assertions(7);
+
+      await expect(GithubApiLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+        new Error(`graphql error`)
+      );
+
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+        `Adding the label`,
+        `cyan-${labelId}`,
+        `whiteBright-on the issue`,
+        `cyan-${issueId}whiteBright-...`
+      );
+      expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+      expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+      expect(graphqlMock).toHaveBeenCalledTimes(1);
+      expect(graphqlMock).toHaveBeenCalledWith(
+        `
+        mutation MyMutation($issueId: ID!, $labelId: ID!) {
+          __typename
+          addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
+            clientMutationId
+          }
+        }
+      `,
+        {
+          issueId,
+          labelId,
+        }
+      );
+    });
+
+    describe(`when the label failed to be added`, (): void => {
+      beforeEach((): void => {
+        graphqlMock.mockRejectedValue(new Error(`graphql error`));
+      });
+
+      it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        expect.assertions(3);
+
+        await expect(GithubApiLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(
+          `Failed to add the label`,
+          `cyan-${labelId}`,
+          `red-on the issue`,
+          `cyan-${issueId}`
+        );
+      });
+    });
+
+    describe(`when the label was successfully added`, (): void => {
+      beforeEach((): void => {
+        graphqlMock.mockResolvedValue({});
+      });
+
+      it(`should log about the success of the addition`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await GithubApiLabelsService.addLabelToIssue(issueId, labelId);
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `green-Label`,
+          `cyan-${labelId}`,
+          `green-added to issue`,
+          `cyan-${issueId}`
+        );
       });
     });
   });

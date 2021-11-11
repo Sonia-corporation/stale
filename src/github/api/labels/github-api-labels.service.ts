@@ -1,5 +1,6 @@
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { IUuid } from '@utils/dates/uuid';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
@@ -68,6 +69,49 @@ export class GithubApiLabelsService {
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(`Failed to fetch the label`, LoggerFormatService.cyan(labelName));
+
+        throw error;
+      });
+  }
+
+  public static addLabelToIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
+    LoggerService.info(
+      `Adding the label`,
+      LoggerFormatService.cyan(labelId),
+      LoggerFormatService.whiteBright(`on the issue`),
+      `${LoggerFormatService.cyan(issueId)}${LoggerFormatService.whiteBright(`...`)}`
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(
+        `
+        mutation MyMutation($issueId: ID!, $labelId: ID!) {
+          __typename
+          addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
+            clientMutationId
+          }
+        }
+      `,
+        {
+          issueId,
+          labelId,
+        }
+      )
+      .then((): void => {
+        LoggerService.info(
+          LoggerFormatService.green(`Label`),
+          LoggerFormatService.cyan(labelId),
+          LoggerFormatService.green(`added to issue`),
+          LoggerFormatService.cyan(issueId)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        LoggerService.error(
+          `Failed to add the label`,
+          LoggerFormatService.cyan(labelId),
+          LoggerFormatService.red(`on the issue`),
+          LoggerFormatService.cyan(issueId)
+        );
 
         throw error;
       });
