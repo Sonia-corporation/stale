@@ -64,15 +64,13 @@ export class IssueProcessor {
    * At this point, the issue can really be processed (not ignored)
    * @returns {Promise<void>}
    */
-  public processForStale$$(): Promise<void> {
+  public async processForStale$$(): Promise<void> {
     const issueStaleProcessor: IssueStaleProcessor = new IssueStaleProcessor(this);
 
     if (issueStaleProcessor.shouldStale()) {
-      issueStaleProcessor.stale();
+      await issueStaleProcessor.stale();
     }
 
     this.stopProcessing$$();
-
-    return Promise.resolve();
   }
 }

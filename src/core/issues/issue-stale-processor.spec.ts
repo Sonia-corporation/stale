@@ -1,5 +1,12 @@
+import { IInputs } from '@core/inputs/inputs.interface';
+import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
+import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IUuid } from '@utils/dates/uuid';
+import faker from 'faker';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -78,7 +85,68 @@ describe(`issueStaleProcessor`, (): void => {
     });
 
     describe(`stale()`, (): void => {
-      it.todo(`should`);
+      let issueStaleLabel: string;
+      let staleLabelId: IUuid;
+      let issueId: IUuid;
+
+      let githubApiLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
+      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let githubApiLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueStaleLabel = faker.random.word();
+        staleLabelId = faker.datatype.uuid();
+        issueProcessor = createHydratedMock<IssueProcessor>({
+          githubIssue: {
+            id: issueId,
+          },
+        });
+        issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
+
+        githubApiLabelsServiceFetchLabelByNameSpy = jest
+          .spyOn(GithubApiLabelsService, `fetchLabelByName`)
+          .mockResolvedValue(
+            createHydratedMock<IGithubApiGetLabel>({
+              repository: {
+                labels: {
+                  nodes: [
+                    createHydratedMock<IGithubApiLabel>({
+                      id: staleLabelId,
+                    }),
+                  ],
+                },
+              },
+            })
+          );
+        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueStaleLabel,
+          })
+        );
+        githubApiLabelsServiceAddLabelToIssueSpy = jest
+          .spyOn(GithubApiLabelsService, `addLabelToIssue`)
+          .mockImplementation();
+      });
+
+      it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
+        expect.assertions(4);
+
+        await issueStaleProcessor.stale();
+
+        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      it(`should add the stale label on the issue`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await issueStaleProcessor.stale();
+
+        expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
+      });
     });
 
     describe(`isStaleByUpdateDate$$()`, (): void => {
