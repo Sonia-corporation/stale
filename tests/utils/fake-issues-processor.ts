@@ -2,7 +2,7 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
 import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
 import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/issues-per-page';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';

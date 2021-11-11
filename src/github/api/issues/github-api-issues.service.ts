@@ -1,5 +1,5 @@
 import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/issues-per-page';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';

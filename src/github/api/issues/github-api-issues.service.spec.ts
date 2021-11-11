@@ -106,15 +106,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when zero issue was fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 0,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 0,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {
@@ -141,15 +141,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when one issue was fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 1,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 1,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {
@@ -176,15 +176,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when multiple issues were fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 2,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 2,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {
