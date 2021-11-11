@@ -67,7 +67,7 @@ export class IssueProcessor {
   public processForStale$$(): Promise<void> {
     const issueStaleProcessor: IssueStaleProcessor = new IssueStaleProcessor(this);
 
-    if (issueStaleProcessor.shouldBeStale()) {
+    if (issueStaleProcessor.shouldStale()) {
       issueStaleProcessor.stale();
     }
 

@@ -271,13 +271,13 @@ describe(`issueProcessor`, (): void => {
 
         expect(mockIssueStaleProcessor).toHaveBeenCalledTimes(1);
         expect(mockIssueStaleProcessor).toHaveBeenCalledWith(issueProcessor);
-        expect(mockIssueStaleProcessor.prototype.shouldBeStale.mock.calls).toHaveLength(1);
-        expect(mockIssueStaleProcessor.prototype.shouldBeStale.mock.calls[0]).toHaveLength(0);
+        expect(mockIssueStaleProcessor.prototype.shouldStale.mock.calls).toHaveLength(1);
+        expect(mockIssueStaleProcessor.prototype.shouldStale.mock.calls[0]).toHaveLength(0);
       });
 
       describe(`when the issue should not be stale`, (): void => {
         beforeEach((): void => {
-          mockIssueStaleProcessor.prototype.shouldBeStale.mockImplementation().mockReturnValue(false);
+          mockIssueStaleProcessor.prototype.shouldStale.mockImplementation().mockReturnValue(false);
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -293,7 +293,7 @@ describe(`issueProcessor`, (): void => {
 
       describe(`when the issue should be stale`, (): void => {
         beforeEach((): void => {
-          mockIssueStaleProcessor.prototype.shouldBeStale.mockImplementation().mockReturnValue(true);
+          mockIssueStaleProcessor.prototype.shouldStale.mockImplementation().mockReturnValue(true);
         });
 
         it(`should stale the issue`, async (): Promise<void> => {

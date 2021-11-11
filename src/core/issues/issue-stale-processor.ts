@@ -11,7 +11,7 @@ export class IssueStaleProcessor {
     this.issueProcessor = issueProcessor;
   }
 
-  public shouldBeStale(): boolean {
+  public shouldStale(): boolean {
     return this.isStaleByUpdateDate$$();
   }
 
@@ -25,7 +25,7 @@ export class IssueStaleProcessor {
     return (
       DateTime.now().diff(updatedAt, `days`, {
         conversionAccuracy: `longterm`,
-      }).days >= STALE_AFTER
+      }).days > STALE_AFTER
     );
   }
 }
