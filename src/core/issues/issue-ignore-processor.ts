@@ -10,11 +10,7 @@ export class IssueIgnoreProcessor {
   public shouldIgnore(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue should be ignored...`);
 
-    if (this.isLocked$$()) {
-      return true;
-    }
-
-    return false;
+    return this.isLocked$$();
   }
 
   public isLocked$$(): boolean {

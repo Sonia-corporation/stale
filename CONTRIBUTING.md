@@ -128,7 +128,10 @@ To help us have a clear vision over the workflow and also for you if you are jus
 
 - Fetch all the open issues per batch of 20, sorted by update date from the oldest first
 - Check if the issue is locked and stop the processing if this is the case
-- When the batch is process, go to the next one and proceed again
+- Check if the issue last update is older than 30 days
+- If the issue last update is older than 30 days
+  - Add a label (coming from the `issue-stale-label` input)
+- When the batch was processed, go to the next one and proceed again
 
 ### Error handling
 

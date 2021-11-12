@@ -1,4 +1,4 @@
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 
 export interface IGithubApiIssuesPagination {
   readonly nodes: IGithubApiIssue[];
