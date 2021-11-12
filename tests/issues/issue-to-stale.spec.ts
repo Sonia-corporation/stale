@@ -1,21 +1,26 @@
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
+import { DateTime } from 'luxon';
 
-/**
- * Perfect to test the pagination
- */
-describe(`Batch of issues`, (): void => {
+describe(`Issue to stale`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
   beforeEach((): void => {
     issueSut = new FakeIssuesProcessor();
   });
 
-  describe(`when more than 20 issues are locked`, (): void => {
+  describe(`when an issue last update was older than 30 days`, (): void => {
     beforeEach((): void => {
-      issueSut.addIssues(30, { locked: true });
+      issueSut.addIssue({
+        locked: false,
+        updatedAt: DateTime.now()
+          .minus({
+            day: 31,
+          })
+          .toISO(),
+      });
     });
 
-    it(`should not process the issues`, async (): Promise<void> => {
+    it(`should stale the issue`, async (): Promise<void> => {
       expect.assertions(1);
 
       await issueSut.process();

@@ -1,8 +1,8 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesService } from '@core/issues/issues.service';
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';

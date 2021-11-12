@@ -1,6 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';

@@ -1,5 +1,6 @@
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
@@ -50,33 +51,12 @@ describe(`GithubApiIssuesService`, (): void => {
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
       expect(graphqlMock).toHaveBeenCalledTimes(1);
-      expect(graphqlMock).toHaveBeenCalledWith(
-        `
-        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!, $afterCursor: String) {
-          repository(name: $repository, owner: $owner) {
-            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
-              pageInfo {
-                hasNextPage
-              }
-              totalCount
-              nodes {
-                locked
-                createdAt
-                number
-                updatedAt
-                url
-              }
-            }
-          }
-        }
-      `,
-        {
-          afterCursor: undefined,
-          issuesPerPage: 20,
-          owner: `dummy-owner`,
-          repository: `dummy-repo`,
-        }
-      );
+      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ISSUES_QUERY, {
+        afterCursor: undefined,
+        issuesPerPage: 20,
+        owner: `dummy-owner`,
+        repository: `dummy-repo`,
+      });
     });
 
     describe(`when the issues failed to be fetched`, (): void => {
@@ -105,15 +85,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when zero issue was fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 0,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 0,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {
@@ -140,15 +120,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when one issue was fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 1,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 1,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {
@@ -175,15 +155,15 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when multiple issues were fetched`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
-              repository: {
-                issues: {
-                  totalCount: 2,
-                },
+          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+            repository: {
+              issues: {
+                totalCount: 2,
               },
-            })
-          );
+            },
+          });
+
+          graphqlMock.mockResolvedValue(githubApiIssues);
         });
 
         describe(`when the issues are fetched from the start`, (): void => {

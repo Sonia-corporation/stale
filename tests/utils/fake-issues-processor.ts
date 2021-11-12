@@ -1,8 +1,12 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
-import { IGithubApiIssue } from '@github/api/issues/github-api-issue.interface';
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/issues-per-page';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
+import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
+import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';
@@ -29,6 +33,7 @@ export class FakeIssuesProcessor {
   private static _getMockedIssue(issue?: Readonly<Partial<IGithubApiIssue>>): IGithubApiIssue {
     return createHydratedMock<IGithubApiIssue>({
       createdAt: faker.date.past().toISOString(),
+      id: faker.datatype.uuid(),
       locked: faker.datatype.boolean(),
       number: faker.datatype.number(),
       updatedAt: faker.date.recent().toISOString(),
@@ -39,6 +44,97 @@ export class FakeIssuesProcessor {
 
   private readonly _inputs: IInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
+  private _githubApiIssuesFetchCount = 0;
+  private readonly _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
+    [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_ISSUES_QUERY]: (): Promise<IGithubApiIssues> => {
+      let firstBatchIssues: IGithubApiIssues;
+      let secondBatchIssues: IGithubApiIssues | null;
+
+      // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
+      if (this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE) {
+        firstBatchIssues = createHydratedMock<IGithubApiIssues>({
+          repository: {
+            issues: {
+              nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[0],
+              pageInfo: {
+                endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
+                hasNextPage: true,
+              },
+              totalCount: this._githubApiIssues.length,
+            },
+          },
+        });
+        secondBatchIssues = createHydratedMock<IGithubApiIssues>({
+          repository: {
+            issues: {
+              nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[1],
+              pageInfo: {
+                endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
+                hasNextPage: false,
+              },
+              totalCount: this._githubApiIssues.length,
+            },
+          },
+        });
+      } else {
+        firstBatchIssues = createHydratedMock<IGithubApiIssues>({
+          repository: {
+            issues: {
+              nodes: this._githubApiIssues,
+              pageInfo: {
+                endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
+                hasNextPage: this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE,
+              },
+              totalCount: this._githubApiIssues.length,
+            },
+          },
+        });
+        secondBatchIssues = null;
+      }
+
+      if (this._githubApiIssuesFetchCount === 0) {
+        this._githubApiIssuesFetchCount += 1;
+
+        return Promise.resolve(firstBatchIssues);
+      }
+
+      if (this._githubApiIssuesFetchCount === 1) {
+        this._githubApiIssuesFetchCount += 1;
+
+        if (secondBatchIssues === null) {
+          throw new Error(`Should not reach this code if your mocks are correct`);
+        }
+
+        return Promise.resolve(secondBatchIssues);
+      }
+
+      throw new Error(`The support of more than 2 batches is not yet implemented`);
+    },
+    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabel> {
+      if (!_.isString(data.labelName)) {
+        throw new Error(`The labelName is not a string`);
+      }
+
+      return Promise.resolve(
+        createHydratedMock<IGithubApiGetLabel>({
+          repository: {
+            labels: {
+              nodes: [
+                {
+                  id: faker.datatype.uuid(),
+                  name: data.labelName,
+                },
+              ],
+              totalCount: 1,
+            },
+          },
+        })
+      );
+    },
+  };
 
   /**
    * @description
@@ -50,6 +146,7 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IInputs>({
       dryRun: false,
       githubToken: faker.datatype.uuid(),
+      issueStaleLabel: `stale`,
       ...inputs,
     });
   }
@@ -80,15 +177,21 @@ export class FakeIssuesProcessor {
 
   /**
    * @description
-   * Add some new locked issues to the list of issues
+   * Add x new issues to the list of issues
+   * Note: the id cannot be passed and will be overridden anyhow to make sure each issue has a unique id
    * @param {Readonly<number>} count The number of issues to add
+   * @param {Readonly<Partial<IGithubApiIssue>>} issue The issue to add (same template)
    * @returns {FakeIssuesProcessor} The class
    */
-  public addXLockedIssues(count: Readonly<number>): FakeIssuesProcessor {
+  public addIssues(
+    count: Readonly<number>,
+    issue?: Readonly<Partial<Exclude<IGithubApiIssue, 'id'>>>
+  ): FakeIssuesProcessor {
     _.times(count, (): void => {
       this._githubApiIssues.push(
         FakeIssuesProcessor._getMockedIssue({
-          locked: true,
+          ...issue,
+          id: faker.datatype.uuid(),
         })
       );
     });
@@ -134,75 +237,18 @@ export class FakeIssuesProcessor {
     });
 
     // Mock the GitHub API fetch of issues
-    jest.spyOn(github, `getOctokit`).mockImplementation((): InstanceType<typeof GitHub> => {
-      let firstBatchIssues: IGithubApiIssues;
-      let secondBatchIssues: IGithubApiIssues;
-
-      if (this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE) {
-        firstBatchIssues = createHydratedMock<IGithubApiIssues>({
-          repository: {
-            issues: {
-              nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[0],
-              pageInfo: {
-                endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
-                hasNextPage: true,
-              },
-              totalCount: this._githubApiIssues.length,
-            },
-          },
-        });
-        secondBatchIssues = createHydratedMock<IGithubApiIssues>({
-          repository: {
-            issues: {
-              nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[1],
-              pageInfo: {
-                endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
-                hasNextPage: false,
-              },
-              totalCount: this._githubApiIssues.length,
-            },
-          },
-        });
-
-        return createHydratedMock<InstanceType<typeof GitHub>>({
-          // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
+    jest.spyOn(github, `getOctokit`).mockImplementation(
+      (): InstanceType<typeof GitHub> =>
+        createHydratedMock<InstanceType<typeof GitHub>>({
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           graphql: jest
             .fn()
-            .mockImplementation((): never => {
-              // @todo support an infinity of batches (dunno how to have X mockResolvedValueOnce calls)
-              throw new Error(`The support of more than 2 batches is not yet implemented`);
-            })
-            .mockResolvedValueOnce(firstBatchIssues)
-            .mockResolvedValueOnce(secondBatchIssues),
-        });
-      }
-
-      firstBatchIssues = createHydratedMock<IGithubApiIssues>({
-        repository: {
-          issues: {
-            nodes: this._githubApiIssues,
-            pageInfo: {
-              endCursor: this._githubApiIssues.length > 1 ? faker.datatype.uuid() : undefined,
-              hasNextPage: this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE,
-            },
-            totalCount: this._githubApiIssues.length,
-          },
-        },
-      });
-
-      return createHydratedMock<InstanceType<typeof GitHub>>({
-        // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        graphql: jest
-          .fn()
-          .mockImplementation((): never => {
-            throw new Error(`This code should never be reached else there is a risk of infinite loop`);
-          })
-          .mockResolvedValueOnce(firstBatchIssues),
-      });
-    });
+            .mockImplementation(
+              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> =>
+                this._apiMapper[request](data)
+            ),
+        })
+    );
   }
 }

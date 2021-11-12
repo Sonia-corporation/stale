@@ -42,6 +42,10 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
+## Default configuration
+
+@todo
+
 ## All the common inputs
 
 All the inputs that are used both for issues and Pull Requests.
@@ -53,8 +57,9 @@ All the inputs that are used both for issues and Pull Requests.
 
 ## All the issues inputs
 
-| Input | Description | Default |
-| ----- | ----------- | ------- |
+| Input             | Description                                                 | Default |
+| ----------------- | ----------------------------------------------------------- | ------- |
+| issue-stale-label | The label that will be added to the issue when it is stale. | `stale` |
 
 ## All the Pull Requests inputs
 
