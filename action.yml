@@ -14,6 +14,10 @@ inputs:
     description: 'The label that will be added to the issue when it is stale.'
     required: false
     default: 'stale'
+  issue-ignore-any-labels:
+    description: 'Allow to ignore the processing of issues that contains one of those labels (multiline).'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

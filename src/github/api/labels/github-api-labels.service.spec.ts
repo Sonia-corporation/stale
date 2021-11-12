@@ -1,8 +1,8 @@
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -48,7 +48,7 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
         `Fetching the label`,
-        `cyan-${labelName}`,
+        `value-${labelName}`,
         `whiteBright-from GitHub...`
       );
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
@@ -72,22 +72,22 @@ describe(`GithubApiLabelsService`, (): void => {
         await expect(GithubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `cyan-${labelName}`);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
       });
     });
 
     describe(`when the label was successfully fetched`, (): void => {
-      let githubApiGetLabel: IGithubApiGetLabel;
+      let githubApiGetLabel: IGithubApiLabels;
 
       beforeEach((): void => {
-        githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>();
+        githubApiGetLabel = createHydratedMock<IGithubApiLabels>();
 
         graphqlMock.mockResolvedValue(githubApiGetLabel);
       });
 
       describe(`when the label was not found`, (): void => {
         beforeEach((): void => {
-          githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+          githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
             repository: {
               labels: {
                 totalCount: 0,
@@ -109,15 +109,15 @@ describe(`GithubApiLabelsService`, (): void => {
           expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
             1,
             `Could not find a single label matching`,
-            `cyan-${labelName}`
+            `value-${labelName}`
           );
-          expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+          expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
         });
       });
 
       describe(`when one label matching the search one was found`, (): void => {
         beforeEach((): void => {
-          githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+          githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
             repository: {
               labels: {
                 nodes: [createHydratedMock<IGithubApiLabel>()],
@@ -131,7 +131,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
         describe(`when the label is exactly the one searched`, (): void => {
           beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+            githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
               repository: {
                 labels: {
                   nodes: [
@@ -158,7 +158,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
         describe(`when the label is not the one searched`, (): void => {
           beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+            githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
               repository: {
                 labels: {
                   nodes: [
@@ -185,18 +185,18 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
               `Could find a label`,
-              `cyan-dummy-${labelName}`,
+              `value-dummy-${labelName}`,
               `red-which is not exactly identical to`,
-              `cyan-${labelName}`
+              `value-${labelName}`
             );
-            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
           });
         });
       });
 
       describe(`when multiple labels matching the search one were found`, (): void => {
         beforeEach((): void => {
-          githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+          githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
             repository: {
               labels: {
                 nodes: [createHydratedMock<IGithubApiLabel>(), createHydratedMock<IGithubApiLabel>()],
@@ -210,7 +210,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
         describe(`when the first label is exactly the one searched`, (): void => {
           beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+            githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
               repository: {
                 labels: {
                   nodes: [
@@ -240,7 +240,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
         describe(`when the first label is not the one searched`, (): void => {
           beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+            githubApiGetLabel = createHydratedMock<IGithubApiLabels>({
               repository: {
                 labels: {
                   nodes: [
@@ -270,11 +270,11 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
               `Could find a label`,
-              `cyan-dummy-${labelName}`,
+              `value-dummy-${labelName}`,
               `red-which is not exactly identical to`,
-              `cyan-${labelName}`
+              `value-${labelName}`
             );
-            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
           });
 
           it(`should log a warning about the missing pagination implementation`, async (): Promise<void> => {
@@ -287,7 +287,7 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(loggerServiceWarningSpy).toHaveBeenCalledWith(
               `Found`,
-              `cyan-2`,
+              `value-2`,
               `whiteBright-labels during the search (by name or description). The pagination support is not yet implemented!`
             );
           });
@@ -328,9 +328,9 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
         `Adding the label`,
-        `cyan-${labelId}`,
+        `value-${labelId}`,
         `whiteBright-on the issue`,
-        `cyan-${issueId}whiteBright-...`
+        `value-${issueId}whiteBright-...`
       );
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
@@ -356,9 +356,9 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(
           `Failed to add the label`,
-          `cyan-${labelId}`,
+          `value-${labelId}`,
           `red-on the issue`,
-          `cyan-${issueId}`
+          `value-${issueId}`
         );
       });
     });
@@ -377,9 +377,9 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `green-Label`,
-          `cyan-${labelId}`,
+          `value-${labelId}`,
           `green-added to issue`,
-          `cyan-${issueId}`
+          `value-${issueId}`
         );
       });
     });
