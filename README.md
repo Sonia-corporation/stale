@@ -50,17 +50,17 @@ After 30 days without any update on the issue, add a label on the issue to indic
 
 All the inputs that are used both for issues and Pull Requests.
 
-| Input        | Description                                                                                                              | Default               |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| github-token | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`. | `${{ github.token }}` |
-| dry-run      | A mode where any Data Manipulation Language will be skipped. Useful to debug.                                            | `false`               |
+| Input        | Description                                                                                                                              | Default               |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| github-token | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`.                 | `${{ github.token }}` |
+| dry-run      | A mode where any Data Manipulation Language will be skipped. Useful to debug safely and without risking messing up with your repository. | `false`               |
 
 ## All the issues inputs
 
 | Input                   | Description                                                                             | Default |
 | ----------------------- | --------------------------------------------------------------------------------------- | ------- |
 | issue-stale-label       | The label that will be added to the issue when it is stale.                             | `stale` |
-| issue-ignore-any-labels | Allow to ignore the processing of issues that contains one of those labels (multiline). | ``      |
+| issue-ignore-any-labels | Allow to ignore the processing of issues that contains one of those labels (multiline). |         |
 
 ## All the Pull Requests inputs
 
