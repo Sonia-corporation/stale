@@ -14,7 +14,8 @@ export class IssuesService {
 
   public static async processBatches(batch: Readonly<number> = 1, fromPageId?: Readonly<string>): Promise<void> {
     LoggerService.info(
-      `Fetching the batch of issues ${LoggerService.value(`#${_.toString(batch)}`)}${LoggerFormatService.whiteBright(
+      `Fetching the batch of issues`,
+      `${LoggerFormatService.white(`#`)}${LoggerService.value(_.toString(batch))}${LoggerFormatService.whiteBright(
         `...`
       )}`
     );
@@ -26,7 +27,7 @@ export class IssuesService {
       `Found`,
       LoggerService.value(_.toString(issuesCount)),
       LoggerFormatService.whiteBright(`issue${issuesCount > 1 ? `s` : ``} in the batch`),
-      LoggerService.value(`#${_.toString(batch)}`)
+      `${LoggerFormatService.white(`#`)}${LoggerService.value(_.toString(batch))}`
     );
 
     for (const issue of issues.repository.issues.nodes) {
@@ -38,7 +39,7 @@ export class IssuesService {
 
     LoggerService.info(
       LoggerFormatService.green(`Batch of issues`),
-      LoggerService.value(`#${_.toString(batch)}`),
+      `${LoggerFormatService.white(`#`)}${LoggerService.value(_.toString(batch))}`,
       LoggerFormatService.green(`processed`)
     );
 

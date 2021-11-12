@@ -14,3 +14,9 @@ jobs:
       - name: Stale
         id: stale
         uses: sonia-corporation/stale@develop
+        with:
+          issue-ignore-any-labels: |
+            frozen
+            help wanted
+            dependency-fix
+            dependencies

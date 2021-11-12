@@ -70,7 +70,11 @@ describe(`IssuesService`, (): void => {
       await IssuesService.processBatches();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Fetching the batch of issues value-#1whiteBright-...`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+        1,
+        `Fetching the batch of issues`,
+        `white-#value-1whiteBright-...`
+      );
     });
 
     it(`should fetch the issues to process`, async (): Promise<void> => {
@@ -115,7 +119,7 @@ describe(`IssuesService`, (): void => {
           `Found`,
           `value-1`,
           `whiteBright-issue in the batch`,
-          `value-#1`
+          `white-#value-1`
         );
       });
 
@@ -166,7 +170,7 @@ describe(`IssuesService`, (): void => {
           `Found`,
           `value-2`,
           `whiteBright-issues in the batch`,
-          `value-#1`
+          `white-#value-1`
         );
       });
 
@@ -190,7 +194,12 @@ describe(`IssuesService`, (): void => {
       await IssuesService.processBatches();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `green-Batch of issues`, `value-#1`, `green-processed`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+        3,
+        `green-Batch of issues`,
+        `white-#value-1`,
+        `green-processed`
+      );
     });
 
     describe(`when this batch does not contains more issues to process`, (): void => {

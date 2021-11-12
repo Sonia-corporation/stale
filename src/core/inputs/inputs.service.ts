@@ -24,6 +24,7 @@ export class InputsService {
     InputsService.inputs$$ = {
       dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
+      issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
     };
 
@@ -35,7 +36,7 @@ export class InputsService {
 
     _.forIn(
       InputsService.inputs$$,
-      (value: Readonly<string | boolean>, inputName: Readonly<string>, inputs: Readonly<IInputs>): void => {
+      (value: Readonly<string | boolean | string[]>, inputName: Readonly<string>, inputs: Readonly<IInputs>): void => {
         const lastInputName: string | undefined = _.findLastKey(inputs, (): true => true);
 
         LoggerService.info(
