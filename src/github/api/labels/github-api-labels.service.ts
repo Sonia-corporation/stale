@@ -1,3 +1,5 @@
+import { GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION } from '@github/api/labels/constants/github-api-add-label-to-issue-mutation';
+import { GITHUB_API_GET_LABEL_QUERY } from '@github/api/labels/constants/github-api-get-label-query';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
@@ -15,26 +17,11 @@ export class GithubApiLabelsService {
     );
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiGetLabel>(
-        `
-        query MyQuery($owner: String!, $repository: String!, $labelName: String!) {
-          repository(name: $repository, owner: $owner) {
-            labels(query: $labelName, first: 1) {
-              totalCount
-              nodes {
-                id
-                name
-              }
-            }
-          }
-        }
-      `,
-        {
-          labelName,
-          owner: context.repo.owner,
-          repository: context.repo.repo,
-        }
-      )
+      .graphql<IGithubApiGetLabel>(GITHUB_API_GET_LABEL_QUERY, {
+        labelName,
+        owner: context.repo.owner,
+        repository: context.repo.repo,
+      })
       .then((response: Readonly<IGithubApiGetLabel>): IGithubApiGetLabel | never => {
         const { totalCount } = response.repository.labels;
 
@@ -83,20 +70,10 @@ export class GithubApiLabelsService {
     );
 
     return OctokitService.getOctokit()
-      .graphql<unknown>(
-        `
-        mutation MyMutation($issueId: ID!, $labelId: ID!) {
-          __typename
-          addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
-            clientMutationId
-          }
-        }
-      `,
-        {
-          issueId,
-          labelId,
-        }
-      )
+      .graphql<unknown>(GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION, {
+        issueId,
+        labelId,
+      })
       .then((): void => {
         LoggerService.info(
           LoggerFormatService.green(`Label`),
