@@ -44,7 +44,7 @@
 
 ## Default configuration
 
-After 30 days without any issue update, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
+After 30 days without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
 
 ## All the common inputs
 
