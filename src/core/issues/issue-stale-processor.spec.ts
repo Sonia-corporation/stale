@@ -14,7 +14,7 @@ import { createHydratedMock } from 'ts-auto-mock';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`issueStaleProcessor`, (): void => {
+describe(`IssueStaleProcessor`, (): void => {
   let issueProcessor: IssueProcessor;
 
   beforeEach((): void => {
