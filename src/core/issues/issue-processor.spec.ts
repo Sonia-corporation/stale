@@ -15,7 +15,7 @@ jest.mock(`@core/issues/issue-logger`);
 jest.mock(`@core/issues/issue-ignore-processor`);
 jest.mock(`@core/issues/issue-stale-processor`);
 
-describe(`issueProcessor`, (): void => {
+describe(`IssueProcessor`, (): void => {
   let gitHubApiIssue: IGithubApiIssue;
 
   beforeEach((): void => {
