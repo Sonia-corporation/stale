@@ -1,5 +1,6 @@
-import { IGithubApiIssues } from '@github/api/issues/github-api-issues.interface';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/issues-per-page';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
+import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -13,33 +14,12 @@ export class GithubApiIssuesService {
     LoggerService.info(`Fetching the issues from GitHub...`);
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiIssues>(
-        `
-        query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!, $afterCursor: String) {
-          repository(name: $repository, owner: $owner) {
-            issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
-              pageInfo {
-                hasNextPage
-              }
-              totalCount
-              nodes {
-                locked
-                createdAt
-                number
-                updatedAt
-                url
-              }
-            }
-          }
-        }
-      `,
-        {
-          afterCursor: fromPageId,
-          issuesPerPage: GithubApiIssuesService.issuesPerPage,
-          owner: context.repo.owner,
-          repository: context.repo.repo,
-        }
-      )
+      .graphql<IGithubApiIssues>(GITHUB_API_ISSUES_QUERY, {
+        afterCursor: fromPageId,
+        issuesPerPage: GithubApiIssuesService.issuesPerPage,
+        owner: context.repo.owner,
+        repository: context.repo.repo,
+      })
       .then((response: Readonly<IGithubApiIssues>): IGithubApiIssues => {
         // Only log the first time (when we do not have some pagination yet)
         if (!fromPageId) {
