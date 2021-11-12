@@ -1,12 +1,12 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
-import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';
@@ -34,6 +34,15 @@ export class FakeIssuesProcessor {
     return createHydratedMock<IGithubApiIssue>({
       createdAt: faker.date.past().toISOString(),
       id: faker.datatype.uuid(),
+      labels: {
+        nodes: [
+          {
+            id: faker.datatype.uuid(),
+            name: faker.random.word(),
+          },
+        ],
+        totalCount: 1,
+      },
       locked: faker.datatype.boolean(),
       number: faker.datatype.number(),
       updatedAt: faker.date.recent().toISOString(),
@@ -113,13 +122,13 @@ export class FakeIssuesProcessor {
 
       throw new Error(`The support of more than 2 batches is not yet implemented`);
     },
-    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabel> {
+    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiLabels> {
       if (!_.isString(data.labelName)) {
         throw new Error(`The labelName is not a string`);
       }
 
       return Promise.resolve(
-        createHydratedMock<IGithubApiGetLabel>({
+        createHydratedMock<IGithubApiLabels>({
           repository: {
             labels: {
               nodes: [
@@ -146,6 +155,7 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IInputs>({
       dryRun: false,
       githubToken: faker.datatype.uuid(),
+      issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
       issueStaleLabel: `stale`,
       ...inputs,
     });
@@ -220,14 +230,20 @@ export class FakeIssuesProcessor {
     jest
       .spyOn(core, `getInput`)
       .mockImplementation(
-        (name: string): string =>
-          _.find(this._inputs, (_value, key: string): boolean => key === _.camelCase(name)) as string
+        (name: Readonly<string>): string =>
+          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as string
       );
     jest
       .spyOn(core, `getBooleanInput`)
       .mockImplementation(
-        (name: string): boolean =>
-          _.find(this._inputs, (_value, key: string): boolean => key === _.camelCase(name)) as boolean
+        (name: Readonly<string>): boolean =>
+          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as boolean
+      );
+    jest
+      .spyOn(core, `getMultilineInput`)
+      .mockImplementation(
+        (name: Readonly<string>): string[] =>
+          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as string[]
       );
 
     // Useful for the calls to the GitHub API

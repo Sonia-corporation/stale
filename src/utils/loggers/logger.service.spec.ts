@@ -1,6 +1,7 @@
 import { EInputs } from '@core/inputs/inputs.enum';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
+import faker from 'faker';
 
 jest.mock(`@utils/loggers/logger-format.service`);
 
@@ -283,6 +284,71 @@ describe(`LoggerService`, (): void => {
       const result = LoggerService.input(EInputs.GITHUB_TOKEN);
 
       expect(result).toStrictEqual(`magenta-github-token`);
+    });
+  });
+
+  describe(`value()`, (): void => {
+    let value: string | boolean | string[];
+
+    describe(`when the given value is a string`, (): void => {
+      beforeEach((): void => {
+        value = faker.random.word();
+      });
+
+      it(`should return the value in cyan`, (): void => {
+        expect.assertions(1);
+
+        const result = LoggerService.value(value);
+
+        expect(result).toStrictEqual(`cyan-${value}`);
+      });
+    });
+
+    describe(`when the given value is a true`, (): void => {
+      beforeEach((): void => {
+        value = true;
+      });
+
+      it(`should return true in cyan`, (): void => {
+        expect.assertions(1);
+
+        const result = LoggerService.value(value);
+
+        expect(result).toStrictEqual(`cyan-true`);
+      });
+    });
+
+    describe(`when the given value is a false`, (): void => {
+      beforeEach((): void => {
+        value = false;
+      });
+
+      it(`should return false in cyan`, (): void => {
+        expect.assertions(1);
+
+        const result = LoggerService.value(value);
+
+        expect(result).toStrictEqual(`cyan-false`);
+      });
+    });
+
+    describe(`when the given value is an array of strings`, (): void => {
+      let value1: string;
+      let value2: string;
+
+      beforeEach((): void => {
+        value1 = faker.random.word();
+        value2 = faker.random.word();
+        value = [value1, value2];
+      });
+
+      it(`should return the values separated with a comma and space in cyan`, (): void => {
+        expect.assertions(1);
+
+        const result = LoggerService.value(value);
+
+        expect(result).toStrictEqual(`cyan-${value1}, ${value2}`);
+      });
     });
   });
 });

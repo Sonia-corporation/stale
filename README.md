@@ -44,7 +44,7 @@
 
 ## Default configuration
 
-@todo
+After 30 days without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
 
 ## All the common inputs
 
@@ -57,9 +57,10 @@ All the inputs that are used both for issues and Pull Requests.
 
 ## All the issues inputs
 
-| Input             | Description                                                 | Default |
-| ----------------- | ----------------------------------------------------------- | ------- |
-| issue-stale-label | The label that will be added to the issue when it is stale. | `stale` |
+| Input                   | Description                                                                             | Default |
+| ----------------------- | --------------------------------------------------------------------------------------- | ------- |
+| issue-stale-label       | The label that will be added to the issue when it is stale.                             | `stale` |
+| issue-ignore-any-labels | Allow to ignore the processing of issues that contains one of those labels (multiline). | ``      |
 
 ## All the Pull Requests inputs
 

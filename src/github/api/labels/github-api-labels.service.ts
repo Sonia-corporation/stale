@@ -1,6 +1,6 @@
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -9,40 +9,40 @@ import { context } from '@actions/github';
 import _ from 'lodash';
 
 export class GithubApiLabelsService {
-  public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiGetLabel> | never {
+  public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
     LoggerService.info(
       `Fetching the label`,
-      LoggerFormatService.cyan(labelName),
+      LoggerService.value(labelName),
       LoggerFormatService.whiteBright(`from GitHub...`)
     );
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiGetLabel>(GITHUB_API_LABEL_BY_NAME_QUERY, {
+      .graphql<IGithubApiLabels>(GITHUB_API_LABEL_BY_NAME_QUERY, {
         labelName,
         owner: context.repo.owner,
         repository: context.repo.repo,
       })
-      .then((response: Readonly<IGithubApiGetLabel>): IGithubApiGetLabel | never => {
+      .then((response: Readonly<IGithubApiLabels>): IGithubApiLabels | never => {
         const { totalCount } = response.repository.labels;
 
         if (totalCount === 0) {
-          LoggerService.error(`Could not find a single label matching`, LoggerFormatService.cyan(labelName));
+          LoggerService.error(`Could not find a single label matching`, LoggerService.value(labelName));
           throw new Error(`Could not find a single label matching ${labelName}`);
         }
 
         if (response.repository.labels.nodes[0].name !== labelName) {
           LoggerService.error(
             `Could find a label`,
-            LoggerFormatService.cyan(response.repository.labels.nodes[0].name),
+            LoggerService.value(response.repository.labels.nodes[0].name),
             LoggerFormatService.red(`which is not exactly identical to`),
-            LoggerFormatService.cyan(labelName)
+            LoggerService.value(labelName)
           );
 
           // @todo handle the pagination
           if (totalCount > 1) {
             LoggerService.warning(
               `Found`,
-              LoggerFormatService.cyan(_.toString(totalCount)),
+              LoggerService.value(_.toString(totalCount)),
               LoggerFormatService.whiteBright(
                 `labels during the search (by name or description). The pagination support is not yet implemented!`
               )
@@ -55,7 +55,7 @@ export class GithubApiLabelsService {
         return response;
       })
       .catch((error: Readonly<Error>): never => {
-        LoggerService.error(`Failed to fetch the label`, LoggerFormatService.cyan(labelName));
+        LoggerService.error(`Failed to fetch the label`, LoggerService.value(labelName));
 
         throw error;
       });
@@ -64,9 +64,9 @@ export class GithubApiLabelsService {
   public static addLabelToIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
     LoggerService.info(
       `Adding the label`,
-      LoggerFormatService.cyan(labelId),
+      LoggerService.value(labelId),
       LoggerFormatService.whiteBright(`on the issue`),
-      `${LoggerFormatService.cyan(issueId)}${LoggerFormatService.whiteBright(`...`)}`
+      `${LoggerService.value(issueId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
     return OctokitService.getOctokit()
@@ -77,17 +77,17 @@ export class GithubApiLabelsService {
       .then((): void => {
         LoggerService.info(
           LoggerFormatService.green(`Label`),
-          LoggerFormatService.cyan(labelId),
+          LoggerService.value(labelId),
           LoggerFormatService.green(`added to issue`),
-          LoggerFormatService.cyan(issueId)
+          LoggerService.value(issueId)
         );
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(
           `Failed to add the label`,
-          LoggerFormatService.cyan(labelId),
+          LoggerService.value(labelId),
           LoggerFormatService.red(`on the issue`),
-          LoggerFormatService.cyan(issueId)
+          LoggerService.value(issueId)
         );
 
         throw error;

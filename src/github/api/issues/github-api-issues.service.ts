@@ -1,5 +1,6 @@
-import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
-import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/github-issues-per-page';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
+import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
+import { GITHUB_LABELS_PER_ISSUE } from '@github/api/issues/constants/github-labels-per-issue';
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -9,6 +10,7 @@ import _ from 'lodash';
 
 export class GithubApiIssuesService {
   public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
+  public static readonly labelsPerIssue = GITHUB_LABELS_PER_ISSUE;
 
   public static fetchIssues(fromPageId?: Readonly<string>): Promise<IGithubApiIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
@@ -17,6 +19,7 @@ export class GithubApiIssuesService {
       .graphql<IGithubApiIssues>(GITHUB_API_ISSUES_QUERY, {
         afterCursor: fromPageId,
         issuesPerPage: GithubApiIssuesService.issuesPerPage,
+        labelsPerIssue: GithubApiIssuesService.labelsPerIssue,
         owner: context.repo.owner,
         repository: context.repo.repo,
       })
@@ -29,7 +32,7 @@ export class GithubApiIssuesService {
             LoggerService.notice(`No issue can be processed`);
           } else {
             LoggerService.info(
-              LoggerFormatService.cyan(_.toString(totalCount)),
+              LoggerService.value(_.toString(totalCount)),
               LoggerFormatService.whiteBright(`issue${totalCount > 1 ? `s` : ``} can be processed`)
             );
           }

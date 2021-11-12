@@ -1,6 +1,7 @@
 import { EInputs } from '@core/inputs/inputs.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
 /**
  * @description
@@ -61,5 +62,23 @@ export class LoggerService {
    */
   public static input(input: Readonly<EInputs>): string {
     return LoggerFormatService.magenta(input);
+  }
+
+  /**
+   * @description
+   * Very specific log used to show a value
+   * @param {Readonly<string | boolean | string[]>} value The value to display
+   * @returns {string} The value in cyan
+   */
+  public static value(value: Readonly<string | boolean | string[]>): string {
+    let formattedValue: string;
+
+    if (_.isArray(value)) {
+      formattedValue = _.join(value, `, `);
+    } else {
+      formattedValue = _.toString(value);
+    }
+
+    return LoggerFormatService.cyan(formattedValue);
   }
 }

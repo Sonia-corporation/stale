@@ -3,8 +3,8 @@ import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { IUuid } from '@utils/dates/uuid';
 import { LoggerService } from '@utils/loggers/logger.service';
 import faker from 'faker';
@@ -113,7 +113,7 @@ describe(`IssueStaleProcessor`, (): void => {
         githubApiLabelsServiceFetchLabelByNameSpy = jest
           .spyOn(GithubApiLabelsService, `fetchLabelByName`)
           .mockResolvedValue(
-            createHydratedMock<IGithubApiGetLabel>({
+            createHydratedMock<IGithubApiLabels>({
               repository: {
                 labels: {
                   nodes: [
@@ -151,7 +151,7 @@ describe(`IssueStaleProcessor`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `Fetching the stale label`,
-          `cyan-${issueStaleLabel}`,
+          `value-${issueStaleLabel}`,
           `whiteBright-to add on this issue...`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `The stale label was fetched`);
@@ -209,12 +209,12 @@ describe(`IssueStaleProcessor`, (): void => {
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The issue was updated for the last time the`,
-            `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+            `value-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             3,
             `The issue should be stale since it was not updated in the last`,
-            `cyan-30`,
+            `value-30`,
             `whiteBright-days`
           );
         });
@@ -248,12 +248,12 @@ describe(`IssueStaleProcessor`, (): void => {
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The issue was updated for the last time the`,
-            `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+            `value-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             3,
             `The issue should not be stale since it was updated in the last`,
-            `cyan-30`,
+            `value-30`,
             `whiteBright-days`
           );
         });

@@ -1,4 +1,4 @@
-import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/github-api-issues-query';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -54,6 +54,7 @@ describe(`GithubApiIssuesService`, (): void => {
       expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ISSUES_QUERY, {
         afterCursor: undefined,
         issuesPerPage: 20,
+        labelsPerIssue: 20,
         owner: `dummy-owner`,
         repository: `dummy-repo`,
       });
@@ -138,7 +139,7 @@ describe(`GithubApiIssuesService`, (): void => {
             await GithubApiIssuesService.fetchIssues();
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-1`, `whiteBright-issue can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `value-1`, `whiteBright-issue can be processed`);
           });
         });
 
@@ -173,7 +174,7 @@ describe(`GithubApiIssuesService`, (): void => {
             await GithubApiIssuesService.fetchIssues();
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-2`, `whiteBright-issues can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `value-2`, `whiteBright-issues can be processed`);
           });
         });
 

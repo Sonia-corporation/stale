@@ -47,14 +47,31 @@ describe(`inputsService`, (): void => {
   describe(`setInputs()`, (): void => {
     let coreGetInputSpy: jest.SpyInstance;
     let coreGetBooleanInputSpy: jest.SpyInstance;
+    let coreGetMultilineInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       InputsService.inputs$$ = createHydratedMock<IInputs>({
+        dryRun: true,
         githubToken: `github-token`,
+        issueIgnoreAnyLabels: [`label-1`, `label-2`],
+        issueStaleLabel: `issue-stale-label`,
       });
 
       coreGetInputSpy = jest.spyOn(core, `getInput`).mockImplementation((name: string): string => `dummy-${name}`);
       coreGetBooleanInputSpy = jest.spyOn(core, `getBooleanInput`).mockReturnValue(false);
+      coreGetMultilineInputSpy = jest
+        .spyOn(core, `getMultilineInput`)
+        .mockReturnValue([`dummy-label-1`, `dummy-label-2`]);
+    });
+
+    it(`should get the dry-run input, parse it and set it`, (): void => {
+      expect.assertions(3);
+
+      InputsService.setInputs();
+
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(1);
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledWith(`dry-run`, { required: false });
+      expect(InputsService.inputs$$?.dryRun).toBeFalse();
     });
 
     it(`should get the github-token input, parse it and set it`, (): void => {
@@ -67,14 +84,14 @@ describe(`inputsService`, (): void => {
       expect(InputsService.inputs$$?.githubToken).toStrictEqual(`dummy-github-token`);
     });
 
-    it(`should get the dry-run input, parse it and set it`, (): void => {
+    it(`should get the issue-ignore-any-labels input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       InputsService.setInputs();
 
-      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(1);
-      expect(coreGetBooleanInputSpy).toHaveBeenCalledWith(`dry-run`, { required: false });
-      expect(InputsService.inputs$$?.dryRun).toBeFalse();
+      expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(1);
+      expect(coreGetMultilineInputSpy).toHaveBeenCalledWith(`issue-ignore-any-labels`, { required: false });
+      expect(InputsService.inputs$$?.issueIgnoreAnyLabels).toStrictEqual([`dummy-label-1`, `dummy-label-2`]);
     });
 
     it(`should get the issue-stale-label input, parse it and set it`, (): void => {
@@ -95,6 +112,7 @@ describe(`inputsService`, (): void => {
       expect(result).toStrictEqual({
         dryRun: false,
         githubToken: `dummy-github-token`,
+        issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
         issueStaleLabel: `dummy-issue-stale-label`,
       } as IInputs);
     });
@@ -142,6 +160,7 @@ describe(`inputsService`, (): void => {
         InputsService.inputs$$ = createHydratedMock<IInputs>({
           dryRun: false,
           githubToken: `dummy-github-token`,
+          issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
           issueStaleLabel: `dummy-issue-stale-label`,
         });
       });
@@ -151,9 +170,9 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `cyan-false`);
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `value-false`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(1, `dry-run`);
       });
 
@@ -162,15 +181,31 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
           `input-github-token`,
-          `cyan-dummy-github-token`
+          `value-dummy-github-token`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(2, `github-token`);
+      });
+
+      it(`should log the issue ignore any labels input`, (): void => {
+        expect.assertions(4);
+
+        InputsService.logInputs();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          3,
+          `white-├──`,
+          `input-issue-ignore-any-labels`,
+          `value-dummy-label-1,dummy-label-2`
+        );
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(4);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(3, `issue-ignore-any-labels`);
       });
 
       it(`should log the issue stale label input`, (): void => {
@@ -178,15 +213,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          3,
+          4,
           `white-└──`,
           `input-issue-stale-label`,
-          `cyan-dummy-issue-stale-label`
+          `value-dummy-issue-stale-label`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(3, `issue-stale-label`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(4);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(4, `issue-stale-label`);
       });
     });
 
