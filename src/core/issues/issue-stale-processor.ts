@@ -31,7 +31,7 @@ export class IssueStaleProcessor {
     LoggerService.info(
       `Fetching the stale label`,
       LoggerFormatService.cyan(issueStaleLabel),
-      LoggerFormatService.whiteBright(`to apply...`)
+      LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
     const label: IGithubApiGetLabel = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
@@ -54,7 +54,7 @@ export class IssueStaleProcessor {
     const updatedAt: DateTime = this.issueProcessor.getUpdatedAt();
 
     LoggerService.info(
-      `The issue was updated for the last time on`,
+      `The issue was updated for the last time the`,
       LoggerFormatService.cyan(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
     );
 

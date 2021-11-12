@@ -150,7 +150,7 @@ describe(`issueStaleProcessor`, (): void => {
           2,
           `Fetching the stale label`,
           `cyan-${issueStaleLabel}`,
-          `whiteBright-to apply...`
+          `whiteBright-to add on this issue...`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `The stale label was fetched`);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Adding the stale label to this issue...`);
@@ -205,7 +205,7 @@ describe(`issueStaleProcessor`, (): void => {
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             2,
-            `The issue was updated for the last time on`,
+            `The issue was updated for the last time the`,
             `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -244,7 +244,7 @@ describe(`issueStaleProcessor`, (): void => {
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             2,
-            `The issue was updated for the last time on`,
+            `The issue was updated for the last time the`,
             `cyan-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
           );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(

@@ -50,6 +50,7 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IInputs>({
       dryRun: false,
       githubToken: faker.datatype.uuid(),
+      issueStaleLabel: `stale`,
       ...inputs,
     });
   }
