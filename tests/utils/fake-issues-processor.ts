@@ -81,15 +81,21 @@ export class FakeIssuesProcessor {
 
   /**
    * @description
-   * Add some new locked issues to the list of issues
+   * Add x new issues to the list of issues
+   * Note: the id cannot be passed and will be overridden anyhow to make sure each issue has a unique id
    * @param {Readonly<number>} count The number of issues to add
+   * @param {Readonly<Partial<IGithubApiIssue>>} issue The issue to add (same template)
    * @returns {FakeIssuesProcessor} The class
    */
-  public addXLockedIssues(count: Readonly<number>): FakeIssuesProcessor {
+  public addIssues(
+    count: Readonly<number>,
+    issue?: Readonly<Partial<Exclude<IGithubApiIssue, 'id'>>>
+  ): FakeIssuesProcessor {
     _.times(count, (): void => {
       this._githubApiIssues.push(
         FakeIssuesProcessor._getMockedIssue({
-          locked: true,
+          ...issue,
+          id: faker.datatype.uuid(),
         })
       );
     });
