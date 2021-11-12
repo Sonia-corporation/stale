@@ -1,5 +1,17 @@
 # Semantic Versioning Changelog
 
+# [1.5.0](https://github.com/Sonia-corporation/stale/compare/1.4.0...1.5.0) (2021-11-12)
+
+
+### :rocket: Features
+
+* **labels:** add a new feature to add a label to an issue ([f93639d](https://github.com/Sonia-corporation/stale/commit/f93639d81d4c7d5b8b54d4be9e62f5fd69c33196))
+* **labels:** add a new feature to get a label from the repository ([06eb94e](https://github.com/Sonia-corporation/stale/commit/06eb94ef48adabea10aca1849e4d4cb7a587d012))
+* **issue:** add a new option "issue-stale-label" to define the label to use when an issue is stale ([b8a54a8](https://github.com/Sonia-corporation/stale/commit/b8a54a8bc1340438275651dadd56cc38cb4da46d))
+* **stale:** add a stale label on issue not updated since 30 days ([ffd6c76](https://github.com/Sonia-corporation/stale/commit/ffd6c768c1f1c93cb2ecbf7e119f34e1412bb7a9))
+* **logs:** add logs for the stale label ([b57de32](https://github.com/Sonia-corporation/stale/commit/b57de328a7473354bf69a983c26cbbc28e5a7c88))
+* **stale:** stale locally the issues older than 30 days ([c5af87c](https://github.com/Sonia-corporation/stale/commit/c5af87c0207c10f3c13160bcc6978e0ebde7da12))
+
 # [1.4.0](https://github.com/Sonia-corporation/stale/compare/1.3.0...1.4.0) (2021-11-09)
 
 
