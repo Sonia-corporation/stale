@@ -29,7 +29,7 @@ export class GithubApiIssuesService {
             LoggerService.notice(`No issue can be processed`);
           } else {
             LoggerService.info(
-              LoggerFormatService.cyan(_.toString(totalCount)),
+              LoggerService.value(_.toString(totalCount)),
               LoggerFormatService.whiteBright(`issue${totalCount > 1 ? `s` : ``} can be processed`)
             );
           }

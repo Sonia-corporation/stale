@@ -152,7 +152,7 @@ describe(`inputsService`, (): void => {
         InputsService.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `cyan-false`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `value-false`);
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(1, `dry-run`);
       });
@@ -167,7 +167,7 @@ describe(`inputsService`, (): void => {
           2,
           `white-├──`,
           `input-github-token`,
-          `cyan-dummy-github-token`
+          `value-dummy-github-token`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(2, `github-token`);
@@ -183,7 +183,7 @@ describe(`inputsService`, (): void => {
           3,
           `white-└──`,
           `input-issue-stale-label`,
-          `cyan-dummy-issue-stale-label`
+          `value-dummy-issue-stale-label`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(3);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(3, `issue-stale-label`);

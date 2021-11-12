@@ -41,7 +41,7 @@ export class InputsService {
         LoggerService.info(
           LoggerFormatService.white(inputName === lastInputName ? ETreeRows.LAST : ETreeRows.ANY),
           LoggerService.input(_.kebabCase(inputName) as EInputs),
-          LoggerFormatService.cyan(value)
+          LoggerService.value(value)
         );
       }
     );

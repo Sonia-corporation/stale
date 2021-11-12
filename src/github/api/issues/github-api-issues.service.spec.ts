@@ -138,7 +138,7 @@ describe(`GithubApiIssuesService`, (): void => {
             await GithubApiIssuesService.fetchIssues();
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-1`, `whiteBright-issue can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `value-1`, `whiteBright-issue can be processed`);
           });
         });
 
@@ -173,7 +173,7 @@ describe(`GithubApiIssuesService`, (): void => {
             await GithubApiIssuesService.fetchIssues();
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `cyan-2`, `whiteBright-issues can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `value-2`, `whiteBright-issues can be processed`);
           });
         });
 

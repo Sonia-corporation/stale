@@ -48,7 +48,7 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
         `Fetching the label`,
-        `cyan-${labelName}`,
+        `value-${labelName}`,
         `whiteBright-from GitHub...`
       );
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
@@ -72,7 +72,7 @@ describe(`GithubApiLabelsService`, (): void => {
         await expect(GithubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `cyan-${labelName}`);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
       });
     });
 
@@ -109,9 +109,9 @@ describe(`GithubApiLabelsService`, (): void => {
           expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
             1,
             `Could not find a single label matching`,
-            `cyan-${labelName}`
+            `value-${labelName}`
           );
-          expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+          expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
         });
       });
 
@@ -185,11 +185,11 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
               `Could find a label`,
-              `cyan-dummy-${labelName}`,
+              `value-dummy-${labelName}`,
               `red-which is not exactly identical to`,
-              `cyan-${labelName}`
+              `value-${labelName}`
             );
-            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
           });
         });
       });
@@ -270,11 +270,11 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
               `Could find a label`,
-              `cyan-dummy-${labelName}`,
+              `value-dummy-${labelName}`,
               `red-which is not exactly identical to`,
-              `cyan-${labelName}`
+              `value-${labelName}`
             );
-            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `cyan-${labelName}`);
+            expect(loggerServiceErrorSpy).toHaveBeenNthCalledWith(2, `Failed to fetch the label`, `value-${labelName}`);
           });
 
           it(`should log a warning about the missing pagination implementation`, async (): Promise<void> => {
@@ -287,7 +287,7 @@ describe(`GithubApiLabelsService`, (): void => {
             expect(loggerServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(loggerServiceWarningSpy).toHaveBeenCalledWith(
               `Found`,
-              `cyan-2`,
+              `value-2`,
               `whiteBright-labels during the search (by name or description). The pagination support is not yet implemented!`
             );
           });
@@ -328,9 +328,9 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
         `Adding the label`,
-        `cyan-${labelId}`,
+        `value-${labelId}`,
         `whiteBright-on the issue`,
-        `cyan-${issueId}whiteBright-...`
+        `value-${issueId}whiteBright-...`
       );
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
@@ -356,9 +356,9 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(
           `Failed to add the label`,
-          `cyan-${labelId}`,
+          `value-${labelId}`,
           `red-on the issue`,
-          `cyan-${issueId}`
+          `value-${issueId}`
         );
       });
     });
@@ -377,9 +377,9 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `green-Label`,
-          `cyan-${labelId}`,
+          `value-${labelId}`,
           `green-added to issue`,
-          `cyan-${issueId}`
+          `value-${issueId}`
         );
       });
     });

@@ -30,7 +30,7 @@ export class IssueStaleProcessor {
 
     LoggerService.info(
       `Fetching the stale label`,
-      LoggerFormatService.cyan(issueStaleLabel),
+      LoggerService.value(issueStaleLabel),
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
@@ -55,7 +55,7 @@ export class IssueStaleProcessor {
 
     LoggerService.info(
       `The issue was updated for the last time the`,
-      LoggerFormatService.cyan(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
+      LoggerService.value(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
     );
 
     const isStale: boolean =
@@ -66,13 +66,13 @@ export class IssueStaleProcessor {
     if (isStale) {
       LoggerService.info(
         `The issue should be stale since it was not updated in the last`,
-        LoggerFormatService.cyan(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
+        LoggerService.value(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
         LoggerFormatService.whiteBright(`days`)
       );
     } else {
       LoggerService.info(
         `The issue should not be stale since it was updated in the last`,
-        LoggerFormatService.cyan(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
+        LoggerService.value(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
         LoggerFormatService.whiteBright(`days`)
       );
     }
