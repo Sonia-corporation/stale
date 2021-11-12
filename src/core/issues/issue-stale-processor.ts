@@ -44,9 +44,12 @@ export class IssueStaleProcessor {
         this.issueProcessor.githubIssue.id,
         label.repository.labels.nodes[0].id
       );
+
+      LoggerService.info(`The stale label was added`);
+    } else {
+      LoggerService.info(`The stale label was not added due to the dry-run mode`);
     }
 
-    LoggerService.info(`The stale label was added`);
     LoggerService.notice(`The issue is now stale`);
   }
 

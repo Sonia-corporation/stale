@@ -200,7 +200,10 @@ describe(`IssueStaleProcessor`, (): void => {
 
           expect(githubApiLabelsServiceAddLabelToIssueSpy).not.toHaveBeenCalled();
           expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(5);
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            5,
+            `The stale label was not added due to the dry-run mode`
+          );
           expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
           expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
         });
