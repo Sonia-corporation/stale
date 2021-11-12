@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
@@ -34,7 +34,7 @@ export class IssueStaleProcessor {
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiGetLabel = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
 
     LoggerService.info(`The stale label was fetched`);
     LoggerService.info(`Adding the stale label to this issue...`);

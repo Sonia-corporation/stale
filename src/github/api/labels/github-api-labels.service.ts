@@ -1,6 +1,6 @@
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
-import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -9,7 +9,7 @@ import { context } from '@actions/github';
 import _ from 'lodash';
 
 export class GithubApiLabelsService {
-  public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiGetLabel> | never {
+  public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
     LoggerService.info(
       `Fetching the label`,
       LoggerService.value(labelName),
@@ -17,12 +17,12 @@ export class GithubApiLabelsService {
     );
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiGetLabel>(GITHUB_API_LABEL_BY_NAME_QUERY, {
+      .graphql<IGithubApiLabels>(GITHUB_API_LABEL_BY_NAME_QUERY, {
         labelName,
         owner: context.repo.owner,
         repository: context.repo.repo,
       })
-      .then((response: Readonly<IGithubApiGetLabel>): IGithubApiGetLabel | never => {
+      .then((response: Readonly<IGithubApiLabels>): IGithubApiLabels | never => {
         const { totalCount } = response.repository.labels;
 
         if (totalCount === 0) {

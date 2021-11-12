@@ -13,6 +13,13 @@ export const GITHUB_API_ISSUES_QUERY = `
           updatedAt
           url
           id
+          labels(first: 20) {
+            totalCount
+            nodes {
+              id
+              name
+            }
+          }
         }
       }
     }
