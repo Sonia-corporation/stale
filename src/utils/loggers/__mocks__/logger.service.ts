@@ -36,4 +36,8 @@ export class LoggerService {
   public static input(input: Readonly<EInputs>): string {
     return `input-${input}`;
   }
+
+  public static value(value: Readonly<string | boolean | string[]>): string {
+    return `value-${value}`;
+  }
 }
