@@ -45,7 +45,7 @@ export class IssueStaleProcessor {
     );
 
     LoggerService.info(`The stale label was added`);
-    LoggerService.info(LoggerFormatService.green(`The issue is now stale`));
+    LoggerService.notice(`The issue is now stale`);
   }
 
   public isStaleByUpdateDate$$(): boolean {

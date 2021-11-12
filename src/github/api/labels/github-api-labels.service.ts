@@ -1,5 +1,5 @@
-import { GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION } from '@github/api/labels/constants/github-api-add-label-to-issue-mutation';
-import { GITHUB_API_GET_LABEL_QUERY } from '@github/api/labels/constants/github-api-get-label-query';
+import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
@@ -17,7 +17,7 @@ export class GithubApiLabelsService {
     );
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiGetLabel>(GITHUB_API_GET_LABEL_QUERY, {
+      .graphql<IGithubApiGetLabel>(GITHUB_API_LABEL_BY_NAME_QUERY, {
         labelName,
         owner: context.repo.owner,
         repository: context.repo.repo,
@@ -70,7 +70,7 @@ export class GithubApiLabelsService {
     );
 
     return OctokitService.getOctokit()
-      .graphql<unknown>(GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION, {
+      .graphql<unknown>(GITHUB_API_ADD_LABEL_MUTATION, {
         issueId,
         labelId,
       })

@@ -1,5 +1,5 @@
-import { GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION } from '@github/api/labels/constants/github-api-add-label-to-issue-mutation';
-import { GITHUB_API_GET_LABEL_QUERY } from '@github/api/labels/constants/github-api-get-label-query';
+import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -54,7 +54,7 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
       expect(graphqlMock).toHaveBeenCalledTimes(1);
-      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_GET_LABEL_QUERY, {
+      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_LABEL_BY_NAME_QUERY, {
         labelName,
         owner: `dummy-owner`,
         repository: `dummy-repo`,
@@ -335,7 +335,7 @@ describe(`GithubApiLabelsService`, (): void => {
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
       expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
       expect(graphqlMock).toHaveBeenCalledTimes(1);
-      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABEL_TO_ISSUE_MUTATION, {
+      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABEL_MUTATION, {
         issueId,
         labelId,
       });

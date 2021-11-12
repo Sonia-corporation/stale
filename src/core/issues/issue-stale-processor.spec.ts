@@ -98,6 +98,7 @@ describe(`issueStaleProcessor`, (): void => {
       let inputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
       let loggerServiceInfoSpy: jest.SpyInstance;
+      let loggerServiceNoticeSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -133,6 +134,7 @@ describe(`issueStaleProcessor`, (): void => {
           .spyOn(GithubApiLabelsService, `addLabelToIssue`)
           .mockImplementation();
         loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+        loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -144,7 +146,7 @@ describe(`issueStaleProcessor`, (): void => {
         expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(5);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Adding the stale state to this issue...`);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
@@ -157,15 +159,16 @@ describe(`issueStaleProcessor`, (): void => {
       });
 
       it(`should add the stale label on the issue`, async (): Promise<void> => {
-        expect.assertions(5);
+        expect.assertions(6);
 
         await issueStaleProcessor.stale();
 
         expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
         expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(5);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(6, `green-The issue is now stale`);
+        expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
       });
     });
 
