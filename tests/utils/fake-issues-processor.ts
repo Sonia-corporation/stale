@@ -155,6 +155,7 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IInputs>({
       dryRun: false,
       githubToken: faker.datatype.uuid(),
+      issueDaysBeforeStale: 30,
       issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
       issueStaleLabel: `stale`,
       ...inputs,

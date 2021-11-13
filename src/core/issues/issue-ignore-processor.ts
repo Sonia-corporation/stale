@@ -48,8 +48,6 @@ export class IssueIgnoreProcessor {
     );
     const firstDuplicatedLabel: string | undefined = _.head(duplicatedLabels);
 
-    this.issueProcessor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
-
     if (!_.isUndefined(firstDuplicatedLabel)) {
       this.issueProcessor.logger.info(
         `Containing one of the ignored labels`,
@@ -59,6 +57,8 @@ export class IssueIgnoreProcessor {
 
       return true;
     }
+
+    this.issueProcessor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
     const { totalCount } = this.issueProcessor.githubIssue.labels;
