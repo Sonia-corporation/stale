@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.7.0](https://github.com/Sonia-corporation/stale/compare/1.6.1...1.7.0) (2021-11-13)
+
+
+### :rocket: Features
+
+* **issue:** add a new input "issue-days-before-stale" to choose when to stale ([2e92099](https://github.com/Sonia-corporation/stale/commit/2e92099f52fa4e0c90772913b43adca9ed24fcf5))
+
 ## [1.6.1](https://github.com/Sonia-corporation/stale/compare/1.6.0...1.6.1) (2021-11-13)
 
 
