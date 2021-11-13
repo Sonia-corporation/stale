@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.6.1](https://github.com/Sonia-corporation/stale/compare/1.6.0...1.6.1) (2021-11-13)
+
+
+### :bug: Bug Fixes
+
+* **dry-run:** ignore the stale label addition in dry-run mode ([8fe45d2](https://github.com/Sonia-corporation/stale/commit/8fe45d291f6b2eb9ad9d5a295df2000f64b6d682))
+
 # [1.6.0](https://github.com/Sonia-corporation/stale/compare/1.5.0...1.6.0) (2021-11-12)
 
 
