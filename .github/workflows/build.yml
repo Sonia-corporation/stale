@@ -51,8 +51,10 @@ jobs:
       - name: Install dependencies
         if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
-      - name: Lint
-        run: npm run lint:all:ci
+      - name: Lint ts
+        run: npm run lint:ts:ci
+      - name: Lint other
+        run: npm run lint:other:ci
   CoverageCodeClimate:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
