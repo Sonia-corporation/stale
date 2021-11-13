@@ -7,7 +7,7 @@ inputs:
     required: false
     default: ${{ github.token }}
   dry-run:
-    description: 'A mode where any Data Manipulation Language will be skipped. Useful to debug.'
+    description: 'A mode where any Data Manipulation Language will be skipped. Useful to debug safely and without risking messing up with your repository.'
     required: false
     default: 'false'
   issue-stale-label:

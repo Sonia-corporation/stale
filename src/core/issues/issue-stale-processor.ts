@@ -39,12 +39,17 @@ export class IssueStaleProcessor {
     LoggerService.info(`The stale label was fetched`);
     LoggerService.info(`Adding the stale label to this issue...`);
 
-    await GithubApiLabelsService.addLabelToIssue(
-      this.issueProcessor.githubIssue.id,
-      label.repository.labels.nodes[0].id
-    );
+    if (!InputsService.getInputs().dryRun) {
+      await GithubApiLabelsService.addLabelToIssue(
+        this.issueProcessor.githubIssue.id,
+        label.repository.labels.nodes[0].id
+      );
 
-    LoggerService.info(`The stale label was added`);
+      LoggerService.info(`The stale label was added`);
+    } else {
+      LoggerService.info(`The stale label was not added due to the dry-run mode`);
+    }
+
     LoggerService.notice(`The issue is now stale`);
   }
 
