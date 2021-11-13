@@ -5,7 +5,9 @@ describe(`Issue to stale`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
   beforeEach((): void => {
-    issueSut = new FakeIssuesProcessor();
+    issueSut = new FakeIssuesProcessor({
+      issueDaysBeforeStale: 30,
+    });
   });
 
   describe(`when an issue last update was older than 30 days`, (): void => {

@@ -18,6 +18,10 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains one of those labels (multiline).'
     required: false
     default: ''
+  issue-days-before-stale:
+    description: 'The number of days until the issue is considered as stale.'
+    required: false
+    default: '30'
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -214,12 +214,32 @@ describe(`IssueStaleProcessor`, (): void => {
       let issueProcessorGetUpdatedAtMock: jest.Mock;
 
       let loggerServiceInfoSpy: jest.SpyInstance;
+      let inputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueDaysBeforeStale: 30,
+          })
+        );
       });
 
-      describe(`when the issue was updated more than 30 days ago`, (): void => {
+      it(`should get the number of days before the issue should be stale`, (): void => {
+        expect.assertions(4);
+
+        issueStaleProcessor.isStaleByUpdateDate$$();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if the issue should be stale based on the update date...`
+        );
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue last updated is older than the number of days before the issue should be stale`, (): void => {
         beforeEach((): void => {
           issueProcessorGetUpdatedAtMock = jest.fn().mockImplementation(
             (): DateTime =>
@@ -234,16 +254,12 @@ describe(`IssueStaleProcessor`, (): void => {
         });
 
         it(`should return true`, (): void => {
-          expect.assertions(5);
+          expect.assertions(4);
 
           const result = issueStaleProcessor.isStaleByUpdateDate$$();
 
           expect(result).toBeTrue();
           expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-            1,
-            `Checking if the issue should be stale based on the update date...`
-          );
           expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The issue was updated for the last time the`,
@@ -258,44 +274,43 @@ describe(`IssueStaleProcessor`, (): void => {
         });
       });
 
-      describe.each([30, 29, 0])(`when the issue was updated less than 30 days ago`, (day): void => {
-        beforeEach((): void => {
-          issueProcessorGetUpdatedAtMock = jest.fn().mockImplementation(
-            (): DateTime =>
-              DateTime.now().minus({
-                day,
-              })
-          );
-          issueProcessor = createHydratedMock<IssueProcessor>({
-            getUpdatedAt: issueProcessorGetUpdatedAtMock,
+      describe.each([30, 29, 0])(
+        `when the issue last updated is younger than the number of days before the issue should be stale`,
+        (day): void => {
+          beforeEach((): void => {
+            issueProcessorGetUpdatedAtMock = jest.fn().mockImplementation(
+              (): DateTime =>
+                DateTime.now().minus({
+                  day,
+                })
+            );
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              getUpdatedAt: issueProcessorGetUpdatedAtMock,
+            });
+            issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
           });
-          issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
-        });
 
-        it(`should return false`, (): void => {
-          expect.assertions(5);
+          it(`should return false`, (): void => {
+            expect.assertions(4);
 
-          const result = issueStaleProcessor.isStaleByUpdateDate$$();
+            const result = issueStaleProcessor.isStaleByUpdateDate$$();
 
-          expect(result).toBeFalse();
-          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-            1,
-            `Checking if the issue should be stale based on the update date...`
-          );
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-            2,
-            `The issue was updated for the last time the`,
-            `value-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
-          );
-          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-            3,
-            `The issue should not be stale since it was updated in the last`,
-            `value-30`,
-            `whiteBright-days`
-          );
-        });
-      });
+            expect(result).toBeFalse();
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `The issue was updated for the last time the`,
+              `value-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+            );
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The issue should not be stale since it was updated in the last`,
+              `value-30`,
+              `whiteBright-days`
+            );
+          });
+        }
+      );
     });
   });
 });

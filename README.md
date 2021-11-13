@@ -47,7 +47,7 @@ If you have any suggestion, bugfix to report, specific feature-request or just w
 
 ## Default configuration
 
-After 30 days without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
+After X days (coming from `issue-days-before-stale`) without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
 
 ## All the common inputs
 
@@ -64,6 +64,7 @@ All the inputs that are used both for issues and Pull Requests.
 | ----------------------- | --------------------------------------------------------------------------------------- | ------- |
 | issue-stale-label       | The label that will be added to the issue when it is stale.                             | `stale` |
 | issue-ignore-any-labels | Allow to ignore the processing of issues that contains one of those labels (multiline). |         |
+| issue-days-before-stale | The number of days until the issue is considered as stale.                              | `30`    |
 
 ## All the Pull Requests inputs
 
