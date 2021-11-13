@@ -22,6 +22,10 @@ inputs:
     description: 'The number of days until the issue is considered as stale.'
     required: false
     default: '30'
+  issue-days-before-close:
+    description: 'The number of days until a stale issue is considered as closed.'
+    required: false
+    default: '10'
 runs:
   using: 'node12'
   main: 'dist/index.js'
