@@ -37,18 +37,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint
         run: npm run lint:all:ci
@@ -68,18 +69,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Coverage
         uses: paambaati/codeclimate-action@v3.0.0
@@ -104,18 +106,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test
         run: npm run test:ci:coverage:integration
@@ -142,18 +145,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test
         run: npm run test:ci:coverage:unit
@@ -180,18 +184,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
         run: npm run build:dirty

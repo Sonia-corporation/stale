@@ -38,18 +38,19 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        id: cache-node_modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Install dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
         run: npm run build
