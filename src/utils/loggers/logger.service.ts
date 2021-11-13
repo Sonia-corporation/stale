@@ -67,10 +67,10 @@ export class LoggerService {
   /**
    * @description
    * Very specific log used to show a value
-   * @param {Readonly<string | boolean | string[]>} value The value to display
+   * @param {Readonly<string | number | boolean | string[]>} value The value to display
    * @returns {string} The value in cyan
    */
-  public static value(value: Readonly<string | boolean | string[]>): string {
+  public static value(value: Readonly<string | number | boolean | string[]>): string {
     let formattedValue: string;
 
     if (_.isArray(value)) {

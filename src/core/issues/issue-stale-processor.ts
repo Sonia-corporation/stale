@@ -7,9 +7,6 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
 
-// Days
-const NUMBER_OF_DAYS_BEFORE_STALE = 30;
-
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
 
@@ -63,24 +60,31 @@ export class IssueStaleProcessor {
       LoggerService.value(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
     );
 
-    const isStale: boolean =
-      DateTime.now().diff(updatedAt, `days`, {
-        conversionAccuracy: `longterm`,
-      }).days > NUMBER_OF_DAYS_BEFORE_STALE;
+    const numberOfDaysBeforeStale: number = InputsService.getInputs().issueDaysBeforeStale;
+    const daysDifference: number = DateTime.now().diff(updatedAt, `days`, {
+      conversionAccuracy: `longterm`,
+    }).days;
+    const isStale: boolean = daysDifference > numberOfDaysBeforeStale;
 
     if (isStale) {
       LoggerService.info(
         `The issue should be stale since it was not updated in the last`,
-        LoggerService.value(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
-        LoggerFormatService.whiteBright(`days`)
+        LoggerService.value(_.toString(numberOfDaysBeforeStale)),
+        LoggerFormatService.whiteBright(`day${numberOfDaysBeforeStale > 1 ? `s` : ``}`)
       );
     } else {
       LoggerService.info(
         `The issue should not be stale since it was updated in the last`,
-        LoggerService.value(_.toString(NUMBER_OF_DAYS_BEFORE_STALE)),
-        LoggerFormatService.whiteBright(`days`)
+        LoggerService.value(_.toString(numberOfDaysBeforeStale)),
+        LoggerFormatService.whiteBright(`day${numberOfDaysBeforeStale > 1 ? `s` : ``}`)
       );
     }
+
+    LoggerService.debug(
+      `The difference is`,
+      LoggerService.value(_.toString(daysDifference)),
+      LoggerFormatService.whiteBright(`day${daysDifference > 1 ? `s` : ``}`)
+    );
 
     return isStale;
   }

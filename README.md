@@ -42,9 +42,12 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
+⚠️ This is a work in progress that is focused for now to deliver a nice experience to handle your issues. Pull Requests handling will come later, once everything is stable for the issues handling.
+If you have any suggestion, bugfix to report, specific feature-request or just want to help, you are welcome!
+
 ## Default configuration
 
-After 30 days without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
+After X days (coming from `issue-days-before-stale`) without any update on the issue, add a label on the issue to indicate that it is stale (coming from `issue-stale-label`).
 
 ## All the common inputs
 
@@ -61,6 +64,7 @@ All the inputs that are used both for issues and Pull Requests.
 | ----------------------- | --------------------------------------------------------------------------------------- | ------- |
 | issue-stale-label       | The label that will be added to the issue when it is stale.                             | `stale` |
 | issue-ignore-any-labels | Allow to ignore the processing of issues that contains one of those labels (multiline). |         |
+| issue-days-before-stale | The number of days until the issue is considered as stale.                              | `30`    |
 
 ## All the Pull Requests inputs
 

@@ -12,7 +12,7 @@ describe(`Batch of issues`, (): void => {
 
   describe(`when more than 20 issues are locked`, (): void => {
     beforeEach((): void => {
-      issueSut.addIssues(30, { locked: true });
+      issueSut.addIssues(22, { locked: true });
     });
 
     it(`should not process the issues`, async (): Promise<void> => {

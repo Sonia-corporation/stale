@@ -2,8 +2,10 @@ import { EInputs } from '@core/inputs/inputs.enum';
 import { IInputs } from '@core/inputs/inputs.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import { isFiniteNumber } from '@utils/numbers/is-finite-number';
 import { ETreeRows } from '@utils/trees/tree-rows.enum';
 import * as core from '@actions/core';
+import { InputOptions } from '@actions/core';
 import _ from 'lodash';
 
 /**
@@ -24,6 +26,7 @@ export class InputsService {
     InputsService.inputs$$ = {
       dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
+      issueDaysBeforeStale: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
       issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
     };
@@ -36,7 +39,11 @@ export class InputsService {
 
     _.forIn(
       InputsService.inputs$$,
-      (value: Readonly<string | boolean | string[]>, inputName: Readonly<string>, inputs: Readonly<IInputs>): void => {
+      (
+        value: Readonly<string | number | boolean | string[]>,
+        inputName: Readonly<string>,
+        inputs: Readonly<IInputs>
+      ): void => {
         const lastInputName: string | undefined = _.findLastKey(inputs, (): true => true);
 
         LoggerService.info(
@@ -58,5 +65,23 @@ export class InputsService {
     }
 
     return InputsService.inputs$$;
+  }
+
+  public static getNumberInput$$(input: Readonly<EInputs>, options?: Readonly<InputOptions>): number {
+    const inputValue: string = core.getInput(input, options);
+    const value: number = _.parseInt(inputValue);
+
+    if (!isFiniteNumber(value)) {
+      LoggerService.error(
+        `Wrong value given to the input`,
+        LoggerService.value(input),
+        LoggerFormatService.white(`->`),
+        LoggerService.value(inputValue)
+      );
+
+      throw new Error(`Wrong value given to the input number ${input}`);
+    }
+
+    return value;
   }
 }

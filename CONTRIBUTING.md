@@ -129,8 +129,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Fetch all the open issues per batch of 20, sorted by update date from the oldest first
 - Check if the issue is locked and stop the processing if this is the case
 - Check if the issue has any of the ignored labels and stop the processing if this is the case (coming from the `issue-ignore-any-labels` input)
-- Check if the issue last update is older than 30 days
-- If the issue last update is older than 30 days
+- Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
+- If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Add a label to stale (coming from the `issue-stale-label` input, ignored in `dry-run` mode)
 - When the batch was processed, go to the next one and proceed again
 
