@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        id: cache-node_modules
+        id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -47,7 +47,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint ts
         run: npm run lint:ts:ci
@@ -69,7 +69,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        id: cache-node_modules
+        id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -79,7 +79,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Coverage
         uses: paambaati/codeclimate-action@v3.0.0
@@ -104,7 +104,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        id: cache-node_modules
+        id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -114,8 +114,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Cache Jest
+        id: cache-jest
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-jest
+        with:
+          path: .cache-jest
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
       - name: Test
         run: npm run test:ci:coverage:integration
       - name: Coverage
@@ -141,7 +151,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        id: cache-node_modules
+        id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -151,8 +161,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Cache Jest
+        id: cache-jest
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-jest
+        with:
+          path: .cache-jest
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
       - name: Test
         run: npm run test:ci:coverage:unit
       - name: Coverage
@@ -178,7 +198,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Cache node_modules
-        id: cache-node_modules
+        id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
@@ -188,7 +208,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build
         run: npm run build:dirty
