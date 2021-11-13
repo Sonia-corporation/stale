@@ -131,7 +131,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue has any of the ignored labels and stop the processing if this is the case (coming from the `issue-ignore-any-labels` input)
 - Check if the issue last update is older than 30 days
 - If the issue last update is older than 30 days
-  - Add a label (coming from the `issue-stale-label` input)
+  - Add a label to stale (coming from the `issue-stale-label` input, ignored in `dry-run` mode)
 - When the batch was processed, go to the next one and proceed again
 
 ### Error handling
