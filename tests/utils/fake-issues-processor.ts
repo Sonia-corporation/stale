@@ -7,6 +7,7 @@ import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issue
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import * as github from '@actions/github';
@@ -153,11 +154,7 @@ export class FakeIssuesProcessor {
    */
   public constructor(inputs?: Readonly<Partial<IInputs>>) {
     this._inputs = createHydratedMock<IInputs>({
-      dryRun: false,
-      githubToken: faker.datatype.uuid(),
-      issueDaysBeforeStale: 30,
-      issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
-      issueStaleLabel: `stale`,
+      ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
   }
