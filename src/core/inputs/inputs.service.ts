@@ -26,6 +26,7 @@ export class InputsService {
     InputsService.inputs$$ = {
       dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
+      issueDaysBeforeClose: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_CLOSE, { required: false }),
       issueDaysBeforeStale: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
       issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
