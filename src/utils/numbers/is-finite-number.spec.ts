@@ -13,6 +13,10 @@ describe(`isFiniteNumber()`, (): void => {
     ${0}         | ${true}
     ${1}         | ${true}
     ${888}       | ${true}
+    ${`-1`}      | ${false}
+    ${`0`}       | ${false}
+    ${`1`}       | ${false}
+    ${`888`}     | ${false}
   `(`when the given value is "$value"`, ({ value, isFinite }: IMatrix): void => {
     it(`should return ${isFinite}`, (): void => {
       expect.assertions(1);

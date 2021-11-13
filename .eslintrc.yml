@@ -406,6 +406,7 @@ overrides:
       - 'plugin:jest/style'
       - 'plugin:jest/all'
     rules:
+      '@typescript-eslint/prefer-readonly-parameter-types': off
       jest/prefer-expect-resolves: error
       jest/prefer-to-be: error
       jest/require-top-level-describe: error
