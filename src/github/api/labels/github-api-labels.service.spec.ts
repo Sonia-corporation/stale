@@ -149,10 +149,12 @@ describe(`GithubApiLabelsService`, (): void => {
           });
 
           it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(1);
+            expect.assertions(3);
 
             const result = await GithubApiLabelsService.fetchLabelByName(labelName);
 
+            expect(loggerServiceInfoSpy).toHaveReturnedTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `green-Found the label`, `value-${labelName}`);
             expect(result).toStrictEqual(githubApiGetLabel);
           });
         });
@@ -231,10 +233,12 @@ describe(`GithubApiLabelsService`, (): void => {
           });
 
           it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(1);
+            expect.assertions(3);
 
             const result = await GithubApiLabelsService.fetchLabelByName(labelName);
 
+            expect(loggerServiceInfoSpy).toHaveReturnedTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `green-Found the label`, `value-${labelName}`);
             expect(result).toStrictEqual(githubApiGetLabel);
           });
         });

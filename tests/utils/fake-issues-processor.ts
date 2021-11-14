@@ -6,6 +6,7 @@ import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
 import * as core from '@actions/core';
@@ -143,6 +144,9 @@ export class FakeIssuesProcessor {
           },
         })
       );
+    },
+    [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
+      return Promise.resolve();
     },
   };
 

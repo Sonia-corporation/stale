@@ -10,6 +10,14 @@ import { context } from '@actions/github';
 import _ from 'lodash';
 
 export class GithubApiLabelsService {
+  /**
+   * @description
+   * Fetch a label by name
+   * Since the GitHub API is doing a search by name and description, this method will throw if the first match is not good
+   * @todo handle the pagination to check the other labels as well
+   * @param {Readonly<string>} labelName The name of the label to search for
+   * @returns {Promise<IGithubApiLabels>} The stale label
+   */
   public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
     LoggerService.info(
       `Fetching the label`,
@@ -52,6 +60,8 @@ export class GithubApiLabelsService {
 
           throw new Error(`Could not find the label ${labelName}`);
         }
+
+        LoggerService.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
 
         return response;
       })
