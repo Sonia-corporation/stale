@@ -28,7 +28,9 @@ describe(`Issue stale and updated`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.now().toISO(), // Updated right now
+          updatedAt: DateTime.now().toISO({
+            includeOffset: false,
+          }), // Updated right now
         })
         .mockTimelineItemsIssueLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>

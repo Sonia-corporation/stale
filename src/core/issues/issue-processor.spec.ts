@@ -231,7 +231,9 @@ describe(`IssueProcessor`, (): void => {
         beforeEach((): void => {
           issueProcessor = new IssueProcessor(
             createHydratedMock<IGithubApiIssue>({
-              updatedAt: DateTime.now().toISO(),
+              updatedAt: DateTime.now().toISO({
+                includeOffset: false,
+              }),
             })
           );
         });

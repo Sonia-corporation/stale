@@ -152,7 +152,9 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO(),
+                            createdAt: DateTime.utc(2019).toISO({
+                              includeOffset: false,
+                            }),
                             label: {
                               name: `stale`,
                             },
@@ -181,7 +183,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale label was added the`,
-              `date-01/01/2019, 01:00:00`
+              `date-01/01/2019, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               3,
@@ -211,7 +213,9 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
-                            createdAt: DateTime.utc(2021).toISO(),
+                            createdAt: DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }),
                             label: {
                               name: `stale`,
                             },
@@ -240,7 +244,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale label was added the`,
-              `date-01/01/2021, 01:00:00`
+              `date-01/01/2021, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               3,

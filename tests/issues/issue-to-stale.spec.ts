@@ -18,7 +18,9 @@ describe(`Issue to stale`, (): void => {
           .minus({
             day: 31,
           })
-          .toISO(),
+          .toISO({
+            includeOffset: false,
+          }),
       });
     });
 
