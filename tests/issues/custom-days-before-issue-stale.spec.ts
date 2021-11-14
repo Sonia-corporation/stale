@@ -19,7 +19,9 @@ describe(`Custom days before issue stale`, (): void => {
             .minus({
               day: 21,
             })
-            .toISO(),
+            .toISO({
+              includeOffset: false,
+            }),
         });
       });
 
@@ -41,7 +43,9 @@ describe(`Custom days before issue stale`, (): void => {
             .minus({
               day: 20,
             })
-            .toISO(),
+            .toISO({
+              includeOffset: false,
+            }),
         });
       });
 
@@ -63,7 +67,9 @@ describe(`Custom days before issue stale`, (): void => {
             .minus({
               day: 19,
             })
-            .toISO(),
+            .toISO({
+              includeOffset: false,
+            }),
         });
       });
 

@@ -7,80 +7,86 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
 
+/**
+ * @description
+ * The processor to stale an issue
+ */
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
+  public readonly githubApiLabelsService$$: GithubApiLabelsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
+    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
   }
 
   public shouldStale(): boolean {
-    LoggerService.info(`Checking if the issue should be stale...`);
+    this.issueProcessor.logger.info(`Checking if the issue should be stale...`);
 
     return this.isStaleByUpdateDate$$();
   }
 
   public async stale(): Promise<void> {
-    LoggerService.info(`Adding the stale state to this issue...`);
+    this.issueProcessor.logger.info(`Adding the stale state to this issue...`);
 
     const { issueStaleLabel } = InputsService.getInputs();
 
-    LoggerService.info(
+    this.issueProcessor.logger.info(
       `Fetching the stale label`,
       LoggerService.value(issueStaleLabel),
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabels = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
 
-    LoggerService.info(`The stale label was fetched`);
-    LoggerService.info(`Adding the stale label to this issue...`);
+    this.issueProcessor.logger.info(`The stale label was fetched`);
+    this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
     if (!InputsService.getInputs().dryRun) {
-      await GithubApiLabelsService.addLabelToIssue(
+      await this.githubApiLabelsService$$.addLabelToIssue(
         this.issueProcessor.githubIssue.id,
         label.repository.labels.nodes[0].id
       );
 
-      LoggerService.info(`The stale label was added`);
+      this.issueProcessor.logger.info(`The stale label was added`);
     } else {
-      LoggerService.info(`The stale label was not added due to the dry-run mode`);
+      this.issueProcessor.logger.info(`The stale label was not added due to the dry-run mode`);
     }
 
-    LoggerService.notice(`The issue is now stale`);
+    this.issueProcessor.logger.notice(`The issue is now stale`);
   }
 
   public isStaleByUpdateDate$$(): boolean {
-    LoggerService.info(`Checking if the issue should be stale based on the update date...`);
+    this.issueProcessor.logger.info(`Checking if the issue should be stale based on the update date...`);
 
     const updatedAt: DateTime = this.issueProcessor.getUpdatedAt();
 
-    LoggerService.info(
-      `The issue was updated for the last time the`,
-      LoggerService.value(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
-    );
+    this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(updatedAt));
 
     const numberOfDaysBeforeStale: number = InputsService.getInputs().issueDaysBeforeStale;
-    const daysDifference: number = DateTime.now().diff(updatedAt, `days`, {
-      conversionAccuracy: `longterm`,
-    }).days;
+    const daysDifference: number = _.round(
+      DateTime.now().diff(updatedAt, `days`, {
+        conversionAccuracy: `longterm`,
+      }).days,
+      1
+    );
     const isStale: boolean = daysDifference > numberOfDaysBeforeStale;
 
     if (isStale) {
-      LoggerService.info(
+      this.issueProcessor.logger.info(
         `The issue should be stale since it was not updated in the last`,
         LoggerService.value(_.toString(numberOfDaysBeforeStale)),
         LoggerFormatService.whiteBright(`day${numberOfDaysBeforeStale > 1 ? `s` : ``}`)
       );
     } else {
-      LoggerService.info(
+      this.issueProcessor.logger.info(
         `The issue should not be stale since it was updated in the last`,
         LoggerService.value(_.toString(numberOfDaysBeforeStale)),
         LoggerFormatService.whiteBright(`day${numberOfDaysBeforeStale > 1 ? `s` : ``}`)
       );
     }
 
-    LoggerService.debug(
+    this.issueProcessor.logger.debug(
       `The difference is`,
       LoggerService.value(_.toString(daysDifference)),
       LoggerFormatService.whiteBright(`day${daysDifference > 1 ? `s` : ``}`)

@@ -1,0 +1,72 @@
+import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
+import faker from 'faker';
+import { DateTime } from 'luxon';
+import { createHydratedMock } from 'ts-auto-mock';
+
+describe(`Issue stale not updated`, (): void => {
+  let issueSut: FakeIssuesProcessor;
+
+  beforeEach((): void => {
+    issueSut = new FakeIssuesProcessor({
+      issueDaysBeforeStale: 30,
+      issueStaleLabel: `stale`,
+    });
+  });
+
+  describe(`when an issue is stale and was not recently updated`, (): void => {
+    beforeEach((): void => {
+      issueSut
+        .addIssue({
+          labels: {
+            nodes: [
+              {
+                id: faker.datatype.uuid(),
+                name: `stale`, // Already stale
+              },
+            ],
+            totalCount: 1,
+          },
+          locked: false,
+          updatedAt: DateTime.utc(2021).toISO({
+            includeOffset: false,
+          }), // No update since last stale
+        })
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
+            Promise.resolve(
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                repository: {
+                  issue: {
+                    timelineItems: {
+                      filteredCount: 1,
+                      nodes: [
+                        {
+                          createdAt: DateTime.utc(2021).toISO({
+                            includeOffset: false,
+                          }), // Last stale
+                          label: {
+                            id: faker.datatype.uuid(),
+                            name: `stale`,
+                          },
+                        },
+                      ],
+                      pageCount: 1,
+                    },
+                  },
+                },
+              })
+            )
+        );
+    });
+
+    it(`should not remove the stale state on the issue`, async (): Promise<void> => {
+      expect.assertions(1);
+
+      await issueSut.process();
+
+      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
+      expect(true).toBeTrue();
+    });
+  });
+});

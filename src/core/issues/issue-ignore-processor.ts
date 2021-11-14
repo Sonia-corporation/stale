@@ -7,6 +7,10 @@ import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
 
+/**
+ * @description
+ * The processor to ignore an issue
+ */
 export class IssueIgnoreProcessor {
   public readonly issueProcessor: IssueProcessor;
 
