@@ -1,3 +1,4 @@
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -7,7 +8,7 @@ import { context } from '@actions/github';
 
 export class GithubApiTimelineItemsService {
   public static fetchIssueAddedLabels(
-    issueNumber: Readonly<number>
+    issueNumber: Readonly<IGithubApiIssueNumber>
   ): Promise<IGithubApiTimelineItemsIssueLabeledEvents> | never {
     LoggerService.info(
       `Fetching the added labels events on the issue`,

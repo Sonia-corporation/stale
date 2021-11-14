@@ -59,10 +59,7 @@ export class IssueStaleProcessor {
 
     const updatedAt: DateTime = this.issueProcessor.getUpdatedAt();
 
-    this.issueProcessor.logger.info(
-      `The issue was updated for the last time the`,
-      LoggerService.value(updatedAt.toLocaleString(DateTime.DATETIME_SHORT))
-    );
+    this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(updatedAt));
 
     const numberOfDaysBeforeStale: number = InputsService.getInputs().issueDaysBeforeStale;
     const daysDifference: number = DateTime.now().diff(updatedAt, `days`, {

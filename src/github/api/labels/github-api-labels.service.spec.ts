@@ -5,8 +5,8 @@ import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.ser
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
-import { IUuid } from '@utils/dates/uuid';
 import { LoggerService } from '@utils/loggers/logger.service';
+import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';

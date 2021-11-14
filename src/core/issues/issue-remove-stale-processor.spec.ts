@@ -5,7 +5,7 @@ import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-proce
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
-import { IUuid } from '@utils/dates/uuid';
+import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
 

@@ -1,3 +1,4 @@
+import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
@@ -13,7 +14,7 @@ jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`GithubApiTimelineItemsService`, (): void => {
   describe(`fetchIssueAddedLabels()`, (): void => {
-    let issueNumber: number;
+    let issueNumber: IGithubApiIssueNumber;
     let graphqlMock: jest.Mock;
 
     let loggerServiceInfoSpy: jest.SpyInstance;
