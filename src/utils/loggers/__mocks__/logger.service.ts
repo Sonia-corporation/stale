@@ -1,4 +1,5 @@
 import { EInputs } from '@core/inputs/inputs.enum';
+import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { DateTime } from 'luxon';
 
 export class LoggerService {
@@ -43,6 +44,8 @@ export class LoggerService {
   }
 
   public static date(date: Readonly<DateTime>): string {
-    return `date-${date.toLocaleString(DateTime.DATETIME_SHORT)}`;
+    // Predefined format only for the tests
+    // To avoid having issues locally versus in the CI
+    return `date-${date.toFormat(MOCK_DATE_FORMAT)}`;
   }
 }

@@ -90,6 +90,6 @@ export class LoggerService {
    * @returns {string} The date in cyan
    */
   public static date(date: Readonly<DateTime>): string {
-    return LoggerFormatService.cyan(date.toLocaleString(DateTime.DATETIME_SHORT));
+    return LoggerFormatService.cyan(date.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS));
   }
 }

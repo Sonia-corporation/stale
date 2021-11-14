@@ -5,6 +5,7 @@ import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { DateTime } from 'luxon';
@@ -274,7 +275,7 @@ describe(`IssueStaleProcessor`, (): void => {
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The issue was updated for the last time the`,
-            `date-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+            `date-${issueProcessorGetUpdatedAtMock().toFormat(MOCK_DATE_FORMAT)}`
           );
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             3,
@@ -315,7 +316,7 @@ describe(`IssueStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The issue was updated for the last time the`,
-              `date-${issueProcessorGetUpdatedAtMock().toLocaleString(DateTime.DATETIME_SHORT)}`
+              `date-${issueProcessorGetUpdatedAtMock().toFormat(MOCK_DATE_FORMAT)}`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               3,

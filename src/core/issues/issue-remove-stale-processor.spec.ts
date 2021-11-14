@@ -181,12 +181,12 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale label was added the`,
-              `date-01/01/2019, 01:00`
+              `date-01/01/2019, 01:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               3,
               `The issue was updated for the last time the`,
-              `date-01/01/2020, 00:00`
+              `date-01/01/2020, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
@@ -240,12 +240,12 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale label was added the`,
-              `date-01/01/2021, 01:00`
+              `date-01/01/2021, 01:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               3,
               `The issue was updated for the last time the`,
-              `date-01/01/2020, 00:00`
+              `date-01/01/2020, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
