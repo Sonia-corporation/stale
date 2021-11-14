@@ -43,6 +43,25 @@ describe(`StatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseUnalteredIssuesCount()`, (): void => {
+    it(`should increase the unaltered issues count`, (): void => {
+      expect.assertions(1);
+      StatisticsService.unalteredIssuesCount$$ = 0;
+
+      StatisticsService.increaseUnalteredIssuesCount();
+
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.increaseUnalteredIssuesCount();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
   describe(`increaseStaleIssuesCount()`, (): void => {
     it(`should increase the stale issues count`, (): void => {
       expect.assertions(1);
@@ -124,6 +143,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 0;
         StatisticsService.ignoredIssuesCount$$ = 0;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
@@ -142,6 +162,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 1;
         StatisticsService.ignoredIssuesCount$$ = 0;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
@@ -161,6 +182,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 1;
         StatisticsService.ignoredIssuesCount$$ = 2;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 3;
         StatisticsService.alreadyStaleIssuesCount$$ = 4;
         StatisticsService.removeStaleIssuesCount$$ = 5;

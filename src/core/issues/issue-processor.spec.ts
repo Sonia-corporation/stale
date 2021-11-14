@@ -385,6 +385,7 @@ describe(`IssueProcessor`, (): void => {
 
       let stopProcessingSpy: jest.SpyInstance;
       let statisticsServiceIncreaseStaleIssuesCountSpy: jest.SpyInstance;
+      let statisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         mockedIssueStaleProcessor.mockClear();
@@ -392,6 +393,9 @@ describe(`IssueProcessor`, (): void => {
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
         statisticsServiceIncreaseStaleIssuesCountSpy = jest
           .spyOn(StatisticsService, `increaseStaleIssuesCount`)
+          .mockImplementation();
+        statisticsServiceIncreaseUnalteredIssuesCountSpy = jest
+          .spyOn(StatisticsService, `increaseUnalteredIssuesCount`)
           .mockImplementation();
       });
 
@@ -417,6 +421,15 @@ describe(`IssueProcessor`, (): void => {
           await issueProcessor.processForStale$$();
 
           expect(statisticsServiceIncreaseStaleIssuesCountSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should increase the unaltered issues statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processForStale$$();
+
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -451,6 +464,14 @@ describe(`IssueProcessor`, (): void => {
 
           expect(statisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
           expect(statisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledWith();
+        });
+
+        it(`should not increase the unaltered issues statistics`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await issueProcessor.processForStale$$();
+
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
