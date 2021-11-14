@@ -50,7 +50,7 @@ If you have any suggestion, bugfix to report, specific feature-request or just w
 
 ### Issues
 
-After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.
+After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed.
 
 ## All the common inputs
