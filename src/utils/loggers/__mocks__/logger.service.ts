@@ -1,4 +1,5 @@
 import { EInputs } from '@core/inputs/inputs.enum';
+import { DateTime } from 'luxon';
 
 export class LoggerService {
   public static debug(): LoggerService {
@@ -39,5 +40,9 @@ export class LoggerService {
 
   public static value(value: Readonly<string | boolean | string[]>): string {
     return `value-${value}`;
+  }
+
+  public static date(date: Readonly<DateTime>): string {
+    return `date-${date.toLocaleString(DateTime.DATETIME_SHORT)}`;
   }
 }

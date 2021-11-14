@@ -2,6 +2,7 @@ import { EInputs } from '@core/inputs/inputs.enum';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 import faker from 'faker';
+import { DateTime } from 'luxon';
 
 jest.mock(`@utils/loggers/logger-format.service`);
 
@@ -349,6 +350,16 @@ describe(`LoggerService`, (): void => {
 
         expect(result).toStrictEqual(`cyan-${value1}, ${value2}`);
       });
+    });
+  });
+
+  describe(`date()`, (): void => {
+    it(`should return the date humanized in cyan`, (): void => {
+      expect.assertions(1);
+
+      const result = LoggerService.date(DateTime.utc(2021));
+
+      expect(result).toStrictEqual(`cyan-01/01/2021, 00:00`);
     });
   });
 });
