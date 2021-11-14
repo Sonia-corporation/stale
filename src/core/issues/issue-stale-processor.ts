@@ -64,9 +64,12 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(updatedAt));
 
     const numberOfDaysBeforeStale: number = InputsService.getInputs().issueDaysBeforeStale;
-    const daysDifference: number = DateTime.now().diff(updatedAt, `days`, {
-      conversionAccuracy: `longterm`,
-    }).days;
+    const daysDifference: number = _.round(
+      DateTime.now().diff(updatedAt, `days`, {
+        conversionAccuracy: `longterm`,
+      }).days,
+      1
+    );
     const isStale: boolean = daysDifference > numberOfDaysBeforeStale;
 
     if (isStale) {
