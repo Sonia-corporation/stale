@@ -48,19 +48,14 @@ export class IssueRemoveStaleProcessor {
     }
 
     const lastAddedStaleLabelAt: DateTime = iso8601ToDatetime(lastAddedStaleLabelEvent.createdAt);
+    const issueUpdatedAt: DateTime = this.issueProcessor.getUpdatedAt();
 
-    this.issueProcessor.logger.info(
-      `The stale label was added for the last time the`,
-      LoggerService.date(lastAddedStaleLabelAt)
-    );
-    this.issueProcessor.logger.info(
-      `The issue last updated for the last time the`,
-      LoggerService.date(lastAddedStaleLabelAt)
-    );
+    this.issueProcessor.logger.info(`The stale label was added the`, LoggerService.date(lastAddedStaleLabelAt));
+    this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(issueUpdatedAt));
 
     // If the update date is more recent that the last time where the stale label was added
     // It means that an update occurred
-    if (isDateMoreRecent(this.issueProcessor.getUpdatedAt(), lastAddedStaleLabelAt)) {
+    if (isDateMoreRecent(issueUpdatedAt, lastAddedStaleLabelAt)) {
       this.issueProcessor.logger.info(`The last update on the issue is more recent that the last time it was stale`);
       this.issueProcessor.logger.info(`The stale state should be removed`);
 

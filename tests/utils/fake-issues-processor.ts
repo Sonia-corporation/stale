@@ -8,6 +8,8 @@ import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/gith
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
+import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
@@ -56,7 +58,7 @@ export class FakeIssuesProcessor {
   private readonly _inputs: IInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
   private _githubApiIssuesFetchCount = 0;
-  private readonly _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
+  private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
     [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
@@ -148,6 +150,29 @@ export class FakeIssuesProcessor {
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
+    [GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY](): Promise<IGithubApiTimelineItemsIssueLabeledEvents> {
+      return Promise.resolve(
+        createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+          repository: {
+            issue: {
+              timelineItems: {
+                filteredCount: 1,
+                nodes: [
+                  {
+                    createdAt: faker.date.recent().toISOString(),
+                    label: {
+                      id: faker.datatype.uuid(),
+                      name: faker.random.word(),
+                    },
+                  },
+                ],
+                pageCount: 1,
+              },
+            },
+          },
+        })
+      );
+    },
   };
 
   /**
@@ -218,6 +243,14 @@ export class FakeIssuesProcessor {
    */
   public removeAllIssues(): FakeIssuesProcessor {
     this._githubApiIssues = [];
+
+    return this;
+  }
+
+  public mockTimelineItemsIssueLabeledEventQuery(
+    result: () => Promise<IGithubApiTimelineItemsIssueLabeledEvents>
+  ): FakeIssuesProcessor {
+    this._apiMapper[GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY] = result;
 
     return this;
   }
