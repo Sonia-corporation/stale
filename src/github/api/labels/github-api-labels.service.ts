@@ -1,5 +1,6 @@
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IUuid } from '@utils/dates/uuid';
@@ -78,7 +79,7 @@ export class GithubApiLabelsService {
         LoggerService.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
-          LoggerFormatService.green(`added to issue`),
+          LoggerFormatService.green(`added to the issue`),
           LoggerService.value(issueId)
         );
       })
@@ -87,6 +88,39 @@ export class GithubApiLabelsService {
           `Failed to add the label`,
           LoggerService.value(labelId),
           LoggerFormatService.red(`on the issue`),
+          LoggerService.value(issueId)
+        );
+
+        throw error;
+      });
+  }
+
+  public static removeLabelFromIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
+    LoggerService.info(
+      `Removing the label`,
+      LoggerService.value(labelId),
+      LoggerFormatService.whiteBright(`from the issue`),
+      `${LoggerService.value(issueId)}${LoggerFormatService.whiteBright(`...`)}`
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(GITHUB_API_REMOVE_LABEL_MUTATION, {
+        issueId,
+        labelId,
+      })
+      .then((): void => {
+        LoggerService.info(
+          LoggerFormatService.green(`Label`),
+          LoggerService.value(labelId),
+          LoggerFormatService.green(`removed from the issue`),
+          LoggerService.value(issueId)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        LoggerService.error(
+          `Failed to remove the label`,
+          LoggerService.value(labelId),
+          LoggerFormatService.red(`from the issue`),
           LoggerService.value(issueId)
         );
 

@@ -1,5 +1,6 @@
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
@@ -378,7 +379,96 @@ describe(`GithubApiLabelsService`, (): void => {
           2,
           `green-Label`,
           `value-${labelId}`,
-          `green-added to issue`,
+          `green-added to the issue`,
+          `value-${issueId}`
+        );
+      });
+    });
+  });
+
+  describe(`removeLabelFromIssue()`, (): void => {
+    let issueId: IUuid;
+    let labelId: IUuid;
+    let graphqlMock: jest.Mock;
+
+    let loggerServiceInfoSpy: jest.SpyInstance;
+    let loggerServiceErrorSpy: jest.SpyInstance;
+    let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      issueId = faker.datatype.uuid();
+      labelId = faker.datatype.uuid();
+      graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
+      octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+        // @ts-ignore
+        graphql: graphqlMock,
+      });
+    });
+
+    it(`should remove the label on the issue`, async (): Promise<void> => {
+      expect.assertions(7);
+
+      await expect(GithubApiLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
+        new Error(`graphql error`)
+      );
+
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+        `Removing the label`,
+        `value-${labelId}`,
+        `whiteBright-from the issue`,
+        `value-${issueId}whiteBright-...`
+      );
+      expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+      expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+      expect(graphqlMock).toHaveBeenCalledTimes(1);
+      expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_REMOVE_LABEL_MUTATION, {
+        issueId,
+        labelId,
+      });
+    });
+
+    describe(`when the label failed to be removed`, (): void => {
+      beforeEach((): void => {
+        graphqlMock.mockRejectedValue(new Error(`graphql error`));
+      });
+
+      it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        expect.assertions(3);
+
+        await expect(GithubApiLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(
+          `Failed to remove the label`,
+          `value-${labelId}`,
+          `red-from the issue`,
+          `value-${issueId}`
+        );
+      });
+    });
+
+    describe(`when the label was successfully removed`, (): void => {
+      beforeEach((): void => {
+        graphqlMock.mockResolvedValue({});
+      });
+
+      it(`should log about the success of the removal`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await GithubApiLabelsService.removeLabelFromIssue(issueId, labelId);
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `green-Label`,
+          `value-${labelId}`,
+          `green-removed from the issue`,
           `value-${issueId}`
         );
       });
