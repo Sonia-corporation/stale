@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.10.0](https://github.com/Sonia-corporation/stale/compare/1.9.0...1.10.0) (2021-11-14)
+
+
+### :rocket: Features
+
+* **logs:** add statistics in the logs ([90fbb7a](https://github.com/Sonia-corporation/stale/commit/90fbb7aa86f381d6152f264e0796cd1cbb453671))
+
 # [1.9.0](https://github.com/Sonia-corporation/stale/compare/1.8.0...1.9.0) (2021-11-14)
 
 
