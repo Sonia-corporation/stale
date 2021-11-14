@@ -2,8 +2,15 @@ import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
+import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
+import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
+import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import _ from 'lodash';
+import { DateTime } from 'luxon';
 
 /**
  * @description
@@ -16,6 +23,62 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor = issueProcessor;
   }
 
+  /**
+   * @description
+   * Check if the issue should continue to be stale or not
+   * The check is made by comparing the last update date and the last creation date of the stale label
+   * @returns {Promise<boolean>} Returns true when the stale state should be removed
+   */
+  public async shouldRemoveStale(): Promise<boolean> | never {
+    this.issueProcessor.logger.info(`Checking if the stale state should be removed...`);
+
+    const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
+      await GithubApiTimelineItemsService.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
+    const { issueStaleLabel } = InputsService.getInputs();
+    const lastAddedStaleLabelEvent: IGithubApiTimelineItemsIssueLabeledEvent | undefined = _.findLast(
+      addedLabelEvents.repository.issue.timelineItems.nodes,
+      (addedLabelEvent: Readonly<IGithubApiTimelineItemsIssueLabeledEvent>): boolean =>
+        addedLabelEvent.label.name === issueStaleLabel
+    );
+
+    if (!lastAddedStaleLabelEvent) {
+      this.issueProcessor.logger.error(`Could not find the stale label in the added labels events`);
+
+      throw new Error(`Could not find the stale label in the added labels events`);
+    }
+
+    const lastAddedStaleLabelAt: DateTime = iso8601ToDatetime(lastAddedStaleLabelEvent.createdAt);
+
+    this.issueProcessor.logger.info(
+      `The stale label was added for the last time the`,
+      LoggerService.date(lastAddedStaleLabelAt)
+    );
+    this.issueProcessor.logger.info(
+      `The issue last updated for the last time the`,
+      LoggerService.date(lastAddedStaleLabelAt)
+    );
+
+    // If the update date is more recent that the last time where the stale label was added
+    // It means that an update occurred
+    if (isDateMoreRecent(this.issueProcessor.getUpdatedAt(), lastAddedStaleLabelAt)) {
+      this.issueProcessor.logger.info(`The last update on the issue is more recent that the last time it was stale`);
+      this.issueProcessor.logger.info(`The stale state should be removed`);
+
+      return true;
+    }
+
+    this.issueProcessor.logger.info(`There was no update since the last time this issue was stale`);
+    this.issueProcessor.logger.info(`The stale state should not be removed`);
+
+    return false;
+  }
+
+  /**
+   * @description
+   * Remove the stale state from the issue
+   * Remove the stale label from the issue
+   * @returns {Promise<void>} A promise
+   */
   public async removeStale(): Promise<void> {
     this.issueProcessor.logger.info(`Removing the stale state from this issue...`);
 

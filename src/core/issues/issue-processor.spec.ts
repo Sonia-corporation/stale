@@ -159,6 +159,36 @@ describe(`IssueProcessor`, (): void => {
             expect(loggerInfoSpy).toHaveBeenCalledWith(`Already stale`);
             expect(processForStaleSpy).not.toHaveBeenCalled();
           });
+
+          describe(`when the stale state was removed`, (): void => {
+            beforeEach((): void => {
+              processToRemoveStaleSpy.mockResolvedValue(true);
+            });
+
+            it(`should stop the processing`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await issueProcessor.process();
+
+              expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+              expect(stopProcessingSpy).toHaveBeenCalledWith();
+            });
+          });
+
+          describe(`when the stale state was not removed`, (): void => {
+            beforeEach((): void => {
+              processToRemoveStaleSpy.mockResolvedValue(false);
+            });
+
+            it(`should stop the processing`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await issueProcessor.process();
+
+              expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+              expect(stopProcessingSpy).toHaveBeenCalledWith();
+            });
+          });
         });
 
         describe(`when the issue is not stale yet`, (): void => {
@@ -420,15 +450,60 @@ describe(`IssueProcessor`, (): void => {
         mockedIssueRemoveStaleProcessor.mockClear();
       });
 
-      it(`should remove the stale state on this issue`, async (): Promise<void> => {
+      it(`should check if the stale state should be removed`, async (): Promise<void> => {
         expect.assertions(4);
 
         await issueProcessor.processToRemoveStale$$();
 
         expect(mockedIssueRemoveStaleProcessor).toHaveBeenCalledTimes(1);
         expect(mockedIssueRemoveStaleProcessor).toHaveBeenCalledWith(issueProcessor);
-        expect(mockedIssueRemoveStaleProcessor.prototype.removeStale.mock.calls).toHaveLength(1);
-        expect(mockedIssueRemoveStaleProcessor.prototype.removeStale.mock.calls[0]).toHaveLength(0);
+        expect(mockedIssueRemoveStaleProcessor.prototype.shouldRemoveStale.mock.calls).toHaveLength(1);
+        expect(mockedIssueRemoveStaleProcessor.prototype.shouldRemoveStale.mock.calls[0]).toHaveLength(0);
+      });
+
+      describe(`when the stale state should be removed`, (): void => {
+        beforeEach((): void => {
+          mockedIssueRemoveStaleProcessor.prototype.shouldRemoveStale.mockResolvedValue(true);
+        });
+
+        it(`should remove the stale state on this issue`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processToRemoveStale$$();
+
+          expect(mockedIssueRemoveStaleProcessor.prototype.removeStale.mock.calls).toHaveLength(1);
+          expect(mockedIssueRemoveStaleProcessor.prototype.removeStale.mock.calls[0]).toHaveLength(0);
+        });
+
+        it(`should return true`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          const result = await issueProcessor.processToRemoveStale$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the stale state should not be removed`, (): void => {
+        beforeEach((): void => {
+          mockedIssueRemoveStaleProcessor.prototype.shouldRemoveStale.mockResolvedValue(false);
+        });
+
+        it(`should not remove the stale state on this issue`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await issueProcessor.processToRemoveStale$$();
+
+          expect(mockedIssueRemoveStaleProcessor.prototype.removeStale.mock.calls).toHaveLength(0);
+        });
+
+        it(`should return false`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          const result = await issueProcessor.processToRemoveStale$$();
+
+          expect(result).toBeFalse();
+        });
       });
     });
   });

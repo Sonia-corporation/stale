@@ -4,6 +4,7 @@ import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
+import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { createLink } from '@utils/links/create-link';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import _ from 'lodash';
@@ -45,10 +46,14 @@ export class IssueProcessor {
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
 
-      await this.processToRemoveStale$$();
+      const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
-      // @todo add the closing logic here
-      this.stopProcessing$$();
+      if (!isStaleStateRemoved) {
+        // @todo add the closing logic here
+        this.stopProcessing$$();
+      } else {
+        this.stopProcessing$$();
+      }
 
       return;
     }
@@ -62,13 +67,7 @@ export class IssueProcessor {
    * @returns {DateTime} Returns the updatedAt field formatted as a {DateTime}
    */
   public getUpdatedAt(): DateTime {
-    const dateTime: DateTime = DateTime.fromISO(this.githubIssue.updatedAt);
-
-    if (_.isString(dateTime.invalidReason)) {
-      throw new Error(dateTime.invalidReason);
-    }
-
-    return dateTime;
+    return iso8601ToDatetime(this.githubIssue.updatedAt);
   }
 
   /**
@@ -119,13 +118,20 @@ export class IssueProcessor {
 
   /**
    * @description
-   * Used to remove the stale state from the issue
+   * Used to remove the stale state from the issue (when the conditions are met)
    * Typically, the stale label should be removed by this
-   * @returns {Promise<void>} No useful information returned
+   * If the stale state was removed, the processing should be stopped
+   * @returns {Promise<boolean>} Returns true when the stale state was removed and the processing should be stopped
    */
-  public processToRemoveStale$$(): Promise<void> {
+  public async processToRemoveStale$$(): Promise<boolean> {
     const issueRemoveStaleProcessor: IssueRemoveStaleProcessor = new IssueRemoveStaleProcessor(this);
 
-    return issueRemoveStaleProcessor.removeStale();
+    if (await issueRemoveStaleProcessor.shouldRemoveStale()) {
+      await issueRemoveStaleProcessor.removeStale();
+
+      return Promise.resolve(true);
+    }
+
+    return Promise.resolve(false);
   }
 }
