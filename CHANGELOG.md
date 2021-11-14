@@ -1,5 +1,17 @@
 # Semantic Versioning Changelog
 
+# [1.9.0](https://github.com/Sonia-corporation/stale/compare/1.8.0...1.9.0) (2021-11-14)
+
+
+### :rocket: Features
+
+* **logs:** display the api services logs with the issue prefix ([6b35fe8](https://github.com/Sonia-corporation/stale/commit/6b35fe8e7a84ed9a64745b7b4657cf843ce0efd0))
+* **logs:** improve the issue logger to always add the issue id as a prefix ([b6390da](https://github.com/Sonia-corporation/stale/commit/b6390da9d3dcd924ee92d3df780f595312234c72))
+* **issue:** remove the stale label from the issue when no longer stale ([c128375](https://github.com/Sonia-corporation/stale/commit/c128375998ec04299f21a0e4957a5461af83f564))
+* **issue:** remove the stale label when the creation date of the label is sooner than the update date ([b66d9b3](https://github.com/Sonia-corporation/stale/commit/b66d9b3e8b3c2fcfbeaaeb4c40379b16ec0fe464))
+* **logs:** round the difference of days in the logs ([6801ee5](https://github.com/Sonia-corporation/stale/commit/6801ee5f3f5b94035d6b0ae702bcdc882bd767c7))
+* **issue:** stop processing an issue already stale ([3dbd799](https://github.com/Sonia-corporation/stale/commit/3dbd79911c31f414ae0a955f753a9a4705b43905))
+
 # [1.8.0](https://github.com/Sonia-corporation/stale/compare/1.7.0...1.8.0) (2021-11-13)
 
 
