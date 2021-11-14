@@ -1,4 +1,4 @@
-import { IUuid } from '@utils/dates/uuid';
+import { IUuid } from '@utils/types/uuid';
 
 export interface IGithubApiLabel {
   readonly id: IUuid;

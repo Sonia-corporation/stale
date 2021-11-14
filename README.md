@@ -114,4 +114,4 @@ Contributions of any kind are welcome!
 
 [Geoffrey 'C0ZEN' Testelin](https://github.com/C0ZEN) was originally a contributor of [@actions/stale](https://github.com/actions/stale) (see the [contributors](https://github.com/actions/stale/graphs/contributors)).  
 Due to slower cadence and different opinions over how the project should go forward, he decided to start from scratch on his own.  
-The main difference is that this project aims to provide the best stale action as possible, the lack of skills is the limit. ;)
+The main difference is that this project aims to provide the best stale action as possible based on consumers needs, even if it may be hard to provide such features. #noLimit - we do what we can to have an amazing stale action ;)

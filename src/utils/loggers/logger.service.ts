@@ -2,6 +2,7 @@ import { EInputs } from '@core/inputs/inputs.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import * as core from '@actions/core';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
 
 /**
  * @description
@@ -80,5 +81,15 @@ export class LoggerService {
     }
 
     return LoggerFormatService.cyan(formattedValue);
+  }
+
+  /**
+   * @description
+   * Very specific log used to show a date
+   * @param {Readonly<DateTime>} date The date to display
+   * @returns {string} The date in cyan
+   */
+  public static date(date: Readonly<DateTime>): string {
+    return LoggerFormatService.cyan(date.toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS));
   }
 }
