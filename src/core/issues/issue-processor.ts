@@ -56,6 +56,11 @@ export class IssueProcessor {
     return this.processForStale$$();
   }
 
+  /**
+   * @description
+   * Return the updatedAt issue field formatted as a {DateTime}
+   * @returns {DateTime} Returns the updatedAt field formatted as a {DateTime}
+   */
   public getUpdatedAt(): DateTime {
     const dateTime: DateTime = DateTime.fromISO(this.githubIssue.updatedAt);
 
@@ -66,11 +71,21 @@ export class IssueProcessor {
     return dateTime;
   }
 
+  /**
+   * @description
+   * Only used log the end of the processing for this issue
+   */
   public stopProcessing$$(): void {
     this.logger.info(`Processing stopped`);
     this.logger.endGroup();
   }
 
+  /**
+   * @description
+   * The first thing to do
+   * Check if the issue is a good candidate for processing or not
+   * @returns {boolean} Returns true if the issue should be ignored by the processor
+   */
   public shouldIgnore$$(): boolean {
     return new IssueIgnoreProcessor(this).shouldIgnore();
   }
@@ -78,7 +93,7 @@ export class IssueProcessor {
   /**
    * @description
    * Second step to process an issue
-   * At this point, the issue can really be processed (not ignored)
+   * At this point, the issue can really be processed (not ignored) to eventually be stale
    * @returns {Promise<void>}
    */
   public async processForStale$$(): Promise<void> {
@@ -91,12 +106,23 @@ export class IssueProcessor {
     this.stopProcessing$$();
   }
 
+  /**
+   * @description
+   * Used to check if the issue is stale (when the stale label is added)
+   * @returns {boolean} Returns true if the issue is stale
+   */
   public isAlreadyStale$$(): boolean {
     const issueIsStaleProcessor: IssueIsStaleProcessor = new IssueIsStaleProcessor(this);
 
     return issueIsStaleProcessor.isStale();
   }
 
+  /**
+   * @description
+   * Used to remove the stale state from the issue
+   * Typically, the stale label should be removed by this
+   * @returns {Promise<void>} No useful information returned
+   */
   public processToRemoveStale$$(): Promise<void> {
     const issueRemoveStaleProcessor: IssueRemoveStaleProcessor = new IssueRemoveStaleProcessor(this);
 
