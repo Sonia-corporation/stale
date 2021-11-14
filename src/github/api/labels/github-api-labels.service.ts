@@ -1,3 +1,4 @@
+import { IssueProcessor } from '@core/issues/issue-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -10,6 +11,12 @@ import { context } from '@actions/github';
 import _ from 'lodash';
 
 export class GithubApiLabelsService {
+  public readonly issueProcessor: IssueProcessor;
+
+  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+    this.issueProcessor = issueProcessor;
+  }
+
   /**
    * @description
    * Fetch a label by name
@@ -18,8 +25,8 @@ export class GithubApiLabelsService {
    * @param {Readonly<string>} labelName The name of the label to search for
    * @returns {Promise<IGithubApiLabels>} The stale label
    */
-  public static fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
-    LoggerService.info(
+  public fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
+    this.issueProcessor.logger.info(
       `Fetching the label`,
       LoggerService.value(labelName),
       LoggerFormatService.whiteBright(`from GitHub...`)
@@ -35,12 +42,12 @@ export class GithubApiLabelsService {
         const { totalCount } = response.repository.labels;
 
         if (totalCount === 0) {
-          LoggerService.error(`Could not find a single label matching`, LoggerService.value(labelName));
+          this.issueProcessor.logger.error(`Could not find a single label matching`, LoggerService.value(labelName));
           throw new Error(`Could not find a single label matching ${labelName}`);
         }
 
         if (response.repository.labels.nodes[0].name !== labelName) {
-          LoggerService.error(
+          this.issueProcessor.logger.error(
             `Could find a label`,
             LoggerService.value(response.repository.labels.nodes[0].name),
             LoggerFormatService.red(`which is not exactly identical to`),
@@ -49,7 +56,7 @@ export class GithubApiLabelsService {
 
           // @todo handle the pagination
           if (totalCount > 1) {
-            LoggerService.warning(
+            this.issueProcessor.logger.warning(
               `Found`,
               LoggerService.value(_.toString(totalCount)),
               LoggerFormatService.whiteBright(
@@ -61,19 +68,19 @@ export class GithubApiLabelsService {
           throw new Error(`Could not find the label ${labelName}`);
         }
 
-        LoggerService.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
+        this.issueProcessor.logger.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
 
         return response;
       })
       .catch((error: Readonly<Error>): never => {
-        LoggerService.error(`Failed to fetch the label`, LoggerService.value(labelName));
+        this.issueProcessor.logger.error(`Failed to fetch the label`, LoggerService.value(labelName));
 
         throw error;
       });
   }
 
-  public static addLabelToIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
-    LoggerService.info(
+  public addLabelToIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
+    this.issueProcessor.logger.info(
       `Adding the label`,
       LoggerService.value(labelId),
       LoggerFormatService.whiteBright(`on the issue`),
@@ -86,7 +93,7 @@ export class GithubApiLabelsService {
         labelId,
       })
       .then((): void => {
-        LoggerService.info(
+        this.issueProcessor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
           LoggerFormatService.green(`added to the issue`),
@@ -94,7 +101,7 @@ export class GithubApiLabelsService {
         );
       })
       .catch((error: Readonly<Error>): never => {
-        LoggerService.error(
+        this.issueProcessor.logger.error(
           `Failed to add the label`,
           LoggerService.value(labelId),
           LoggerFormatService.red(`on the issue`),
@@ -105,8 +112,8 @@ export class GithubApiLabelsService {
       });
   }
 
-  public static removeLabelFromIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
-    LoggerService.info(
+  public removeLabelFromIssue(issueId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> | never {
+    this.issueProcessor.logger.info(
       `Removing the label`,
       LoggerService.value(labelId),
       LoggerFormatService.whiteBright(`from the issue`),
@@ -119,7 +126,7 @@ export class GithubApiLabelsService {
         labelId,
       })
       .then((): void => {
-        LoggerService.info(
+        this.issueProcessor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
           LoggerFormatService.green(`removed from the issue`),
@@ -127,7 +134,7 @@ export class GithubApiLabelsService {
         );
       })
       .catch((error: Readonly<Error>): never => {
-        LoggerService.error(
+        this.issueProcessor.logger.error(
           `Failed to remove the label`,
           LoggerService.value(labelId),
           LoggerFormatService.red(`from the issue`),

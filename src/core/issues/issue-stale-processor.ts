@@ -13,9 +13,11 @@ import { DateTime } from 'luxon';
  */
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
+  public readonly githubApiLabelsService$$: GithubApiLabelsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
+    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
   }
 
   public shouldStale(): boolean {
@@ -35,13 +37,13 @@ export class IssueStaleProcessor {
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabels = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
     if (!InputsService.getInputs().dryRun) {
-      await GithubApiLabelsService.addLabelToIssue(
+      await this.githubApiLabelsService$$.addLabelToIssue(
         this.issueProcessor.githubIssue.id,
         label.repository.labels.nodes[0].id
       );

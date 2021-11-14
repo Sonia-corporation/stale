@@ -2,10 +2,8 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
-import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { IUuid } from '@utils/types/uuid';
@@ -55,7 +53,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
 
         githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
-          .spyOn(GithubApiTimelineItemsService, `fetchIssueAddedLabels`)
+          .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
           .mockResolvedValue(createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>());
         inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
           createHydratedMock<IInputs>({
@@ -144,7 +142,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
 
             githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
-              .spyOn(GithubApiTimelineItemsService, `fetchIssueAddedLabels`)
+              .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
               .mockResolvedValue(
                 createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                   repository: {
@@ -205,7 +203,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
 
             githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
-              .spyOn(GithubApiTimelineItemsService, `fetchIssueAddedLabels`)
+              .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
               .mockResolvedValue(
                 createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                   repository: {
@@ -284,7 +282,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
 
         githubApiLabelsServiceFetchLabelByNameSpy = jest
-          .spyOn(GithubApiLabelsService, `fetchLabelByName`)
+          .spyOn(issueRemoveStaleProcessor.githubApiLabelsService$$, `fetchLabelByName`)
           .mockResolvedValue(
             createHydratedMock<IGithubApiLabels>({
               repository: {
@@ -305,7 +303,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           })
         );
         githubApiLabelsServiceRemoveLabelFromIssueSpy = jest
-          .spyOn(GithubApiLabelsService, `removeLabelFromIssue`)
+          .spyOn(issueRemoveStaleProcessor.githubApiLabelsService$$, `removeLabelFromIssue`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueRemoveStaleProcessor.issueProcessor.logger, `info`)

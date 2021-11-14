@@ -18,9 +18,13 @@ import { DateTime } from 'luxon';
  */
 export class IssueRemoveStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
+  public readonly githubApiTimelineItemsService$$: GithubApiTimelineItemsService;
+  public readonly githubApiLabelsService$$: GithubApiLabelsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
+    this.githubApiTimelineItemsService$$ = new GithubApiTimelineItemsService(this.issueProcessor);
+    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
   }
 
   /**
@@ -33,7 +37,7 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
-      await GithubApiTimelineItemsService.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
+      await this.githubApiTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
     const { issueStaleLabel } = InputsService.getInputs();
     const lastAddedStaleLabelEvent: IGithubApiTimelineItemsIssueLabeledEvent | undefined = _.findLast(
       addedLabelEvents.repository.issue.timelineItems.nodes,
@@ -85,13 +89,13 @@ export class IssueRemoveStaleProcessor {
       LoggerFormatService.whiteBright(`to remove from this issue...`)
     );
 
-    const label: IGithubApiLabels = await GithubApiLabelsService.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Removing the stale label from this issue...`);
 
     if (!InputsService.getInputs().dryRun) {
-      await GithubApiLabelsService.removeLabelFromIssue(
+      await this.githubApiLabelsService$$.removeLabelFromIssue(
         this.issueProcessor.githubIssue.id,
         label.repository.labels.nodes[0].id
       );

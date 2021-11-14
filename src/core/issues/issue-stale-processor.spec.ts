@@ -2,7 +2,6 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
@@ -113,7 +112,7 @@ describe(`IssueStaleProcessor`, (): void => {
         issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
 
         githubApiLabelsServiceFetchLabelByNameSpy = jest
-          .spyOn(GithubApiLabelsService, `fetchLabelByName`)
+          .spyOn(issueStaleProcessor.githubApiLabelsService$$, `fetchLabelByName`)
           .mockResolvedValue(
             createHydratedMock<IGithubApiLabels>({
               repository: {
@@ -134,7 +133,7 @@ describe(`IssueStaleProcessor`, (): void => {
           })
         );
         githubApiLabelsServiceAddLabelToIssueSpy = jest
-          .spyOn(GithubApiLabelsService, `addLabelToIssue`)
+          .spyOn(issueStaleProcessor.githubApiLabelsService$$, `addLabelToIssue`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueStaleProcessor.issueProcessor.logger, `info`)
