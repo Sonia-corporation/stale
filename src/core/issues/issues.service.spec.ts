@@ -1,5 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesService } from '@core/issues/issues.service';
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
@@ -47,6 +48,7 @@ describe(`IssuesService`, (): void => {
     let githubApiIssuesServiceFetchIssuesSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
     let processBatchesSpy: jest.SpyInstance;
+    let statisticsServiceIncreaseProcessedIssuesCountSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       mockedIssueProcessor.mockClear();
@@ -62,6 +64,9 @@ describe(`IssuesService`, (): void => {
       );
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       processBatchesSpy = jest.spyOn(IssuesService, `processBatches`);
+      statisticsServiceIncreaseProcessedIssuesCountSpy = jest
+        .spyOn(StatisticsService, `increaseProcessedIssuesCount`)
+        .mockImplementation();
     });
 
     it(`should log about the fetch of this batch of issues`, async (): Promise<void> => {
@@ -123,7 +128,16 @@ describe(`IssuesService`, (): void => {
         );
       });
 
-      it(`should process the two issues`, async (): Promise<void> => {
+      it(`should increase the counter of processed issues statistic by 1`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await IssuesService.processBatches();
+
+        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(1);
+        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+      });
+
+      it(`should process the issue`, async (): Promise<void> => {
         expect.assertions(4);
 
         await IssuesService.processBatches();
@@ -172,6 +186,15 @@ describe(`IssuesService`, (): void => {
           `whiteBright-issues in the batch`,
           `white-#value-1`
         );
+      });
+
+      it(`should increase the counter of processed issues statistic by 2`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await IssuesService.processBatches();
+
+        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(2);
+        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
       });
 
       it(`should process the two issues`, async (): Promise<void> => {

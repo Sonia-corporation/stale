@@ -3,6 +3,7 @@ import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { createLink } from '@utils/links/create-link';
@@ -38,6 +39,7 @@ export class IssueProcessor {
 
     if (this.shouldIgnore$$()) {
       this.logger.info(`Ignored`);
+      StatisticsService.increaseIgnoredIssuesCount();
       this.stopProcessing$$();
 
       return;
@@ -45,6 +47,7 @@ export class IssueProcessor {
 
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
+      StatisticsService.increaseAlreadyStaleIssuesCount();
 
       const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
@@ -100,6 +103,7 @@ export class IssueProcessor {
 
     if (issueStaleProcessor.shouldStale()) {
       await issueStaleProcessor.stale();
+      StatisticsService.increaseStaleIssuesCount();
     }
 
     this.stopProcessing$$();
@@ -128,6 +132,7 @@ export class IssueProcessor {
 
     if (await issueRemoveStaleProcessor.shouldRemoveStale()) {
       await issueRemoveStaleProcessor.removeStale();
+      StatisticsService.increaseRemoveStaleIssuesCount();
 
       return Promise.resolve(true);
     }

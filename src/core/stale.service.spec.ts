@@ -1,6 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssuesService } from '@core/issues/issues.service';
 import { StaleService } from '@core/stale.service';
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
@@ -17,6 +18,7 @@ describe(`StaleService`, (): void => {
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
+    let statisticsServiceLogsAllStatisticsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
@@ -26,6 +28,7 @@ describe(`StaleService`, (): void => {
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      statisticsServiceLogsAllStatisticsSpy = jest.spyOn(StatisticsService, `logsAllStatistics`).mockImplementation();
     });
 
     it(`should log starting the stale process`, async (): Promise<void> => {
@@ -70,6 +73,14 @@ describe(`StaleService`, (): void => {
           expect(loggerServiceDebugSpy.mock.calls[0]).toHaveLength(1);
         });
 
+        it(`should not display the statistics`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await StaleService.initialize();
+
+          expect(statisticsServiceLogsAllStatisticsSpy).not.toHaveBeenCalled();
+        });
+
         it(`should exit the action with the thrown error`, async (): Promise<void> => {
           expect.assertions(2);
 
@@ -95,6 +106,14 @@ describe(`StaleService`, (): void => {
 
           expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Stale action failed with error inputs error`);
+        });
+
+        it(`should not display the statistics`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await StaleService.initialize();
+
+          expect(statisticsServiceLogsAllStatisticsSpy).not.toHaveBeenCalled();
         });
 
         it(`should exit the action with the thrown error`, async (): Promise<void> => {
@@ -142,6 +161,15 @@ describe(`StaleService`, (): void => {
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `green-The stale processing is over`);
+    });
+
+    it(`should display the statistics`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(statisticsServiceLogsAllStatisticsSpy).toHaveBeenCalledTimes(1);
+      expect(statisticsServiceLogsAllStatisticsSpy).toHaveBeenCalledWith();
     });
 
     it(`should return the service`, async (): Promise<void> => {
