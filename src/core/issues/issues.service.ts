@@ -1,4 +1,5 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -35,6 +36,8 @@ export class IssuesService {
       // The goal is to process a single issue at a time
       // eslint-disable-next-line no-await-in-loop
       await new IssueProcessor(issue).process();
+
+      StatisticsService.increaseProcessedIssuesCount();
     }
 
     LoggerService.info(

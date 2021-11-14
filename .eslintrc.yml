@@ -49,6 +49,7 @@ settings:
         - ./tsconfig.app.json
         - ./tsconfig.spec.json
 rules:
+  '@typescript-eslint/no-inferrable-types': off
   no-restricted-imports:
     - error
     - patterns:
