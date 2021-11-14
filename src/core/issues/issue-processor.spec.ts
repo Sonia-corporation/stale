@@ -2,6 +2,7 @@ import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import * as CreateLinkModule from '@utils/links/create-link';
@@ -382,7 +383,7 @@ describe(`IssueProcessor`, (): void => {
 
       describe(`when the issue is not stale`, (): void => {
         beforeEach((): void => {
-          mockIssueIsStaleProcessor.prototype.isStale.mockImplementation().mockResolvedValue(false);
+          mockIssueIsStaleProcessor.prototype.isStale.mockImplementation().mockReturnValue(false);
         });
 
         it(`should return false`, (): void => {
@@ -396,7 +397,7 @@ describe(`IssueProcessor`, (): void => {
 
       describe(`when the issue is already stale`, (): void => {
         beforeEach((): void => {
-          mockIssueIsStaleProcessor.prototype.isStale.mockImplementation().mockResolvedValue(true);
+          mockIssueIsStaleProcessor.prototype.isStale.mockImplementation().mockReturnValue(true);
         });
 
         it(`should return true`, (): void => {
@@ -406,6 +407,28 @@ describe(`IssueProcessor`, (): void => {
 
           expect(result).toBeTrue();
         });
+      });
+    });
+
+    describe(`processToRemoveStale$$()`, (): void => {
+      const mockIssueRemoveStaleProcessor: MockedObjectDeep<typeof IssueRemoveStaleProcessor> = mocked(
+        IssueRemoveStaleProcessor,
+        true
+      );
+
+      beforeEach((): void => {
+        mockIssueRemoveStaleProcessor.mockClear();
+      });
+
+      it(`should remove the stale state on this issue`, async (): Promise<void> => {
+        expect.assertions(4);
+
+        await issueProcessor.processToRemoveStale$$();
+
+        expect(mockIssueRemoveStaleProcessor).toHaveBeenCalledTimes(1);
+        expect(mockIssueRemoveStaleProcessor).toHaveBeenCalledWith(issueProcessor);
+        expect(mockIssueRemoveStaleProcessor.prototype.removeStale.mock.calls).toHaveLength(1);
+        expect(mockIssueRemoveStaleProcessor.prototype.removeStale.mock.calls[0]).toHaveLength(0);
       });
     });
   });

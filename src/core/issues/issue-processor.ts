@@ -1,6 +1,7 @@
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
+import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { createLink } from '@utils/links/create-link';
@@ -44,7 +45,7 @@ export class IssueProcessor {
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
 
-      this.processToRemoveStale$$();
+      await this.processToRemoveStale$$();
 
       // @todo add the closing logic here
       this.stopProcessing$$();
@@ -96,7 +97,9 @@ export class IssueProcessor {
     return issueIsStaleProcessor.isStale();
   }
 
-  public processToRemoveStale$$(): boolean {
-    return false;
+  public processToRemoveStale$$(): Promise<void> {
+    const issueRemoveStaleProcessor: IssueRemoveStaleProcessor = new IssueRemoveStaleProcessor(this);
+
+    return issueRemoveStaleProcessor.removeStale();
   }
 }
