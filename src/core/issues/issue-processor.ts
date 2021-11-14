@@ -1,4 +1,5 @@
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
+import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -7,6 +8,10 @@ import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
 
+/**
+ * @description
+ * The main processor to process an issue
+ */
 export class IssueProcessor {
   public readonly githubIssue: IGithubApiIssue;
   public readonly logger: IssueLogger;
@@ -31,6 +36,17 @@ export class IssueProcessor {
 
     if (this.shouldIgnore$$()) {
       this.logger.info(`Ignored`);
+      this.stopProcessing$$();
+
+      return;
+    }
+
+    if (this.isAlreadyStale$$()) {
+      this.logger.info(`Already stale`);
+
+      this.processToRemoveStale$$();
+
+      // @todo add the closing logic here
       this.stopProcessing$$();
 
       return;
@@ -72,5 +88,15 @@ export class IssueProcessor {
     }
 
     this.stopProcessing$$();
+  }
+
+  public isAlreadyStale$$(): boolean {
+    const issueIsStaleProcessor: IssueIsStaleProcessor = new IssueIsStaleProcessor(this);
+
+    return issueIsStaleProcessor.isStale();
+  }
+
+  public processToRemoveStale$$(): boolean {
+    return false;
   }
 }
