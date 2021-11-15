@@ -104,6 +104,8 @@ export class IssueProcessor {
     if (issueStaleProcessor.shouldStale()) {
       await issueStaleProcessor.stale();
       StatisticsService.increaseStaleIssuesCount();
+    } else {
+      StatisticsService.increaseUnalteredIssuesCount();
     }
 
     this.stopProcessing$$();

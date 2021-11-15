@@ -6,14 +6,37 @@ import { mapFilter } from '@utils/maps/map-filter';
 import { ETreeRows } from '@utils/trees/tree-rows.enum';
 import _ from 'lodash';
 
-type IStat = 'Processed issues' | 'Ignored issues' | 'Stale issues' | 'Remove stale issues' | 'Already stale issues';
+type IStat =
+  | 'Processed issues'
+  | 'Ignored issues'
+  | 'Stale issues'
+  | 'Remove stale issues'
+  | 'Already stale issues'
+  | 'Unaltered issues';
 
 export class StatisticsService {
   public static processedIssuesCount$$: number = 0;
   public static ignoredIssuesCount$$: number = 0;
+  public static unalteredIssuesCount$$: number = 0;
   public static staleIssuesCount$$: number = 0;
   public static alreadyStaleIssuesCount$$: number = 0;
   public static removeStaleIssuesCount$$: number = 0;
+
+  /**
+   * @description
+   * Only used for the tests to reset the state
+   * @returns {StatisticsService} The service
+   */
+  public static initialize(): StatisticsService {
+    StatisticsService.processedIssuesCount$$ = 0;
+    StatisticsService.ignoredIssuesCount$$ = 0;
+    StatisticsService.unalteredIssuesCount$$ = 0;
+    StatisticsService.staleIssuesCount$$ = 0;
+    StatisticsService.alreadyStaleIssuesCount$$ = 0;
+    StatisticsService.removeStaleIssuesCount$$ = 0;
+
+    return StatisticsService;
+  }
 
   public static increaseProcessedIssuesCount(): StatisticsService {
     this.processedIssuesCount$$++;
@@ -23,6 +46,12 @@ export class StatisticsService {
 
   public static increaseIgnoredIssuesCount(): StatisticsService {
     this.ignoredIssuesCount$$++;
+
+    return StatisticsService;
+  }
+
+  public static increaseUnalteredIssuesCount(): StatisticsService {
+    this.unalteredIssuesCount$$++;
 
     return StatisticsService;
   }
@@ -85,6 +114,7 @@ export class StatisticsService {
     return new Map<IStat, number>()
       .set(`Processed issues`, StatisticsService.processedIssuesCount$$)
       .set(`Ignored issues`, StatisticsService.ignoredIssuesCount$$)
+      .set(`Unaltered issues`, StatisticsService.unalteredIssuesCount$$)
       .set(`Stale issues`, StatisticsService.staleIssuesCount$$)
       .set(`Already stale issues`, StatisticsService.alreadyStaleIssuesCount$$)
       .set(`Remove stale issues`, StatisticsService.removeStaleIssuesCount$$);

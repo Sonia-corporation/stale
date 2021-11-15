@@ -5,6 +5,35 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`StatisticsService`, (): void => {
+  describe(`initialize()`, (): void => {
+    it(`should reset all the statistics to 0`, (): void => {
+      expect.assertions(6);
+      StatisticsService.processedIssuesCount$$ = 1;
+      StatisticsService.ignoredIssuesCount$$ = 1;
+      StatisticsService.unalteredIssuesCount$$ = 1;
+      StatisticsService.staleIssuesCount$$ = 1;
+      StatisticsService.alreadyStaleIssuesCount$$ = 1;
+      StatisticsService.removeStaleIssuesCount$$ = 1;
+
+      StatisticsService.initialize();
+
+      expect(StatisticsService.processedIssuesCount$$).toBe(0);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.initialize();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
   describe(`increaseProcessedIssuesCount()`, (): void => {
     it(`should increase the processed issues count`, (): void => {
       expect.assertions(1);
@@ -38,6 +67,25 @@ describe(`StatisticsService`, (): void => {
       expect.assertions(1);
 
       const result = StatisticsService.increaseIgnoredIssuesCount();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
+  describe(`increaseUnalteredIssuesCount()`, (): void => {
+    it(`should increase the unaltered issues count`, (): void => {
+      expect.assertions(1);
+      StatisticsService.unalteredIssuesCount$$ = 0;
+
+      StatisticsService.increaseUnalteredIssuesCount();
+
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.increaseUnalteredIssuesCount();
 
       expect(result).toStrictEqual(StatisticsService);
     });
@@ -124,6 +172,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 0;
         StatisticsService.ignoredIssuesCount$$ = 0;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
@@ -142,6 +191,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 1;
         StatisticsService.ignoredIssuesCount$$ = 0;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
@@ -161,6 +211,7 @@ describe(`StatisticsService`, (): void => {
       beforeEach((): void => {
         StatisticsService.processedIssuesCount$$ = 1;
         StatisticsService.ignoredIssuesCount$$ = 2;
+        StatisticsService.unalteredIssuesCount$$ = 0;
         StatisticsService.staleIssuesCount$$ = 3;
         StatisticsService.alreadyStaleIssuesCount$$ = 4;
         StatisticsService.removeStaleIssuesCount$$ = 5;
