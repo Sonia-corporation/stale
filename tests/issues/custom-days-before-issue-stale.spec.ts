@@ -1,3 +1,4 @@
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 
@@ -5,15 +6,11 @@ describe(`Custom days before issue stale`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
   describe(`when the number of days before stale is set to 20`, (): void => {
-    beforeEach((): void => {
-      issueSut = new FakeIssuesProcessor({
-        issueDaysBeforeStale: 20,
-      });
-    });
-
     describe(`when an issue last update was older than 20 days`, (): void => {
       beforeEach((): void => {
-        issueSut.addIssue({
+        issueSut = new FakeIssuesProcessor({
+          issueDaysBeforeStale: 20,
+        }).addIssue({
           locked: false,
           updatedAt: DateTime.now()
             .minus({
@@ -26,18 +23,24 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should stale the issue`, async (): Promise<void> => {
-        expect.assertions(1);
+        expect.assertions(6);
 
         await issueSut.process();
 
-        // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-        expect(true).toBeTrue();
+        expect(StatisticsService.processedIssuesCount$$).toBe(1);
+        expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+        expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+        expect(StatisticsService.staleIssuesCount$$).toBe(1);
+        expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+        expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
       });
     });
 
     describe(`when an issue last update is 20 days`, (): void => {
       beforeEach((): void => {
-        issueSut.addIssue({
+        issueSut = new FakeIssuesProcessor({
+          issueDaysBeforeStale: 20,
+        }).addIssue({
           locked: false,
           updatedAt: DateTime.now()
             .minus({
@@ -50,18 +53,24 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should not stale the issue`, async (): Promise<void> => {
-        expect.assertions(1);
+        expect.assertions(6);
 
         await issueSut.process();
 
-        // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-        expect(true).toBeTrue();
+        expect(StatisticsService.processedIssuesCount$$).toBe(1);
+        expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+        expect(StatisticsService.unalteredIssuesCount$$).toBe(1);
+        expect(StatisticsService.staleIssuesCount$$).toBe(0);
+        expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+        expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
       });
     });
 
     describe(`when an issue last update is 19 days`, (): void => {
       beforeEach((): void => {
-        issueSut.addIssue({
+        issueSut = new FakeIssuesProcessor({
+          issueDaysBeforeStale: 20,
+        }).addIssue({
           locked: false,
           updatedAt: DateTime.now()
             .minus({
@@ -74,12 +83,16 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should not stale the issue`, async (): Promise<void> => {
-        expect.assertions(1);
+        expect.assertions(6);
 
         await issueSut.process();
 
-        // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-        expect(true).toBeTrue();
+        expect(StatisticsService.processedIssuesCount$$).toBe(1);
+        expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+        expect(StatisticsService.unalteredIssuesCount$$).toBe(1);
+        expect(StatisticsService.staleIssuesCount$$).toBe(0);
+        expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+        expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
       });
     });
   });

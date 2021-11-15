@@ -5,6 +5,35 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`StatisticsService`, (): void => {
+  describe(`initialize()`, (): void => {
+    it(`should reset all the statistics to 0`, (): void => {
+      expect.assertions(6);
+      StatisticsService.processedIssuesCount$$ = 1;
+      StatisticsService.ignoredIssuesCount$$ = 1;
+      StatisticsService.unalteredIssuesCount$$ = 1;
+      StatisticsService.staleIssuesCount$$ = 1;
+      StatisticsService.alreadyStaleIssuesCount$$ = 1;
+      StatisticsService.removeStaleIssuesCount$$ = 1;
+
+      StatisticsService.initialize();
+
+      expect(StatisticsService.processedIssuesCount$$).toBe(0);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.initialize();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
   describe(`increaseProcessedIssuesCount()`, (): void => {
     it(`should increase the processed issues count`, (): void => {
       expect.assertions(1);

@@ -1,3 +1,4 @@
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import faker from 'faker';
@@ -7,16 +8,12 @@ import { createHydratedMock } from 'ts-auto-mock';
 describe(`Issue stale not updated`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  beforeEach((): void => {
-    issueSut = new FakeIssuesProcessor({
-      issueDaysBeforeStale: 30,
-      issueStaleLabel: `stale`,
-    });
-  });
-
   describe(`when an issue is stale and was not recently updated`, (): void => {
     beforeEach((): void => {
-      issueSut
+      issueSut = new FakeIssuesProcessor({
+        issueDaysBeforeStale: 30,
+        issueStaleLabel: `stale`,
+      })
         .addIssue({
           labels: {
             nodes: [
@@ -61,12 +58,16 @@ describe(`Issue stale not updated`, (): void => {
     });
 
     it(`should not remove the stale state on the issue`, async (): Promise<void> => {
-      expect.assertions(1);
+      expect.assertions(6);
 
       await issueSut.process();
 
-      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-      expect(true).toBeTrue();
+      expect(StatisticsService.processedIssuesCount$$).toBe(1);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(1);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
     });
   });
 });

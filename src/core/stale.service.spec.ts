@@ -11,6 +11,7 @@ jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`StaleService`, (): void => {
   describe(`initialize()`, (): void => {
+    let statisticsServiceInitializeSpy: jest.SpyInstance;
     let inputsServiceInitializeSpy: jest.SpyInstance;
     let octokitServiceInitializeSpy: jest.SpyInstance;
     let issuesServiceProcessSpy: jest.SpyInstance;
@@ -21,6 +22,7 @@ describe(`StaleService`, (): void => {
     let statisticsServiceLogsAllStatisticsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
+      statisticsServiceInitializeSpy = jest.spyOn(StatisticsService, `initialize`).mockImplementation();
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
       octokitServiceInitializeSpy = jest.spyOn(OctokitService, `initialize`).mockImplementation();
       issuesServiceProcessSpy = jest.spyOn(IssuesService, `process`).mockResolvedValue();
@@ -38,6 +40,15 @@ describe(`StaleService`, (): void => {
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Starting the stale process...`);
+    });
+
+    it(`should initialize the statistics service to avoid an issue for the integration tests`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(statisticsServiceInitializeSpy).toHaveBeenCalledTimes(1);
+      expect(statisticsServiceInitializeSpy).toHaveBeenCalledWith();
     });
 
     describe(`when an error occur`, (): void => {

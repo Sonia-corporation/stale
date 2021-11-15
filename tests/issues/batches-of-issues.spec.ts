@@ -1,3 +1,4 @@
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 
 /**
@@ -6,22 +7,22 @@ import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 describe(`Batch of issues`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  beforeEach((): void => {
-    issueSut = new FakeIssuesProcessor();
-  });
-
-  describe(`when more than 20 issues are locked`, (): void => {
+  describe(`when more than 20 issues are locked (two batches)`, (): void => {
     beforeEach((): void => {
-      issueSut.addIssues(22, { locked: true });
+      issueSut = new FakeIssuesProcessor().addIssues(22, { locked: true });
     });
 
     it(`should not process the issues`, async (): Promise<void> => {
-      expect.assertions(1);
+      expect.assertions(6);
 
       await issueSut.process();
 
-      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-      expect(true).toBeTrue();
+      expect(StatisticsService.processedIssuesCount$$).toBe(22);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(22);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
     });
   });
 });

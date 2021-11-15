@@ -10,6 +10,7 @@ export class StaleService {
   public static async initialize(): Promise<StaleService> {
     try {
       LoggerService.info(`Starting the stale process...`);
+      StatisticsService.initialize();
       InputsService.initialize();
       OctokitService.initialize();
       await IssuesService.process();
