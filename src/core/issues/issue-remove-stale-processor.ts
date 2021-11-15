@@ -39,11 +39,18 @@ export class IssueRemoveStaleProcessor {
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
       await this.githubApiTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
     const { issueStaleLabel } = InputsService.getInputs();
-    const lastAddedStaleLabelEvent: IGithubApiTimelineItemsIssueLabeledEvent | undefined = _.findLast(
-      addedLabelEvents.repository.issue.timelineItems.nodes,
-      (addedLabelEvent: Readonly<IGithubApiTimelineItemsIssueLabeledEvent>): boolean =>
-        addedLabelEvent.label.name === issueStaleLabel
+    const staleLabelEvents: IGithubApiTimelineItemsIssueLabeledEvent[] = this._getStaleLabelEvents(
+      addedLabelEvents,
+      issueStaleLabel
     );
+
+    this.issueProcessor.logger.info(
+      `Found`,
+      LoggerService.value(staleLabelEvents.length),
+      LoggerFormatService.whiteBright(`stale label added event${staleLabelEvents.length > 1 ? `s` : ``} on this issue`)
+    );
+    const lastAddedStaleLabelEvent: IGithubApiTimelineItemsIssueLabeledEvent | null =
+      this._getMostRecentStaleLabelEvent(staleLabelEvents);
 
     if (!lastAddedStaleLabelEvent) {
       this.issueProcessor.logger.error(`Could not find the stale label in the added labels events`);
@@ -106,5 +113,39 @@ export class IssueRemoveStaleProcessor {
     }
 
     this.issueProcessor.logger.notice(`The issue is no longer stale`);
+  }
+
+  private _getStaleLabelEvents(
+    addedLabelEvents: Readonly<IGithubApiTimelineItemsIssueLabeledEvents>,
+    issueStaleLabel: Readonly<string>
+  ): IGithubApiTimelineItemsIssueLabeledEvent[] {
+    return _.filter(
+      addedLabelEvents.repository.issue.timelineItems.nodes,
+      (addedLabelEvent: Readonly<IGithubApiTimelineItemsIssueLabeledEvent>): boolean =>
+        addedLabelEvent.label.name === issueStaleLabel
+    );
+  }
+
+  private _getMostRecentStaleLabelEvent(
+    events: IGithubApiTimelineItemsIssueLabeledEvent[]
+  ): IGithubApiTimelineItemsIssueLabeledEvent | null {
+    return _.reduce<IGithubApiTimelineItemsIssueLabeledEvent, IGithubApiTimelineItemsIssueLabeledEvent | null>(
+      events,
+      (mostRecentStaleLabelEvent, event): IGithubApiTimelineItemsIssueLabeledEvent | null => {
+        if (!mostRecentStaleLabelEvent) {
+          return event;
+        }
+
+        const mostRecentStaleLabelEventCreatedAt: DateTime = iso8601ToDatetime(mostRecentStaleLabelEvent.createdAt);
+        const lastAddedStaleLabelCreatedAt: DateTime = iso8601ToDatetime(event.createdAt);
+
+        if (isDateMoreRecent(mostRecentStaleLabelEventCreatedAt, lastAddedStaleLabelCreatedAt)) {
+          return mostRecentStaleLabelEvent;
+        }
+
+        return event;
+      },
+      null
+    );
   }
 }

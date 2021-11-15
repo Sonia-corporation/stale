@@ -75,8 +75,11 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         expect(githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy).toHaveBeenCalledWith(888);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(`Checking if the stale state should be removed...`);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if the stale state should be removed...`
+        );
       });
 
       describe(`when no event is related to the addition of the stale label`, (): void => {
@@ -172,27 +175,33 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           });
 
           it(`should return true`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(7);
 
             const result = await issueRemoveStaleProcessor.shouldRemoveStale();
 
             expect(result).toBeTrue();
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
+              `Found`,
+              `value-1`,
+              `whiteBright-stale label added event on this issue`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
               `The stale label was added the`,
               `date-01/01/2019, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              3,
+              4,
               `The issue was updated for the last time the`,
               `date-01/01/2020, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              4,
+              5,
               `The last update on the issue is more recent that the last time it was stale`
             );
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale state should be removed`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The stale state should be removed`);
           });
         });
 
@@ -233,27 +242,285 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           });
 
           it(`should return false`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(7);
 
             const result = await issueRemoveStaleProcessor.shouldRemoveStale();
 
             expect(result).toBeFalse();
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
+              `Found`,
+              `value-1`,
+              `whiteBright-stale label added event on this issue`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
               `The stale label was added the`,
               `date-01/01/2021, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              3,
+              4,
               `The issue was updated for the last time the`,
               `date-01/01/2020, 00:00:00`
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              4,
+              5,
               `There was no update since the last time this issue was stale`
             );
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale state should not be removed`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The stale state should not be removed`);
+          });
+        });
+      });
+
+      describe(`when there are multiple events related to the addition of the stale label`, (): void => {
+        beforeEach((): void => {
+          githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy.mockResolvedValue(
+            createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+              repository: {
+                issue: {
+                  timelineItems: {
+                    nodes: [
+                      createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                        label: {
+                          name: `stale`,
+                        },
+                      }),
+                      createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                        label: {
+                          name: `stale`,
+                        },
+                      }),
+                    ],
+                  },
+                },
+              },
+            })
+          );
+        });
+
+        describe(`when the last update on the issue is more recent that the addition of all the stale label events`, (): void => {
+          beforeEach((): void => {
+            jest.spyOn(issueProcessor, `getUpdatedAt`).mockReturnValue(DateTime.utc(2020));
+
+            issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
+
+            githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
+              .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
+              .mockResolvedValue(
+                createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                  repository: {
+                    issue: {
+                      timelineItems: {
+                        nodes: [
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2019).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2019).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                        ],
+                      },
+                    },
+                  },
+                })
+              );
+            inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueStaleLabel: `stale`,
+              })
+            );
+            issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+          });
+
+          it(`should return true`, async (): Promise<void> => {
+            expect.assertions(7);
+
+            const result = await issueRemoveStaleProcessor.shouldRemoveStale();
+
+            expect(result).toBeTrue();
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `Found`,
+              `value-2`,
+              `whiteBright-stale label added events on this issue`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The stale label was added the`,
+              `date-01/01/2019, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The issue was updated for the last time the`,
+              `date-01/01/2020, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              5,
+              `The last update on the issue is more recent that the last time it was stale`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The stale state should be removed`);
+          });
+        });
+
+        describe(`when the last update on the issue is older or equal to the addition of all the stale label events (ascending)`, (): void => {
+          beforeEach((): void => {
+            jest.spyOn(issueProcessor, `getUpdatedAt`).mockReturnValue(DateTime.utc(2020));
+
+            issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
+
+            githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
+              .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
+              .mockResolvedValue(
+                createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                  repository: {
+                    issue: {
+                      timelineItems: {
+                        nodes: [
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2019).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                        ],
+                      },
+                    },
+                  },
+                })
+              );
+            inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueStaleLabel: `stale`,
+              })
+            );
+            issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+          });
+
+          it(`should return false`, async (): Promise<void> => {
+            expect.assertions(7);
+
+            const result = await issueRemoveStaleProcessor.shouldRemoveStale();
+
+            expect(result).toBeFalse();
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `Found`,
+              `value-2`,
+              `whiteBright-stale label added events on this issue`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The stale label was added the`,
+              `date-01/01/2021, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The issue was updated for the last time the`,
+              `date-01/01/2020, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              5,
+              `There was no update since the last time this issue was stale`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The stale state should not be removed`);
+          });
+        });
+
+        describe(`when the last update on the issue is older or equal to the addition of all the stale label events (descensing)`, (): void => {
+          beforeEach((): void => {
+            jest.spyOn(issueProcessor, `getUpdatedAt`).mockReturnValue(DateTime.utc(2020));
+
+            issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
+
+            githubApiTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
+              .spyOn(issueRemoveStaleProcessor.githubApiTimelineItemsService$$, `fetchIssueAddedLabels`)
+              .mockResolvedValue(
+                createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                  repository: {
+                    issue: {
+                      timelineItems: {
+                        nodes: [
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                          createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvent>({
+                            createdAt: DateTime.utc(2019).toISO({
+                              includeOffset: false,
+                            }),
+                            label: {
+                              name: `stale`,
+                            },
+                          }),
+                        ],
+                      },
+                    },
+                  },
+                })
+              );
+            inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueStaleLabel: `stale`,
+              })
+            );
+            issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+          });
+
+          it(`should return false`, async (): Promise<void> => {
+            expect.assertions(7);
+
+            const result = await issueRemoveStaleProcessor.shouldRemoveStale();
+
+            expect(result).toBeFalse();
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `Found`,
+              `value-2`,
+              `whiteBright-stale label added events on this issue`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The stale label was added the`,
+              `date-01/01/2021, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The issue was updated for the last time the`,
+              `date-01/01/2020, 00:00:00`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              5,
+              `There was no update since the last time this issue was stale`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The stale state should not be removed`);
           });
         });
       });
