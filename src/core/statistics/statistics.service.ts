@@ -22,6 +22,22 @@ export class StatisticsService {
   public static alreadyStaleIssuesCount$$: number = 0;
   public static removeStaleIssuesCount$$: number = 0;
 
+  /**
+   * @description
+   * Only used for the tests to reset the state
+   * @returns {StatisticsService} The service
+   */
+  public static initialize(): StatisticsService {
+    StatisticsService.processedIssuesCount$$ = 0;
+    StatisticsService.ignoredIssuesCount$$ = 0;
+    StatisticsService.unalteredIssuesCount$$ = 0;
+    StatisticsService.staleIssuesCount$$ = 0;
+    StatisticsService.alreadyStaleIssuesCount$$ = 0;
+    StatisticsService.removeStaleIssuesCount$$ = 0;
+
+    return StatisticsService;
+  }
+
   public static increaseProcessedIssuesCount(): StatisticsService {
     this.processedIssuesCount$$++;
 
