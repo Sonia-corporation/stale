@@ -81,6 +81,16 @@ jobs:
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Cache Jest
+        id: cache-jest
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-jest-cc
+        with:
+          path: .cache-jest
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
       - name: Coverage
         uses: paambaati/codeclimate-action@v3.0.0
         with:
@@ -120,7 +130,7 @@ jobs:
         id: cache-jest
         uses: actions/cache@v2
         env:
-          cache-name: cache-jest
+          cache-name: cache-jest-integration
         with:
           path: .cache-jest
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
@@ -167,7 +177,7 @@ jobs:
         id: cache-jest
         uses: actions/cache@v2
         env:
-          cache-name: cache-jest
+          cache-name: cache-jest-unit
         with:
           path: .cache-jest
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
