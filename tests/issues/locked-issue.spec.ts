@@ -1,32 +1,33 @@
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 
 describe(`Locked issue`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  beforeEach((): void => {
-    issueSut = new FakeIssuesProcessor();
-  });
-
   describe(`when an issue is locked`, (): void => {
     beforeEach((): void => {
-      issueSut.addIssue({
+      issueSut = new FakeIssuesProcessor().addIssue({
         locked: true,
       });
     });
 
-    it(`should not process the issue`, async (): Promise<void> => {
-      expect.assertions(1);
+    it(`should ignore the issue`, async (): Promise<void> => {
+      expect.assertions(6);
 
       await issueSut.process();
 
-      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-      expect(true).toBeTrue();
+      expect(StatisticsService.processedIssuesCount$$).toBe(1);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(1);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
     });
   });
 
   describe(`when multiple issues are locked`, (): void => {
     beforeEach((): void => {
-      issueSut
+      issueSut = new FakeIssuesProcessor()
         .addIssue({
           locked: true,
         })
@@ -35,13 +36,17 @@ describe(`Locked issue`, (): void => {
         });
     });
 
-    it(`should not process the issues`, async (): Promise<void> => {
-      expect.assertions(1);
+    it(`should ignore the issues`, async (): Promise<void> => {
+      expect.assertions(6);
 
       await issueSut.process();
 
-      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-      expect(true).toBeTrue();
+      expect(StatisticsService.processedIssuesCount$$).toBe(2);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(2);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
     });
   });
 });

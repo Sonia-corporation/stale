@@ -1,24 +1,25 @@
+import { StatisticsService } from '@core/statistics/statistics.service';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 
 describe(`No issue`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  beforeEach((): void => {
-    issueSut = new FakeIssuesProcessor();
-  });
-
   describe(`when there is no issue to process`, (): void => {
     beforeEach((): void => {
-      issueSut.removeAllIssues();
+      issueSut = new FakeIssuesProcessor().removeAllIssues();
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(1);
+      expect.assertions(6);
 
       await issueSut.process();
 
-      // @todo add a better test (by checking the outputs and the statistics when these features will be added)
-      expect(true).toBeTrue();
+      expect(StatisticsService.processedIssuesCount$$).toBe(0);
+      expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
+      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(StatisticsService.staleIssuesCount$$).toBe(0);
+      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
     });
   });
 });
