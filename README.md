@@ -71,10 +71,16 @@ All the inputs that are used both for issues and Pull Requests.
 | issue-days-before-stale | The number of days until the issue is considered as stale.                              | `30`    |
 | issue-days-before-close | The number of days until a stale issue is considered as closed.                         | `10`    |
 
-## All the Pull Requests inputs
+## All the issues outputs
 
-| Input | Description | Default |
-| ----- | ----------- | ------- |
+| Output                     | Description                                                                 |
+| -------------------------- | --------------------------------------------------------------------------- |
+| processed-issues-count     | The number of issues processed.                                             |
+| ignored-issues-count       | The number of issues ignored.                                               |
+| unaltered-issues-count     | The number of issues unaltered (either not good to stale or already stale). |
+| stale-issues-count         | The number of issues stale.                                                 |
+| already-stale-issues-count | The number of issues processed which were already stale.                    |
+| remove-stale-issues-count  | The number of issues from where the stale state was removed.                |
 
 ## Debug the action
 
