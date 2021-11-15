@@ -1,5 +1,6 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssuesService } from '@core/issues/issues.service';
+import { OutputsService } from '@core/outputs/outputs.service';
 import { StaleService } from '@core/stale.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -20,6 +21,7 @@ describe(`StaleService`, (): void => {
     let loggerServiceDebugSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
     let statisticsServiceLogsAllStatisticsSpy: jest.SpyInstance;
+    let outputsServiceSetOutputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       statisticsServiceInitializeSpy = jest.spyOn(StatisticsService, `initialize`).mockImplementation();
@@ -31,6 +33,7 @@ describe(`StaleService`, (): void => {
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       statisticsServiceLogsAllStatisticsSpy = jest.spyOn(StatisticsService, `logsAllStatistics`).mockImplementation();
+      outputsServiceSetOutputsSpy = jest.spyOn(OutputsService, `setOutputs`).mockImplementation();
     });
 
     it(`should log starting the stale process`, async (): Promise<void> => {
@@ -181,6 +184,15 @@ describe(`StaleService`, (): void => {
 
       expect(statisticsServiceLogsAllStatisticsSpy).toHaveBeenCalledTimes(1);
       expect(statisticsServiceLogsAllStatisticsSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should set the outputs`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(outputsServiceSetOutputsSpy).toHaveBeenCalledTimes(1);
+      expect(outputsServiceSetOutputsSpy).toHaveBeenCalledWith();
     });
 
     it(`should return the service`, async (): Promise<void> => {
