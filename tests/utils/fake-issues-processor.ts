@@ -8,8 +8,8 @@ import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/gith
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
-import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
@@ -128,15 +128,19 @@ export class FakeIssuesProcessor {
 
       throw new Error(`The support of more than 2 batches is not yet implemented`);
     },
-    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiLabel> {
+    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabel> {
       if (!_.isString(data.labelName)) {
         throw new Error(`The labelName is not a string`);
       }
 
       return Promise.resolve(
-        createHydratedMock<IGithubApiLabel>({
-          id: faker.datatype.uuid(),
-          name: data.labelName,
+        createHydratedMock<IGithubApiGetLabel>({
+          repository: {
+            label: {
+              id: faker.datatype.uuid(),
+              name: data.labelName,
+            },
+          },
         })
       );
     },
