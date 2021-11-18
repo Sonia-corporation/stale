@@ -531,7 +531,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
       let staleLabelId: IUuid;
       let issueId: IUuid;
 
-      let githubApiLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
+      let githubApiLabelsServiceFetchLabelsByNameSpy: jest.SpyInstance;
       let inputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiLabelsServiceRemoveLabelFromIssueSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
@@ -548,8 +548,8 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         });
         issueRemoveStaleProcessor = new IssueRemoveStaleProcessor(issueProcessor);
 
-        githubApiLabelsServiceFetchLabelByNameSpy = jest
-          .spyOn(issueRemoveStaleProcessor.githubApiLabelsService$$, `fetchLabelByName`)
+        githubApiLabelsServiceFetchLabelsByNameSpy = jest
+          .spyOn(issueRemoveStaleProcessor.githubApiLabelsService$$, `fetchLabelsByName`)
           .mockResolvedValue(
             createHydratedMock<IGithubApiLabels>({
               repository: {
@@ -585,8 +585,8 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
 
         await issueRemoveStaleProcessor.removeStale();
 
-        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(1);
-        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
+        expect(githubApiLabelsServiceFetchLabelsByNameSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsServiceFetchLabelsByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(2);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);

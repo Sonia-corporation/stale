@@ -25,7 +25,7 @@ export class GithubApiLabelsService {
    * @param {Readonly<string>} labelName The name of the label to search for
    * @returns {Promise<IGithubApiLabels>} The stale label
    */
-  public fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
+  public fetchLabelsByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
     this.issueProcessor.logger.info(
       `Fetching the label`,
       LoggerService.value(labelName),

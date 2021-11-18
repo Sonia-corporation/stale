@@ -96,7 +96,7 @@ export class IssueRemoveStaleProcessor {
       LoggerFormatService.whiteBright(`to remove from this issue...`)
     );
 
-    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelsByName(issueStaleLabel);
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Removing the stale label from this issue...`);

@@ -95,7 +95,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let staleLabelId: IUuid;
       let issueId: IUuid;
 
-      let githubApiLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
+      let githubApiLabelsServiceFetchLabelsByNameSpy: jest.SpyInstance;
       let inputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
@@ -111,8 +111,8 @@ describe(`IssueStaleProcessor`, (): void => {
         });
         issueStaleProcessor = new IssueStaleProcessor(issueProcessor);
 
-        githubApiLabelsServiceFetchLabelByNameSpy = jest
-          .spyOn(issueStaleProcessor.githubApiLabelsService$$, `fetchLabelByName`)
+        githubApiLabelsServiceFetchLabelsByNameSpy = jest
+          .spyOn(issueStaleProcessor.githubApiLabelsService$$, `fetchLabelsByName`)
           .mockResolvedValue(
             createHydratedMock<IGithubApiLabels>({
               repository: {
@@ -148,8 +148,8 @@ describe(`IssueStaleProcessor`, (): void => {
 
         await issueStaleProcessor.stale();
 
-        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(1);
-        expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
+        expect(githubApiLabelsServiceFetchLabelsByNameSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsServiceFetchLabelsByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(2);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);

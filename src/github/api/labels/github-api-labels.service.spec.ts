@@ -38,7 +38,7 @@ describe(`GithubApiLabelsService`, (): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
     });
 
-    describe(`fetchLabelByName()`, (): void => {
+    describe(`fetchLabelsByName()`, (): void => {
       let labelName: string;
       let graphqlMock: jest.Mock;
 
@@ -68,7 +68,7 @@ describe(`GithubApiLabelsService`, (): void => {
       it(`should fetch the label with the given name`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+        await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(new Error(`graphql error`));
 
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
@@ -94,7 +94,7 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(new Error(`graphql error`));
 
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
@@ -126,7 +126,7 @@ describe(`GithubApiLabelsService`, (): void => {
           it(`should log about not finding this label and throw an error`, async (): Promise<void> => {
             expect.assertions(4);
 
-            await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+            await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
               new Error(`Could not find a single label matching ${labelName}`)
             );
 
@@ -179,7 +179,7 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should return the label`, async (): Promise<void> => {
               expect.assertions(3);
 
-              const result = await githubApiLabelsService.fetchLabelByName(labelName);
+              const result = await githubApiLabelsService.fetchLabelsByName(labelName);
 
               expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -212,7 +212,7 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should log about not finding this label and throw an error`, async (): Promise<void> => {
               expect.assertions(4);
 
-              await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
                 new Error(`Could not find the label ${labelName}`)
               );
 
@@ -271,7 +271,7 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should return the label`, async (): Promise<void> => {
               expect.assertions(3);
 
-              const result = await githubApiLabelsService.fetchLabelByName(labelName);
+              const result = await githubApiLabelsService.fetchLabelsByName(labelName);
 
               expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -307,7 +307,7 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should log about not finding this label and throw an error`, async (): Promise<void> => {
               expect.assertions(4);
 
-              await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
                 new Error(`Could not find the label ${labelName}`)
               );
 
@@ -329,7 +329,7 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should log a warning about the missing pagination implementation`, async (): Promise<void> => {
               expect.assertions(3);
 
-              await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
                 new Error(`Could not find the label ${labelName}`)
               );
 

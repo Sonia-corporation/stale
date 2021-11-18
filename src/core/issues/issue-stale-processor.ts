@@ -37,7 +37,7 @@ export class IssueStaleProcessor {
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelsByName(issueStaleLabel);
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
