@@ -82,6 +82,40 @@ All the inputs that are used both for issues and Pull Requests.
 | already-stale-issues-count | The number of issues processed which were already stale.                    |
 | remove-stale-issues-count  | The number of issues from where the stale state was removed.                |
 
+## Examples
+
+### All issues inputs example
+
+```yml
+name: Stale
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  Stale:
+    runs-on: ubuntu-latest
+    name: Run stale
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Stale
+        id: stale
+        uses: sonia-corporation/stale@1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: false
+          issue-stale-label: stale
+          issue-ignore-any-labels: |
+            frozen
+            help wanted
+            dependency-fix
+            dependencies
+          issue-days-before-stale: 30
+          issue-days-before-close: 10
+```
+
 ## Debug the action
 
 If you have an issue, you could help yourself to save some time by enabling the debug mode of the actions by adding the `ACTIONS_STEP_DEBUG` GitHub secret to `true` in your repository.  

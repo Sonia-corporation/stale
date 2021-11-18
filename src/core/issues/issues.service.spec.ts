@@ -2,8 +2,8 @@ import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesService } from '@core/issues/issues.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
-import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
@@ -54,7 +54,7 @@ describe(`IssuesService`, (): void => {
       mockedIssueProcessor.mockClear();
 
       githubApiIssuesServiceFetchIssuesSpy = jest.spyOn(GithubApiIssuesService, `fetchIssues`).mockResolvedValue(
-        createHydratedMock<IGithubApiIssues>({
+        createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: [],
@@ -93,12 +93,12 @@ describe(`IssuesService`, (): void => {
 
     describe(`when one issue was fetched in this batch`, (): void => {
       let gitHubApiIssue: IGithubApiIssue;
-      let githubApiIssues: IGithubApiIssues;
+      let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
         mockedIssueProcessor.mockClear();
         gitHubApiIssue = createHydratedMock<IGithubApiIssue>();
-        githubApiIssues = createHydratedMock<IGithubApiIssues>({
+        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: [gitHubApiIssue],
@@ -152,13 +152,13 @@ describe(`IssuesService`, (): void => {
     describe(`when two issues were fetched in this batch`, (): void => {
       let gitHubApiIssue1: IGithubApiIssue;
       let gitHubApiIssue2: IGithubApiIssue;
-      let githubApiIssues: IGithubApiIssues;
+      let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
         mockedIssueProcessor.mockClear();
         gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
         gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
-        githubApiIssues = createHydratedMock<IGithubApiIssues>({
+        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: [gitHubApiIssue1, gitHubApiIssue2],
@@ -228,10 +228,10 @@ describe(`IssuesService`, (): void => {
     describe(`when this batch does not contains more issues to process`, (): void => {
       let gitHubApiIssue1: IGithubApiIssue;
       let gitHubApiIssue2: IGithubApiIssue;
-      let githubApiIssues: IGithubApiIssues;
+      let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
-        githubApiIssues = createHydratedMock<IGithubApiIssues>({
+        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: [gitHubApiIssue1, gitHubApiIssue2],
@@ -259,10 +259,10 @@ describe(`IssuesService`, (): void => {
     describe(`when this batch contains more issues to process`, (): void => {
       let gitHubApiIssue1: IGithubApiIssue;
       let gitHubApiIssue2: IGithubApiIssue;
-      let githubApiIssues: IGithubApiIssues;
+      let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
-        githubApiIssues = createHydratedMock<IGithubApiIssues>({
+        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: [gitHubApiIssue1, gitHubApiIssue2],
@@ -276,7 +276,7 @@ describe(`IssuesService`, (): void => {
 
         githubApiIssuesServiceFetchIssuesSpy
           .mockResolvedValue(
-            createHydratedMock<IGithubApiIssues>({
+            createHydratedMock<IGithubApiGetIssues>({
               repository: {
                 issues: {
                   nodes: [],
