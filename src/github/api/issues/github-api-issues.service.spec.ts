@@ -1,6 +1,6 @@
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
-import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
+import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
@@ -76,17 +76,17 @@ describe(`GithubApiIssuesService`, (): void => {
     });
 
     describe(`when the issues were successfully fetched`, (): void => {
-      let githubApiIssues: IGithubApiIssues;
+      let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
-        githubApiIssues = createHydratedMock<IGithubApiIssues>();
+        githubApiIssues = createHydratedMock<IGithubApiGetIssues>();
 
         graphqlMock.mockResolvedValue(githubApiIssues);
       });
 
       describe(`when zero issue was fetched`, (): void => {
         beforeEach((): void => {
-          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
             repository: {
               issues: {
                 totalCount: 0,
@@ -121,7 +121,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when one issue was fetched`, (): void => {
         beforeEach((): void => {
-          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
             repository: {
               issues: {
                 totalCount: 1,
@@ -156,7 +156,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
       describe(`when multiple issues were fetched`, (): void => {
         beforeEach((): void => {
-          githubApiIssues = createHydratedMock<IGithubApiIssues>({
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
             repository: {
               issues: {
                 totalCount: 2,

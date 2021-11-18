@@ -1,6 +1,6 @@
 import { IGithubApiLabelsPagination } from '@github/api/labels/interfaces/github-api-labels-pagination.interface';
 
-export interface IGithubApiLabels {
+export interface IGithubApiGetLabels {
   readonly repository: {
     readonly labels: IGithubApiLabelsPagination;
   };

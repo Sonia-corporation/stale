@@ -3,7 +3,6 @@ import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -100,6 +99,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let githubApiLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
+      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -114,16 +114,8 @@ describe(`IssueStaleProcessor`, (): void => {
         githubApiLabelsServiceFetchLabelByNameSpy = jest
           .spyOn(issueStaleProcessor.githubApiLabelsService$$, `fetchLabelByName`)
           .mockResolvedValue(
-            createHydratedMock<IGithubApiLabels>({
-              repository: {
-                labels: {
-                  nodes: [
-                    createHydratedMock<IGithubApiLabel>({
-                      id: staleLabelId,
-                    }),
-                  ],
-                },
-              },
+            createHydratedMock<IGithubApiLabel>({
+              id: staleLabelId,
             })
           );
         inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
@@ -140,6 +132,9 @@ describe(`IssueStaleProcessor`, (): void => {
           .mockImplementation();
         issueProcessorLoggerNoticeSpy = jest
           .spyOn(issueStaleProcessor.issueProcessor.logger, `notice`)
+          .mockImplementation();
+        issueProcessorLoggerErrorSpy = jest
+          .spyOn(issueStaleProcessor.issueProcessor.logger, `error`)
           .mockImplementation();
       });
 
@@ -164,53 +159,83 @@ describe(`IssueStaleProcessor`, (): void => {
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Adding the stale label to this issue...`);
       });
 
-      describe(`when the action is not in dry-run mode`, (): void => {
+      describe(`when the label could not be found`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
-              issueStaleLabel,
-            })
-          );
+          githubApiLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
         });
 
-        it(`should add the stale label on the issue`, async (): Promise<void> => {
-          expect.assertions(6);
+        it(`should log and throw an error`, async (): Promise<void> => {
+          expect.assertions(3);
 
-          await issueStaleProcessor.stale();
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
 
-          expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
-          expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Could not find the stale label`,
+            `value-${issueStaleLabel}`
+          );
         });
       });
 
-      describe(`when the action is in dry-run mode`, (): void => {
+      describe(`when the label could be found`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: true,
-              issueStaleLabel,
+          githubApiLabelsServiceFetchLabelByNameSpy.mockResolvedValue(
+            createHydratedMock<IGithubApiLabel>({
+              id: staleLabelId,
             })
           );
         });
 
-        it(`should not add the stale label on the issue`, async (): Promise<void> => {
-          expect.assertions(5);
+        describe(`when the action is not in dry-run mode`, (): void => {
+          beforeEach((): void => {
+            inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                dryRun: false,
+                issueStaleLabel,
+              })
+            );
+          });
 
-          await issueStaleProcessor.stale();
+          it(`should add the stale label on the issue`, async (): Promise<void> => {
+            expect.assertions(6);
 
-          expect(githubApiLabelsServiceAddLabelToIssueSpy).not.toHaveBeenCalled();
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-            5,
-            `The stale label was not added due to the dry-run mode`
-          );
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+            await issueStaleProcessor.stale();
+
+            expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          });
+        });
+
+        describe(`when the action is in dry-run mode`, (): void => {
+          beforeEach((): void => {
+            inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                dryRun: true,
+                issueStaleLabel,
+              })
+            );
+          });
+
+          it(`should not add the stale label on the issue`, async (): Promise<void> => {
+            expect.assertions(5);
+
+            await issueStaleProcessor.stale();
+
+            expect(githubApiLabelsServiceAddLabelToIssueSpy).not.toHaveBeenCalled();
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              5,
+              `The stale label was not added due to the dry-run mode`
+            );
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          });
         });
       });
     });

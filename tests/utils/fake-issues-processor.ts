@@ -2,12 +2,14 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
+import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
-import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
@@ -62,13 +64,13 @@ export class FakeIssuesProcessor {
     [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
-    [GITHUB_API_ISSUES_QUERY]: (): Promise<IGithubApiIssues> => {
-      let firstBatchIssues: IGithubApiIssues;
-      let secondBatchIssues: IGithubApiIssues | null;
+    [GITHUB_API_ISSUES_QUERY]: (): Promise<IGithubApiGetIssues> => {
+      let firstBatchIssues: IGithubApiGetIssues;
+      let secondBatchIssues: IGithubApiGetIssues | null;
 
       // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
       if (this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE) {
-        firstBatchIssues = createHydratedMock<IGithubApiIssues>({
+        firstBatchIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[0],
@@ -80,7 +82,7 @@ export class FakeIssuesProcessor {
             },
           },
         });
-        secondBatchIssues = createHydratedMock<IGithubApiIssues>({
+        secondBatchIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: _.chunk(this._githubApiIssues, GITHUB_ISSUES_PER_PAGE)[1],
@@ -93,7 +95,7 @@ export class FakeIssuesProcessor {
           },
         });
       } else {
-        firstBatchIssues = createHydratedMock<IGithubApiIssues>({
+        firstBatchIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
               nodes: this._githubApiIssues,
@@ -126,13 +128,29 @@ export class FakeIssuesProcessor {
 
       throw new Error(`The support of more than 2 batches is not yet implemented`);
     },
-    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiLabels> {
+    [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabel> {
       if (!_.isString(data.labelName)) {
         throw new Error(`The labelName is not a string`);
       }
 
       return Promise.resolve(
-        createHydratedMock<IGithubApiLabels>({
+        createHydratedMock<IGithubApiGetLabel>({
+          repository: {
+            label: {
+              id: faker.datatype.uuid(),
+              name: data.labelName,
+            },
+          },
+        })
+      );
+    },
+    [GITHUB_API_LABELS_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabels> {
+      if (!_.isString(data.labelName)) {
+        throw new Error(`The labelName is not a string`);
+      }
+
+      return Promise.resolve(
+        createHydratedMock<IGithubApiGetLabels>({
           repository: {
             labels: {
               nodes: [

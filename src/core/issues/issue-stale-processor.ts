@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
@@ -37,16 +37,19 @@ export class IssueStaleProcessor {
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
+
+    if (!label) {
+      this.issueProcessor.logger.error(`Could not find the stale label`, LoggerService.value(issueStaleLabel));
+
+      throw new Error(`Could not find the stale label ${issueStaleLabel}`);
+    }
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
     if (!InputsService.getInputs().dryRun) {
-      await this.githubApiLabelsService$$.addLabelToIssue(
-        this.issueProcessor.githubIssue.id,
-        label.repository.labels.nodes[0].id
-      );
+      await this.githubApiLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was added`);
     } else {
