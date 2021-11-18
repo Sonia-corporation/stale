@@ -1,7 +1,7 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
-import { IGithubApiIssues } from '@github/api/issues/interfaces/github-api-issues.interface';
+import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
@@ -21,7 +21,7 @@ export class IssuesService {
       )}`
     );
 
-    const issues: IGithubApiIssues | never = await GithubApiIssuesService.fetchIssues(fromPageId);
+    const issues: IGithubApiGetIssues | never = await GithubApiIssuesService.fetchIssues(fromPageId);
     const issuesCount: number = issues.repository.issues.nodes.length;
 
     LoggerService.info(

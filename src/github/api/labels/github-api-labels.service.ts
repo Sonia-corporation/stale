@@ -1,14 +1,16 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
+import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
+import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
-import _ from 'lodash';
 
 export class GithubApiLabelsService {
   public readonly issueProcessor: IssueProcessor;
@@ -19,26 +21,25 @@ export class GithubApiLabelsService {
 
   /**
    * @description
-   * Fetch a label by name
-   * Since the GitHub API is doing a search by name and description, this method will throw if the first match is not good
+   * Fetch some labels by name or description
    * @todo handle the pagination to check the other labels as well
    * @param {Readonly<string>} labelName The name of the label to search for
-   * @returns {Promise<IGithubApiLabels>} The stale label
+   * @returns {Promise<IGithubApiGetLabels>} The stale label
    */
-  public fetchLabelsByName(labelName: Readonly<string>): Promise<IGithubApiLabels> | never {
+  public fetchLabelsByName(labelName: Readonly<string>): Promise<IGithubApiGetLabels> {
     this.issueProcessor.logger.info(
-      `Fetching the label`,
+      `Fetching the labels matching`,
       LoggerService.value(labelName),
       LoggerFormatService.whiteBright(`from GitHub...`)
     );
 
     return OctokitService.getOctokit()
-      .graphql<IGithubApiLabels>(GITHUB_API_LABEL_BY_NAME_QUERY, {
+      .graphql<IGithubApiGetLabels>(GITHUB_API_LABELS_BY_NAME_QUERY, {
         labelName,
         owner: context.repo.owner,
         repository: context.repo.repo,
       })
-      .then((response: Readonly<IGithubApiLabels>): IGithubApiLabels | never => {
+      .then((response: Readonly<IGithubApiGetLabels>): IGithubApiGetLabels | never => {
         const { totalCount } = response.repository.labels;
 
         if (totalCount === 0) {
@@ -46,31 +47,41 @@ export class GithubApiLabelsService {
           throw new Error(`Could not find a single label matching ${labelName}`);
         }
 
-        if (response.repository.labels.nodes[0].name !== labelName) {
-          this.issueProcessor.logger.error(
-            `Could find a label`,
-            LoggerService.value(response.repository.labels.nodes[0].name),
-            LoggerFormatService.red(`which is not exactly identical to`),
-            LoggerService.value(labelName)
-          );
+        this.issueProcessor.logger.info(
+          LoggerFormatService.green(`Found the labels matching`),
+          LoggerService.value(labelName)
+        );
 
-          // @todo handle the pagination
-          if (totalCount > 1) {
-            this.issueProcessor.logger.warning(
-              `Found`,
-              LoggerService.value(_.toString(totalCount)),
-              LoggerFormatService.whiteBright(
-                `labels during the search (by name or description). The pagination support is not yet implemented!`
-              )
-            );
-          }
+        return response;
+      })
+      .catch((error: Readonly<Error>): never => {
+        this.issueProcessor.logger.error(`Failed to fetch the labels matching`, LoggerService.value(labelName));
 
-          throw new Error(`Could not find the label ${labelName}`);
+        throw error;
+      });
+  }
+
+  public fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null> {
+    this.issueProcessor.logger.info(
+      `Fetching the label`,
+      LoggerService.value(labelName),
+      LoggerFormatService.whiteBright(`from GitHub...`)
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<IGithubApiGetLabel>(GITHUB_API_LABEL_BY_NAME_QUERY, {
+        labelName,
+        owner: context.repo.owner,
+        repository: context.repo.repo,
+      })
+      .then((response: Readonly<IGithubApiGetLabel>): IGithubApiLabel | null => {
+        if (!response.repository.label) {
+          this.issueProcessor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
         }
 
         this.issueProcessor.logger.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
 
-        return response;
+        return response.repository.label;
       })
       .catch((error: Readonly<Error>): never => {
         this.issueProcessor.logger.error(`Failed to fetch the label`, LoggerService.value(labelName));

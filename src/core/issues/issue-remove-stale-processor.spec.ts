@@ -2,8 +2,8 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
+import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { IUuid } from '@utils/types/uuid';
@@ -551,7 +551,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         githubApiLabelsServiceFetchLabelsByNameSpy = jest
           .spyOn(issueRemoveStaleProcessor.githubApiLabelsService$$, `fetchLabelsByName`)
           .mockResolvedValue(
-            createHydratedMock<IGithubApiLabels>({
+            createHydratedMock<IGithubApiGetLabels>({
               repository: {
                 labels: {
                   nodes: [

@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
+import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
@@ -96,7 +96,7 @@ export class IssueRemoveStaleProcessor {
       LoggerFormatService.whiteBright(`to remove from this issue...`)
     );
 
-    const label: IGithubApiLabels = await this.githubApiLabelsService$$.fetchLabelsByName(issueStaleLabel);
+    const label: IGithubApiGetLabels = await this.githubApiLabelsService$$.fetchLabelsByName(issueStaleLabel);
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Removing the stale label from this issue...`);

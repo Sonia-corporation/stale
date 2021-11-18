@@ -2,8 +2,8 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
+import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiLabels } from '@github/api/labels/interfaces/github-api-labels.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -114,7 +114,7 @@ describe(`IssueStaleProcessor`, (): void => {
         githubApiLabelsServiceFetchLabelsByNameSpy = jest
           .spyOn(issueStaleProcessor.githubApiLabelsService$$, `fetchLabelsByName`)
           .mockResolvedValue(
-            createHydratedMock<IGithubApiLabels>({
+            createHydratedMock<IGithubApiGetLabels>({
               repository: {
                 labels: {
                   nodes: [
