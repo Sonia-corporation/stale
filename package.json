@@ -135,7 +135,7 @@
     "faker": "5.5.3",
     "husky": "7.0.4",
     "jest": "27.3.1",
-    "jest-extended": "0.11.5",
+    "jest-extended": "1.1.0",
     "jest-silent-reporter": "0.5.0",
     "jest-ts-auto-mock": "2.0.0",
     "lint-staged": "12.0.3",
