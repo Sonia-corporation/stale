@@ -1,5 +1,5 @@
 export const GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY = `
-  query MyQuery($owner: String!, $repository: String!, $issueNumber: Int!) {
+  query GetIssueLabelEvents($owner: String!, $repository: String!, $issueNumber: Int!) {
     __typename
     repository(name: $repository, owner: $owner) {
       issue(number: $issueNumber) {

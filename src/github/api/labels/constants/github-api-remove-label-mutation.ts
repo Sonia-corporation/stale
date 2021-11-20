@@ -1,7 +1,7 @@
 export const GITHUB_API_REMOVE_LABEL_MUTATION = `
-  mutation MyMutation($issueId: ID!, $labelId: ID!) {
+  mutation RemoveLabel($id: ID!, $labelId: ID!) {
     __typename
-    removeLabelsFromLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
+    removeLabelsFromLabelable(input: {labelableId: $id, labelIds: [$labelId]}) {
       clientMutationId
     }
   }

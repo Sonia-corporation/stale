@@ -1,5 +1,5 @@
 export const GITHUB_API_ISSUES_QUERY = `
-  query MyQuery($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $afterCursor: String) {
+  query GetIssues($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $afterCursor: String) {
     repository(name: $repository, owner: $owner) {
       issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
         pageInfo {
