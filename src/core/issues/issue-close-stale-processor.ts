@@ -1,3 +1,4 @@
+import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 
@@ -17,7 +18,9 @@ export class IssueCloseStaleProcessor {
   public async close(): Promise<void> {
     this.issueProcessor.logger.info(`Closing this issue...`);
 
-    await this.githubApiIssuesService$$.closeIssue(this.issueProcessor.githubIssue.id);
+    if (!InputsService.getInputs().dryRun) {
+      await this.githubApiIssuesService$$.closeIssue(this.issueProcessor.githubIssue.id);
+    }
 
     this.issueProcessor.logger.notice(`Closed`);
   }
