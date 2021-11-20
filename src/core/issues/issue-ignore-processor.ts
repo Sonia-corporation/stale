@@ -1,3 +1,4 @@
+import { EInputs } from '@core/inputs/inputs.enum';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
@@ -23,6 +24,8 @@ export class IssueIgnoreProcessor {
 
     if (this.isLocked$$()) {
       return true;
+    } else if (this.hasAllIgnoredLabels$$()) {
+      return true;
     }
 
     return this.hasAnyIgnoredLabels$$();
@@ -39,6 +42,45 @@ export class IssueIgnoreProcessor {
     }
 
     this.issueProcessor.logger.info(`Not locked. Continuing...`);
+
+    return false;
+  }
+
+  public hasAllIgnoredLabels$$(): boolean {
+    this.issueProcessor.logger.info(`Checking if all the labels on this issue should be ignored...`);
+
+    if (!InputsService.getInputs().issueIgnoreAllLabels) {
+      this.issueProcessor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_LABELS),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.issueProcessor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_LABELS),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    const staleLabel: string = InputsService.getInputs().issueStaleLabel;
+    const allLabels: string[] = this._getLabels(this.issueProcessor.githubIssue.labels.nodes).filter(
+      (label: Readonly<string>): boolean => label !== staleLabel
+    );
+
+    if (allLabels.length > 0) {
+      this.issueProcessor.logger.info(
+        `The issue has`,
+        LoggerService.value(allLabels.length),
+        LoggerFormatService.whiteBright(`label${allLabels.length > 1 ? `s` : ``}`)
+      );
+
+      return true;
+    }
+
+    this.issueProcessor.logger.info(`The issue has no label. Continuing...`);
 
     return false;
   }
