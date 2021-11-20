@@ -7,13 +7,14 @@ jest.mock(`@utils/loggers/logger-format.service`);
 describe(`StatisticsService`, (): void => {
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(6);
+      expect.assertions(7);
       StatisticsService.processedIssuesCount$$ = 1;
       StatisticsService.ignoredIssuesCount$$ = 1;
       StatisticsService.unalteredIssuesCount$$ = 1;
       StatisticsService.staleIssuesCount$$ = 1;
       StatisticsService.alreadyStaleIssuesCount$$ = 1;
       StatisticsService.removeStaleIssuesCount$$ = 1;
+      StatisticsService.closeIssuesCount$$ = 1;
 
       StatisticsService.initialize();
 
@@ -23,6 +24,7 @@ describe(`StatisticsService`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.closeIssuesCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -148,6 +150,25 @@ describe(`StatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseCloseIssuesCount()`, (): void => {
+    it(`should increase the close issues count`, (): void => {
+      expect.assertions(1);
+      StatisticsService.closeIssuesCount$$ = 0;
+
+      StatisticsService.increaseCloseIssuesCount();
+
+      expect(StatisticsService.closeIssuesCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.increaseCloseIssuesCount();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -176,6 +197,7 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
+        StatisticsService.closeIssuesCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -195,6 +217,7 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
+        StatisticsService.closeIssuesCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -215,14 +238,15 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 3;
         StatisticsService.alreadyStaleIssuesCount$$ = 4;
         StatisticsService.removeStaleIssuesCount$$ = 5;
+        StatisticsService.closeIssuesCount$$ = 6;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(6);
+        expect.assertions(7);
 
         StatisticsService.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(5);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -249,10 +273,11 @@ describe(`StatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Remove stale issues `,
           `value-5`
         );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(6, `white-└──`, `whiteBright-Close issues `, `value-6`);
       });
     });
 
