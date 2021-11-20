@@ -56,7 +56,7 @@ describe(`Issue stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the issue`, async (): Promise<void> => {
-      expect.assertions(6);
+      expect.assertions(7);
 
       await issueSut.process();
 
@@ -66,6 +66,7 @@ describe(`Issue stale and updated`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(1);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(1);
+      expect(StatisticsService.closeIssuesCount$$).toBe(0);
     });
   });
 });

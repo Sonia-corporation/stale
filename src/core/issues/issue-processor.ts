@@ -1,7 +1,9 @@
+import { IssueCloseStaleProcessor } from '@core/issues/issue-close-stale-processor';
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
+import { IssueShouldCloseStaleProcessor } from '@core/issues/issue-should-close-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -52,8 +54,7 @@ export class IssueProcessor {
       const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
       if (!isStaleStateRemoved) {
-        // @todo add the closing logic here
-        this.stopProcessing$$();
+        await this.processForClose$$();
       } else {
         this.stopProcessing$$();
       }
@@ -140,5 +141,20 @@ export class IssueProcessor {
     }
 
     return Promise.resolve(false);
+  }
+
+  public async processForClose$$(): Promise<void> {
+    const issueShouldCloseStaleProcessor: IssueShouldCloseStaleProcessor = new IssueShouldCloseStaleProcessor(this);
+
+    if (issueShouldCloseStaleProcessor.shouldClose()) {
+      const issueCloseStaleProcessor: IssueCloseStaleProcessor = new IssueCloseStaleProcessor(this);
+
+      await issueCloseStaleProcessor.close();
+      StatisticsService.increaseCloseIssuesCount();
+    } else {
+      StatisticsService.increaseUnalteredIssuesCount();
+    }
+
+    this.stopProcessing$$();
   }
 }

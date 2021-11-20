@@ -2,6 +2,7 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
+import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
@@ -26,6 +27,14 @@ describe(`IssueStaleProcessor`, (): void => {
       const result = new IssueStaleProcessor(issueProcessor);
 
       expect(result.issueProcessor).toStrictEqual(issueProcessor);
+    });
+
+    it(`should create the GithubApiLabelsService`, (): void => {
+      expect.assertions(1);
+
+      const result = new IssueStaleProcessor(issueProcessor);
+
+      expect(result.githubApiLabelsService$$).toBeInstanceOf(GithubApiLabelsService);
     });
   });
 

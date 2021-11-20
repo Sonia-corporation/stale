@@ -100,7 +100,7 @@ export class GithubApiLabelsService {
 
     return OctokitService.getOctokit()
       .graphql<unknown>(GITHUB_API_ADD_LABEL_MUTATION, {
-        issueId,
+        id: issueId,
         labelId,
       })
       .then((): void => {
@@ -133,7 +133,7 @@ export class GithubApiLabelsService {
 
     return OctokitService.getOctokit()
       .graphql<unknown>(GITHUB_API_REMOVE_LABEL_MUTATION, {
-        issueId,
+        id: issueId,
         labelId,
       })
       .then((): void => {

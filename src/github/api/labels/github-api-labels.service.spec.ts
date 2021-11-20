@@ -403,7 +403,7 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABEL_MUTATION, {
-          issueId,
+          id: issueId,
           labelId,
         });
       });
@@ -493,7 +493,7 @@ describe(`GithubApiLabelsService`, (): void => {
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_REMOVE_LABEL_MUTATION, {
-          issueId,
+          id: issueId,
           labelId,
         });
       });

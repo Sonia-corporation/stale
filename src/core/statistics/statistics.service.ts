@@ -12,7 +12,8 @@ type IStat =
   | 'Stale issues'
   | 'Remove stale issues'
   | 'Already stale issues'
-  | 'Unaltered issues';
+  | 'Unaltered issues'
+  | 'Close issues';
 
 export class StatisticsService {
   public static processedIssuesCount$$: number = 0;
@@ -21,6 +22,7 @@ export class StatisticsService {
   public static staleIssuesCount$$: number = 0;
   public static alreadyStaleIssuesCount$$: number = 0;
   public static removeStaleIssuesCount$$: number = 0;
+  public static closeIssuesCount$$: number = 0;
 
   /**
    * @description
@@ -34,6 +36,7 @@ export class StatisticsService {
     StatisticsService.staleIssuesCount$$ = 0;
     StatisticsService.alreadyStaleIssuesCount$$ = 0;
     StatisticsService.removeStaleIssuesCount$$ = 0;
+    StatisticsService.closeIssuesCount$$ = 0;
 
     return StatisticsService;
   }
@@ -70,6 +73,12 @@ export class StatisticsService {
 
   public static increaseRemoveStaleIssuesCount(): StatisticsService {
     this.removeStaleIssuesCount$$++;
+
+    return StatisticsService;
+  }
+
+  public static increaseCloseIssuesCount(): StatisticsService {
+    this.closeIssuesCount$$++;
 
     return StatisticsService;
   }
@@ -117,7 +126,8 @@ export class StatisticsService {
       .set(`Unaltered issues`, StatisticsService.unalteredIssuesCount$$)
       .set(`Stale issues`, StatisticsService.staleIssuesCount$$)
       .set(`Already stale issues`, StatisticsService.alreadyStaleIssuesCount$$)
-      .set(`Remove stale issues`, StatisticsService.removeStaleIssuesCount$$);
+      .set(`Remove stale issues`, StatisticsService.removeStaleIssuesCount$$)
+      .set(`Close issues`, StatisticsService.closeIssuesCount$$);
   }
 
   private static _getAllFilteredStatisticsMap(): Map<IStat, number> {
