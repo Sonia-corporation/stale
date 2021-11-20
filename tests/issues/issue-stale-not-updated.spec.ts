@@ -1,7 +1,7 @@
 import { StatisticsService } from '@core/statistics/statistics.service';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
-import faker from 'faker';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -17,10 +17,9 @@ describe(`Issue stale not updated`, (): void => {
         .addIssue({
           labels: {
             nodes: [
-              {
-                id: faker.datatype.uuid(),
+              createHydratedMock<IGithubApiLabel>({
                 name: `stale`, // Already stale
-              },
+              }),
             ],
             totalCount: 1,
           },
@@ -42,10 +41,9 @@ describe(`Issue stale not updated`, (): void => {
                           createdAt: DateTime.utc(2021).toISO({
                             includeOffset: false,
                           }), // Last stale
-                          label: {
-                            id: faker.datatype.uuid(),
+                          label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
-                          },
+                          }),
                         },
                       ],
                       pageCount: 1,

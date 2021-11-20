@@ -35,12 +35,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`shouldIgnore()`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
+      let hasAllIgnoredLabelsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
 
         isLockedSpy = jest.spyOn(issueIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
+        hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
       });
 
       it(`should check if the issue is locked`, (): void => {
@@ -71,18 +73,18 @@ describe(`IssueIgnoreProcessor`, (): void => {
           isLockedSpy.mockReturnValue(false);
         });
 
-        it(`should check if the issue has one of the ignored labels`, (): void => {
+        it(`should check if the issue should ignore all labels`, (): void => {
           expect.assertions(2);
 
           issueIgnoreProcessor.shouldIgnore();
 
-          expect(hasAnyIgnoredLabelsSpy).toHaveBeenCalledTimes(1);
-          expect(hasAnyIgnoredLabelsSpy).toHaveBeenCalledWith();
+          expect(hasAllIgnoredLabelsSpy).toHaveBeenCalledTimes(1);
+          expect(hasAllIgnoredLabelsSpy).toHaveBeenCalledWith();
         });
 
-        describe(`when the issue has one of the ignored labels`, (): void => {
+        describe(`when the issue should ignore all the labels`, (): void => {
           beforeEach((): void => {
-            hasAnyIgnoredLabelsSpy.mockReturnValue(true);
+            hasAllIgnoredLabelsSpy.mockReturnValue(true);
           });
 
           it(`should return true`, (): void => {
@@ -94,17 +96,46 @@ describe(`IssueIgnoreProcessor`, (): void => {
           });
         });
 
-        describe(`when the issue does not have one of the ignored labels`, (): void => {
+        describe(`when the issue should not ignore all the labels`, (): void => {
           beforeEach((): void => {
-            hasAnyIgnoredLabelsSpy.mockReturnValue(false);
+            hasAllIgnoredLabelsSpy.mockReturnValue(false);
           });
 
-          it(`should return false`, (): void => {
-            expect.assertions(1);
+          it(`should check if the issue has one of the ignored labels`, (): void => {
+            expect.assertions(2);
 
-            const result = issueIgnoreProcessor.shouldIgnore();
+            issueIgnoreProcessor.shouldIgnore();
 
-            expect(result).toBeFalse();
+            expect(hasAnyIgnoredLabelsSpy).toHaveBeenCalledTimes(1);
+            expect(hasAnyIgnoredLabelsSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the issue has one of the ignored labels`, (): void => {
+            beforeEach((): void => {
+              hasAnyIgnoredLabelsSpy.mockReturnValue(true);
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIgnoreProcessor.shouldIgnore();
+
+              expect(result).toBeTrue();
+            });
+          });
+
+          describe(`when the issue does not have one of the ignored labels`, (): void => {
+            beforeEach((): void => {
+              hasAnyIgnoredLabelsSpy.mockReturnValue(false);
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIgnoreProcessor.shouldIgnore();
+
+              expect(result).toBeFalse();
+            });
           });
         });
       });
@@ -210,6 +241,244 @@ describe(`IssueIgnoreProcessor`, (): void => {
           const result = issueIgnoreProcessor.isLocked$$();
 
           expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAllIgnoredLabels$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let inputsServiceGetInputs: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest
+          .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+          .mockImplementation();
+        inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueIgnoreAllLabels: false,
+          })
+        );
+      });
+
+      it(`should log about checking if the issue should ignore all the labels`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if all the labels on this issue should be ignored...`
+        );
+        expect(inputsServiceGetInputs).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputs).toHaveBeenCalledWith();
+      });
+
+      describe(`when the input to ignore issue with a label is disabled`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreAllLabels: false,
+            })
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(3);
+
+          const result = issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-labels`,
+            `whiteBright-is disabled. Continuing...`
+          );
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the input to ignore issue with a label is enabled`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreAllLabels: true,
+            })
+          );
+        });
+
+        it(`should check if the issue has at least one label (except the stale one)`, (): void => {
+          expect.assertions(4);
+
+          issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-labels`,
+            `whiteBright-is enabled. Checking...`
+          );
+          expect(inputsServiceGetInputs).toHaveBeenCalledTimes(2);
+          expect(inputsServiceGetInputs).toHaveBeenNthCalledWith(2);
+        });
+
+        describe(`when the issue has no label`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                labels: {
+                  nodes: [],
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue has no label. Continuing...`);
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has one label which is the stale one`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                labels: {
+                  nodes: [
+                    createHydratedMock<IGithubApiLabel>({
+                      name: `stale`,
+                    }),
+                  ],
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+            inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreAllLabels: true,
+                issueStaleLabel: `stale`,
+              })
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue has no label. Continuing...`);
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has one label which is not the stale one`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                labels: {
+                  nodes: [
+                    createHydratedMock<IGithubApiLabel>({
+                      name: `not-stale`,
+                    }),
+                  ],
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+            inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreAllLabels: true,
+                issueStaleLabel: `stale`,
+              })
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The issue has`,
+              `value-1`,
+              `whiteBright-label`
+            );
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the issue has three labels which are not the stale one`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                labels: {
+                  nodes: [
+                    createHydratedMock<IGithubApiLabel>({
+                      name: `not-stale`,
+                    }),
+                    createHydratedMock<IGithubApiLabel>({
+                      name: `marco`,
+                    }),
+                    createHydratedMock<IGithubApiLabel>({
+                      name: `polo`,
+                    }),
+                  ],
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+            inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreAllLabels: true,
+                issueStaleLabel: `stale`,
+              })
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredLabels$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The issue has`,
+              `value-3`,
+              `whiteBright-labels`
+            );
+            expect(result).toBeTrue();
+          });
         });
       });
     });

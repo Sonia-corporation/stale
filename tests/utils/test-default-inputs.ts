@@ -6,6 +6,7 @@ export const TEST_DEFAULT_INPUTS: IInputs = {
   githubToken: faker.datatype.uuid(),
   issueDaysBeforeClose: 10,
   issueDaysBeforeStale: 30,
+  issueIgnoreAllLabels: false,
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
   issueStaleLabel: `stale`,
 };
