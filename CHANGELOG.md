@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.14.0](https://github.com/Sonia-corporation/stale/compare/1.13.0...1.14.0) (2021-11-20)
+
+
+### :rocket: Features
+
+* **issue:** add new input to ignore the process when a label is on an issue ([9c118dc](https://github.com/Sonia-corporation/stale/commit/9c118dc14cc113d2d044285d09517e22d051d9bb))
+
 # [1.13.0](https://github.com/Sonia-corporation/stale/compare/1.12.0...1.13.0) (2021-11-18)
 
 
