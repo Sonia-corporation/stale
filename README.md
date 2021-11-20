@@ -107,6 +107,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dry-run: false
+          issue-ignore-all-labels: false
           issue-stale-label: stale
           issue-ignore-any-labels: |
             frozen
