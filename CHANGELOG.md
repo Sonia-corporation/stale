@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.15.0](https://github.com/Sonia-corporation/stale/compare/1.14.0...1.15.0) (2021-11-20)
+
+
+### :rocket: Features
+
+* **outputs:** add closed issues count output ([aeeb72e](https://github.com/Sonia-corporation/stale/commit/aeeb72eec75a67bb0ee1dfec36c63174d1983bb2))
+* **stats:** add stats about the number of closed issues ([de3d98c](https://github.com/Sonia-corporation/stale/commit/de3d98c7d8fea7b4ded4a2b8c12437a3b36518bd))
+* **issue:** close stale issues ([e7f9a54](https://github.com/Sonia-corporation/stale/commit/e7f9a545161b02a61fc957ea6f5c7a917b464f06))
+
 # [1.14.0](https://github.com/Sonia-corporation/stale/compare/1.13.0...1.14.0) (2021-11-20)
 
 
