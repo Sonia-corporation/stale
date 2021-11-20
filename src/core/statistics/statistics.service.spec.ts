@@ -277,7 +277,12 @@ describe(`StatisticsService`, (): void => {
           `whiteBright-Remove stale issues `,
           `value-5`
         );
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(6, `white-└──`, `whiteBright-Close issues `, `value-6`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          6,
+          `white-└──`,
+          `whiteBright-Close issues        `,
+          `value-6`
+        );
       });
     });
 

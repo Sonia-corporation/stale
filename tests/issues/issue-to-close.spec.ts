@@ -5,12 +5,13 @@ import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Issue stale not updated`, (): void => {
+describe(`Issue to close`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
   describe(`when an issue is stale and was not recently updated`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
+        issueDaysBeforeClose: 10,
         issueDaysBeforeStale: 30,
         issueStaleLabel: `stale`,
       })
@@ -55,7 +56,7 @@ describe(`Issue stale not updated`, (): void => {
         );
     });
 
-    it(`should not remove the stale state on the issue`, async (): Promise<void> => {
+    it(`should close the issue`, async (): Promise<void> => {
       expect.assertions(7);
 
       await issueSut.process();

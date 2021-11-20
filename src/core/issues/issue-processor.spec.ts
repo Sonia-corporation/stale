@@ -1,8 +1,10 @@
+import { IssueCloseStaleProcessor } from '@core/issues/issue-close-stale-processor';
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
+import { IssueShouldCloseStaleProcessor } from '@core/issues/issue-should-close-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -19,6 +21,8 @@ jest.mock(`@core/issues/issue-ignore-processor`);
 jest.mock(`@core/issues/issue-stale-processor`);
 jest.mock(`@core/issues/issue-is-stale-processor`);
 jest.mock(`@core/issues/issue-remove-stale-processor`);
+jest.mock(`@core/issues/issue-should-close-stale-processor`);
+jest.mock(`@core/issues/issue-close-stale-processor`);
 
 describe(`IssueProcessor`, (): void => {
   let gitHubApiIssue: IGithubApiIssue;
@@ -68,6 +72,7 @@ describe(`IssueProcessor`, (): void => {
       let shouldIgnoreSpy: jest.SpyInstance;
       let isAlreadyStaleSpy: jest.SpyInstance;
       let processToRemoveStaleSpy: jest.SpyInstance;
+      let processForCloseSpy: jest.SpyInstance;
       let processForStaleSpy: jest.SpyInstance;
       let loggerInfoSpy: jest.SpyInstance;
       let createLinkSpy: jest.SpyInstance;
@@ -81,6 +86,7 @@ describe(`IssueProcessor`, (): void => {
         isAlreadyStaleSpy = jest.spyOn(issueProcessor, `isAlreadyStale$$`).mockImplementation();
         processToRemoveStaleSpy = jest.spyOn(issueProcessor, `processToRemoveStale$$`).mockImplementation();
         processForStaleSpy = jest.spyOn(issueProcessor, `processForStale$$`).mockImplementation();
+        processForCloseSpy = jest.spyOn(issueProcessor, `processForClose$$`).mockImplementation();
         loggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         createLinkSpy = jest.spyOn(CreateLinkModule, `createLink`).mockReturnValue(`dummy-link`);
         statisticsServiceIncreaseIgnoredIssuesCountSpy = jest
@@ -143,7 +149,7 @@ describe(`IssueProcessor`, (): void => {
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
-          expect.assertions(5);
+          expect.assertions(6);
 
           await issueProcessor.process();
 
@@ -152,6 +158,7 @@ describe(`IssueProcessor`, (): void => {
           expect(isAlreadyStaleSpy).not.toHaveBeenCalled();
           expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
           expect(processForStaleSpy).not.toHaveBeenCalled();
+          expect(processForCloseSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -223,13 +230,13 @@ describe(`IssueProcessor`, (): void => {
               processToRemoveStaleSpy.mockResolvedValue(false);
             });
 
-            it(`should stop the processing`, async (): Promise<void> => {
+            it(`should try to close the issue`, async (): Promise<void> => {
               expect.assertions(2);
 
               await issueProcessor.process();
 
-              expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
-              expect(stopProcessingSpy).toHaveBeenCalledWith();
+              expect(processForCloseSpy).toHaveBeenCalledTimes(1);
+              expect(processForCloseSpy).toHaveBeenCalledWith();
             });
           });
         });
@@ -240,7 +247,7 @@ describe(`IssueProcessor`, (): void => {
           });
 
           it(`should really process the issue for the stale checks`, async (): Promise<void> => {
-            expect.assertions(4);
+            expect.assertions(5);
 
             await issueProcessor.process();
 
@@ -248,6 +255,7 @@ describe(`IssueProcessor`, (): void => {
             expect(processForStaleSpy).toHaveBeenCalledWith();
             expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
             expect(stopProcessingSpy).not.toHaveBeenCalled();
+            expect(processForCloseSpy).not.toHaveBeenCalled();
           });
 
           it(`should not increase the already stale issues statistic`, async (): Promise<void> => {
@@ -621,6 +629,119 @@ describe(`IssueProcessor`, (): void => {
           const result = await issueProcessor.processToRemoveStale$$();
 
           expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`processForClose$$()`, (): void => {
+      const mockedIssueShouldCloseStaleProcessor: MockedObjectDeep<typeof IssueShouldCloseStaleProcessor> = mocked(
+        IssueShouldCloseStaleProcessor,
+        true
+      );
+      const mockedIssueCloseStaleProcessor: MockedObjectDeep<typeof IssueCloseStaleProcessor> = mocked(
+        IssueCloseStaleProcessor,
+        true
+      );
+
+      let stopProcessingSpy: jest.SpyInstance;
+      let statisticsServiceIncreaseCloseIssuesCountSpy: jest.SpyInstance;
+      let statisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        mockedIssueShouldCloseStaleProcessor.mockClear();
+        mockedIssueCloseStaleProcessor.mockClear();
+
+        stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
+        statisticsServiceIncreaseCloseIssuesCountSpy = jest
+          .spyOn(StatisticsService, `increaseCloseIssuesCount`)
+          .mockImplementation();
+        statisticsServiceIncreaseUnalteredIssuesCountSpy = jest
+          .spyOn(StatisticsService, `increaseUnalteredIssuesCount`)
+          .mockImplementation();
+      });
+
+      it(`should check if the issue should be closed`, async (): Promise<void> => {
+        expect.assertions(4);
+
+        await issueProcessor.processForClose$$();
+
+        expect(mockedIssueShouldCloseStaleProcessor).toHaveBeenCalledTimes(1);
+        expect(mockedIssueShouldCloseStaleProcessor).toHaveBeenCalledWith(issueProcessor);
+        expect(mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mock.calls).toHaveLength(1);
+        expect(mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mock.calls[0]).toHaveLength(0);
+      });
+
+      describe(`when the issue should not be closed`, (): void => {
+        beforeEach((): void => {
+          mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(false);
+        });
+
+        it(`should not increase the close issues statistic`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await issueProcessor.processForClose$$();
+
+          expect(statisticsServiceIncreaseCloseIssuesCountSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should increase the unaltered issues statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processForClose$$();
+
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
+        });
+
+        it(`should stop to process this issue`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await issueProcessor.processForClose$$();
+
+          expect(mockedIssueCloseStaleProcessor.prototype.close).not.toHaveBeenCalled();
+          expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+          expect(stopProcessingSpy).toHaveBeenCalledWith();
+        });
+      });
+
+      describe(`when the issue should be closed`, (): void => {
+        beforeEach((): void => {
+          mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(true);
+        });
+
+        it(`should close the issue`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processForClose$$();
+
+          expect(mockedIssueCloseStaleProcessor.prototype.close.mock.calls).toHaveLength(1);
+          expect(mockedIssueCloseStaleProcessor.prototype.close.mock.calls[0]).toHaveLength(0);
+        });
+
+        it(`should increase the close issues statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processForClose$$();
+
+          expect(statisticsServiceIncreaseCloseIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(statisticsServiceIncreaseCloseIssuesCountSpy).toHaveBeenCalledWith();
+        });
+
+        it(`should not increase the unaltered issues statistics`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await issueProcessor.processForClose$$();
+
+          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should stop to process this issue`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueProcessor.processForClose$$();
+
+          expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+          expect(stopProcessingSpy).toHaveBeenCalledWith();
         });
       });
     });

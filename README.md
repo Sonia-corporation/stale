@@ -52,6 +52,7 @@ If you have any suggestion, bugfix to report, specific feature-request or just w
 
 After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed.
+If the issue is not updated for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
 
 ## All the common inputs
 
@@ -82,6 +83,7 @@ All the inputs that are used both for issues and Pull Requests.
 | stale-issues-count         | The number of issues stale.                                                 |
 | already-stale-issues-count | The number of issues processed which were already stale.                    |
 | remove-stale-issues-count  | The number of issues from where the stale state was removed.                |
+| close-issues-count         | The number of issues closed.                                                |
 
 ## Examples
 

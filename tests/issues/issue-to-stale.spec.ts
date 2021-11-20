@@ -22,7 +22,7 @@ describe(`Issue to stale`, (): void => {
     });
 
     it(`should stale the issue`, async (): Promise<void> => {
-      expect.assertions(6);
+      expect.assertions(7);
 
       await issueSut.process();
 
@@ -32,6 +32,7 @@ describe(`Issue to stale`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(1);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
+      expect(StatisticsService.closeIssuesCount$$).toBe(0);
     });
   });
 });
