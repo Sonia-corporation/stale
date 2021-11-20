@@ -1,8 +1,11 @@
+import { IssueProcessor } from '@core/issues/issue-processor';
+import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -11,6 +14,8 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`GithubApiIssuesService`, (): void => {
+  let issueProcessor: IssueProcessor;
+
   it(`should load 20 issues per batch`, (): void => {
     expect.assertions(1);
 
@@ -195,6 +200,103 @@ describe(`GithubApiIssuesService`, (): void => {
         const result = await GithubApiIssuesService.fetchIssues();
 
         expect(result).toStrictEqual(githubApiIssues);
+      });
+    });
+  });
+
+  describe(`constructor()`, (): void => {
+    beforeEach((): void => {
+      issueProcessor = createHydratedMock<IssueProcessor>();
+    });
+
+    it(`should save the given issue processor`, (): void => {
+      expect.assertions(1);
+
+      const result = new GithubApiIssuesService(issueProcessor);
+
+      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+    });
+  });
+
+  describe(`after creation`, (): void => {
+    let githubApiIssuesService: GithubApiIssuesService;
+
+    beforeEach((): void => {
+      issueProcessor = createHydratedMock<IssueProcessor>();
+    });
+
+    describe(`removeLabelFromIssue()`, (): void => {
+      let issueId: IUuid;
+      let graphqlMock: jest.Mock;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueId = faker.datatype.uuid();
+        graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        githubApiIssuesService = new GithubApiIssuesService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+          // @ts-ignore
+          graphql: graphqlMock,
+        });
+      });
+
+      it(`should close the issue`, async (): Promise<void> => {
+        expect.assertions(7);
+
+        await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Closing the issue`,
+          `value-${issueId}whiteBright-...`
+        );
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+        expect(graphqlMock).toHaveBeenCalledTimes(1);
+        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_ISSUE_MUTATION, {
+          issueId,
+        });
+      });
+
+      describe(`when the issue failed to be closed`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to close the issue`, `value-${issueId}`);
+        });
+      });
+
+      describe(`when the issue was successfully closed`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockResolvedValue({});
+        });
+
+        it(`should log about the success of the closing`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiIssuesService.closeIssue(issueId);
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `green-Issue`,
+            `value-${issueId}`,
+            `green-closed`
+          );
+        });
       });
     });
   });

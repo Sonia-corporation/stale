@@ -1,7 +1,7 @@
 export const GITHUB_API_ADD_LABEL_MUTATION = `
-  mutation MyMutation($issueId: ID!, $labelId: ID!) {
+  mutation AddLabel($id: ID!, $labelId: ID!) {
     __typename
-    addLabelsToLabelable(input: {labelableId: $issueId, labelIds: [$labelId]}) {
+    addLabelsToLabelable(input: {labelableId: $id, labelIds: [$labelId]}) {
       clientMutationId
     }
   }

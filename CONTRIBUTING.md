@@ -133,7 +133,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue has already a stale state (stale label)
   - If the issue has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
-    - Else, continue (todo -> handle the closing logic)
+    - Else, check if issue last update is older than X days (coming from `issue-days-before-close`)
+      - If it is old, close the issue
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Add a label to stale (coming from the `issue-stale-label` input, ignored in `dry-run` mode)
