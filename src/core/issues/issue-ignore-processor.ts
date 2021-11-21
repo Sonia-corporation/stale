@@ -22,13 +22,12 @@ export class IssueIgnoreProcessor {
   public shouldIgnore(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue should be ignored...`);
 
-    if (this.isLocked$$()) {
-      return true;
-    } else if (this.hasAllIgnoredLabels$$()) {
-      return true;
-    }
-
-    return this.hasAnyIgnoredLabels$$();
+    return (
+      this.isLocked$$() ||
+      this.hasAllIgnoredLabels$$() ||
+      this.hasAnyIgnoredLabels$$() ||
+      this.hasAllIgnoredAssignees$$()
+    );
   }
 
   public isLocked$$(): boolean {
@@ -42,6 +41,42 @@ export class IssueIgnoreProcessor {
     }
 
     this.issueProcessor.logger.info(`Not locked. Continuing...`);
+
+    return false;
+  }
+
+  public hasAllIgnoredAssignees$$(): boolean {
+    this.issueProcessor.logger.info(`Checking if all the assignees on this issue should be ignored...`);
+
+    if (!InputsService.getInputs().issueIgnoreAllAssignees) {
+      this.issueProcessor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.issueProcessor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    if (this.issueProcessor.githubIssue.assignees.totalCount > 0) {
+      this.issueProcessor.logger.info(
+        `The issue has`,
+        LoggerService.value(this.issueProcessor.githubIssue.assignees.totalCount),
+        LoggerFormatService.whiteBright(
+          `assignee${this.issueProcessor.githubIssue.assignees.totalCount > 1 ? `s` : ``}`
+        )
+      );
+
+      return true;
+    }
+
+    this.issueProcessor.logger.info(`The issue has no assignee. Continuing...`);
 
     return false;
   }

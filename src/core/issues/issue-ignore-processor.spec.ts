@@ -36,6 +36,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
+      let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
@@ -43,6 +44,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         isLockedSpy = jest.spyOn(issueIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
+        hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
       });
 
       it(`should check if the issue is locked`, (): void => {
@@ -129,12 +131,41 @@ describe(`IssueIgnoreProcessor`, (): void => {
               hasAnyIgnoredLabelsSpy.mockReturnValue(false);
             });
 
-            it(`should return false`, (): void => {
-              expect.assertions(1);
+            it(`should check if the issue should ignore all assignees`, (): void => {
+              expect.assertions(2);
 
-              const result = issueIgnoreProcessor.shouldIgnore();
+              issueIgnoreProcessor.shouldIgnore();
 
-              expect(result).toBeFalse();
+              expect(hasAllIgnoredAssigneesSpy).toHaveBeenCalledTimes(1);
+              expect(hasAllIgnoredAssigneesSpy).toHaveBeenCalledWith();
+            });
+
+            describe(`when the issue should ignore all assignees`, (): void => {
+              beforeEach((): void => {
+                hasAllIgnoredAssigneesSpy.mockReturnValue(true);
+              });
+
+              it(`should return true`, (): void => {
+                expect.assertions(1);
+
+                const result = issueIgnoreProcessor.shouldIgnore();
+
+                expect(result).toBeTrue();
+              });
+            });
+
+            describe(`when the issue should not ignore all assignees`, (): void => {
+              beforeEach((): void => {
+                hasAllIgnoredAssigneesSpy.mockReturnValue(false);
+              });
+
+              it(`should return false`, (): void => {
+                expect.assertions(1);
+
+                const result = issueIgnoreProcessor.shouldIgnore();
+
+                expect(result).toBeFalse();
+              });
             });
           });
         });
@@ -241,6 +272,154 @@ describe(`IssueIgnoreProcessor`, (): void => {
           const result = issueIgnoreProcessor.isLocked$$();
 
           expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAllIgnoredAssignees$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let inputsServiceGetInputs: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest
+          .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+          .mockImplementation();
+        inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueIgnoreAllAssignees: false,
+          })
+        );
+      });
+
+      it(`should log about checking if the issue should ignore all the assignees`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAllIgnoredAssignees$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if all the assignees on this issue should be ignored...`
+        );
+        expect(inputsServiceGetInputs).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputs).toHaveBeenCalledWith();
+      });
+
+      describe(`when the input to ignore issue with an assignee is disabled`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreAllAssignees: false,
+            })
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(3);
+
+          const result = issueIgnoreProcessor.hasAllIgnoredAssignees$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-assignees`,
+            `whiteBright-is disabled. Continuing...`
+          );
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the input to ignore issue with an assignee is enabled`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreAllAssignees: true,
+            })
+          );
+        });
+
+        it(`should check if the issue has at least one assignee`, (): void => {
+          expect.assertions(4);
+
+          issueIgnoreProcessor.hasAllIgnoredAssignees$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-assignees`,
+            `whiteBright-is enabled. Checking...`
+          );
+          expect(inputsServiceGetInputs).toHaveBeenCalledTimes(1);
+          expect(inputsServiceGetInputs).toHaveBeenCalledWith();
+        });
+
+        describe(`when the issue has no assignee`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                assignees: {
+                  totalCount: 0,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredAssignees$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue has no assignee. Continuing...`);
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has one assignee`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                assignees: {
+                  totalCount: 1,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+              .mockImplementation();
+            inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreAllAssignees: true,
+              })
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredAssignees$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The issue has`,
+              `value-1`,
+              `whiteBright-assignee`
+            );
+            expect(result).toBeTrue();
+          });
         });
       });
     });
