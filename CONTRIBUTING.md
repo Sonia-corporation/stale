@@ -130,6 +130,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue is locked and stop the processing if this is the case
 - Check if the issue has a label (except the stale one) and stop the processing if this is the case (coming from the `issue-ignore-all-labels` input)
 - Check if the issue has any of the ignored labels and stop the processing if this is the case (coming from the `issue-ignore-any-labels` input)
+- Check if the issue has an assignee and stop the processing if this is the case (coming from the `issue-ignore-all-assignees` input)
 - Check if the issue has already a stale state (stale label)
   - If the issue has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
