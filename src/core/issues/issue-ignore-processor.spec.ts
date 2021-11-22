@@ -3,6 +3,7 @@ import { InputsService } from '@core/inputs/inputs.service';
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`@utils/loggers/logger.service`);
@@ -37,6 +38,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
+      let hasIgnoredCreationDateSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
@@ -45,6 +47,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
+        hasIgnoredCreationDateSpy = jest.spyOn(issueIgnoreProcessor, `hasIgnoredCreationDate$$`).mockImplementation();
       });
 
       it(`should check if the issue is locked`, (): void => {
@@ -159,12 +162,41 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 hasAllIgnoredAssigneesSpy.mockReturnValue(false);
               });
 
-              it(`should return false`, (): void => {
-                expect.assertions(1);
+              it(`should check if the issue should ignore based on the creation date`, (): void => {
+                expect.assertions(2);
 
-                const result = issueIgnoreProcessor.shouldIgnore();
+                issueIgnoreProcessor.shouldIgnore();
 
-                expect(result).toBeFalse();
+                expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+              });
+
+              describe(`when the issue should ignore based on the creation date`, (): void => {
+                beforeEach((): void => {
+                  hasIgnoredCreationDateSpy.mockReturnValue(true);
+                });
+
+                it(`should return true`, (): void => {
+                  expect.assertions(1);
+
+                  const result = issueIgnoreProcessor.shouldIgnore();
+
+                  expect(result).toBeTrue();
+                });
+              });
+
+              describe(`when the issue should not ignore based on the creation date`, (): void => {
+                beforeEach((): void => {
+                  hasIgnoredCreationDateSpy.mockReturnValue(false);
+                });
+
+                it(`should return false`, (): void => {
+                  expect.assertions(1);
+
+                  const result = issueIgnoreProcessor.shouldIgnore();
+
+                  expect(result).toBeFalse();
+                });
               });
             });
           });
@@ -417,6 +449,150 @@ describe(`IssueIgnoreProcessor`, (): void => {
               `The issue has`,
               `value-1`,
               `whiteBright-assignee`
+            );
+            expect(result).toBeTrue();
+          });
+        });
+      });
+    });
+
+    describe(`hasIgnoredCreationDate$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let inputsServiceGetInputs: jest.SpyInstance;
+      let issueProcessorGetCreatedAtSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest
+          .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+          .mockImplementation();
+        inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueIgnoreBeforeCreationDate: ``,
+          })
+        );
+        issueProcessorGetCreatedAtSpy = jest.spyOn(issueProcessor, `getCreatedAt`).mockReturnValue(DateTime.utc(2020));
+      });
+
+      it(`should try to get the issue ignore before creation date input and parse it`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasIgnoredCreationDate$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue should be ignored based on its creation date...`
+        );
+        expect(inputsServiceGetInputs).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputs).toHaveBeenCalledWith();
+      });
+
+      describe(`when the date is not valid`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreBeforeCreationDate: `dummy`,
+            })
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(3);
+
+          const result = issueIgnoreProcessor.hasIgnoredCreationDate$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-before-creation-date`,
+            `whiteBright-is either unset or not convertible to a valid ISO 8601 date. Continuing...`
+          );
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the date is valid`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputs.mockReturnValue(
+            createHydratedMock<IInputs>({
+              issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
+                includeOffset: false,
+              }),
+            })
+          );
+        });
+
+        it(`should get the creation date of the issue`, (): void => {
+          expect.assertions(5);
+
+          issueIgnoreProcessor.hasIgnoredCreationDate$$();
+
+          expect(issueProcessorGetCreatedAtSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorGetCreatedAtSpy).toHaveBeenCalledWith();
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The issue was created the`,
+            `date-01/01/2020, 00:00:00`
+          );
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The minimal processing creation date is set to the`,
+            `date-01/01/2020, 00:00:00`
+          );
+        });
+
+        describe(`when the creation date of the issue is more recent that the creation date input`, (): void => {
+          beforeEach((): void => {
+            issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.now());
+            inputsServiceGetInputs.mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
+                  includeOffset: false,
+                }),
+              })
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasIgnoredCreationDate$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The issue was created after the minimal processing creation date. Continuing...`
+            );
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the creation date of the issue is older that the creation date input`, (): void => {
+          beforeEach((): void => {
+            issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.utc(2019));
+            inputsServiceGetInputs.mockReturnValue(
+              createHydratedMock<IInputs>({
+                issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
+                  includeOffset: false,
+                }),
+              })
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasIgnoredCreationDate$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The issue was created before the minimal processing creation date`
             );
             expect(result).toBeTrue();
           });

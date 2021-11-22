@@ -76,6 +76,15 @@ export class IssueProcessor {
 
   /**
    * @description
+   * Return the createdAt issue field formatted as a {DateTime}
+   * @returns {DateTime} Returns the createdAt field formatted as a {DateTime}
+   */
+  public getCreatedAt(): DateTime {
+    return iso8601ToDatetime(this.githubIssue.createdAt);
+  }
+
+  /**
+   * @description
    * Only used log the end of the processing for this issue
    */
   public stopProcessing$$(): void {
