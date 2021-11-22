@@ -121,7 +121,7 @@ jobs:
             dependencies
           issue-days-before-stale: 30
           issue-days-before-close: 10
-          issue-ignore-before-creation-date: 10
+          issue-ignore-before-creation-date: 2020-04
 ```
 
 ## Debug the action

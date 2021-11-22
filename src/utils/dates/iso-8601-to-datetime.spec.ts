@@ -20,17 +20,20 @@ describe(`iso8601ToDatetime()`, (): void => {
     }
   );
 
-  describe.each([new Date().toISOString()])(`when the given date can be parsed`, (validDate: string): void => {
-    beforeEach((): void => {
-      date = validDate;
-    });
+  describe.each([new Date().toISOString(), `2016-05`])(
+    `when the given date can be parsed`,
+    (validDate: string): void => {
+      beforeEach((): void => {
+        date = validDate;
+      });
 
-    it(`should return the parsed date`, (): void => {
-      expect.assertions(1);
+      it(`should return the parsed date`, (): void => {
+        expect.assertions(1);
 
-      const result = iso8601ToDatetime(date);
+        const result = iso8601ToDatetime(date);
 
-      expect(result).toBeInstanceOf(DateTime);
-    });
-  });
+        expect(result).toBeInstanceOf(DateTime);
+      });
+    }
+  );
 });
