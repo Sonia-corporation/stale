@@ -4,9 +4,12 @@ import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
+import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
+import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
 
 /**
  * @description
@@ -26,7 +29,8 @@ export class IssueIgnoreProcessor {
       this.isLocked$$() ||
       this.hasAllIgnoredLabels$$() ||
       this.hasAnyIgnoredLabels$$() ||
-      this.hasAllIgnoredAssignees$$()
+      this.hasAllIgnoredAssignees$$() ||
+      this.hasIgnoredCreationDate$$()
     );
   }
 
@@ -79,6 +83,43 @@ export class IssueIgnoreProcessor {
     this.issueProcessor.logger.info(`The issue has no assignee. Continuing...`);
 
     return false;
+  }
+
+  public hasIgnoredCreationDate$$(): boolean {
+    this.issueProcessor.logger.info(`Checking if this issue should be ignored based on its creation date...`);
+    let issueIgnoreBeforeCreationDate: DateTime;
+
+    try {
+      issueIgnoreBeforeCreationDate = iso8601ToDatetime(InputsService.getInputs().issueIgnoreBeforeCreationDate);
+    } catch (error) {
+      this.issueProcessor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_IGNORE_BEFORE_CREATION_DATE),
+        LoggerFormatService.whiteBright(`is either unset or not convertible to a valid ISO 8601 date. Continuing...`)
+      );
+
+      return false;
+    }
+
+    const createdAt: DateTime = this.issueProcessor.getCreatedAt();
+
+    this.issueProcessor.logger.info(`The issue was created the`, LoggerService.date(createdAt));
+    this.issueProcessor.logger.info(
+      `The minimal processing creation date is set to the`,
+      LoggerService.date(issueIgnoreBeforeCreationDate)
+    );
+
+    if (isDateMoreRecent(createdAt, issueIgnoreBeforeCreationDate)) {
+      this.issueProcessor.logger.info(
+        `The issue was created after the minimal processing creation date. Continuing...`
+      );
+
+      return false;
+    }
+
+    this.issueProcessor.logger.info(`The issue was created before the minimal processing creation date`);
+
+    return true;
   }
 
   public hasAllIgnoredLabels$$(): boolean {

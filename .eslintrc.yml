@@ -409,7 +409,7 @@ overrides:
     rules:
       jest/max-nested-describe:
         - error
-        - max: 7
+        - max: 8
       '@typescript-eslint/prefer-readonly-parameter-types': off
       jest/prefer-expect-resolves: error
       jest/prefer-to-be: error
