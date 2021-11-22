@@ -270,7 +270,7 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`getUpdatedAt()`, (): void => {
-      describe(`when the creation date of the issue is invalid`, (): void => {
+      describe(`when the update date of the issue is invalid`, (): void => {
         beforeEach((): void => {
           issueProcessor = new IssueProcessor(
             createHydratedMock<IGithubApiIssue>({
@@ -286,7 +286,7 @@ describe(`IssueProcessor`, (): void => {
         });
       });
 
-      describe(`when the creation date of the issue is valid`, (): void => {
+      describe(`when the update date of the issue is valid`, (): void => {
         beforeEach((): void => {
           issueProcessor = new IssueProcessor(
             createHydratedMock<IGithubApiIssue>({
@@ -297,10 +297,49 @@ describe(`IssueProcessor`, (): void => {
           );
         });
 
-        it(`should return the creation date as a date time class`, (): void => {
+        it(`should return the update date as a date time class`, (): void => {
           expect.assertions(2);
 
           const result = issueProcessor.getUpdatedAt();
+
+          expect(result).toBeInstanceOf(DateTime);
+          expect(result.equals(DateTime.now())).toBeTrue();
+        });
+      });
+    });
+
+    describe(`getCreatedAt()`, (): void => {
+      describe(`when the creation date of the issue is invalid`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = new IssueProcessor(
+            createHydratedMock<IGithubApiIssue>({
+              createdAt: `dummy-wrong-date`,
+            })
+          );
+        });
+
+        it(`should throw an error`, (): void => {
+          expect.assertions(1);
+
+          expect((): DateTime => issueProcessor.getCreatedAt()).toThrow(new Error(`unparsable`));
+        });
+      });
+
+      describe(`when the creation date of the issue is valid`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = new IssueProcessor(
+            createHydratedMock<IGithubApiIssue>({
+              createdAt: DateTime.now().toISO({
+                includeOffset: false,
+              }),
+            })
+          );
+        });
+
+        it(`should return the creation date as a date time class`, (): void => {
+          expect.assertions(2);
+
+          const result = issueProcessor.getCreatedAt();
 
           expect(result).toBeInstanceOf(DateTime);
           expect(result.equals(DateTime.now())).toBeTrue();
