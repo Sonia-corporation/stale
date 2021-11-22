@@ -9,5 +9,6 @@ export const TEST_DEFAULT_INPUTS: IInputs = {
   issueIgnoreAllAssignees: false,
   issueIgnoreAllLabels: false,
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
+  issueIgnoreBeforeCreationDate: ``,
   issueStaleLabel: `stale`,
 };

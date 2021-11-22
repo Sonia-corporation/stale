@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 describe(`iso8601ToDatetime()`, (): void => {
   let date: IIso8601Date;
 
-  describe.each([`dummy`, new Date().toLocaleString()])(
+  describe.each([``, `dummy`, new Date().toLocaleString()])(
     `when the given date cannot be parsed`,
     (invalidDate: string): void => {
       beforeEach((): void => {

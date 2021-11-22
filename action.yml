@@ -34,6 +34,10 @@ inputs:
     description: 'The number of days until a stale issue is considered as closed.'
     required: false
     default: '10'
+  issue-ignore-before-creation-date:
+    description: 'Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'
