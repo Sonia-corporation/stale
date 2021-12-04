@@ -1,6 +1,7 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
+import { GITHUB_ASSIGNEES_PER_ISSUE } from '@github/api/issues/constants/github-assignees-per-issue';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
 import { GITHUB_LABELS_PER_ISSUE } from '@github/api/issues/constants/github-labels-per-issue';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
@@ -14,6 +15,7 @@ import _ from 'lodash';
 export class GithubApiIssuesService {
   public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
   public static readonly labelsPerIssue = GITHUB_LABELS_PER_ISSUE;
+  public static readonly assigneesPerIssue = GITHUB_ASSIGNEES_PER_ISSUE;
 
   public static fetchIssues(fromPageId?: Readonly<string>): Promise<IGithubApiGetIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
@@ -21,6 +23,7 @@ export class GithubApiIssuesService {
     return OctokitService.getOctokit()
       .graphql<IGithubApiGetIssues>(GITHUB_API_ISSUES_QUERY, {
         afterCursor: fromPageId,
+        assigneesPerIssue: GithubApiIssuesService.assigneesPerIssue,
         issuesPerPage: GithubApiIssuesService.issuesPerPage,
         labelsPerIssue: GithubApiIssuesService.labelsPerIssue,
         owner: context.repo.owner,

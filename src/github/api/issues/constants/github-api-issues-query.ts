@@ -1,5 +1,5 @@
 export const GITHUB_API_ISSUES_QUERY = `
-  query GetIssues($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $afterCursor: String) {
+  query GetIssues($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $assigneesPerIssue: Int!, $afterCursor: String) {
     repository(name: $repository, owner: $owner) {
       issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
         pageInfo {
@@ -18,6 +18,12 @@ export const GITHUB_API_ISSUES_QUERY = `
             nodes {
               id
               name
+            }
+          }
+          assignees(first: $assigneesPerIssue) {
+            totalCount
+            nodes {
+              login
             }
           }
         }

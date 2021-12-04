@@ -2,6 +2,7 @@ import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueIgnoreProcessor } from '@core/issues/issue-ignore-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
+import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -36,6 +37,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`shouldIgnore()`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
+      let hasAnyIgnoredAsigneesSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
@@ -45,6 +47,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
         isLockedSpy = jest.spyOn(issueIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
+        hasAnyIgnoredAsigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredAssignees$$`).mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
         hasIgnoredCreationDateSpy = jest.spyOn(issueIgnoreProcessor, `hasIgnoredCreationDate$$`).mockImplementation();
@@ -162,7 +165,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 hasAllIgnoredAssigneesSpy.mockReturnValue(false);
               });
 
-              it(`should check if the issue should ignore based on the creation date`, (): void => {
+              it(`should check if the issue has one of the ignored assignees`, (): void => {
                 expect.assertions(2);
 
                 issueIgnoreProcessor.shouldIgnore();
@@ -171,9 +174,52 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
               });
 
-              describe(`when the issue should ignore based on the creation date`, (): void => {
+              describe(`when the issue does not have one of the ignored assignees`, (): void => {
                 beforeEach((): void => {
-                  hasIgnoredCreationDateSpy.mockReturnValue(true);
+                  hasAnyIgnoredAsigneesSpy.mockReturnValue(false);
+                });
+
+                it(`should check if the issue should ignore based on the creation date`, (): void => {
+                  expect.assertions(2);
+
+                  issueIgnoreProcessor.shouldIgnore();
+
+                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                });
+
+                describe(`when the issue should ignore based on the creation date`, (): void => {
+                  beforeEach((): void => {
+                    hasIgnoredCreationDateSpy.mockReturnValue(true);
+                  });
+
+                  it(`should return true`, (): void => {
+                    expect.assertions(1);
+
+                    const result = issueIgnoreProcessor.shouldIgnore();
+
+                    expect(result).toBeTrue();
+                  });
+                });
+
+                describe(`when the issue should not ignore based on the creation date`, (): void => {
+                  beforeEach((): void => {
+                    hasIgnoredCreationDateSpy.mockReturnValue(false);
+                  });
+
+                  it(`should return false`, (): void => {
+                    expect.assertions(1);
+
+                    const result = issueIgnoreProcessor.shouldIgnore();
+
+                    expect(result).toBeFalse();
+                  });
+                });
+              });
+
+              describe(`when the issue has one of the ignored assignees`, (): void => {
+                beforeEach((): void => {
+                  hasAnyIgnoredAsigneesSpy.mockReturnValue(true);
                 });
 
                 it(`should return true`, (): void => {
@@ -182,20 +228,6 @@ describe(`IssueIgnoreProcessor`, (): void => {
                   const result = issueIgnoreProcessor.shouldIgnore();
 
                   expect(result).toBeTrue();
-                });
-              });
-
-              describe(`when the issue should not ignore based on the creation date`, (): void => {
-                beforeEach((): void => {
-                  hasIgnoredCreationDateSpy.mockReturnValue(false);
-                });
-
-                it(`should return false`, (): void => {
-                  expect.assertions(1);
-
-                  const result = issueIgnoreProcessor.shouldIgnore();
-
-                  expect(result).toBeFalse();
                 });
               });
             });
@@ -1018,6 +1050,192 @@ describe(`IssueIgnoreProcessor`, (): void => {
           expect.assertions(1);
 
           const result = issueIgnoreProcessor.hasAnyIgnoredLabels$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAnyIgnoredAssignees$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerWarningSpy: jest.SpyInstance;
+      let inputsServiceGetInputs: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest
+          .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+          .mockImplementation();
+        issueProcessorLoggerWarningSpy = jest
+          .spyOn(issueIgnoreProcessor.issueProcessor.logger, `warning`)
+          .mockImplementation();
+        inputsServiceGetInputs = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            issueIgnoreAnyAssignees: [`ignored-assignee`],
+          })
+        );
+      });
+
+      it(`should log about checking if the issue has one of the ignored assignees`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue has one of the ignored assignees...`
+        );
+        expect(inputsServiceGetInputs).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputs).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue has one of the ignored assignees`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            githubIssue: {
+              assignees: {
+                nodes: [
+                  createHydratedMock<IGithubApiAssignee>({
+                    login: `ignored-assignee`,
+                  }),
+                ],
+              },
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest
+            .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about the ignored assignee`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Containing one of the ignored assignees`,
+            `white-->`,
+            `value-ignored-assignee`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue does not have one of the ignored assignees`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            githubIssue: {
+              assignees: {
+                nodes: [
+                  createHydratedMock<IGithubApiAssignee>({
+                    login: `not-ignored-assignee`,
+                  }),
+                ],
+              },
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest
+            .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about not containing an ignored assignee`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored assignee. Continuing...`
+          );
+        });
+
+        describe(`when the issue has more than 20 assignees`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `not-ignored-assignee`,
+                    }),
+                  ],
+                  totalCount: 21,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerWarningSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `warning`)
+              .mockImplementation();
+          });
+
+          it(`should log a warning about finding too much assignees on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+              `Found`,
+              `value-21`,
+              `whiteBright-assignees attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+        });
+
+        describe.each([19, 20])(`when the issue has less or just 20 assignees`, (totalCount: number): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              githubIssue: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `not-ignored-assignee`,
+                    }),
+                  ],
+                  totalCount,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerWarningSpy = jest
+              .spyOn(issueIgnoreProcessor.issueProcessor.logger, `warning`)
+              .mockImplementation();
+          });
+
+          it(`should not log a warning about finding too much assignees on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
 
           expect(result).toBeFalse();
         });

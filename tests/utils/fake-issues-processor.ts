@@ -39,6 +39,14 @@ export class FakeIssuesProcessor {
    */
   private static _getMockedIssue(issue?: Readonly<Partial<IGithubApiIssue>>): IGithubApiIssue {
     return createHydratedMock<IGithubApiIssue>({
+      assignees: {
+        nodes: [
+          {
+            login: faker.name.firstName(),
+          },
+        ],
+        totalCount: 1,
+      },
       createdAt: faker.date.past().toISOString(),
       id: faker.datatype.uuid(),
       labels: {

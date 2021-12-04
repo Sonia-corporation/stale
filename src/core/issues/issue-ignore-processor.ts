@@ -2,6 +2,7 @@ import { EInputs } from '@core/inputs/inputs.enum';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
@@ -30,6 +31,7 @@ export class IssueIgnoreProcessor {
       this.hasAllIgnoredLabels$$() ||
       this.hasAnyIgnoredLabels$$() ||
       this.hasAllIgnoredAssignees$$() ||
+      this.hasAnyIgnoredAssignees$$() ||
       this.hasIgnoredCreationDate$$()
     );
   }
@@ -190,7 +192,9 @@ export class IssueIgnoreProcessor {
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
-          `labels attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+          `label${
+            totalCount > 1 ? `s` : ``
+          } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
     }
@@ -200,7 +204,52 @@ export class IssueIgnoreProcessor {
     return false;
   }
 
+  public hasAnyIgnoredAssignees$$(): boolean {
+    this.issueProcessor.logger.info(`Checking if this issue has one of the ignored assignees...`);
+
+    const duplicatedAssignees: string[] = getDuplicates(
+      this._getAssignees(this.issueProcessor.githubIssue.assignees.nodes),
+      InputsService.getInputs().issueIgnoreAnyAssignees
+    );
+    const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssignees);
+
+    if (!_.isUndefined(firstDuplicatedAssignee)) {
+      this.issueProcessor.logger.info(
+        `Containing one of the ignored assignees`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedAssignee)
+      );
+
+      return true;
+    }
+
+    this.issueProcessor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+
+    // @todo handle the pagination
+    const { totalCount } = this.issueProcessor.githubIssue.assignees;
+
+    if (totalCount > GithubApiIssuesService.assigneesPerIssue) {
+      this.issueProcessor.logger.warning(
+        `Found`,
+        LoggerService.value(_.toString(totalCount)),
+        LoggerFormatService.whiteBright(
+          `assignee${
+            totalCount > 1 ? `s` : ``
+          } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+        )
+      );
+    }
+
+    this.issueProcessor.logger.info(`Not containing an ignored assignee. Continuing...`);
+
+    return false;
+  }
+
   private _getLabels(labels: ReadonlyArray<IGithubApiLabel>): string[] {
     return _.map(labels, (label: Readonly<IGithubApiLabel>): string => label.name);
+  }
+
+  private _getAssignees(assignees: ReadonlyArray<IGithubApiAssignee>): string[] {
+    return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
   }
 }

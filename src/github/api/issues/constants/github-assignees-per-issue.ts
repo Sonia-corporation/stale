@@ -1,0 +1,1 @@
+export const GITHUB_ASSIGNEES_PER_ISSUE = 20;
