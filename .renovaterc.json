@@ -49,13 +49,13 @@
     "branchPrefix": "dependencies/major/",
     "automerge": false,
     "enabled": true,
-    "extends": ["schedule:weekly"]
+    "extends": ["schedule:daily"]
   },
   "minor": {
     "branchPrefix": "dependencies/minor/",
     "automerge": false,
     "enabled": true,
-    "extends": ["schedule:weekly"]
+    "extends": ["schedule:daily"]
   },
   "patch": {
     "branchPrefix": "dependencies/patch/",
@@ -73,7 +73,7 @@
     "branchPrefix": "dependencies/lock-file/",
     "automerge": false,
     "enabled": true,
-    "extends": ["schedule:weekly"]
+    "extends": ["schedule:daily"]
   },
   "vulnerabilityAlerts": {
     "enabled": true
