@@ -1,5 +1,6 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { StaleService } from '@core/stale.service';
+import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
@@ -70,6 +71,9 @@ export class FakeIssuesProcessor {
   private _githubApiIssues: IGithubApiIssue[] = [];
   private _githubApiIssuesFetchCount = 0;
   private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
+    [GITHUB_API_ADD_COMMENT_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
     [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },

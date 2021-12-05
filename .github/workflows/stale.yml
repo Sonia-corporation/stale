@@ -20,3 +20,5 @@ jobs:
             help wanted
             dependency-fix
             dependencies
+          issue-ignore-any-assignees: |
+            C0ZEN

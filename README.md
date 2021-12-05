@@ -75,18 +75,20 @@ All the inputs that are used both for issues and Pull Requests.
 | issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
 | issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                        | `30`    |
 | issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
+| issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
 
 ## All the issues outputs
 
-| Output                     | Description                                                                 |
-| -------------------------- | --------------------------------------------------------------------------- |
-| processed-issues-count     | The number of issues processed.                                             |
-| ignored-issues-count       | The number of issues ignored.                                               |
-| unaltered-issues-count     | The number of issues unaltered (either not good to stale or already stale). |
-| stale-issues-count         | The number of issues stale.                                                 |
-| already-stale-issues-count | The number of issues processed which were already stale.                    |
-| remove-stale-issues-count  | The number of issues from where the stale state was removed.                |
-| close-issues-count         | The number of issues closed.                                                |
+| Output                      | Description                                                                 |
+| --------------------------- | --------------------------------------------------------------------------- |
+| processed-issues-count      | The number of issues processed.                                             |
+| ignored-issues-count        | The number of issues ignored.                                               |
+| unaltered-issues-count      | The number of issues unaltered (either not good to stale or already stale). |
+| stale-issues-count          | The number of issues stale.                                                 |
+| already-stale-issues-count  | The number of issues processed which were already stale.                    |
+| remove-stale-issues-count   | The number of issues from where the stale state was removed.                |
+| close-issues-count          | The number of issues closed.                                                |
+| added-issues-comments-count | The number of added issues comments.                                        |
 
 ## Examples
 
@@ -126,6 +128,8 @@ jobs:
           issue-days-before-stale: 30
           issue-days-before-close: 10
           issue-ignore-before-creation-date: 2020-04
+          issue-stale-comment: |
+            This issue is now stale!
 ```
 
 ## Debug the action

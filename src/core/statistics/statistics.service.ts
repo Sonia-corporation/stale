@@ -13,7 +13,8 @@ type IStat =
   | 'Remove stale issues'
   | 'Already stale issues'
   | 'Unaltered issues'
-  | 'Close issues';
+  | 'Closed issues'
+  | 'Added issues comments';
 
 export class StatisticsService {
   public static processedIssuesCount$$: number = 0;
@@ -22,7 +23,8 @@ export class StatisticsService {
   public static staleIssuesCount$$: number = 0;
   public static alreadyStaleIssuesCount$$: number = 0;
   public static removeStaleIssuesCount$$: number = 0;
-  public static closeIssuesCount$$: number = 0;
+  public static closedIssuesCount$$: number = 0;
+  public static addedIssuesCommentsCount$$: number = 0;
 
   /**
    * @description
@@ -36,7 +38,8 @@ export class StatisticsService {
     StatisticsService.staleIssuesCount$$ = 0;
     StatisticsService.alreadyStaleIssuesCount$$ = 0;
     StatisticsService.removeStaleIssuesCount$$ = 0;
-    StatisticsService.closeIssuesCount$$ = 0;
+    StatisticsService.closedIssuesCount$$ = 0;
+    StatisticsService.addedIssuesCommentsCount$$ = 0;
 
     return StatisticsService;
   }
@@ -77,8 +80,14 @@ export class StatisticsService {
     return StatisticsService;
   }
 
-  public static increaseCloseIssuesCount(): StatisticsService {
-    this.closeIssuesCount$$++;
+  public static increaseClosedIssuesCount(): StatisticsService {
+    this.closedIssuesCount$$++;
+
+    return StatisticsService;
+  }
+
+  public static increaseAddedIssuesCommentsCount(): StatisticsService {
+    this.addedIssuesCommentsCount$$++;
 
     return StatisticsService;
   }
@@ -127,7 +136,8 @@ export class StatisticsService {
       .set(`Stale issues`, StatisticsService.staleIssuesCount$$)
       .set(`Already stale issues`, StatisticsService.alreadyStaleIssuesCount$$)
       .set(`Remove stale issues`, StatisticsService.removeStaleIssuesCount$$)
-      .set(`Close issues`, StatisticsService.closeIssuesCount$$);
+      .set(`Closed issues`, StatisticsService.closedIssuesCount$$)
+      .set(`Added issues comments`, StatisticsService.addedIssuesCommentsCount$$);
   }
 
   private static _getAllFilteredStatisticsMap(): Map<IStat, number> {

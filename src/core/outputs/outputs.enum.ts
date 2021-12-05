@@ -6,4 +6,5 @@ export enum EOutputs {
   PROCESSED_ISSUES_COUNT = `processed-issues-count`,
   REMOVE_STALE_ISSUES_COUNT = `remove-stale-issues-count`,
   CLOSE_ISSUES_COUNT = `close-issues-count`,
+  ADDED_ISSUES_COMMENTS_COUNT = `added-issues-comments-count`,
 }

@@ -159,7 +159,7 @@ export class IssueProcessor {
       const issueCloseStaleProcessor: IssueCloseStaleProcessor = new IssueCloseStaleProcessor(this);
 
       await issueCloseStaleProcessor.close();
-      StatisticsService.increaseCloseIssuesCount();
+      StatisticsService.increaseClosedIssuesCount();
     } else {
       StatisticsService.increaseUnalteredIssuesCount();
     }

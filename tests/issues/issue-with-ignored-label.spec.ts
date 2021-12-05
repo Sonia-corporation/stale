@@ -24,7 +24,7 @@ describe(`Issue with ignored label`, (): void => {
     });
 
     it(`should ignore the issue`, async (): Promise<void> => {
-      expect.assertions(7);
+      expect.assertions(8);
 
       await issueSut.process();
 
@@ -34,7 +34,8 @@ describe(`Issue with ignored label`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(StatisticsService.closeIssuesCount$$).toBe(0);
+      expect(StatisticsService.closedIssuesCount$$).toBe(0);
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
     });
   });
 });
