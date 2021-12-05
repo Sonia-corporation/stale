@@ -27,18 +27,19 @@ describe(`OutputsService`, (): void => {
     });
 
     it(`should set the statistics outputs`, (): void => {
-      expect.assertions(8);
+      expect.assertions(9);
       StatisticsService.processedIssuesCount$$ = 1;
       StatisticsService.ignoredIssuesCount$$ = 1;
       StatisticsService.unalteredIssuesCount$$ = 1;
       StatisticsService.staleIssuesCount$$ = 1;
       StatisticsService.alreadyStaleIssuesCount$$ = 1;
       StatisticsService.removeStaleIssuesCount$$ = 1;
-      StatisticsService.closeIssuesCount$$ = 1;
+      StatisticsService.closedIssuesCount$$ = 1;
+      StatisticsService.addedIssuesCommentsCount$$ = 1;
 
       OutputsService.setOutputs();
 
-      expect(coreSetOutputSpy).toHaveBeenCalledTimes(7);
+      expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EOutputs.IGNORED_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EOutputs.UNALTERED_ISSUES_COUNT, 1);
@@ -46,6 +47,7 @@ describe(`OutputsService`, (): void => {
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(5, EOutputs.PROCESSED_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EOutputs.REMOVE_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EOutputs.CLOSE_ISSUES_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
     });
 
     it(`should log about the end of the output setup`, (): void => {

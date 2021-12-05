@@ -9,4 +9,5 @@ export enum EInputs {
   ISSUE_IGNORE_ANY_LABELS = `issue-ignore-any-labels`,
   ISSUE_IGNORE_BEFORE_CREATION_DATE = `issue-ignore-before-creation-date`,
   ISSUE_STALE_LABEL = `issue-stale-label`,
+  ISSUE_STALE_COMMENT = `issue-stale-comment`,
 }

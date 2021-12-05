@@ -1,5 +1,6 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
+import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
@@ -35,6 +36,14 @@ describe(`IssueStaleProcessor`, (): void => {
       const result = new IssueStaleProcessor(issueProcessor);
 
       expect(result.githubApiLabelsService$$).toBeInstanceOf(GithubApiLabelsService);
+    });
+
+    it(`should create the IssueCommentsProcessor`, (): void => {
+      expect.assertions(1);
+
+      const result = new IssueStaleProcessor(issueProcessor);
+
+      expect(result.issueCommentsProcessor$$).toBeInstanceOf(IssueCommentsProcessor);
     });
   });
 
@@ -109,6 +118,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let issueCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -145,6 +155,9 @@ describe(`IssueStaleProcessor`, (): void => {
         issueProcessorLoggerErrorSpy = jest
           .spyOn(issueStaleProcessor.issueProcessor.logger, `error`)
           .mockImplementation();
+        issueCommentsProcessorProcessStaleCommentSpy = jest
+          .spyOn(issueStaleProcessor.issueCommentsProcessor$$, `processStaleComment`)
+          .mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -154,7 +167,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
         expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(1);
         expect(githubApiLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(issueStaleLabel);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(2);
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Adding the stale state to this issue...`);
@@ -174,7 +187,7 @@ describe(`IssueStaleProcessor`, (): void => {
         });
 
         it(`should log and throw an error`, async (): Promise<void> => {
-          expect.assertions(3);
+          expect.assertions(4);
 
           await expect(issueStaleProcessor.stale()).rejects.toThrow(
             `Could not find the stale label ${issueStaleLabel}`
@@ -185,6 +198,7 @@ describe(`IssueStaleProcessor`, (): void => {
             `Could not find the stale label`,
             `value-${issueStaleLabel}`
           );
+          expect(issueCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -219,6 +233,15 @@ describe(`IssueStaleProcessor`, (): void => {
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
           });
+
+          it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueStaleProcessor.stale();
+
+            expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
+            expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
+          });
         });
 
         describe(`when the action is in dry-run mode`, (): void => {
@@ -244,6 +267,15 @@ describe(`IssueStaleProcessor`, (): void => {
             );
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          });
+
+          it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueStaleProcessor.stale();
+
+            expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
+            expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
           });
         });
       });

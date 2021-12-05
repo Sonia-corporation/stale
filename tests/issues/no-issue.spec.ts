@@ -10,7 +10,7 @@ describe(`No issue`, (): void => {
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(7);
+      expect.assertions(8);
 
       await issueSut.process();
 
@@ -20,7 +20,8 @@ describe(`No issue`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(StatisticsService.closeIssuesCount$$).toBe(0);
+      expect(StatisticsService.closedIssuesCount$$).toBe(0);
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
     });
   });
 });

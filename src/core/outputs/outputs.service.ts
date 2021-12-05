@@ -13,7 +13,8 @@ export class OutputsService {
     core.setOutput(EOutputs.STALE_ISSUES_COUNT, StatisticsService.staleIssuesCount$$);
     core.setOutput(EOutputs.PROCESSED_ISSUES_COUNT, StatisticsService.processedIssuesCount$$);
     core.setOutput(EOutputs.REMOVE_STALE_ISSUES_COUNT, StatisticsService.removeStaleIssuesCount$$);
-    core.setOutput(EOutputs.CLOSE_ISSUES_COUNT, StatisticsService.closeIssuesCount$$);
+    core.setOutput(EOutputs.CLOSE_ISSUES_COUNT, StatisticsService.closedIssuesCount$$);
+    core.setOutput(EOutputs.ADDED_ISSUES_COMMENTS_COUNT, StatisticsService.addedIssuesCommentsCount$$);
 
     LoggerService.info(`Outputs created`);
 

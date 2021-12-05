@@ -57,7 +57,7 @@ describe(`Issue to close`, (): void => {
     });
 
     it(`should close the issue`, async (): Promise<void> => {
-      expect.assertions(7);
+      expect.assertions(8);
 
       await issueSut.process();
 
@@ -67,7 +67,8 @@ describe(`Issue to close`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(1);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(StatisticsService.closeIssuesCount$$).toBe(1);
+      expect(StatisticsService.closedIssuesCount$$).toBe(1);
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
     });
   });
 });
