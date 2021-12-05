@@ -407,9 +407,7 @@ overrides:
       - 'plugin:jest/style'
       - 'plugin:jest/all'
     rules:
-      jest/max-nested-describe:
-        - error
-        - max: 8
+      jest/max-nested-describe: off
       '@typescript-eslint/prefer-readonly-parameter-types': off
       jest/prefer-expect-resolves: error
       jest/prefer-to-be: error

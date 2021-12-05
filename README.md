@@ -71,6 +71,7 @@ All the inputs that are used both for issues and Pull Requests.
 | issue-ignore-all-labels           | Allow to ignore the processing of issues that contains any labels.                                                                                | `false` |
 | issue-ignore-any-labels           | Allow to ignore the processing of issues that contains one of those labels (multiline).                                                           |         |
 | issue-ignore-all-assignees        | Allow to ignore the processing of issues that contains any assignees.                                                                             | `false` |
+| issue-ignore-any-assignees        | Allow to ignore the processing of issues that contains one of those assignees (multiline).                                                        |         |
 | issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
 | issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                        | `30`    |
 | issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
@@ -112,6 +113,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dry-run: false
           issue-ignore-all-assignees: false
+          issue-ignore-any-assignees: |
+            marco
+            polo
           issue-ignore-all-labels: false
           issue-stale-label: stale
           issue-ignore-any-labels: |

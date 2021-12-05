@@ -7,6 +7,7 @@ export interface IInputs {
   readonly issueDaysBeforeStale: number;
   readonly issueIgnoreAllAssignees: boolean;
   readonly issueIgnoreAllLabels: boolean;
+  readonly issueIgnoreAnyAssignees: string[];
   readonly issueIgnoreAnyLabels: string[];
   readonly issueIgnoreBeforeCreationDate: IIso8601Date | '';
   readonly issueStaleLabel: string;
