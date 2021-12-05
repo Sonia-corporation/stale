@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.19.0](https://github.com/Sonia-corporation/stale/compare/1.18.0...1.19.0) (2021-12-05)
+
+
+### :rocket: Features
+
+* **issue:** add new option to ignore some assignees ([6876cfd](https://github.com/Sonia-corporation/stale/commit/6876cfd121e9a8eb7d1972977b43f969c097362c))
+
 # [1.18.0](https://github.com/Sonia-corporation/stale/compare/1.17.0...1.18.0) (2021-11-22)
 
 
