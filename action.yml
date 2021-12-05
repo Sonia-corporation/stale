@@ -42,6 +42,10 @@ inputs:
     description: 'Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
     default: ''
+  issue-stale-comment:
+    description: 'The comment that will be sent once the issue is stale (keep empty to not send a comment).'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

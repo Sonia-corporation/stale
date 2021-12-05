@@ -1,4 +1,6 @@
+import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
+import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -14,10 +16,12 @@ import { DateTime } from 'luxon';
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
   public readonly githubApiLabelsService$$: GithubApiLabelsService;
+  public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
     this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
+    this.issueCommentsProcessor$$ = new IssueCommentsProcessor(this.issueProcessor);
   }
 
   public shouldStale(): boolean {
@@ -29,32 +33,34 @@ export class IssueStaleProcessor {
   public async stale(): Promise<void> {
     this.issueProcessor.logger.info(`Adding the stale state to this issue...`);
 
-    const { issueStaleLabel } = InputsService.getInputs();
+    const inputs: IInputs = InputsService.getInputs();
 
     this.issueProcessor.logger.info(
       `Fetching the stale label`,
-      LoggerService.value(issueStaleLabel),
+      LoggerService.value(inputs.issueStaleLabel),
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(issueStaleLabel);
+    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(inputs.issueStaleLabel);
 
     if (!label) {
-      this.issueProcessor.logger.error(`Could not find the stale label`, LoggerService.value(issueStaleLabel));
+      this.issueProcessor.logger.error(`Could not find the stale label`, LoggerService.value(inputs.issueStaleLabel));
 
-      throw new Error(`Could not find the stale label ${issueStaleLabel}`);
+      throw new Error(`Could not find the stale label ${inputs.issueStaleLabel}`);
     }
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
-    if (!InputsService.getInputs().dryRun) {
+    if (!inputs.dryRun) {
       await this.githubApiLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was added`);
     } else {
       this.issueProcessor.logger.info(`The stale label was not added due to the dry-run mode`);
     }
+
+    await this.issueCommentsProcessor$$.processStaleComment();
 
     this.issueProcessor.logger.notice(`The issue is now stale`);
   }

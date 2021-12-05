@@ -141,6 +141,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Add a label to stale (coming from the `issue-stale-label` input, ignored in `dry-run` mode)
+  - Check if the action should also add a comment (coming from the `issue-stale-comment` input)
+    - When the input value is not empty, add a comment
 - When the batch was processed, go to the next one and proceed again
 
 ### Error handling

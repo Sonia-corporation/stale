@@ -11,5 +11,6 @@ export const TEST_DEFAULT_INPUTS: IInputs = {
   issueIgnoreAnyAssignees: [`issue-ignore-any-assignee-1`, `issue-ignore-any-assignee-2`],
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
   issueIgnoreBeforeCreationDate: ``,
+  issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,
 };

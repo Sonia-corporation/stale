@@ -7,14 +7,15 @@ jest.mock(`@utils/loggers/logger-format.service`);
 describe(`StatisticsService`, (): void => {
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(7);
+      expect.assertions(8);
       StatisticsService.processedIssuesCount$$ = 1;
       StatisticsService.ignoredIssuesCount$$ = 1;
       StatisticsService.unalteredIssuesCount$$ = 1;
       StatisticsService.staleIssuesCount$$ = 1;
       StatisticsService.alreadyStaleIssuesCount$$ = 1;
       StatisticsService.removeStaleIssuesCount$$ = 1;
-      StatisticsService.closeIssuesCount$$ = 1;
+      StatisticsService.closedIssuesCount$$ = 1;
+      StatisticsService.addedIssuesCommentsCount$$ = 1;
 
       StatisticsService.initialize();
 
@@ -24,7 +25,8 @@ describe(`StatisticsService`, (): void => {
       expect(StatisticsService.staleIssuesCount$$).toBe(0);
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(StatisticsService.closeIssuesCount$$).toBe(0);
+      expect(StatisticsService.closedIssuesCount$$).toBe(0);
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -150,20 +152,39 @@ describe(`StatisticsService`, (): void => {
     });
   });
 
-  describe(`increaseCloseIssuesCount()`, (): void => {
+  describe(`increaseClosedIssuesCount()`, (): void => {
     it(`should increase the close issues count`, (): void => {
       expect.assertions(1);
-      StatisticsService.closeIssuesCount$$ = 0;
+      StatisticsService.closedIssuesCount$$ = 0;
 
-      StatisticsService.increaseCloseIssuesCount();
+      StatisticsService.increaseClosedIssuesCount();
 
-      expect(StatisticsService.closeIssuesCount$$).toBe(1);
+      expect(StatisticsService.closedIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = StatisticsService.increaseCloseIssuesCount();
+      const result = StatisticsService.increaseClosedIssuesCount();
+
+      expect(result).toStrictEqual(StatisticsService);
+    });
+  });
+
+  describe(`increaseAddedIssuesCommentsCount()`, (): void => {
+    it(`should increase the added issues comments count`, (): void => {
+      expect.assertions(1);
+      StatisticsService.closedIssuesCount$$ = 0;
+
+      StatisticsService.increaseAddedIssuesCommentsCount();
+
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = StatisticsService.increaseAddedIssuesCommentsCount();
 
       expect(result).toStrictEqual(StatisticsService);
     });
@@ -197,7 +218,8 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
-        StatisticsService.closeIssuesCount$$ = 0;
+        StatisticsService.closedIssuesCount$$ = 0;
+        StatisticsService.addedIssuesCommentsCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -217,7 +239,8 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 0;
         StatisticsService.removeStaleIssuesCount$$ = 0;
         StatisticsService.alreadyStaleIssuesCount$$ = 0;
-        StatisticsService.closeIssuesCount$$ = 0;
+        StatisticsService.closedIssuesCount$$ = 0;
+        StatisticsService.addedIssuesCommentsCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -238,50 +261,57 @@ describe(`StatisticsService`, (): void => {
         StatisticsService.staleIssuesCount$$ = 3;
         StatisticsService.alreadyStaleIssuesCount$$ = 4;
         StatisticsService.removeStaleIssuesCount$$ = 5;
-        StatisticsService.closeIssuesCount$$ = 6;
+        StatisticsService.closedIssuesCount$$ = 6;
+        StatisticsService.addedIssuesCommentsCount$$ = 7;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(7);
+        expect.assertions(8);
 
         StatisticsService.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(6);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(7);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
-          `whiteBright-Processed issues    `,
+          `whiteBright-Processed issues     `,
           `value-1`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
-          `whiteBright-Ignored issues      `,
+          `whiteBright-Ignored issues       `,
           `value-2`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
-          `whiteBright-Stale issues        `,
+          `whiteBright-Stale issues         `,
           `value-3`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           4,
           `white-├──`,
-          `whiteBright-Already stale issues`,
+          `whiteBright-Already stale issues `,
           `value-4`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
           `white-├──`,
-          `whiteBright-Remove stale issues `,
+          `whiteBright-Remove stale issues  `,
           `value-5`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           6,
-          `white-└──`,
-          `whiteBright-Close issues        `,
+          `white-├──`,
+          `whiteBright-Closed issues        `,
           `value-6`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          7,
+          `white-└──`,
+          `whiteBright-Added issues comments`,
+          `value-7`
         );
       });
     });
