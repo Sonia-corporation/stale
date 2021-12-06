@@ -10,4 +10,5 @@ export enum EInputs {
   ISSUE_IGNORE_BEFORE_CREATION_DATE = `issue-ignore-before-creation-date`,
   ISSUE_STALE_LABEL = `issue-stale-label`,
   ISSUE_STALE_COMMENT = `issue-stale-comment`,
+  ISSUE_CLOSE_COMMENT = `issue-close-comment`,
 }

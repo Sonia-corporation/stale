@@ -39,4 +39,30 @@ export class IssueCommentsProcessor {
     StatisticsService.increaseAddedIssuesCommentsCount();
     this.issueProcessor.logger.notice(`Stale comment added`);
   }
+
+  public async processCloseComment(): Promise<void> {
+    this.issueProcessor.logger.info(`Checking if a close comment should be added...`);
+
+    const inputs: IInputs = InputsService.getInputs();
+
+    if (inputs.issueCloseComment === ``) {
+      this.issueProcessor.logger.info(`The close comment is unset. Continuing...`);
+
+      return;
+    }
+
+    this.issueProcessor.logger.info(`The close comment is set to`, LoggerService.value(inputs.issueCloseComment));
+
+    if (!inputs.dryRun) {
+      this.issueProcessor.logger.info(`Adding the close comment...`);
+
+      await this.githubApiCommentsService$$.addCommentToIssue(
+        this.issueProcessor.githubIssue.id,
+        inputs.issueCloseComment
+      );
+    }
+
+    StatisticsService.increaseAddedIssuesCommentsCount();
+    this.issueProcessor.logger.notice(`Close comment added`);
+  }
 }

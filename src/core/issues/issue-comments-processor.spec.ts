@@ -216,5 +216,179 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
       });
     });
+
+    describe(`processCloseComment()`, (): void => {
+      let issueId: IUuid;
+
+      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
+      let statisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
+      let githubApiCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueId = faker.datatype.uuid();
+        issueProcessor = createHydratedMock<IssueProcessor>({
+          githubIssue: {
+            id: issueId,
+          },
+        });
+        issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
+
+        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IInputs>({
+            dryRun: false,
+            issueCloseComment: ``,
+          })
+        );
+        issueProcessorLoggerInfoSpy = jest
+          .spyOn(issueCommentsProcessor.issueProcessor.logger, `info`)
+          .mockImplementation();
+        issueProcessorLoggerNoticeSpy = jest
+          .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
+          .mockImplementation();
+        statisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
+          .spyOn(StatisticsService, `increaseAddedIssuesCommentsCount`)
+          .mockImplementation();
+        githubApiCommentsServiceAddCommentToIssueSpy = jest
+          .spyOn(issueCommentsProcessor.githubApiCommentsService$$, `addCommentToIssue`)
+          .mockImplementation();
+      });
+
+      it(`should check if the issue close comment input is configured`, async (): Promise<void> => {
+        expect.assertions(4);
+
+        await issueCommentsProcessor.processCloseComment();
+
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if a close comment should be added...`
+        );
+      });
+
+      describe(`when the issue close comment is not configured`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IInputs>({
+              dryRun: false,
+              issueCloseComment: ``,
+            })
+          );
+        });
+
+        it(`should continue the process`, async (): Promise<void> => {
+          expect.assertions(4);
+
+          await issueCommentsProcessor.processCloseComment();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The close comment is unset. Continuing...`);
+          expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
+          expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe(`when the issue close comment is configured`, (): void => {
+        beforeEach((): void => {
+          inputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IInputs>({
+              dryRun: false,
+              issueCloseComment: `dummy-comment`,
+            })
+          );
+        });
+
+        describe(`when the action is in dry-run mode`, (): void => {
+          beforeEach((): void => {
+            inputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IInputs>({
+                dryRun: true,
+                issueCloseComment: `dummy-comment`,
+              })
+            );
+          });
+
+          it(`should not add the close comment on the issue`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `The close comment is set to`,
+              `value-dummy-comment`
+            );
+            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+          });
+
+          it(`should continue the process`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
+          });
+        });
+
+        describe(`when the action is not in dry-run mode`, (): void => {
+          beforeEach((): void => {
+            inputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IInputs>({
+                dryRun: false,
+                issueCloseComment: `dummy-comment`,
+              })
+            );
+          });
+
+          it(`should add the close comment on the issue`, async (): Promise<void> => {
+            expect.assertions(5);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              2,
+              `The close comment is set to`,
+              `value-dummy-comment`
+            );
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the close comment...`);
+          });
+
+          it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+          });
+
+          it(`should continue the process`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueCommentsProcessor.processCloseComment();
+
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
+          });
+        });
+      });
+    });
   });
 });
