@@ -4,6 +4,7 @@ import faker from 'faker';
 export const TEST_DEFAULT_INPUTS: IInputs = {
   dryRun: false,
   githubToken: faker.datatype.uuid(),
+  issueCloseComment: `close-comment`,
   issueDaysBeforeClose: 10,
   issueDaysBeforeStale: 30,
   issueIgnoreAllAssignees: false,

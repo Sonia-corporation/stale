@@ -4,6 +4,7 @@ import { IComment } from '@utils/types/comment';
 export interface IInputs {
   readonly dryRun: boolean;
   readonly githubToken: string;
+  readonly issueCloseComment: IComment | '';
   readonly issueDaysBeforeClose: number;
   readonly issueDaysBeforeStale: number;
   readonly issueIgnoreAllAssignees: boolean;
