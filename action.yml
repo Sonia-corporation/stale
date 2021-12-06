@@ -46,6 +46,10 @@ inputs:
     description: 'The comment that will be sent once the issue is stale (keep empty to not send a comment).'
     required: false
     default: ''
+  issue-close-comment:
+    description: 'The comment that will be sent once the issue is close (keep empty to not send a comment).'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

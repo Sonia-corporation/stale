@@ -138,6 +138,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
     - If it was updated, remove the stale state (stale label) and stop the processing
     - Else, check if issue last update is older than X days (coming from `issue-days-before-close`)
       - If it is old, close the issue
+      - Check if the action should also add a comment (coming from the `issue-close-comment` input)
+        - When the input value is not empty, add a comment
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Add a label to stale (coming from the `issue-stale-label` input, ignored in `dry-run` mode)

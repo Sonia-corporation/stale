@@ -1,6 +1,7 @@
 import { IInputs } from '@core/inputs/inputs.interface';
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssueCloseStaleProcessor } from '@core/issues/issue-close-stale-processor';
+import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IUuid } from '@utils/types/uuid';
@@ -33,6 +34,14 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
       expect(result.githubApiIssuesService$$).toBeInstanceOf(GithubApiIssuesService);
     });
+
+    it(`should create the IssueCommentsProcessor`, (): void => {
+      expect.assertions(1);
+
+      const result = new IssueCloseStaleProcessor(issueProcessor);
+
+      expect(result.issueCommentsProcessor$$).toBeInstanceOf(IssueCommentsProcessor);
+    });
   });
 
   describe(`after creation`, (): void => {
@@ -49,6 +58,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let issueCommentsProcessorProcessCloseCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -73,6 +83,9 @@ describe(`IssueCloseStaleProcessor`, (): void => {
             dryRun: true,
           })
         );
+        issueCommentsProcessorProcessCloseCommentSpy = jest
+          .spyOn(issueCloseStaleProcessor.issueCommentsProcessor$$, `processCloseComment`)
+          .mockImplementation();
       });
 
       it(`should check if the dry-run mode is enabled`, async (): Promise<void> => {
@@ -82,8 +95,8 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(`Closing this issue...`);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Closing this issue...`);
       });
 
       describe(`when the dryn-run mode is disabled`, (): void => {
@@ -96,14 +109,25 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         });
 
         it(`should close the issue`, async (): Promise<void> => {
-          expect.assertions(4);
+          expect.assertions(6);
 
           await issueCloseStaleProcessor.close();
 
           expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledTimes(1);
           expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledWith(issueId);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The issue was closed`);
           expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Closed`);
+          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now closed`);
+        });
+
+        it(`should try to add a close comment`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueCloseStaleProcessor.close();
+
+          expect(issueCommentsProcessorProcessCloseCommentSpy).toHaveBeenCalledTimes(1);
+          expect(issueCommentsProcessorProcessCloseCommentSpy).toHaveBeenCalledWith();
         });
       });
 
@@ -117,13 +141,27 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         });
 
         it(`should not close the issue`, async (): Promise<void> => {
-          expect.assertions(3);
+          expect.assertions(5);
 
           await issueCloseStaleProcessor.close();
 
           expect(githubApiIssuesServiceCloseIssueSpy).not.toHaveBeenCalled();
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The issue was not closed due to the dry-run mode`
+          );
           expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Closed`);
+          expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now closed`);
+        });
+
+        it(`should try to add a close comment`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await issueCloseStaleProcessor.close();
+
+          expect(issueCommentsProcessorProcessCloseCommentSpy).toHaveBeenCalledTimes(1);
+          expect(issueCommentsProcessorProcessCloseCommentSpy).toHaveBeenCalledWith();
         });
       });
     });

@@ -15,6 +15,8 @@ jobs:
         id: stale
         uses: sonia-corporation/stale@develop
         with:
+          issue-days-before-stale: 30
+          issue-days-before-close: 10
           issue-ignore-any-labels: |
             frozen
             help wanted
@@ -22,3 +24,21 @@ jobs:
             dependencies
           issue-ignore-any-assignees: |
             C0ZEN
+          issue-stale-comment: |
+            [~frozen]: https://img.shields.io/badge/-frozen-D6FFFA.svg
+            [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
+            [~dependencies]: https://img.shields.io/badge/-odependencies-1e3799.svg
+            [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
+
+            :warning: **Warning!** :warning:
+            This issue was marked as stale due to a lack of activity for 30 days. :worried:
+            In 10 days, this issue will be closed if there is no more activity during this period. :grimacing:
+
+            If you want to avoid this stale state you could add one of these labels:
+            - [![label: frozen][~frozen]](https://github.com/Sonia-corporation/stale/labels/frozen)
+            - [![label: dependency-fix][~dependency-fix]](https://github.com/Sonia-corporation/stale/labels/dependency-fix)
+            - [![label: dependencies][~dependencies]](https://github.com/Sonia-corporation/stale/labels/dependencies)
+            - [![label: help wanted][~help-wanted]](https://github.com/Sonia-corporation/stale/labels/help%20wanted)
+          issue-close-comment: |
+            :warning: **Warning!** :warning:
+            This issue was closed due to a lack of activity for 10 days after it was stale. :worried:

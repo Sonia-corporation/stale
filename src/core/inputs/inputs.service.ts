@@ -26,6 +26,7 @@ export class InputsService {
     InputsService.inputs$$ = {
       dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
+      issueCloseComment: core.getInput(EInputs.ISSUE_CLOSE_COMMENT, { required: false }),
       issueDaysBeforeClose: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_CLOSE, { required: false }),
       issueDaysBeforeStale: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
       issueIgnoreAllAssignees: core.getBooleanInput(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES, { required: false }),

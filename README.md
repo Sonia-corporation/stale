@@ -74,8 +74,9 @@ All the inputs that are used both for issues and Pull Requests.
 | issue-ignore-any-assignees        | Allow to ignore the processing of issues that contains one of those assignees (multiline).                                                        |         |
 | issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
 | issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                        | `30`    |
-| issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
 | issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
+| issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
+| issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                         |         |
 
 ## All the issues outputs
 
@@ -130,6 +131,8 @@ jobs:
           issue-ignore-before-creation-date: 2020-04
           issue-stale-comment: |
             This issue is now stale!
+          issue-close-comment: |
+            This issue is now closed!
 ```
 
 ## Debug the action
