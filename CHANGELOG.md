@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.21.0](https://github.com/Sonia-corporation/stale/compare/1.20.0...1.21.0) (2021-12-06)
+
+
+### :rocket: Features
+
+* **issue:** add new input issue-close-comment to comment on close ([a026020](https://github.com/Sonia-corporation/stale/commit/a0260200e2149a1be591f2ee7b1e97a6e6089115))
+
 # [1.20.0](https://github.com/Sonia-corporation/stale/compare/1.19.0...1.20.0) (2021-12-05)
 
 
