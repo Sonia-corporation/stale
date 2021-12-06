@@ -68,7 +68,7 @@ describe(`Issue to close`, (): void => {
       expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(1);
       expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
       expect(StatisticsService.closedIssuesCount$$).toBe(1);
-      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
+      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(1);
     });
   });
 });
