@@ -77,6 +77,7 @@ export class GithubApiLabelsService {
       .then((response: Readonly<IGithubApiGetLabel>): IGithubApiLabel | null => {
         if (!response.repository.label) {
           this.issueProcessor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
+          this.issueProcessor.logger.debug(`Are you sure it exists in your repository?`);
         }
 
         this.issueProcessor.logger.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
