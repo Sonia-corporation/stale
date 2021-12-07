@@ -239,6 +239,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let issueProcessorLoggerDebugSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -248,6 +249,7 @@ describe(`GithubApiLabelsService`, (): void => {
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        issueProcessorLoggerDebugSpy = jest.spyOn(issueProcessor.logger, `debug`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -315,7 +317,7 @@ describe(`GithubApiLabelsService`, (): void => {
           });
 
           it(`should log about not finding this label and return null`, async (): Promise<void> => {
-            expect.assertions(3);
+            expect.assertions(5);
 
             const result = await githubApiLabelsService.fetchLabelByName(labelName);
 
@@ -324,6 +326,8 @@ describe(`GithubApiLabelsService`, (): void => {
               `Could not fetch the label`,
               `value-${labelName}`
             );
+            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledWith(`Are you sure it exists in your repository?`);
             expect(result).toBeNull();
           });
         });
