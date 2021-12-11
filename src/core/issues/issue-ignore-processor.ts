@@ -32,6 +32,7 @@ export class IssueIgnoreProcessor {
       this.hasAnyIgnoredLabels$$() ||
       this.hasAllIgnoredAssignees$$() ||
       this.hasAnyIgnoredAssignees$$() ||
+      this.hasAllIgnoredProjectCards$$() ||
       this.hasIgnoredCreationDate$$()
     );
   }
@@ -83,6 +84,42 @@ export class IssueIgnoreProcessor {
     }
 
     this.issueProcessor.logger.info(`The issue has no assignee. Continuing...`);
+
+    return false;
+  }
+
+  public hasAllIgnoredProjectCards$$(): boolean {
+    this.issueProcessor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
+
+    if (!InputsService.getInputs().issueIgnoreAllProjectCards) {
+      this.issueProcessor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.issueProcessor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    if (this.issueProcessor.githubIssue.projectCards.totalCount > 0) {
+      this.issueProcessor.logger.info(
+        `The issue has`,
+        LoggerService.value(this.issueProcessor.githubIssue.projectCards.totalCount),
+        LoggerFormatService.whiteBright(
+          `project card${this.issueProcessor.githubIssue.projectCards.totalCount > 1 ? `s` : ``}`
+        )
+      );
+
+      return true;
+    }
+
+    this.issueProcessor.logger.info(`The issue has no project card. Continuing...`);
 
     return false;
   }

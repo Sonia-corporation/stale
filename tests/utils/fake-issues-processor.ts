@@ -61,6 +61,14 @@ export class FakeIssuesProcessor {
       },
       locked: faker.datatype.boolean(),
       number: faker.datatype.number(),
+      projectCards: {
+        nodes: [
+          {
+            id: faker.datatype.uuid(),
+          },
+        ],
+        totalCount: 1,
+      },
       updatedAt: faker.date.recent().toISOString(),
       url: faker.internet.url(),
       ...issue,

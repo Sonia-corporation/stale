@@ -22,6 +22,24 @@ describe(`GithubApiIssuesService`, (): void => {
     expect(GithubApiIssuesService.issuesPerPage).toBe(20);
   });
 
+  it(`should load 20 labels per batch`, (): void => {
+    expect.assertions(1);
+
+    expect(GithubApiIssuesService.labelsPerIssue).toBe(20);
+  });
+
+  it(`should load 20 assignees per batch`, (): void => {
+    expect.assertions(1);
+
+    expect(GithubApiIssuesService.assigneesPerIssue).toBe(20);
+  });
+
+  it(`should load 20 project cards per batch`, (): void => {
+    expect.assertions(1);
+
+    expect(GithubApiIssuesService.projectCardsPerIssue).toBe(20);
+  });
+
   describe(`fetchIssues()`, (): void => {
     let graphqlMock: jest.Mock;
 
@@ -62,6 +80,7 @@ describe(`GithubApiIssuesService`, (): void => {
         issuesPerPage: 20,
         labelsPerIssue: 20,
         owner: `dummy-owner`,
+        projectCardsPerIssue: 20,
         repository: `dummy-repo`,
       });
     });

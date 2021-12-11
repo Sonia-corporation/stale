@@ -51,8 +51,9 @@ If you have any suggestion, bugfix to report, specific feature-request or just w
 ### Issues
 
 After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
-If an update occur after being stale, the `stale` label will be removed.
-If the issue is not updated for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
+If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
+Removing the `stale` label manually will also do the trick.
+If the `stale` label on the issue is still here for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
 
 ## All the common inputs
 
@@ -72,6 +73,7 @@ All the inputs that are used both for issues and Pull Requests.
 | issue-ignore-any-labels           | Allow to ignore the processing of issues that contains one of those labels (multiline).                                                           |         |
 | issue-ignore-all-assignees        | Allow to ignore the processing of issues that contains any assignees.                                                                             | `false` |
 | issue-ignore-any-assignees        | Allow to ignore the processing of issues that contains one of those assignees (multiline).                                                        |         |
+| issue-ignore-all-project-cards    | Allow to ignore the processing of issues that contains any project cards.                                                                         | `false` |
 | issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
 | issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                        | `30`    |
 | issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
@@ -133,6 +135,7 @@ jobs:
             This issue is now stale!
           issue-close-comment: |
             This issue is now closed!
+          issue-ignore-all-project-cards: false
 ```
 
 ## Debug the action

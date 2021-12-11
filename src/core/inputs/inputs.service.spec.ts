@@ -62,6 +62,7 @@ describe(`inputsService`, (): void => {
         issueDaysBeforeStale: 30,
         issueIgnoreAllAssignees: true,
         issueIgnoreAllLabels: true,
+        issueIgnoreAllProjectCards: true,
         issueIgnoreAnyAssignees: [`assignee-1`, `assignee-2`],
         issueIgnoreAnyLabels: [`label-1`, `label-2`],
         issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
@@ -84,7 +85,7 @@ describe(`inputsService`, (): void => {
 
       InputsService.setInputs();
 
-      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(1, `dry-run`, { required: false });
       expect(InputsService.inputs$$?.dryRun).toBeFalse();
     });
@@ -134,7 +135,7 @@ describe(`inputsService`, (): void => {
 
       InputsService.setInputs();
 
-      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(2, `issue-ignore-all-assignees`, { required: false });
       expect(InputsService.inputs$$?.issueIgnoreAllAssignees).toBeFalse();
     });
@@ -144,9 +145,19 @@ describe(`inputsService`, (): void => {
 
       InputsService.setInputs();
 
-      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(3, `issue-ignore-all-labels`, { required: false });
       expect(InputsService.inputs$$?.issueIgnoreAllLabels).toBeFalse();
+    });
+
+    it(`should get the issue-ignore-all-project-cards input, parse it and set it`, (): void => {
+      expect.assertions(3);
+
+      InputsService.setInputs();
+
+      expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(4);
+      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(4, `issue-ignore-all-project-cards`, { required: false });
+      expect(InputsService.inputs$$?.issueIgnoreAllProjectCards).toBeFalse();
     });
 
     it(`should get the issue-ignore-any-assignees input, parse it and set it`, (): void => {
@@ -220,6 +231,7 @@ describe(`inputsService`, (): void => {
         issueDaysBeforeStale: 666,
         issueIgnoreAllAssignees: false,
         issueIgnoreAllLabels: false,
+        issueIgnoreAllProjectCards: false,
         issueIgnoreAnyAssignees: [`dummy-issue-ignore-any-assignees-1`, `dummy-issue-ignore-any-assignees-2`],
         issueIgnoreAnyLabels: [`dummy-issue-ignore-any-labels-1`, `dummy-issue-ignore-any-labels-2`],
         issueIgnoreBeforeCreationDate: `dummy-issue-ignore-before-creation-date`,
@@ -276,6 +288,7 @@ describe(`inputsService`, (): void => {
           issueDaysBeforeStale: 666,
           issueIgnoreAllAssignees: false,
           issueIgnoreAllLabels: false,
+          issueIgnoreAllProjectCards: false,
           issueIgnoreAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
           issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
@@ -291,9 +304,9 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `value-false`);
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(1, `dry-run`);
       });
 
@@ -302,14 +315,14 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
           `input-github-token`,
           `value-dummy-github-token`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(2, `github-token`);
       });
 
@@ -318,14 +331,14 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
           `input-issue-close-comment`,
           `value-dummy-issue-close-comment`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(3, `issue-close-comment`);
       });
 
@@ -334,14 +347,14 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           4,
           `white-├──`,
           `input-issue-days-before-close`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(4, `issue-days-before-close`);
       });
 
@@ -350,14 +363,14 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
           `white-├──`,
           `input-issue-days-before-stale`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(5, `issue-days-before-stale`);
       });
 
@@ -366,14 +379,14 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           6,
           `white-├──`,
           `input-issue-ignore-all-assignees`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(6, `issue-ignore-all-assignees`);
       });
 
@@ -382,15 +395,31 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           7,
           `white-├──`,
           `input-issue-ignore-all-labels`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(7, `issue-ignore-all-labels`);
+      });
+
+      it(`should log the issue ignore all project cards input`, (): void => {
+        expect.assertions(4);
+
+        InputsService.logInputs();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          8,
+          `white-├──`,
+          `input-issue-ignore-all-project-cards`,
+          `value-false`
+        );
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `issue-ignore-all-project-cards`);
       });
 
       it(`should log the issue ignore any assignees input`, (): void => {
@@ -398,15 +427,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          8,
+          9,
           `white-├──`,
           `input-issue-ignore-any-assignees`,
           `value-dummy-assignee-1,dummy-assignee-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `issue-ignore-any-assignees`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `issue-ignore-any-assignees`);
       });
 
       it(`should log the issue ignore any labels input`, (): void => {
@@ -414,15 +443,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          9,
+          10,
           `white-├──`,
           `input-issue-ignore-any-labels`,
           `value-dummy-label-1,dummy-label-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `issue-ignore-any-labels`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `issue-ignore-any-labels`);
       });
 
       it(`should log the issue ignore before creation date input`, (): void => {
@@ -430,15 +459,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          10,
+          11,
           `white-├──`,
           `input-issue-ignore-before-creation-date`,
           `value-2020-01-01T00:00:00.000`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `issue-ignore-before-creation-date`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(11, `issue-ignore-before-creation-date`);
       });
 
       it(`should log the issue stale comment input`, (): void => {
@@ -446,15 +475,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          11,
+          12,
           `white-├──`,
           `input-issue-stale-comment`,
           `value-dummy-issue-stale-comment`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(11, `issue-stale-comment`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(12, `issue-stale-comment`);
       });
 
       it(`should log the issue stale label input`, (): void => {
@@ -462,15 +491,15 @@ describe(`inputsService`, (): void => {
 
         InputsService.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(12);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          12,
+          13,
           `white-└──`,
           `input-issue-stale-label`,
           `value-dummy-issue-stale-label`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(12);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(12, `issue-stale-label`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(13, `issue-stale-label`);
       });
     });
 
