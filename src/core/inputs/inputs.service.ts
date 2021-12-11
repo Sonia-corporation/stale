@@ -31,6 +31,7 @@ export class InputsService {
       issueDaysBeforeStale: this.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
       issueIgnoreAllAssignees: core.getBooleanInput(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES, { required: false }),
       issueIgnoreAllLabels: core.getBooleanInput(EInputs.ISSUE_IGNORE_ALL_LABELS, { required: false }),
+      issueIgnoreAllProjectCards: core.getBooleanInput(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS, { required: false }),
       issueIgnoreAnyAssignees: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_ASSIGNEES, { required: false }),
       issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueIgnoreBeforeCreationDate: core.getInput(EInputs.ISSUE_IGNORE_BEFORE_CREATION_DATE, { required: false }),

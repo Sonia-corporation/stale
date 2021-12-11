@@ -9,6 +9,7 @@ export interface IInputs {
   readonly issueDaysBeforeStale: number;
   readonly issueIgnoreAllAssignees: boolean;
   readonly issueIgnoreAllLabels: boolean;
+  readonly issueIgnoreAllProjectCards: boolean;
   readonly issueIgnoreAnyAssignees: string[];
   readonly issueIgnoreAnyLabels: string[];
   readonly issueIgnoreBeforeCreationDate: IIso8601Date | '';
