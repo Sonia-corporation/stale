@@ -33,7 +33,7 @@ inputs:
   issue-ignore-all-project-cards:
     description: 'Allow to ignore the processing of issues that contains any project cards.'
     required: false
-    default: ''
+    default: 'false'
   issue-days-before-stale:
     description: 'The number of days until the issue is considered as stale.'
     required: false
