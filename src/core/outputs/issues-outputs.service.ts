@@ -5,7 +5,7 @@ import * as core from '@actions/core';
 
 export class IssuesOutputsService {
   public static setOutputs(): IssuesOutputsService {
-    LoggerService.info(`Creating the outputs...`);
+    LoggerService.info(`Creating the issues outputs...`);
 
     core.setOutput(EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, IssuesStatisticsService.alreadyStaleIssuesCount$$);
     core.setOutput(EIssuesOutputs.IGNORED_ISSUES_COUNT, IssuesStatisticsService.ignoredIssuesCount$$);
@@ -16,7 +16,7 @@ export class IssuesOutputsService {
     core.setOutput(EIssuesOutputs.CLOSE_ISSUES_COUNT, IssuesStatisticsService.closedIssuesCount$$);
     core.setOutput(EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT, IssuesStatisticsService.addedIssuesCommentsCount$$);
 
-    LoggerService.info(`Outputs created`);
+    LoggerService.info(`Issues outputs created`);
 
     return IssuesOutputsService;
   }

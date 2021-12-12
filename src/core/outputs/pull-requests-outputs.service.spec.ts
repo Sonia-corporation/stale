@@ -1,5 +1,5 @@
 import { EIssuesOutputs } from '@core/outputs/enums/issues-outputs.enum';
-import { IssuesOutputsService } from '@core/outputs/issues-outputs.service';
+import { PullRequestsOutputsService } from '@core/outputs/pull-requests-outputs.service';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
@@ -7,7 +7,7 @@ import * as core from '@actions/core';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`IssuesOutputsService`, (): void => {
+describe(`PullRequestsOutputsService`, (): void => {
   describe(`setOutputs()`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let coreSetOutputSpy: jest.SpyInstance;
@@ -20,10 +20,10 @@ describe(`IssuesOutputsService`, (): void => {
     it(`should log about setting the outputs`, (): void => {
       expect.assertions(2);
 
-      IssuesOutputsService.setOutputs();
+      PullRequestsOutputsService.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Creating the issues outputs...`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Creating the pull requests outputs...`);
     });
 
     it(`should set the statistics outputs`, (): void => {
@@ -37,7 +37,7 @@ describe(`IssuesOutputsService`, (): void => {
       IssuesStatisticsService.closedIssuesCount$$ = 1;
       IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
 
-      IssuesOutputsService.setOutputs();
+      PullRequestsOutputsService.setOutputs();
 
       expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
@@ -53,18 +53,18 @@ describe(`IssuesOutputsService`, (): void => {
     it(`should log about the end of the output setup`, (): void => {
       expect.assertions(2);
 
-      IssuesOutputsService.setOutputs();
+      PullRequestsOutputsService.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Issues outputs created`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Pull requests outputs created`);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesOutputsService.setOutputs();
+      const result = PullRequestsOutputsService.setOutputs();
 
-      expect(result).toStrictEqual(IssuesOutputsService);
+      expect(result).toStrictEqual(PullRequestsOutputsService);
     });
   });
 });
