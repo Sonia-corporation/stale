@@ -6,7 +6,7 @@ import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueShouldCloseStaleProcessor } from '@core/issues/issue-should-close-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import * as CreateLinkModule from '@utils/links/create-link';
 import { DateTime } from 'luxon';
@@ -76,8 +76,8 @@ describe(`IssueProcessor`, (): void => {
       let processForStaleSpy: jest.SpyInstance;
       let loggerInfoSpy: jest.SpyInstance;
       let createLinkSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseIgnoredIssuesCountSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseAlreadyStaleIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         loggerStartGroupSpy = jest.spyOn(issueProcessor.logger, `startGroup`).mockImplementation();
@@ -89,11 +89,11 @@ describe(`IssueProcessor`, (): void => {
         processForCloseSpy = jest.spyOn(issueProcessor, `processForClose$$`).mockImplementation();
         loggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         createLinkSpy = jest.spyOn(CreateLinkModule, `createLink`).mockReturnValue(`dummy-link`);
-        statisticsServiceIncreaseIgnoredIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseIgnoredIssuesCount`)
+        issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseIgnoredIssuesCount`)
           .mockImplementation();
-        statisticsServiceIncreaseAlreadyStaleIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseAlreadyStaleIssuesCount`)
+        issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseAlreadyStaleIssuesCount`)
           .mockImplementation();
       });
 
@@ -136,8 +136,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.process();
 
-          expect(statisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should not increase the already stale issues statistic`, async (): Promise<void> => {
@@ -145,7 +145,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.process();
 
-          expect(statisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -172,7 +172,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.process();
 
-          expect(statisticsServiceIncreaseIgnoredIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should check if the issue is already stale`, async (): Promise<void> => {
@@ -206,8 +206,8 @@ describe(`IssueProcessor`, (): void => {
 
             await issueProcessor.process();
 
-            expect(statisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
-            expect(statisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledWith();
           });
 
           describe(`when the stale state was removed`, (): void => {
@@ -263,7 +263,7 @@ describe(`IssueProcessor`, (): void => {
 
             await issueProcessor.process();
 
-            expect(statisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
+            expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
           });
         });
       });
@@ -431,18 +431,18 @@ describe(`IssueProcessor`, (): void => {
       const mockedIssueStaleProcessor: MockedObjectDeep<typeof IssueStaleProcessor> = mocked(IssueStaleProcessor, true);
 
       let stopProcessingSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseStaleIssuesCountSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseStaleIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         mockedIssueStaleProcessor.mockClear();
 
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
-        statisticsServiceIncreaseStaleIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseStaleIssuesCount`)
+        issuesStatisticsServiceIncreaseStaleIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseStaleIssuesCount`)
           .mockImplementation();
-        statisticsServiceIncreaseUnalteredIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseUnalteredIssuesCount`)
+        issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseUnalteredIssuesCount`)
           .mockImplementation();
       });
 
@@ -467,7 +467,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForStale$$();
 
-          expect(statisticsServiceIncreaseStaleIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseStaleIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should increase the unaltered issues statistic by 1`, async (): Promise<void> => {
@@ -475,8 +475,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForStale$$();
 
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -509,8 +509,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForStale$$();
 
-          expect(statisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseStaleIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should not increase the unaltered issues statistics`, async (): Promise<void> => {
@@ -518,7 +518,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForStale$$();
 
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -583,7 +583,7 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`processToRemoveStale$$()`, (): void => {
-      let statisticsServiceIncreaseRemoveStaleIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy: jest.SpyInstance;
 
       const mockedIssueRemoveStaleProcessor: MockedObjectDeep<typeof IssueRemoveStaleProcessor> = mocked(
         IssueRemoveStaleProcessor,
@@ -593,8 +593,8 @@ describe(`IssueProcessor`, (): void => {
       beforeEach((): void => {
         mockedIssueRemoveStaleProcessor.mockClear();
 
-        statisticsServiceIncreaseRemoveStaleIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseRemoveStaleIssuesCount`)
+        issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseRemoveStaleIssuesCount`)
           .mockImplementation();
       });
 
@@ -628,8 +628,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processToRemoveStale$$();
 
-          expect(statisticsServiceIncreaseRemoveStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseRemoveStaleIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should return true`, async (): Promise<void> => {
@@ -659,7 +659,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processToRemoveStale$$();
 
-          expect(statisticsServiceIncreaseRemoveStaleIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should return false`, async (): Promise<void> => {
@@ -683,19 +683,19 @@ describe(`IssueProcessor`, (): void => {
       );
 
       let stopProcessingSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseClosedIssuesCountSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseClosedIssuesCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         mockedIssueShouldCloseStaleProcessor.mockClear();
         mockedIssueCloseStaleProcessor.mockClear();
 
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
-        statisticsServiceIncreaseClosedIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseClosedIssuesCount`)
+        issuesStatisticsServiceIncreaseClosedIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseClosedIssuesCount`)
           .mockImplementation();
-        statisticsServiceIncreaseUnalteredIssuesCountSpy = jest
-          .spyOn(StatisticsService, `increaseUnalteredIssuesCount`)
+        issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseUnalteredIssuesCount`)
           .mockImplementation();
       });
 
@@ -720,7 +720,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForClose$$();
 
-          expect(statisticsServiceIncreaseClosedIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseClosedIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should increase the unaltered issues statistic by 1`, async (): Promise<void> => {
@@ -728,8 +728,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForClose$$();
 
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {
@@ -762,8 +762,8 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForClose$$();
 
-          expect(statisticsServiceIncreaseClosedIssuesCountSpy).toHaveBeenCalledTimes(1);
-          expect(statisticsServiceIncreaseClosedIssuesCountSpy).toHaveBeenCalledWith();
+          expect(issuesStatisticsServiceIncreaseClosedIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseClosedIssuesCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should not increase the unaltered issues statistics`, async (): Promise<void> => {
@@ -771,7 +771,7 @@ describe(`IssueProcessor`, (): void => {
 
           await issueProcessor.processForClose$$();
 
-          expect(statisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should stop to process this issue`, async (): Promise<void> => {

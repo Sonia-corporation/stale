@@ -3,7 +3,7 @@ import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiCommentsService } from '@github/api/comments/github-api-comments.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 
@@ -39,7 +39,7 @@ export class IssueCommentsProcessor {
       );
     }
 
-    StatisticsService.increaseAddedIssuesCommentsCount();
+    IssuesStatisticsService.increaseAddedIssuesCommentsCount();
     this.issueProcessor.logger.notice(`Stale comment added`);
   }
 
@@ -66,7 +66,7 @@ export class IssueCommentsProcessor {
       );
     }
 
-    StatisticsService.increaseAddedIssuesCommentsCount();
+    IssuesStatisticsService.increaseAddedIssuesCommentsCount();
     this.issueProcessor.logger.notice(`Close comment added`);
   }
 }

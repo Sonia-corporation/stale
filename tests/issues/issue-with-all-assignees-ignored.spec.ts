@@ -1,4 +1,4 @@
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -29,14 +29,14 @@ describe(`Issue with all assignees ignored`, (): void => {
 
         await issueSut.process();
 
-        expect(StatisticsService.processedIssuesCount$$).toBe(1);
-        expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
-        expect(StatisticsService.unalteredIssuesCount$$).toBe(1);
-        expect(StatisticsService.staleIssuesCount$$).toBe(0);
-        expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
-        expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-        expect(StatisticsService.closedIssuesCount$$).toBe(0);
-        expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
+        expect(IssuesStatisticsService.processedIssuesCount$$).toBe(1);
+        expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(1);
+        expect(IssuesStatisticsService.staleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.closedIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(0);
       });
     });
 
@@ -56,14 +56,14 @@ describe(`Issue with all assignees ignored`, (): void => {
 
         await issueSut.process();
 
-        expect(StatisticsService.processedIssuesCount$$).toBe(1);
-        expect(StatisticsService.ignoredIssuesCount$$).toBe(1);
-        expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
-        expect(StatisticsService.staleIssuesCount$$).toBe(0);
-        expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(0);
-        expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-        expect(StatisticsService.closedIssuesCount$$).toBe(0);
-        expect(StatisticsService.addedIssuesCommentsCount$$).toBe(0);
+        expect(IssuesStatisticsService.processedIssuesCount$$).toBe(1);
+        expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(1);
+        expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.staleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.closedIssuesCount$$).toBe(0);
+        expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(0);
       });
     });
   });

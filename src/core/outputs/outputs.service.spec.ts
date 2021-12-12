@@ -1,6 +1,6 @@
 import { EOutputs } from '@core/outputs/outputs.enum';
 import { OutputsService } from '@core/outputs/outputs.service';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 
@@ -28,14 +28,14 @@ describe(`OutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      StatisticsService.processedIssuesCount$$ = 1;
-      StatisticsService.ignoredIssuesCount$$ = 1;
-      StatisticsService.unalteredIssuesCount$$ = 1;
-      StatisticsService.staleIssuesCount$$ = 1;
-      StatisticsService.alreadyStaleIssuesCount$$ = 1;
-      StatisticsService.removeStaleIssuesCount$$ = 1;
-      StatisticsService.closedIssuesCount$$ = 1;
-      StatisticsService.addedIssuesCommentsCount$$ = 1;
+      IssuesStatisticsService.processedIssuesCount$$ = 1;
+      IssuesStatisticsService.ignoredIssuesCount$$ = 1;
+      IssuesStatisticsService.unalteredIssuesCount$$ = 1;
+      IssuesStatisticsService.staleIssuesCount$$ = 1;
+      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.removeStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.closedIssuesCount$$ = 1;
+      IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
 
       OutputsService.setOutputs();
 
