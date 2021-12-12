@@ -1,4 +1,4 @@
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import faker from 'faker';
@@ -60,14 +60,14 @@ describe(`Pull request stale and updated`, (): void => {
 
       await pullRequestSut.process();
 
-      expect(StatisticsService.processedPullRequestsCount$$).toBe(1);
-      expect(StatisticsService.ignoredPullRequestsCount$$).toBe(0);
-      expect(StatisticsService.unalteredPullRequestsCount$$).toBe(0);
-      expect(StatisticsService.stalePullRequestsCount$$).toBe(0);
-      expect(StatisticsService.alreadyStalePullRequestsCount$$).toBe(1);
-      expect(StatisticsService.removeStalePullRequestsCount$$).toBe(1);
-      expect(StatisticsService.closedPullRequestsCount$$).toBe(0);
-      expect(StatisticsService.addedPullRequestsCommentsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(0);
     });
   });
 });
