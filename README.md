@@ -42,10 +42,6 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
 
-⚠️ This is a work in progress that is focused for now to deliver a nice experience to handle your issues.  
-Pull Requests handling will come later, once everything is stable for the issues handling.  
-If you have any suggestion, bugfix to report, specific feature-request or just want to help, you are welcome!
-
 ## Default configuration
 
 ### Issues
@@ -55,9 +51,16 @@ If an update occur after being stale, the `stale` label will be removed and the 
 Removing the `stale` label manually will also do the trick.
 If the `stale` label on the issue is still here for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
 
+### PRs
+
+After 30 days (coming from `pull-request-days-before-stale`) without any update on the pull request, add a label `stale` (coming from `pull-request-stale-label`) on the pull request to indicate that it is stale.  
+If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
+Removing the `stale` label manually will also do the trick.
+If the `stale` label on the pull request is still here for more than 10 days (coming from `pull-request-days-before-close`), the pull request will be closed.
+
 ## All the common inputs
 
-All the inputs that are used both for issues and Pull Requests.
+All the inputs that are used both for issues and pull requests.
 
 | Input        | Description                                                                                                                              | Default               |
 | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
@@ -92,6 +95,35 @@ All the inputs that are used both for issues and Pull Requests.
 | remove-stale-issues-count   | The number of issues from where the stale state was removed.                |
 | close-issues-count          | The number of issues closed.                                                |
 | added-issues-comments-count | The number of added issues comments.                                        |
+
+## All the pull requests inputs
+
+| Input                                    | Description                                                                                                                                              | Default |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| pull-request-stale-label                 | The label that will be added to the pull request when it is stale.                                                                                       | `stale` |
+| pull-request-ignore-all-labels           | Allow to ignore the processing of pull requests that contains any labels.                                                                                | `false` |
+| pull-request-ignore-any-labels           | Allow to ignore the processing of pull requests that contains one of those labels (multiline).                                                           |         |
+| pull-request-ignore-all-assignees        | Allow to ignore the processing of pull requests that contains any assignees.                                                                             | `false` |
+| pull-request-ignore-any-assignees        | Allow to ignore the processing of pull requests that contains one of those assignees (multiline).                                                        |         |
+| pull-request-ignore-all-project-cards    | Allow to ignore the processing of pull requests that contains any project cards.                                                                         | `false` |
+| pull-request-ignore-before-creation-date | Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
+| pull-request-days-before-stale           | The number of days until the pull request is considered as stale.                                                                                        | `30`    |
+| pull-request-stale-comment               | The comment that will be sent once the pull request is stale (keep empty to not send a comment).                                                         |         |
+| pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
+| pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
+
+## All the pull requests outputs
+
+| Output                             | Description                                                                        |
+| ---------------------------------- | ---------------------------------------------------------------------------------- |
+| processed-pull-requests-count      | The number of pull requests processed.                                             |
+| ignored-pull-requests-count        | The number of pull requests ignored.                                               |
+| unaltered-pull-requests-count      | The number of pull requests unaltered (either not good to stale or already stale). |
+| stale-pull-requests-count          | The number of pull requests stale.                                                 |
+| already-stale-pull-requests-count  | The number of pull requests processed which were already stale.                    |
+| remove-stale-pull-requests-count   | The number of pull requests from where the stale state was removed.                |
+| close-pull-requests-count          | The number of pull requests closed.                                                |
+| added-pull-requests-comments-count | The number of added pull requests comments.                                        |
 
 ## Examples
 
@@ -136,6 +168,49 @@ jobs:
           issue-close-comment: |
             This issue is now closed!
           issue-ignore-all-project-cards: false
+```
+
+### All pull requests inputs example
+
+```yml
+name: Stale
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  Stale:
+    runs-on: ubuntu-latest
+    name: Run stale
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Stale
+        id: stale
+        uses: sonia-corporation/stale@1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dry-run: false
+          pull-request-ignore-all-assignees: false
+          pull-request-ignore-any-assignees: |
+            marco
+            polo
+          pull-request-ignore-all-labels: false
+          pull-request-stale-label: stale
+          pull-request-ignore-any-labels: |
+            frozen
+            help wanted
+            dependency-fix
+            dependencies
+          pull-request-days-before-stale: 30
+          pull-request-days-before-close: 10
+          pull-request-ignore-before-creation-date: 2020-04
+          pull-request-stale-comment: |
+            This pull request is now stale!
+          pull-request-close-comment: |
+            This pull request is now closed!
+          pull-request-ignore-all-project-cards: false
 ```
 
 ## Debug the action
