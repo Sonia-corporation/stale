@@ -1,5 +1,7 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { GithubApiCommentsService } from '@github/api/comments/github-api-comments.service';
@@ -17,22 +19,23 @@ export class IssueCommentsProcessor {
   public async processStaleComment(): Promise<void> {
     this.issueProcessor.logger.info(`Checking if a stale comment should be added...`);
 
-    const inputs: IInputs = InputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
-    if (inputs.issueStaleComment === ``) {
+    if (commonInputs.issueStaleComment === ``) {
       this.issueProcessor.logger.info(`The stale comment is unset. Continuing...`);
 
       return;
     }
 
-    this.issueProcessor.logger.info(`The stale comment is set to`, LoggerService.value(inputs.issueStaleComment));
+    this.issueProcessor.logger.info(`The stale comment is set to`, LoggerService.value(issuesInputs.issueStaleComment));
 
-    if (!inputs.dryRun) {
+    if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the stale comment...`);
 
       await this.githubApiCommentsService$$.addCommentToIssue(
         this.issueProcessor.githubIssue.id,
-        inputs.issueStaleComment
+        issuesInputs.issueStaleComment
       );
     }
 
@@ -43,22 +46,23 @@ export class IssueCommentsProcessor {
   public async processCloseComment(): Promise<void> {
     this.issueProcessor.logger.info(`Checking if a close comment should be added...`);
 
-    const inputs: IInputs = InputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
-    if (inputs.issueCloseComment === ``) {
+    if (issuesInputs.issueCloseComment === ``) {
       this.issueProcessor.logger.info(`The close comment is unset. Continuing...`);
 
       return;
     }
 
-    this.issueProcessor.logger.info(`The close comment is set to`, LoggerService.value(inputs.issueCloseComment));
+    this.issueProcessor.logger.info(`The close comment is set to`, LoggerService.value(issuesInputs.issueCloseComment));
 
-    if (!inputs.dryRun) {
+    if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the close comment...`);
 
       await this.githubApiCommentsService$$.addCommentToIssue(
         this.issueProcessor.githubIssue.id,
-        inputs.issueCloseComment
+        issuesInputs.issueCloseComment
       );
     }
 

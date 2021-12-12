@@ -1,5 +1,5 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IssueCloseStaleProcessor } from '@core/issues/issue-close-stale-processor';
 import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
@@ -57,7 +57,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
       let githubApiIssuesServiceCloseIssueSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessCloseCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -78,8 +78,8 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         issueProcessorLoggerNoticeSpy = jest
           .spyOn(issueCloseStaleProcessor.issueProcessor.logger, `notice`)
           .mockImplementation();
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
             dryRun: true,
           })
         );
@@ -93,16 +93,16 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
         await issueCloseStaleProcessor.close();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Closing this issue...`);
       });
 
       describe(`when the dryn-run mode is disabled`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
+          commonInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<ICommonInputs>({
               dryRun: false,
             })
           );
@@ -133,8 +133,8 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
       describe(`when the dryn-run mode is enabled`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
+          commonInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<ICommonInputs>({
               dryRun: true,
             })
           );

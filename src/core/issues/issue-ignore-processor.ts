@@ -1,5 +1,6 @@
 import { EInputs } from '@core/inputs/inputs.enum';
-import { InputsService } from '@core/inputs/inputs.service';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
@@ -55,7 +56,9 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredAssignees$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the assignees on this issue should be ignored...`);
 
-    if (!InputsService.getInputs().issueIgnoreAllAssignees) {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+
+    if (!issuesInputs.issueIgnoreAllAssignees) {
       this.issueProcessor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES),
@@ -91,7 +94,9 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredProjectCards$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
 
-    if (!InputsService.getInputs().issueIgnoreAllProjectCards) {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+
+    if (!issuesInputs.issueIgnoreAllProjectCards) {
       this.issueProcessor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
@@ -127,9 +132,10 @@ export class IssueIgnoreProcessor {
   public hasIgnoredCreationDate$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue should be ignored based on its creation date...`);
     let issueIgnoreBeforeCreationDate: DateTime;
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
     try {
-      issueIgnoreBeforeCreationDate = iso8601ToDatetime(InputsService.getInputs().issueIgnoreBeforeCreationDate);
+      issueIgnoreBeforeCreationDate = iso8601ToDatetime(issuesInputs.issueIgnoreBeforeCreationDate);
     } catch (error) {
       this.issueProcessor.logger.info(
         `The input`,
@@ -164,7 +170,9 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredLabels$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the labels on this issue should be ignored...`);
 
-    if (!InputsService.getInputs().issueIgnoreAllLabels) {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+
+    if (!issuesInputs.issueIgnoreAllLabels) {
       this.issueProcessor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_LABELS),
@@ -180,7 +188,7 @@ export class IssueIgnoreProcessor {
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    const staleLabel: string = InputsService.getInputs().issueStaleLabel;
+    const staleLabel: string = issuesInputs.issueStaleLabel;
     const allLabels: string[] = this._getLabels(this.issueProcessor.githubIssue.labels.nodes).filter(
       (label: Readonly<string>): boolean => label !== staleLabel
     );
@@ -203,9 +211,10 @@ export class IssueIgnoreProcessor {
   public hasAnyIgnoredLabels$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue has one of the ignored labels...`);
 
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
     const duplicatedLabels: string[] = getDuplicates(
       this._getLabels(this.issueProcessor.githubIssue.labels.nodes),
-      InputsService.getInputs().issueIgnoreAnyLabels
+      issuesInputs.issueIgnoreAnyLabels
     );
     const firstDuplicatedLabel: string | undefined = _.head(duplicatedLabels);
 
@@ -244,9 +253,10 @@ export class IssueIgnoreProcessor {
   public hasAnyIgnoredAssignees$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue has one of the ignored assignees...`);
 
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
       this._getAssignees(this.issueProcessor.githubIssue.assignees.nodes),
-      InputsService.getInputs().issueIgnoreAnyAssignees
+      issuesInputs.issueIgnoreAnyAssignees
     );
     const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssignees);
 

@@ -1,5 +1,7 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { StatisticsService } from '@core/statistics/statistics.service';
@@ -46,7 +48,8 @@ describe(`IssueCommentsProcessor`, (): void => {
     describe(`processStaleComment()`, (): void => {
       let issueId: IUuid;
 
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let statisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
@@ -61,9 +64,13 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
             dryRun: false,
+          })
+        );
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueStaleComment: ``,
           })
         );
@@ -82,12 +89,14 @@ describe(`IssueCommentsProcessor`, (): void => {
       });
 
       it(`should check if the issue stale comment input is configured`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await issueCommentsProcessor.processStaleComment();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
@@ -97,9 +106,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue stale comment is not configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueStaleComment: ``,
             })
           );
@@ -119,9 +127,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue stale comment is configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueStaleComment: `dummy-comment`,
             })
           );
@@ -129,10 +136,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: true,
-                issueStaleComment: `dummy-comment`,
               })
             );
           });
@@ -172,10 +178,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: false,
-                issueStaleComment: `dummy-comment`,
               })
             );
           });
@@ -220,7 +225,8 @@ describe(`IssueCommentsProcessor`, (): void => {
     describe(`processCloseComment()`, (): void => {
       let issueId: IUuid;
 
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let statisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
@@ -235,9 +241,13 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
             dryRun: false,
+          })
+        );
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueCloseComment: ``,
           })
         );
@@ -256,12 +266,14 @@ describe(`IssueCommentsProcessor`, (): void => {
       });
 
       it(`should check if the issue close comment input is configured`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await issueCommentsProcessor.processCloseComment();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
@@ -271,9 +283,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue close comment is not configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueCloseComment: ``,
             })
           );
@@ -293,9 +304,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue close comment is configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueCloseComment: `dummy-comment`,
             })
           );
@@ -303,10 +313,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: true,
-                issueCloseComment: `dummy-comment`,
               })
             );
           });
@@ -346,10 +355,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: false,
-                issueCloseComment: `dummy-comment`,
               })
             );
           });

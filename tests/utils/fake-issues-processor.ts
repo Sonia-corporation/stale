@@ -1,4 +1,4 @@
-import { IInputs } from '@core/inputs/inputs.interface';
+import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
@@ -16,8 +16,8 @@ import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
 import * as core from '@actions/core';
-import { context } from '@actions/github';
 import * as github from '@actions/github';
+import { context } from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import faker from 'faker';
 import _ from 'lodash';
@@ -75,7 +75,7 @@ export class FakeIssuesProcessor {
     });
   }
 
-  private readonly _inputs: IInputs;
+  private readonly _inputs: IAllInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
   private _githubApiIssuesFetchCount = 0;
   private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
@@ -221,10 +221,10 @@ export class FakeIssuesProcessor {
    * @description
    * Crate the SUT
    * You can pass the parameters to override the default inputs
-   * @param {Readonly<Partial<IInputs>>} inputs The override inputs
+   * @param {Readonly<Partial<IAllInputs>>} inputs The override inputs
    */
-  public constructor(inputs?: Readonly<Partial<IInputs>>) {
-    this._inputs = createHydratedMock<IInputs>({
+  public constructor(inputs?: Readonly<Partial<IAllInputs>>) {
+    this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
