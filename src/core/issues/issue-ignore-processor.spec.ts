@@ -894,8 +894,8 @@ describe(`IssueIgnoreProcessor`, (): void => {
             `input-issue-ignore-all-labels`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(2);
-          expect(issuesInputsServiceGetInputs).toHaveBeenNthCalledWith(2);
+          expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
+          expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
         });
 
         describe(`when the issue has no label`, (): void => {

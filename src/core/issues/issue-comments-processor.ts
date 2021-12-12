@@ -22,7 +22,7 @@ export class IssueCommentsProcessor {
     const commonInputs: ICommonInputs = CommonInputsService.getInputs();
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
-    if (commonInputs.issueStaleComment === ``) {
+    if (issuesInputs.issueStaleComment === ``) {
       this.issueProcessor.logger.info(`The stale comment is unset. Continuing...`);
 
       return;

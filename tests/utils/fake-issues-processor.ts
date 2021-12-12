@@ -28,7 +28,7 @@ import { createHydratedMock } from 'ts-auto-mock';
  * This is the helper to test in a way which is rather close to the real process
  * Perfect for integration testing
  * The goal is to mock the least among of code to have the real code called
- * So the logs are visible and we have a local way to test a feature
+ * So the logs are visible, and we have a local way to test a feature
  */
 export class FakeIssuesProcessor {
   /**
