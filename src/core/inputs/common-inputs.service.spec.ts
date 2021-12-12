@@ -17,7 +17,7 @@ describe(`CommonInputsService`, (): void => {
       logInputsSpy = jest.spyOn(CommonInputsService, `logInputs`).mockImplementation();
     });
 
-    it(`should get, parse and set the inputs coming from the action`, (): void => {
+    it(`should get, parse and set the common inputs coming from the action`, (): void => {
       expect.assertions(2);
 
       CommonInputsService.initialize();
@@ -26,7 +26,7 @@ describe(`CommonInputsService`, (): void => {
       expect(setInputsSpy).toHaveBeenCalledWith();
     });
 
-    it(`should log the list of inputs and their values`, (): void => {
+    it(`should log the list of common inputs and their values`, (): void => {
       expect.assertions(2);
 
       CommonInputsService.initialize();
@@ -167,7 +167,7 @@ describe(`CommonInputsService`, (): void => {
   });
 
   describe(`getInputs()`, (): void => {
-    describe(`when the inputs are unset`, (): void => {
+    describe(`when the common inputs are unset`, (): void => {
       beforeEach((): void => {
         delete CommonInputsService.inputs$$;
       });
@@ -179,7 +179,7 @@ describe(`CommonInputsService`, (): void => {
       });
     });
 
-    describe(`when the inputs are set`, (): void => {
+    describe(`when the common inputs are set`, (): void => {
       let inputs: ICommonInputs;
 
       beforeEach((): void => {
@@ -187,7 +187,7 @@ describe(`CommonInputsService`, (): void => {
         CommonInputsService.inputs$$ = inputs;
       });
 
-      it(`should return the inputs`, (): void => {
+      it(`should return the common inputs`, (): void => {
         expect.assertions(1);
 
         const result = CommonInputsService.getInputs();
