@@ -17,7 +17,7 @@ describe(`IssuesOutputsService`, (): void => {
       coreSetOutputSpy = jest.spyOn(core, `setOutput`).mockImplementation();
     });
 
-    it(`should log about setting the outputs`, (): void => {
+    it(`should log about setting the issues outputs`, (): void => {
       expect.assertions(2);
 
       IssuesOutputsService.setOutputs();
@@ -50,7 +50,7 @@ describe(`IssuesOutputsService`, (): void => {
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
     });
 
-    it(`should log about the end of the output setup`, (): void => {
+    it(`should log about the end of the issues output setup`, (): void => {
       expect.assertions(2);
 
       IssuesOutputsService.setOutputs();

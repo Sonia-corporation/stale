@@ -1,6 +1,6 @@
-import { EIssuesOutputs } from '@core/outputs/enums/issues-outputs.enum';
+import { EPullRequestsOutputs } from '@core/outputs/enums/pull-requests-outputs.enum';
 import { PullRequestsOutputsService } from '@core/outputs/pull-requests-outputs.service';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 
@@ -17,7 +17,7 @@ describe(`PullRequestsOutputsService`, (): void => {
       coreSetOutputSpy = jest.spyOn(core, `setOutput`).mockImplementation();
     });
 
-    it(`should log about setting the outputs`, (): void => {
+    it(`should log about setting the pull requests outputs`, (): void => {
       expect.assertions(2);
 
       PullRequestsOutputsService.setOutputs();
@@ -28,29 +28,29 @@ describe(`PullRequestsOutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      IssuesStatisticsService.processedIssuesCount$$ = 1;
-      IssuesStatisticsService.ignoredIssuesCount$$ = 1;
-      IssuesStatisticsService.unalteredIssuesCount$$ = 1;
-      IssuesStatisticsService.staleIssuesCount$$ = 1;
-      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.removeStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.closedIssuesCount$$ = 1;
-      IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
+      PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.stalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.closedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 1;
 
       PullRequestsOutputsService.setOutputs();
 
       expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EIssuesOutputs.IGNORED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EIssuesOutputs.UNALTERED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(4, EIssuesOutputs.STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(5, EIssuesOutputs.PROCESSED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EIssuesOutputs.REMOVE_STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EIssuesOutputs.CLOSE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EPullRequestsOutputs.IGNORED_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EPullRequestsOutputs.UNALTERED_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(4, EPullRequestsOutputs.STALE_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(5, EPullRequestsOutputs.PROCESSED_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EPullRequestsOutputs.REMOVE_STALE_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EPullRequestsOutputs.CLOSE_PULL_REQUESTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT, 1);
     });
 
-    it(`should log about the end of the output setup`, (): void => {
+    it(`should log about the end of the pull requests output setup`, (): void => {
       expect.assertions(2);
 
       PullRequestsOutputsService.setOutputs();

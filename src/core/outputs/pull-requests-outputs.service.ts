@@ -1,4 +1,5 @@
 import { EPullRequestsOutputs } from '@core/outputs/enums/pull-requests-outputs.enum';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 
