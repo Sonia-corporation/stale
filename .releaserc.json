@@ -37,6 +37,7 @@
         },
         "linkCompare": true,
         "linkReferences": true,
+        "includeDetails": true,
         "commit": "commit",
         "issue": "issues"
       }
