@@ -1,9 +1,9 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
+import { GithubApiPullRequestLabelsService } from '@github/api/labels/github-api-pull-request-labels.service';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -16,45 +16,45 @@ import { createHydratedMock } from 'ts-auto-mock';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`GithubApiLabelsService`, (): void => {
-  let issueProcessor: IssueProcessor;
+describe(`GithubApiPullRequestLabelsService`, (): void => {
+  let pullRequestProcessor: PullRequestProcessor;
 
   beforeEach((): void => {
-    issueProcessor = createHydratedMock<IssueProcessor>();
+    pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
   });
 
   describe(`constructor()`, (): void => {
-    it(`should save the given issue processor`, (): void => {
+    it(`should save the given pull request processor`, (): void => {
       expect.assertions(1);
 
-      const result = new GithubApiLabelsService(issueProcessor);
+      const result = new GithubApiPullRequestLabelsService(pullRequestProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
     });
   });
 
   describe(`after creation`, (): void => {
-    let githubApiLabelsService: GithubApiLabelsService;
+    let githubApiPullRequestLabelsService: GithubApiPullRequestLabelsService;
 
     beforeEach((): void => {
-      issueProcessor = createHydratedMock<IssueProcessor>();
+      pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
     });
 
     describe(`fetchLabelsByName()`, (): void => {
       let labelName: string;
       let graphqlMock: jest.Mock;
 
-      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiLabelsService = new GithubApiLabelsService(issueProcessor);
+        githubApiPullRequestLabelsService = new GithubApiPullRequestLabelsService(pullRequestProcessor);
 
-        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
-        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -68,10 +68,12 @@ describe(`GithubApiLabelsService`, (): void => {
       it(`should fetch the labels with the given name or description`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+        await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
 
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
           `Fetching the labels matching`,
           `value-${labelName}`,
           `whiteBright-from GitHub...`
@@ -94,10 +96,12 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to fetch the labels matching`,
             `value-${labelName}`
           );
@@ -129,17 +133,17 @@ describe(`GithubApiLabelsService`, (): void => {
           it(`should log about not finding those labels and throw an error`, async (): Promise<void> => {
             expect.assertions(4);
 
-            await expect(githubApiLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+            await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
               new Error(`Could not find a single label matching ${labelName}`)
             );
 
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(2);
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenNthCalledWith(
+            expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(2);
+            expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenNthCalledWith(
               1,
               `Could not find a single label matching`,
               `value-${labelName}`
             );
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenNthCalledWith(
+            expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenNthCalledWith(
               2,
               `Failed to fetch the labels matching`,
               `value-${labelName}`
@@ -168,10 +172,10 @@ describe(`GithubApiLabelsService`, (): void => {
           it(`should return the label`, async (): Promise<void> => {
             expect.assertions(3);
 
-            const result = await githubApiLabelsService.fetchLabelsByName(labelName);
+            const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
 
-            expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `green-Found the labels matching`,
               `value-${labelName}`
@@ -218,10 +222,10 @@ describe(`GithubApiLabelsService`, (): void => {
             it(`should return the label`, async (): Promise<void> => {
               expect.assertions(3);
 
-              const result = await githubApiLabelsService.fetchLabelsByName(labelName);
+              const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
 
-              expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
                 2,
                 `green-Found the labels matching`,
                 `value-${labelName}`
@@ -237,19 +241,19 @@ describe(`GithubApiLabelsService`, (): void => {
       let labelName: string;
       let graphqlMock: jest.Mock;
 
-      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
-      let issueProcessorLoggerDebugSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerDebugSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiLabelsService = new GithubApiLabelsService(issueProcessor);
+        githubApiPullRequestLabelsService = new GithubApiPullRequestLabelsService(pullRequestProcessor);
 
-        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
-        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
-        issueProcessorLoggerDebugSpy = jest.spyOn(issueProcessor.logger, `debug`).mockImplementation();
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        pullRequestProcessorLoggerDebugSpy = jest.spyOn(pullRequestProcessor.logger, `debug`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -263,10 +267,12 @@ describe(`GithubApiLabelsService`, (): void => {
       it(`should fetch the label with the given name`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+        await expect(githubApiPullRequestLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
 
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
           `Fetching the label`,
           `value-${labelName}`,
           `whiteBright-from GitHub...`
@@ -289,10 +295,15 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiLabelsService.fetchLabelByName(labelName)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiPullRequestLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Failed to fetch the label`,
+            `value-${labelName}`
+          );
         });
       });
 
@@ -319,15 +330,17 @@ describe(`GithubApiLabelsService`, (): void => {
           it(`should log about not finding this label and return null`, async (): Promise<void> => {
             expect.assertions(5);
 
-            const result = await githubApiLabelsService.fetchLabelByName(labelName);
+            const result = await githubApiPullRequestLabelsService.fetchLabelByName(labelName);
 
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
               `Could not fetch the label`,
               `value-${labelName}`
             );
-            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledWith(`Are you sure it exists in your repository?`);
+            expect(pullRequestProcessorLoggerDebugSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestProcessorLoggerDebugSpy).toHaveBeenCalledWith(
+              `Are you sure it exists in your repository?`
+            );
             expect(result).toBeNull();
           });
         });
@@ -349,10 +362,10 @@ describe(`GithubApiLabelsService`, (): void => {
           it(`should return the label`, async (): Promise<void> => {
             expect.assertions(3);
 
-            const result = await githubApiLabelsService.fetchLabelByName(labelName);
+            const result = await githubApiPullRequestLabelsService.fetchLabelByName(labelName);
 
-            expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `green-Found the label`,
               `value-${labelName}`
@@ -366,48 +379,48 @@ describe(`GithubApiLabelsService`, (): void => {
       });
     });
 
-    describe(`addLabelToIssue()`, (): void => {
-      let issueId: IUuid;
+    describe(`addLabelToPullRequest()`, (): void => {
+      let pullRequestId: IUuid;
       let labelId: IUuid;
       let graphqlMock: jest.Mock;
 
-      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
       beforeEach((): void => {
-        issueId = faker.datatype.uuid();
+        pullRequestId = faker.datatype.uuid();
         labelId = faker.datatype.uuid();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiLabelsService = new GithubApiLabelsService(issueProcessor);
+        githubApiPullRequestLabelsService = new GithubApiPullRequestLabelsService(pullRequestProcessor);
 
-        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
-        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
         });
       });
 
-      it(`should add the label on the issue`, async (): Promise<void> => {
+      it(`should add the label on the pull request`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+        await expect(githubApiPullRequestLabelsService.addLabelToPullRequest(pullRequestId, labelId)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
           `Adding the label`,
           `value-${labelId}`,
-          `whiteBright-on the issue`,
-          `value-${issueId}whiteBright-...`
+          `whiteBright-on the pull request`,
+          `value-${pullRequestId}whiteBright-...`
         );
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABEL_MUTATION, {
-          id: issueId,
+          id: pullRequestId,
           labelId,
         });
       });
@@ -420,16 +433,16 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+          await expect(githubApiPullRequestLabelsService.addLabelToPullRequest(pullRequestId, labelId)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to add the label`,
             `value-${labelId}`,
-            `red-on the issue`,
-            `value-${issueId}`
+            `red-on the pull request`,
+            `value-${pullRequestId}`
           );
         });
       });
@@ -442,62 +455,62 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiLabelsService.addLabelToIssue(issueId, labelId);
+          await githubApiPullRequestLabelsService.addLabelToPullRequest(pullRequestId, labelId);
 
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             2,
             `green-Label`,
             `value-${labelId}`,
-            `green-added to the issue`,
-            `value-${issueId}`
+            `green-added to the pull request`,
+            `value-${pullRequestId}`
           );
         });
       });
     });
 
-    describe(`removeLabelFromIssue()`, (): void => {
-      let issueId: IUuid;
+    describe(`removeLabelFromPullRequest()`, (): void => {
+      let pullRequestId: IUuid;
       let labelId: IUuid;
       let graphqlMock: jest.Mock;
 
-      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
       beforeEach((): void => {
-        issueId = faker.datatype.uuid();
+        pullRequestId = faker.datatype.uuid();
         labelId = faker.datatype.uuid();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiLabelsService = new GithubApiLabelsService(issueProcessor);
+        githubApiPullRequestLabelsService = new GithubApiPullRequestLabelsService(pullRequestProcessor);
 
-        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
-        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
         });
       });
 
-      it(`should remove the label on the issue`, async (): Promise<void> => {
+      it(`should remove the label on the pull request`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
-          new Error(`graphql error`)
-        );
+        await expect(
+          githubApiPullRequestLabelsService.removeLabelFromPullRequest(pullRequestId, labelId)
+        ).rejects.toThrow(new Error(`graphql error`));
 
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
           `Removing the label`,
           `value-${labelId}`,
-          `whiteBright-from the issue`,
-          `value-${issueId}whiteBright-...`
+          `whiteBright-from the pull request`,
+          `value-${pullRequestId}whiteBright-...`
         );
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_REMOVE_LABEL_MUTATION, {
-          id: issueId,
+          id: pullRequestId,
           labelId,
         });
       });
@@ -510,16 +523,16 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestLabelsService.removeLabelFromPullRequest(pullRequestId, labelId)
+          ).rejects.toThrow(new Error(`graphql error`));
 
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to remove the label`,
             `value-${labelId}`,
-            `red-from the issue`,
-            `value-${issueId}`
+            `red-from the pull request`,
+            `value-${pullRequestId}`
           );
         });
       });
@@ -532,15 +545,15 @@ describe(`GithubApiLabelsService`, (): void => {
         it(`should log about the success of the removal`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiLabelsService.removeLabelFromIssue(issueId, labelId);
+          await githubApiPullRequestLabelsService.removeLabelFromPullRequest(pullRequestId, labelId);
 
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             2,
             `green-Label`,
             `value-${labelId}`,
-            `green-removed from the issue`,
-            `value-${issueId}`
+            `green-removed from the pull request`,
+            `value-${pullRequestId}`
           );
         });
       });

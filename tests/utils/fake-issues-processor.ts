@@ -12,6 +12,8 @@ import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/gi
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
+import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
+import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
@@ -189,6 +191,22 @@ export class FakeIssuesProcessor {
         })
       );
     },
+    [GITHUB_API_PULL_REQUESTS_QUERY](): Promise<IGithubApiGetPullRequests> {
+      const firstBatchPullRequests: IGithubApiGetPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
+        repository: {
+          pullRequests: {
+            nodes: [],
+            pageInfo: {
+              endCursor: undefined,
+              hasNextPage: false,
+            },
+            totalCount: 0,
+          },
+        },
+      });
+
+      return Promise.resolve(firstBatchPullRequests);
+    },
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
@@ -338,8 +356,13 @@ export class FakeIssuesProcessor {
           graphql: jest
             .fn()
             .mockImplementation(
-              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> =>
-                this._apiMapper[request](data)
+              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> => {
+                if (!_.has(this._apiMapper, request)) {
+                  throw new Error(`Could not find in the API mapper the request "${request}"`);
+                }
+
+                return this._apiMapper[request](data);
+              }
             ),
         })
     );

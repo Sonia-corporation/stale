@@ -1,3 +1,4 @@
+import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
@@ -76,10 +77,10 @@ describe(`GithubApiPullRequestsService`, (): void => {
       expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_PULL_REQUESTS_QUERY, {
         afterCursor: undefined,
         assigneesPerPullRequest: 20,
-        pullRequestsPerPage: 20,
         labelsPerPullRequest: 20,
         owner: `dummy-owner`,
         projectCardsPerPullRequest: 20,
+        pullRequestsPerPage: 20,
         repository: `dummy-repo`,
       });
     });

@@ -3,9 +3,9 @@ import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
+import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
+import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/github-api-issue-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
@@ -21,13 +21,13 @@ import { DateTime } from 'luxon';
  */
 export class IssueRemoveStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
-  public readonly githubApiTimelineItemsService$$: GithubApiTimelineItemsService;
-  public readonly githubApiLabelsService$$: GithubApiLabelsService;
+  public readonly githubApiIssueTimelineItemsService$$: GithubApiIssueTimelineItemsService;
+  public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
-    this.githubApiTimelineItemsService$$ = new GithubApiTimelineItemsService(this.issueProcessor);
-    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
+    this.githubApiIssueTimelineItemsService$$ = new GithubApiIssueTimelineItemsService(this.issueProcessor);
+    this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.issueProcessor);
   }
 
   /**
@@ -40,7 +40,7 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
-      await this.githubApiTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
+      await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsIssueLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
@@ -100,7 +100,7 @@ export class IssueRemoveStaleProcessor {
       LoggerFormatService.whiteBright(`to remove from this issue...`)
     );
 
-    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(
+    const label: IGithubApiLabel | null = await this.githubApiIssueLabelsService$$.fetchLabelByName(
       issuesInputs.issueStaleLabel
     );
 
@@ -117,7 +117,7 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor.logger.info(`Removing the stale label from this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiLabelsService$$.removeLabelFromIssue(this.issueProcessor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.removeLabelFromIssue(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was removed`);
     } else {

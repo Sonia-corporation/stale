@@ -4,16 +4,16 @@ import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
-import { GithubApiCommentsService } from '@github/api/comments/github-api-comments.service';
+import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 
 export class IssueCommentsProcessor {
   public readonly issueProcessor: IssueProcessor;
-  public readonly githubApiCommentsService$$: GithubApiCommentsService;
+  public readonly githubApiIssueCommentsService$$: GithubApiIssueCommentsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
-    this.githubApiCommentsService$$ = new GithubApiCommentsService(this.issueProcessor);
+    this.githubApiIssueCommentsService$$ = new GithubApiIssueCommentsService(this.issueProcessor);
   }
 
   public async processStaleComment(): Promise<void> {
@@ -33,7 +33,7 @@ export class IssueCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the stale comment...`);
 
-      await this.githubApiCommentsService$$.addCommentToIssue(
+      await this.githubApiIssueCommentsService$$.addCommentToIssue(
         this.issueProcessor.githubIssue.id,
         issuesInputs.issueStaleComment
       );
@@ -60,7 +60,7 @@ export class IssueCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the close comment...`);
 
-      await this.githubApiCommentsService$$.addCommentToIssue(
+      await this.githubApiIssueCommentsService$$.addCommentToIssue(
         this.issueProcessor.githubIssue.id,
         issuesInputs.issueCloseComment
       );

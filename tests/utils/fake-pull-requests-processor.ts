@@ -1,6 +1,8 @@
 import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
+import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
@@ -87,6 +89,22 @@ export class FakePullRequestsProcessor {
     },
     [GITHUB_API_CLOSE_PULL_REQUEST_MUTATION](): Promise<void> {
       return Promise.resolve();
+    },
+    [GITHUB_API_ISSUES_QUERY](): Promise<IGithubApiGetIssues> {
+      const firstBatchIssues: IGithubApiGetIssues = createHydratedMock<IGithubApiGetIssues>({
+        repository: {
+          issues: {
+            nodes: [],
+            pageInfo: {
+              endCursor: undefined,
+              hasNextPage: false,
+            },
+            totalCount: 0,
+          },
+        },
+      });
+
+      return Promise.resolve(firstBatchIssues);
     },
     [GITHUB_API_LABEL_BY_NAME_QUERY](data: Readonly<Record<string, unknown>>): Promise<IGithubApiGetLabel> {
       if (!_.isString(data.labelName)) {
@@ -338,8 +356,13 @@ export class FakePullRequestsProcessor {
           graphql: jest
             .fn()
             .mockImplementation(
-              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> =>
-                this._apiMapper[request](data)
+              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> => {
+                if (!_.has(this._apiMapper, request)) {
+                  throw new Error(`Could not find in the API mapper the request "${request}"`);
+                }
+
+                return this._apiMapper[request](data);
+              }
             ),
         })
     );

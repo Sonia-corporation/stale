@@ -27,7 +27,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
       expect(result.issueProcessor).toStrictEqual(issueProcessor);
     });
 
-    it(`should create the GithubApiLabelsService`, (): void => {
+    it(`should create the GithubApiIssuesService`, (): void => {
       expect.assertions(1);
 
       const result = new IssueCloseStaleProcessor(issueProcessor);

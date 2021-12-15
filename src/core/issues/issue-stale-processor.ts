@@ -4,7 +4,7 @@ import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
+import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -17,12 +17,12 @@ import { DateTime } from 'luxon';
  */
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
-  public readonly githubApiLabelsService$$: GithubApiLabelsService;
+  public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
-    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
+    this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.issueProcessor);
     this.issueCommentsProcessor$$ = new IssueCommentsProcessor(this.issueProcessor);
   }
 
@@ -44,7 +44,7 @@ export class IssueStaleProcessor {
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(
+    const label: IGithubApiLabel | null = await this.githubApiIssueLabelsService$$.fetchLabelByName(
       issuesInputs.issueStaleLabel
     );
 
@@ -61,7 +61,7 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was added`);
     } else {
