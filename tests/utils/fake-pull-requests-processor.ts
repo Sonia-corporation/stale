@@ -257,7 +257,12 @@ export class FakePullRequestsProcessor {
   public async process(): Promise<void> {
     this._spy();
 
-    await StaleService.initialize();
+    await StaleService.initialize().catch((error: unknown): void => {
+      console.error(`Caught error in the tests!`);
+      console.error(error);
+
+      throw error;
+    });
   }
 
   /**
