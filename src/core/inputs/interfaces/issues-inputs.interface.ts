@@ -1,9 +1,8 @@
+import { IInputs } from '@core/inputs/types/inputs';
 import { IIso8601Date } from '@utils/dates/iso-8601';
 import { IComment } from '@utils/types/comment';
 
-export interface IInputs {
-  readonly dryRun: boolean;
-  readonly githubToken: string;
+export interface IIssuesInputs extends IInputs {
   readonly issueCloseComment: IComment | '';
   readonly issueDaysBeforeClose: number;
   readonly issueDaysBeforeStale: number;

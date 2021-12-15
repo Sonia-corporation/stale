@@ -1,6 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
 import { IssuesService } from '@core/issues/issues.service';
 import { OutputsService } from '@core/outputs/outputs.service';
+import { PullRequestsService } from '@core/pull-requests/pull-requests.service';
 import { StaleService } from '@core/stale.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -16,6 +17,7 @@ describe(`StaleService`, (): void => {
     let inputsServiceInitializeSpy: jest.SpyInstance;
     let octokitServiceInitializeSpy: jest.SpyInstance;
     let issuesServiceProcessSpy: jest.SpyInstance;
+    let pullRequestsServiceProcessSpy: jest.SpyInstance;
     let coreSetFailedSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
@@ -28,6 +30,7 @@ describe(`StaleService`, (): void => {
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
       octokitServiceInitializeSpy = jest.spyOn(OctokitService, `initialize`).mockImplementation();
       issuesServiceProcessSpy = jest.spyOn(IssuesService, `process`).mockResolvedValue();
+      pullRequestsServiceProcessSpy = jest.spyOn(PullRequestsService, `process`).mockResolvedValue();
       coreSetFailedSpy = jest.spyOn(core, `setFailed`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
@@ -166,6 +169,15 @@ describe(`StaleService`, (): void => {
 
       expect(issuesServiceProcessSpy).toHaveBeenCalledTimes(1);
       expect(issuesServiceProcessSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should process the pull requests`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(pullRequestsServiceProcessSpy).toHaveBeenCalledTimes(1);
+      expect(pullRequestsServiceProcessSpy).toHaveBeenCalledWith();
     });
 
     it(`should log when the process is finished`, async (): Promise<void> => {

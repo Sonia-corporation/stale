@@ -1,4 +1,5 @@
-import { InputsService } from '@core/inputs/inputs.service';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 
@@ -30,10 +31,10 @@ export class IssueIsStaleProcessor {
   }
 
   private _getStaleLabel(): IGithubApiLabel | undefined {
-    const { issueStaleLabel } = InputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
     return this.issueProcessor.githubIssue.labels.nodes.find(
-      (label: Readonly<IGithubApiLabel>): boolean => label.name === issueStaleLabel
+      (label: Readonly<IGithubApiLabel>): boolean => label.name === issuesInputs.issueStaleLabel
     );
   }
 }

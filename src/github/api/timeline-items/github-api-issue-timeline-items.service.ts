@@ -7,7 +7,7 @@ import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 
-export class GithubApiTimelineItemsService {
+export class GithubApiIssueTimelineItemsService {
   public readonly issueProcessor: IssueProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {

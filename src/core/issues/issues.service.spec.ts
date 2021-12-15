@@ -1,6 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssuesService } from '@core/issues/issues.service';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -48,7 +48,7 @@ describe(`IssuesService`, (): void => {
     let githubApiIssuesServiceFetchIssuesSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
     let processBatchesSpy: jest.SpyInstance;
-    let statisticsServiceIncreaseProcessedIssuesCountSpy: jest.SpyInstance;
+    let issuesStatisticsServiceIncreaseProcessedIssuesCountSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       mockedIssueProcessor.mockClear();
@@ -64,8 +64,8 @@ describe(`IssuesService`, (): void => {
       );
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       processBatchesSpy = jest.spyOn(IssuesService, `processBatches`);
-      statisticsServiceIncreaseProcessedIssuesCountSpy = jest
-        .spyOn(StatisticsService, `increaseProcessedIssuesCount`)
+      issuesStatisticsServiceIncreaseProcessedIssuesCountSpy = jest
+        .spyOn(IssuesStatisticsService, `increaseProcessedIssuesCount`)
         .mockImplementation();
     });
 
@@ -133,8 +133,8 @@ describe(`IssuesService`, (): void => {
 
         await IssuesService.processBatches();
 
-        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(1);
-        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(1);
+        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
       });
 
       it(`should process the issue`, async (): Promise<void> => {
@@ -193,8 +193,8 @@ describe(`IssuesService`, (): void => {
 
         await IssuesService.processBatches();
 
-        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(2);
-        expect(statisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(2);
+        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
       });
 
       it(`should process the two issues`, async (): Promise<void> => {

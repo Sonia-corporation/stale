@@ -1,5 +1,5 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import * as github from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
@@ -36,19 +36,19 @@ describe(`OctokitService`, (): void => {
 
   describe(`setOctokit()`, (): void => {
     let githubInstance: InstanceType<typeof GitHub>;
-    let inputs: IInputs;
+    let inputs: ICommonInputs;
 
     let setOctokitSpy: jest.SpyInstance;
-    let inputsServiceGetInputsSpy: jest.SpyInstance;
+    let commonInputsServiceGetInputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       githubInstance = createHydratedMock<InstanceType<typeof GitHub>>({});
-      inputs = createHydratedMock<IInputs>({
+      inputs = createHydratedMock<ICommonInputs>({
         githubToken: `dummy github token`,
       });
 
       setOctokitSpy = jest.spyOn(github, `getOctokit`).mockReturnValue(githubInstance);
-      inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(inputs);
+      commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(inputs);
     });
 
     it(`should create the GitHub octokit`, (): void => {
@@ -56,8 +56,8 @@ describe(`OctokitService`, (): void => {
 
       OctokitService.setOctokit();
 
-      expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-      expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+      expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       expect(setOctokitSpy).toHaveBeenCalledTimes(1);
       expect(setOctokitSpy).toHaveBeenCalledWith(`dummy github token`);
       expect(OctokitService.octokit$$).toStrictEqual(githubInstance);

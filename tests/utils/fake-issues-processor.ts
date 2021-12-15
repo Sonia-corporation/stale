@@ -1,4 +1,4 @@
-import { IInputs } from '@core/inputs/inputs.interface';
+import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
@@ -12,12 +12,14 @@ import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/gi
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
+import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
+import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
 import * as core from '@actions/core';
-import { context } from '@actions/github';
 import * as github from '@actions/github';
+import { context } from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 import faker from 'faker';
 import _ from 'lodash';
@@ -28,7 +30,7 @@ import { createHydratedMock } from 'ts-auto-mock';
  * This is the helper to test in a way which is rather close to the real process
  * Perfect for integration testing
  * The goal is to mock the least among of code to have the real code called
- * So the logs are visible and we have a local way to test a feature
+ * So the logs are visible, and we have a local way to test a feature
  */
 export class FakeIssuesProcessor {
   /**
@@ -75,7 +77,7 @@ export class FakeIssuesProcessor {
     });
   }
 
-  private readonly _inputs: IInputs;
+  private readonly _inputs: IAllInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
   private _githubApiIssuesFetchCount = 0;
   private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
@@ -189,6 +191,22 @@ export class FakeIssuesProcessor {
         })
       );
     },
+    [GITHUB_API_PULL_REQUESTS_QUERY](): Promise<IGithubApiGetPullRequests> {
+      const firstBatchPullRequests: IGithubApiGetPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
+        repository: {
+          pullRequests: {
+            nodes: [],
+            pageInfo: {
+              endCursor: undefined,
+              hasNextPage: false,
+            },
+            totalCount: 0,
+          },
+        },
+      });
+
+      return Promise.resolve(firstBatchPullRequests);
+    },
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
@@ -221,10 +239,10 @@ export class FakeIssuesProcessor {
    * @description
    * Crate the SUT
    * You can pass the parameters to override the default inputs
-   * @param {Readonly<Partial<IInputs>>} inputs The override inputs
+   * @param {Readonly<Partial<IAllInputs>>} inputs The override inputs
    */
-  public constructor(inputs?: Readonly<Partial<IInputs>>) {
-    this._inputs = createHydratedMock<IInputs>({
+  public constructor(inputs?: Readonly<Partial<IAllInputs>>) {
+    this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
@@ -239,7 +257,12 @@ export class FakeIssuesProcessor {
   public async process(): Promise<void> {
     this._spy();
 
-    await StaleService.initialize();
+    await StaleService.initialize().catch((error: unknown): void => {
+      console.error(`Caught error in the tests!`);
+      console.error(error);
+
+      throw error;
+    });
   }
 
   /**
@@ -338,8 +361,13 @@ export class FakeIssuesProcessor {
           graphql: jest
             .fn()
             .mockImplementation(
-              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> =>
-                this._apiMapper[request](data)
+              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> => {
+                if (!_.has(this._apiMapper, request)) {
+                  throw new Error(`Could not find in the API mapper the request "${request}"`);
+                }
+
+                return this._apiMapper[request](data);
+              }
             ),
         })
     );

@@ -1,6 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
-import { GithubApiCommentsService } from '@github/api/comments/github-api-comments.service';
+import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
@@ -10,7 +10,7 @@ import { createHydratedMock } from 'ts-auto-mock';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`GithubApiCommentsService`, (): void => {
+describe(`GithubApiIssueCommentsService`, (): void => {
   let issueProcessor: IssueProcessor;
 
   beforeEach((): void => {
@@ -21,14 +21,14 @@ describe(`GithubApiCommentsService`, (): void => {
     it(`should save the given issue processor`, (): void => {
       expect.assertions(1);
 
-      const result = new GithubApiCommentsService(issueProcessor);
+      const result = new GithubApiIssueCommentsService(issueProcessor);
 
       expect(result.issueProcessor).toStrictEqual(issueProcessor);
     });
   });
 
   describe(`after creation`, (): void => {
-    let githubApiCommentsService: GithubApiCommentsService;
+    let githubApiIssueCommentsService: GithubApiIssueCommentsService;
 
     beforeEach((): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
@@ -47,7 +47,7 @@ describe(`GithubApiCommentsService`, (): void => {
         issueId = faker.datatype.uuid();
         comment = faker.random.words();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiCommentsService = new GithubApiCommentsService(issueProcessor);
+        githubApiIssueCommentsService = new GithubApiIssueCommentsService(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
@@ -60,7 +60,7 @@ describe(`GithubApiCommentsService`, (): void => {
       it(`should add the comment on the issue`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
+        await expect(githubApiIssueCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -88,7 +88,7 @@ describe(`GithubApiCommentsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
+          await expect(githubApiIssueCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
@@ -110,7 +110,7 @@ describe(`GithubApiCommentsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiCommentsService.addCommentToIssue(issueId, comment);
+          await githubApiIssueCommentsService.addCommentToIssue(issueId, comment);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

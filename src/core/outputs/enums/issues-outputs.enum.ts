@@ -1,4 +1,4 @@
-export enum EOutputs {
+export enum EIssuesOutputs {
   ALREADY_STALE_ISSUES_COUNT = `already-stale-issues-count`,
   IGNORED_ISSUES_COUNT = `ignored-issues-count`,
   UNALTERED_ISSUES_COUNT = `unaltered-issues-count`,

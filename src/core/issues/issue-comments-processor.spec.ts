@@ -1,9 +1,11 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { StatisticsService } from '@core/statistics/statistics.service';
-import { GithubApiCommentsService } from '@github/api/comments/github-api-comments.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
+import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -27,12 +29,12 @@ describe(`IssueCommentsProcessor`, (): void => {
       expect(result.issueProcessor).toStrictEqual(issueProcessor);
     });
 
-    it(`should create the GithubApiCommentsService`, (): void => {
+    it(`should create the GithubApiIssueCommentsService`, (): void => {
       expect.assertions(1);
 
       const result = new IssueCommentsProcessor(issueProcessor);
 
-      expect(result.githubApiCommentsService$$).toBeInstanceOf(GithubApiCommentsService);
+      expect(result.githubApiIssueCommentsService$$).toBeInstanceOf(GithubApiIssueCommentsService);
     });
   });
 
@@ -46,11 +48,12 @@ describe(`IssueCommentsProcessor`, (): void => {
     describe(`processStaleComment()`, (): void => {
       let issueId: IUuid;
 
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
-      let githubApiCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
+      let githubApiIssueCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -61,9 +64,13 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
             dryRun: false,
+          })
+        );
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueStaleComment: ``,
           })
         );
@@ -73,21 +80,23 @@ describe(`IssueCommentsProcessor`, (): void => {
         issueProcessorLoggerNoticeSpy = jest
           .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
           .mockImplementation();
-        statisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
-          .spyOn(StatisticsService, `increaseAddedIssuesCommentsCount`)
+        issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
-        githubApiCommentsServiceAddCommentToIssueSpy = jest
-          .spyOn(issueCommentsProcessor.githubApiCommentsService$$, `addCommentToIssue`)
+        githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
+          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)
           .mockImplementation();
       });
 
       it(`should check if the issue stale comment input is configured`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await issueCommentsProcessor.processStaleComment();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
@@ -97,9 +106,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue stale comment is not configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueStaleComment: ``,
             })
           );
@@ -112,16 +120,15 @@ describe(`IssueCommentsProcessor`, (): void => {
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The stale comment is unset. Continuing...`);
-          expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
+          expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
         });
       });
 
       describe(`when the issue stale comment is configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueStaleComment: `dummy-comment`,
             })
           );
@@ -129,10 +136,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: true,
-                issueStaleComment: `dummy-comment`,
               })
             );
           });
@@ -142,7 +148,7 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processStaleComment();
 
-            expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
@@ -156,8 +162,8 @@ describe(`IssueCommentsProcessor`, (): void => {
               `The stale comment is set to`,
               `value-dummy-comment`
             );
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should continue the process`, async (): Promise<void> => {
@@ -172,10 +178,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: false,
-                issueStaleComment: `dummy-comment`,
               })
             );
           });
@@ -201,8 +206,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processStaleComment();
 
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should continue the process`, async (): Promise<void> => {
@@ -220,11 +225,12 @@ describe(`IssueCommentsProcessor`, (): void => {
     describe(`processCloseComment()`, (): void => {
       let issueId: IUuid;
 
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
-      let statisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
-      let githubApiCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
+      let githubApiIssueCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -235,9 +241,13 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
             dryRun: false,
+          })
+        );
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueCloseComment: ``,
           })
         );
@@ -247,21 +257,23 @@ describe(`IssueCommentsProcessor`, (): void => {
         issueProcessorLoggerNoticeSpy = jest
           .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
           .mockImplementation();
-        statisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
-          .spyOn(StatisticsService, `increaseAddedIssuesCommentsCount`)
+        issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
+          .spyOn(IssuesStatisticsService, `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
-        githubApiCommentsServiceAddCommentToIssueSpy = jest
-          .spyOn(issueCommentsProcessor.githubApiCommentsService$$, `addCommentToIssue`)
+        githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
+          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)
           .mockImplementation();
       });
 
       it(`should check if the issue close comment input is configured`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await issueCommentsProcessor.processCloseComment();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
@@ -271,9 +283,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       describe(`when the issue close comment is not configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueCloseComment: ``,
             })
           );
@@ -286,16 +297,15 @@ describe(`IssueCommentsProcessor`, (): void => {
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The close comment is unset. Continuing...`);
-          expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+          expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
+          expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
         });
       });
 
       describe(`when the issue close comment is configured`, (): void => {
         beforeEach((): void => {
-          inputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IInputs>({
-              dryRun: false,
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
               issueCloseComment: `dummy-comment`,
             })
           );
@@ -303,10 +313,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: true,
-                issueCloseComment: `dummy-comment`,
               })
             );
           });
@@ -316,7 +325,7 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processCloseComment();
 
-            expect(githubApiCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
@@ -330,8 +339,8 @@ describe(`IssueCommentsProcessor`, (): void => {
               `The close comment is set to`,
               `value-dummy-comment`
             );
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should continue the process`, async (): Promise<void> => {
@@ -346,10 +355,9 @@ describe(`IssueCommentsProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            inputsServiceGetInputsSpy.mockReturnValue(
-              createHydratedMock<IInputs>({
+            commonInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<ICommonInputs>({
                 dryRun: false,
-                issueCloseComment: `dummy-comment`,
               })
             );
           });
@@ -375,8 +383,8 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processCloseComment();
 
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
-            expect(statisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should continue the process`, async (): Promise<void> => {

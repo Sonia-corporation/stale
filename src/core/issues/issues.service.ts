@@ -1,5 +1,5 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -37,7 +37,7 @@ export class IssuesService {
       // eslint-disable-next-line no-await-in-loop
       await new IssueProcessor(issue).process();
 
-      StatisticsService.increaseProcessedIssuesCount();
+      IssuesStatisticsService.increaseProcessedIssuesCount();
     }
 
     LoggerService.info(

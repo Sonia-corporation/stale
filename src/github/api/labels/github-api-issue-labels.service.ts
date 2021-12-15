@@ -12,7 +12,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 
-export class GithubApiLabelsService {
+export class GithubApiIssueLabelsService {
   public readonly issueProcessor: IssueProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
