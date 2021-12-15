@@ -43,7 +43,7 @@ export class PullRequestIgnoreProcessor {
 
     if (this.pullRequestProcessor.githubPullRequest.locked) {
       this.pullRequestProcessor.logger.info(`Locked`);
-      this.pullRequestProcessor.logger.debug(`We do not process locked pull-requests; it is in the name: locked`);
+      this.pullRequestProcessor.logger.debug(`We do not process locked pull requests; it is in the name: locked`);
 
       return true;
     }
