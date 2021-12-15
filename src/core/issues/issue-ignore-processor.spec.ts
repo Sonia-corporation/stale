@@ -37,7 +37,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`shouldIgnore()`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
-      let hasAnyIgnoredAsigneesSpy: jest.SpyInstance;
+      let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
@@ -48,7 +48,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
         isLockedSpy = jest.spyOn(issueIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
-        hasAnyIgnoredAsigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredAssignees$$`).mockImplementation();
+        hasAnyIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredAssignees$$`).mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
         hasAllIgnoredProjectCardsSpy = jest
@@ -208,7 +208,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
                 describe(`when the issue does not have one of the ignored assignees`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAsigneesSpy.mockReturnValue(false);
+                    hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
                   });
 
                   it(`should check if the issue should ignore based on the creation date`, (): void => {
@@ -251,7 +251,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
                 describe(`when the issue has one of the ignored assignees`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAsigneesSpy.mockReturnValue(true);
+                    hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
                   });
 
                   it(`should return true`, (): void => {

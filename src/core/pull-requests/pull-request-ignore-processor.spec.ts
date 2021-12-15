@@ -37,7 +37,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`shouldIgnore()`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
-      let hasAnyIgnoredAsigneesSpy: jest.SpyInstance;
+      let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
@@ -48,7 +48,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
         isLockedSpy = jest.spyOn(pullRequestIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
-        hasAnyIgnoredAsigneesSpy = jest
+        hasAnyIgnoredAssigneesSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredAssignees$$`)
           .mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(pullRequestIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
@@ -214,7 +214,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
                 describe(`when the pull request does not have one of the ignored assignees`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAsigneesSpy.mockReturnValue(false);
+                    hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
                   });
 
                   it(`should check if the pull request should ignore based on the creation date`, (): void => {
@@ -257,7 +257,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
                 describe(`when the pull request has one of the ignored assignees`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAsigneesSpy.mockReturnValue(true);
+                    hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
                   });
 
                   it(`should return true`, (): void => {
