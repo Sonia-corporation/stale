@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.24.0](https://github.com/Sonia-corporation/stale/compare/1.23.0...1.24.0) (2021-12-16)
+
+
+### :rocket: Features
+
+* **pr:** add new inputs to support pull requests processing ([ab8f8a0](https://github.com/Sonia-corporation/stale/commit/ab8f8a090db6210c18314c4707bdbb294ce46042))
+  this is the same implementation than the issues inputs
+from this point, issues and pull requests have the exact same options and features and this is closing the alpha state off this action
+
 # [1.23.0](https://github.com/Sonia-corporation/stale/compare/1.22.0...1.23.0) (2021-12-11)
 
 
