@@ -1,8 +1,10 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueCommentsProcessor } from '@core/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
-import { GithubApiLabelsService } from '@github/api/labels/github-api-labels.service';
+import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -15,12 +17,12 @@ import { DateTime } from 'luxon';
  */
 export class IssueStaleProcessor {
   public readonly issueProcessor: IssueProcessor;
-  public readonly githubApiLabelsService$$: GithubApiLabelsService;
+  public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
     this.issueProcessor = issueProcessor;
-    this.githubApiLabelsService$$ = new GithubApiLabelsService(this.issueProcessor);
+    this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.issueProcessor);
     this.issueCommentsProcessor$$ = new IssueCommentsProcessor(this.issueProcessor);
   }
 
@@ -33,27 +35,33 @@ export class IssueStaleProcessor {
   public async stale(): Promise<void> {
     this.issueProcessor.logger.info(`Adding the stale state to this issue...`);
 
-    const inputs: IInputs = InputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
     this.issueProcessor.logger.info(
       `Fetching the stale label`,
-      LoggerService.value(inputs.issueStaleLabel),
+      LoggerService.value(issuesInputs.issueStaleLabel),
       LoggerFormatService.whiteBright(`to add on this issue...`)
     );
 
-    const label: IGithubApiLabel | null = await this.githubApiLabelsService$$.fetchLabelByName(inputs.issueStaleLabel);
+    const label: IGithubApiLabel | null = await this.githubApiIssueLabelsService$$.fetchLabelByName(
+      issuesInputs.issueStaleLabel
+    );
 
     if (!label) {
-      this.issueProcessor.logger.error(`Could not find the stale label`, LoggerService.value(inputs.issueStaleLabel));
+      this.issueProcessor.logger.error(
+        `Could not find the stale label`,
+        LoggerService.value(issuesInputs.issueStaleLabel)
+      );
 
-      throw new Error(`Could not find the stale label ${inputs.issueStaleLabel}`);
+      throw new Error(`Could not find the stale label ${issuesInputs.issueStaleLabel}`);
     }
 
     this.issueProcessor.logger.info(`The stale label was fetched`);
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
-    if (!inputs.dryRun) {
-      await this.githubApiLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
+    if (!commonInputs.dryRun) {
+      await this.githubApiIssueLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was added`);
     } else {
@@ -69,10 +77,11 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`Checking if the issue should be stale based on the update date...`);
 
     const updatedAt: DateTime = this.issueProcessor.getUpdatedAt();
+    const inputs: IIssuesInputs = IssuesInputsService.getInputs();
 
     this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(updatedAt));
 
-    const numberOfDaysBeforeStale: number = InputsService.getInputs().issueDaysBeforeStale;
+    const numberOfDaysBeforeStale: number = inputs.issueDaysBeforeStale;
     const daysDifference: number = _.round(
       DateTime.now().diff(updatedAt, `days`, {
         conversionAccuracy: `longterm`,

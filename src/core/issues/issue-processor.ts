@@ -5,7 +5,7 @@ import { IssueLogger } from '@core/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/issues/issue-remove-stale-processor';
 import { IssueShouldCloseStaleProcessor } from '@core/issues/issue-should-close-stale-processor';
 import { IssueStaleProcessor } from '@core/issues/issue-stale-processor';
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { createLink } from '@utils/links/create-link';
@@ -41,7 +41,7 @@ export class IssueProcessor {
 
     if (this.shouldIgnore$$()) {
       this.logger.info(`Ignored`);
-      StatisticsService.increaseIgnoredIssuesCount();
+      IssuesStatisticsService.increaseIgnoredIssuesCount();
       this.stopProcessing$$();
 
       return;
@@ -49,7 +49,7 @@ export class IssueProcessor {
 
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
-      StatisticsService.increaseAlreadyStaleIssuesCount();
+      IssuesStatisticsService.increaseAlreadyStaleIssuesCount();
 
       const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
@@ -113,9 +113,9 @@ export class IssueProcessor {
 
     if (issueStaleProcessor.shouldStale()) {
       await issueStaleProcessor.stale();
-      StatisticsService.increaseStaleIssuesCount();
+      IssuesStatisticsService.increaseStaleIssuesCount();
     } else {
-      StatisticsService.increaseUnalteredIssuesCount();
+      IssuesStatisticsService.increaseUnalteredIssuesCount();
     }
 
     this.stopProcessing$$();
@@ -144,7 +144,7 @@ export class IssueProcessor {
 
     if (await issueRemoveStaleProcessor.shouldRemoveStale()) {
       await issueRemoveStaleProcessor.removeStale();
-      StatisticsService.increaseRemoveStaleIssuesCount();
+      IssuesStatisticsService.increaseRemoveStaleIssuesCount();
 
       return Promise.resolve(true);
     }
@@ -159,9 +159,9 @@ export class IssueProcessor {
       const issueCloseStaleProcessor: IssueCloseStaleProcessor = new IssueCloseStaleProcessor(this);
 
       await issueCloseStaleProcessor.close();
-      StatisticsService.increaseClosedIssuesCount();
+      IssuesStatisticsService.increaseClosedIssuesCount();
     } else {
-      StatisticsService.increaseUnalteredIssuesCount();
+      IssuesStatisticsService.increaseUnalteredIssuesCount();
     }
 
     this.stopProcessing$$();

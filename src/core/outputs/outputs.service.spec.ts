@@ -1,62 +1,38 @@
-import { EOutputs } from '@core/outputs/outputs.enum';
+import { IssuesOutputsService } from '@core/outputs/issues-outputs.service';
 import { OutputsService } from '@core/outputs/outputs.service';
-import { StatisticsService } from '@core/statistics/statistics.service';
-import { LoggerService } from '@utils/loggers/logger.service';
-import * as core from '@actions/core';
+import { PullRequestsOutputsService } from '@core/outputs/pull-requests-outputs.service';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`OutputsService`, (): void => {
   describe(`setOutputs()`, (): void => {
-    let loggerServiceInfoSpy: jest.SpyInstance;
-    let coreSetOutputSpy: jest.SpyInstance;
+    let issuesOutputsServiceSetOutputsSpy: jest.SpyInstance;
+    let pullRequestsOutputsServiceSetOutputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
-      coreSetOutputSpy = jest.spyOn(core, `setOutput`).mockImplementation();
+      issuesOutputsServiceSetOutputsSpy = jest.spyOn(IssuesOutputsService, `setOutputs`).mockImplementation();
+      pullRequestsOutputsServiceSetOutputsSpy = jest
+        .spyOn(PullRequestsOutputsService, `setOutputs`)
+        .mockImplementation();
     });
 
-    it(`should log about setting the outputs`, (): void => {
+    it(`should set the issues statistics outputs`, (): void => {
       expect.assertions(2);
 
       OutputsService.setOutputs();
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Creating the outputs...`);
+      expect(issuesOutputsServiceSetOutputsSpy).toHaveBeenCalledTimes(1);
+      expect(issuesOutputsServiceSetOutputsSpy).toHaveBeenCalledWith();
     });
 
-    it(`should set the statistics outputs`, (): void => {
-      expect.assertions(9);
-      StatisticsService.processedIssuesCount$$ = 1;
-      StatisticsService.ignoredIssuesCount$$ = 1;
-      StatisticsService.unalteredIssuesCount$$ = 1;
-      StatisticsService.staleIssuesCount$$ = 1;
-      StatisticsService.alreadyStaleIssuesCount$$ = 1;
-      StatisticsService.removeStaleIssuesCount$$ = 1;
-      StatisticsService.closedIssuesCount$$ = 1;
-      StatisticsService.addedIssuesCommentsCount$$ = 1;
-
-      OutputsService.setOutputs();
-
-      expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EOutputs.IGNORED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EOutputs.UNALTERED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(4, EOutputs.STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(5, EOutputs.PROCESSED_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EOutputs.REMOVE_STALE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EOutputs.CLOSE_ISSUES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
-    });
-
-    it(`should log about the end of the output setup`, (): void => {
+    it(`should set the pull requests statistics outputs`, (): void => {
       expect.assertions(2);
 
       OutputsService.setOutputs();
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Outputs created`);
+      expect(pullRequestsOutputsServiceSetOutputsSpy).toHaveBeenCalledTimes(1);
+      expect(pullRequestsOutputsServiceSetOutputsSpy).toHaveBeenCalledWith();
     });
 
     it(`should return the service`, (): void => {

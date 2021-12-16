@@ -1,7 +1,7 @@
-import { IInputs } from '@core/inputs/inputs.interface';
+import { IAllInputs } from '@core/inputs/types/all-inputs';
 import faker from 'faker';
 
-export const TEST_DEFAULT_INPUTS: IInputs = {
+export const TEST_DEFAULT_INPUTS: IAllInputs = {
   dryRun: false,
   githubToken: faker.datatype.uuid(),
   issueCloseComment: `close-comment`,
@@ -15,4 +15,15 @@ export const TEST_DEFAULT_INPUTS: IInputs = {
   issueIgnoreBeforeCreationDate: ``,
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,
+  pullRequestCloseComment: `close-comment`,
+  pullRequestDaysBeforeClose: 10,
+  pullRequestDaysBeforeStale: 30,
+  pullRequestIgnoreAllAssignees: false,
+  pullRequestIgnoreAllLabels: false,
+  pullRequestIgnoreAllProjectCards: false,
+  pullRequestIgnoreAnyAssignees: [`pull-request-ignore-any-assignee-1`, `pull-request-ignore-any-assignee-2`],
+  pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
+  pullRequestIgnoreBeforeCreationDate: ``,
+  pullRequestStaleComment: `stale-comment`,
+  pullRequestStaleLabel: `stale`,
 };

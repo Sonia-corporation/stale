@@ -6,7 +6,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 
-export class GithubApiCommentsService {
+export class GithubApiIssueCommentsService {
   public readonly issueProcessor: IssueProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {

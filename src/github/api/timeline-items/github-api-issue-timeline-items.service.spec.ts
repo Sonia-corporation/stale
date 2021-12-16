@@ -1,7 +1,7 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
-import { GithubApiTimelineItemsService } from '@github/api/timeline-items/github-api-timeline-items.service';
+import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/github-api-issue-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -12,7 +12,7 @@ import { createHydratedMock } from 'ts-auto-mock';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`GithubApiTimelineItemsService`, (): void => {
+describe(`GithubApiIssueTimelineItemsService`, (): void => {
   let issueProcessor: IssueProcessor;
 
   beforeEach((): void => {
@@ -23,14 +23,14 @@ describe(`GithubApiTimelineItemsService`, (): void => {
     it(`should save the given issue processor`, (): void => {
       expect.assertions(1);
 
-      const result = new GithubApiTimelineItemsService(issueProcessor);
+      const result = new GithubApiIssueTimelineItemsService(issueProcessor);
 
       expect(result.issueProcessor).toStrictEqual(issueProcessor);
     });
   });
 
   describe(`after creation`, (): void => {
-    let githubApiTimelineItemsService: GithubApiTimelineItemsService;
+    let githubApiIssueTimelineItemsService: GithubApiIssueTimelineItemsService;
 
     beforeEach((): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
@@ -47,7 +47,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
       beforeEach((): void => {
         issueNumber = faker.datatype.number();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
-        githubApiTimelineItemsService = new GithubApiTimelineItemsService(issueProcessor);
+        githubApiIssueTimelineItemsService = new GithubApiIssueTimelineItemsService(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
@@ -64,7 +64,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
       it(`should fetch the added labels events with the given issue number`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+        await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -92,7 +92,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+          await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
@@ -131,7 +131,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
           it(`should log about not finding any added labels events and throw an error`, async (): Promise<void> => {
             expect.assertions(4);
 
-            await expect(githubApiTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
               new Error(`Could not find a single added label event for the issue ${issueNumber}`)
             );
 
@@ -169,7 +169,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
           it(`should return the added labels events`, async (): Promise<void> => {
             expect.assertions(1);
 
-            const result = await githubApiTimelineItemsService.fetchIssueAddedLabels(issueNumber);
+            const result = await githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber);
 
             expect(result).toStrictEqual(githubApiTimelineItemsIssueLabeledEvents);
           });
@@ -198,7 +198,7 @@ describe(`GithubApiTimelineItemsService`, (): void => {
           it(`should log about not handling the pagination yet for the added labels events and throw an error`, async (): Promise<void> => {
             expect.assertions(4);
 
-            await expect(githubApiTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
               new Error(`Reached the maximum number of added label events supported for now`)
             );
 

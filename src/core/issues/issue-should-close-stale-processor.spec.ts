@@ -1,5 +1,5 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IssueShouldCloseStaleProcessor } from '@core/issues/issue-should-close-stale-processor';
 import { DateTime } from 'luxon';
@@ -34,7 +34,7 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
 
     describe(`shouldClose()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorGetUpdatedAtSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -43,8 +43,8 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueShouldCloseStaleProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueDaysBeforeClose: 10,
           })
         );
@@ -56,8 +56,8 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
 
         issueShouldCloseStaleProcessor.shouldClose();
 
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issueProcessorGetUpdatedAtSpy).toHaveBeenCalledTimes(1);
         expect(issueProcessorGetUpdatedAtSpy).toHaveBeenCalledWith();
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);

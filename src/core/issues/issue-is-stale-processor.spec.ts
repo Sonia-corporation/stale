@@ -1,5 +1,5 @@
-import { IInputs } from '@core/inputs/inputs.interface';
-import { InputsService } from '@core/inputs/inputs.service';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueIsStaleProcessor } from '@core/issues/issue-is-stale-processor';
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -34,7 +34,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
 
     describe(`isStale()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let inputsServiceGetInputsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIsStaleProcessor = new IssueIsStaleProcessor(issueProcessor);
@@ -42,8 +42,8 @@ describe(`IssueIsStaleProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueIsStaleProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        inputsServiceGetInputsSpy = jest.spyOn(InputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IInputs>({
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
             issueStaleLabel: `stale`,
           })
         );
@@ -56,8 +56,8 @@ describe(`IssueIsStaleProcessor`, (): void => {
 
         expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Checking if the issue is already stale...`);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(inputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the issue has already the stale label`, (): void => {

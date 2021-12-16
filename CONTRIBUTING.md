@@ -148,6 +148,30 @@ To help us have a clear vision over the workflow and also for you if you are jus
     - When the input value is not empty, add a comment
 - When the batch was processed, go to the next one and proceed again
 
+### Pull requests
+
+- Fetch all the open pull requests per batch of 20, sorted by update date from the oldest first
+- Check if the pull request is locked and stop the processing if this is the case
+- Check if the pull request has a label (except the stale one) and stop the processing if this is the case (coming from the `pull-request-ignore-all-labels` input)
+- Check if the pull request has any of the ignored labels and stop the processing if this is the case (coming from the `pull-request-ignore-any-labels` input)
+- Check if the pull request has an assignee and stop the processing if this is the case (coming from the `pull-request-ignore-all-assignees` input)
+- Check if the pull request has any of the ignored assignees and stop the processing if this is the case (coming from the `pull-request-ignore-any-assignees` input)
+- Check if the pull request has a project card and stop the processing if this is the case (coming from the `pull-request-ignore-all-project-cards` input)
+- Check if the pull request creation date is before x date and stop the processing if this is the case (coming from the `pull-request-ignore-before-creation-date` input)
+- Check if the pull request has already a stale state (stale label)
+  - If the pull request has a stale label, check if it was updated after the addition of the stale label
+    - If it was updated, remove the stale state (stale label) and stop the processing
+    - Else, check if pull request last update is older than X days (coming from `pull-request-days-before-close`)
+      - If it is old, close the pull request
+      - Check if the action should also add a comment (coming from the `pull-request-close-comment` input)
+        - When the input value is not empty, add a comment
+- Check if the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
+- If the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
+  - Add a label to stale (coming from the `pull-request-stale-label` input, ignored in `dry-run` mode)
+  - Check if the action should also add a comment (coming from the `pull-request-stale-comment` input)
+    - When the input value is not empty, add a comment
+- When the batch was processed, go to the next one and proceed again
+
 ### Error handling
 
 - Any error will be caught globally, logged as error and will force the action to stop and fail

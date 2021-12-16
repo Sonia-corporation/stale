@@ -27,7 +27,7 @@ jobs:
           issue-stale-comment: |
             [~frozen]: https://img.shields.io/badge/-frozen-D6FFFA.svg
             [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
-            [~dependencies]: https://img.shields.io/badge/-odependencies-1e3799.svg
+            [~dependencies]: https://img.shields.io/badge/-dependencies-1e3799.svg
             [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
 
             :warning: **Warning!** :warning:

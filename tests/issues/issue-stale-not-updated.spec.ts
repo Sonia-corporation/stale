@@ -1,4 +1,4 @@
-import { StatisticsService } from '@core/statistics/statistics.service';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
@@ -60,14 +60,14 @@ describe(`Issue stale not updated`, (): void => {
 
       await issueSut.process();
 
-      expect(StatisticsService.processedIssuesCount$$).toBe(1);
-      expect(StatisticsService.ignoredIssuesCount$$).toBe(0);
-      expect(StatisticsService.unalteredIssuesCount$$).toBe(0);
-      expect(StatisticsService.staleIssuesCount$$).toBe(0);
-      expect(StatisticsService.alreadyStaleIssuesCount$$).toBe(1);
-      expect(StatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(StatisticsService.closedIssuesCount$$).toBe(1);
-      expect(StatisticsService.addedIssuesCommentsCount$$).toBe(1);
+      expect(IssuesStatisticsService.processedIssuesCount$$).toBe(1);
+      expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.staleIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(1);
+      expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.closedIssuesCount$$).toBe(1);
+      expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(1);
     });
   });
 });
