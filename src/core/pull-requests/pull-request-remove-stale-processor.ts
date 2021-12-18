@@ -103,7 +103,7 @@ export class PullRequestRemoveStaleProcessor {
     this.pullRequestProcessor.logger.info(`Removing the stale state from this pull request...`);
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
     this.pullRequestProcessor.logger.info(
       `Fetching the stale label`,

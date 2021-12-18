@@ -92,7 +92,7 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor.logger.info(`Removing the stale state from this issue...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
     this.issueProcessor.logger.info(
       `Fetching the stale label`,

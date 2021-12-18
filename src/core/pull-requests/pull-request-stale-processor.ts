@@ -35,7 +35,7 @@ export class PullRequestStaleProcessor {
   public async stale(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Adding the stale state to this pull request...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
 
     this.pullRequestProcessor.logger.info(

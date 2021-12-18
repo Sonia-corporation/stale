@@ -142,7 +142,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
               id: staleLabelId,
             })
           );
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
@@ -230,11 +230,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: false,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: false,
+                })
+              );
           });
 
           it(`should add the stale label on the pull request`, async (): Promise<void> => {
@@ -265,11 +267,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: true,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: true,
+                })
+              );
           });
 
           it(`should not add the stale label on the pull request`, async (): Promise<void> => {

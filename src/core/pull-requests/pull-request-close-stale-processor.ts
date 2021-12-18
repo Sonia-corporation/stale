@@ -21,7 +21,7 @@ export class PullRequestCloseStaleProcessor {
   public async close(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Closing this pull request...`);
 
-    if (!CommonInputsService.getInputs().dryRun) {
+    if (!CommonInputsService.getInstance().getInputs().dryRun) {
       await this.githubApiPullRequestsService$$.closePullRequest(this.pullRequestProcessor.githubPullRequest.id);
       this.pullRequestProcessor.logger.info(`The pull request was closed`);
     } else {

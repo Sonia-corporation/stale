@@ -21,7 +21,7 @@ export class IssueCloseStaleProcessor {
   public async close(): Promise<void> {
     this.issueProcessor.logger.info(`Closing this issue...`);
 
-    if (!CommonInputsService.getInputs().dryRun) {
+    if (!CommonInputsService.getInstance().getInputs().dryRun) {
       await this.githubApiIssuesService$$.closeIssue(this.issueProcessor.githubIssue.id);
       this.issueProcessor.logger.info(`The issue was closed`);
     } else {

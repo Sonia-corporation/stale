@@ -19,7 +19,7 @@ export class PullRequestCommentsProcessor {
   public async processStaleComment(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Checking if a stale comment should be added...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
 
     if (pullRequestsInputs.pullRequestStaleComment === ``) {
@@ -49,7 +49,7 @@ export class PullRequestCommentsProcessor {
   public async processCloseComment(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Checking if a close comment should be added...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
 
     if (pullRequestsInputs.pullRequestCloseComment === ``) {

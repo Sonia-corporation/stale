@@ -64,7 +64,7 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
@@ -241,7 +241,7 @@ describe(`IssueCommentsProcessor`, (): void => {
         });
         issueCommentsProcessor = new IssueCommentsProcessor(issueProcessor);
 
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })

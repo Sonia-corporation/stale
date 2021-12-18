@@ -35,7 +35,7 @@ export class IssueStaleProcessor {
   public async stale(): Promise<void> {
     this.issueProcessor.logger.info(`Adding the stale state to this issue...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
 
     this.issueProcessor.logger.info(
