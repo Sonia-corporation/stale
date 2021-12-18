@@ -66,7 +66,7 @@ describe(`IssuesInputsService`, (): void => {
 
       const result = service.initialize();
 
-      expect(result).toStrictEqual(IssuesInputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
