@@ -6,7 +6,7 @@ export class InputsService {
   public static initialize(): InputsService {
     CommonInputsService.getInstance().initialize();
     IssuesInputsService.getInstance().initialize();
-    PullRequestsInputsService.initialize();
+    PullRequestsInputsService.getInstance().initialize();
 
     return InputsService;
   }
@@ -14,7 +14,7 @@ export class InputsService {
   public static logInputs(): InputsService {
     CommonInputsService.getInstance().logInputs();
     IssuesInputsService.getInstance().logInputs();
-    PullRequestsInputsService.logInputs();
+    PullRequestsInputsService.getInstance().logInputs();
 
     return InputsService;
   }

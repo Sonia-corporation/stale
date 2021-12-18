@@ -10,19 +10,43 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`PullRequestsInputsService`, (): void => {
+  let service: PullRequestsInputsService;
+
+  beforeEach((): void => {
+    service = PullRequestsInputsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a PullRequestsInputsService`, (): void => {
+      expect.assertions(1);
+
+      service = PullRequestsInputsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(PullRequestsInputsService));
+    });
+
+    it(`should return the created PullRequestsInputsService`, (): void => {
+      expect.assertions(1);
+
+      const result = PullRequestsInputsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     let setInputsSpy: jest.SpyInstance;
     let logInputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      setInputsSpy = jest.spyOn(PullRequestsInputsService, `setInputs`).mockImplementation();
-      logInputsSpy = jest.spyOn(PullRequestsInputsService, `logInputs`).mockImplementation();
+      setInputsSpy = jest.spyOn(service, `setInputs`).mockImplementation();
+      logInputsSpy = jest.spyOn(service, `logInputs`).mockImplementation();
     });
 
     it(`should get, parse and set the pull requests inputs coming from the action`, (): void => {
       expect.assertions(2);
 
-      PullRequestsInputsService.initialize();
+      service.initialize();
 
       expect(setInputsSpy).toHaveBeenCalledTimes(1);
       expect(setInputsSpy).toHaveBeenCalledWith();
@@ -31,7 +55,7 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should log the list of pull requests inputs and their values`, (): void => {
       expect.assertions(2);
 
-      PullRequestsInputsService.initialize();
+      service.initialize();
 
       expect(logInputsSpy).toHaveBeenCalledTimes(1);
       expect(logInputsSpy).toHaveBeenCalledWith();
@@ -40,9 +64,9 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsInputsService.initialize();
+      const result = service.initialize();
 
-      expect(result).toStrictEqual(PullRequestsInputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
@@ -53,7 +77,7 @@ describe(`PullRequestsInputsService`, (): void => {
     let coreInputsServiceGetNumberInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      PullRequestsInputsService.inputs$$ = createHydratedMock<IPullRequestsInputs>({
+      service.inputs$$ = createHydratedMock<IPullRequestsInputs>({
         pullRequestCloseComment: `pull-request-close-comment`,
         pullRequestDaysBeforeClose: 10,
         pullRequestDaysBeforeStale: 30,
@@ -80,83 +104,81 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should get the pull-request-close-comment input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(1, `pull-request-close-comment`, { required: false });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestCloseComment).toStrictEqual(
-        `dummy-pull-request-close-comment`
-      );
+      expect(service.inputs$$?.pullRequestCloseComment).toStrictEqual(`dummy-pull-request-close-comment`);
     });
 
     it(`should get the pull-request-days-before-close input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreInputsServiceGetNumberInputSpy).toHaveBeenCalledTimes(2);
       expect(coreInputsServiceGetNumberInputSpy).toHaveBeenNthCalledWith(1, `pull-request-days-before-close`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestDaysBeforeClose).toBe(666);
+      expect(service.inputs$$?.pullRequestDaysBeforeClose).toBe(666);
     });
 
     it(`should get the pull-request-days-before-stale input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreInputsServiceGetNumberInputSpy).toHaveBeenCalledTimes(2);
       expect(coreInputsServiceGetNumberInputSpy).toHaveBeenNthCalledWith(2, `pull-request-days-before-stale`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestDaysBeforeStale).toBe(666);
+      expect(service.inputs$$?.pullRequestDaysBeforeStale).toBe(666);
     });
 
     it(`should get the pull-request-ignore-all-assignees input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(1, `pull-request-ignore-all-assignees`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreAllAssignees).toBeFalse();
+      expect(service.inputs$$?.pullRequestIgnoreAllAssignees).toBeFalse();
     });
 
     it(`should get the pull-request-ignore-all-labels input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(2, `pull-request-ignore-all-labels`, { required: false });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreAllLabels).toBeFalse();
+      expect(service.inputs$$?.pullRequestIgnoreAllLabels).toBeFalse();
     });
 
     it(`should get the pull-request-ignore-all-project-cards input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(3);
       expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(3, `pull-request-ignore-all-project-cards`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreAllProjectCards).toBeFalse();
+      expect(service.inputs$$?.pullRequestIgnoreAllProjectCards).toBeFalse();
     });
 
     it(`should get the pull-request-ignore-any-assignees input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(2);
       expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(1, `pull-request-ignore-any-assignees`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreAnyAssignees).toStrictEqual([
+      expect(service.inputs$$?.pullRequestIgnoreAnyAssignees).toStrictEqual([
         `dummy-pull-request-ignore-any-assignees-1`,
         `dummy-pull-request-ignore-any-assignees-2`,
       ]);
@@ -165,13 +187,13 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should get the pull-request-ignore-any-labels input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(2);
       expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(2, `pull-request-ignore-any-labels`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreAnyLabels).toStrictEqual([
+      expect(service.inputs$$?.pullRequestIgnoreAnyLabels).toStrictEqual([
         `dummy-pull-request-ignore-any-labels-1`,
         `dummy-pull-request-ignore-any-labels-2`,
       ]);
@@ -180,13 +202,13 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should get the pull-request-ignore-before-creation-date input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(2, `pull-request-ignore-before-creation-date`, {
         required: false,
       });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestIgnoreBeforeCreationDate).toStrictEqual(
+      expect(service.inputs$$?.pullRequestIgnoreBeforeCreationDate).toStrictEqual(
         `dummy-pull-request-ignore-before-creation-date`
       );
     });
@@ -194,29 +216,27 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should get the pull-request-stale-comment input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(3, `pull-request-stale-comment`, { required: false });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestStaleComment).toStrictEqual(
-        `dummy-pull-request-stale-comment`
-      );
+      expect(service.inputs$$?.pullRequestStaleComment).toStrictEqual(`dummy-pull-request-stale-comment`);
     });
 
     it(`should get the pull-request-stale-label input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      PullRequestsInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(4, `pull-request-stale-label`, { required: false });
-      expect(PullRequestsInputsService.inputs$$?.pullRequestStaleLabel).toStrictEqual(`dummy-pull-request-stale-label`);
+      expect(service.inputs$$?.pullRequestStaleLabel).toStrictEqual(`dummy-pull-request-stale-label`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsInputsService.setInputs();
+      const result = service.setInputs();
 
       expect(result).toStrictEqual({
         pullRequestCloseComment: `dummy-pull-request-close-comment`,
@@ -256,7 +276,7 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should create a group of logs`, (): void => {
       expect.assertions(2);
 
-      PullRequestsInputsService.logInputs();
+      service.logInputs();
 
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Pull requests inputs`);
@@ -264,7 +284,7 @@ describe(`PullRequestsInputsService`, (): void => {
 
     describe(`when the inputs are set`, (): void => {
       beforeEach((): void => {
-        PullRequestsInputsService.inputs$$ = createHydratedMock<IPullRequestsInputs>({
+        service.inputs$$ = createHydratedMock<IPullRequestsInputs>({
           pullRequestCloseComment: `dummy-pull-request-close-comment`,
           pullRequestDaysBeforeClose: 666,
           pullRequestDaysBeforeStale: 666,
@@ -284,7 +304,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request close comment input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -300,7 +320,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request days before close input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -316,7 +336,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request days before stale input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -332,7 +352,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore all assignees input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -348,7 +368,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore all labels input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -364,7 +384,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore all project cards input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -380,7 +400,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore any assignees input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -396,7 +416,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore any labels input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -412,7 +432,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request ignore before creation date input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -428,7 +448,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request stale comment input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -444,7 +464,7 @@ describe(`PullRequestsInputsService`, (): void => {
       it(`should log the pull request stale label input`, (): void => {
         expect.assertions(4);
 
-        PullRequestsInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -461,7 +481,7 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 
-      PullRequestsInputsService.logInputs();
+      service.logInputs();
 
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledWith();
@@ -470,24 +490,22 @@ describe(`PullRequestsInputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsInputsService.logInputs();
+      const result = service.logInputs();
 
-      expect(result).toStrictEqual(PullRequestsInputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`getInputs()`, (): void => {
     describe(`when the pull requests inputs are unset`, (): void => {
       beforeEach((): void => {
-        delete PullRequestsInputsService.inputs$$;
+        delete service.inputs$$;
       });
 
       it(`should throw an error`, (): void => {
         expect.assertions(1);
 
-        expect((): IPullRequestsInputs => PullRequestsInputsService.getInputs()).toThrow(
-          new Error(`The pull requests inputs are unset`)
-        );
+        expect((): IPullRequestsInputs => service.getInputs()).toThrow(new Error(`The pull requests inputs are unset`));
       });
     });
 
@@ -496,13 +514,13 @@ describe(`PullRequestsInputsService`, (): void => {
 
       beforeEach((): void => {
         inputs = createHydratedMock<IPullRequestsInputs>();
-        PullRequestsInputsService.inputs$$ = inputs;
+        service.inputs$$ = inputs;
       });
 
       it(`should return the pull requests inputs`, (): void => {
         expect.assertions(1);
 
-        const result = PullRequestsInputsService.getInputs();
+        const result = service.getInputs();
 
         expect(result).toStrictEqual(inputs);
       });

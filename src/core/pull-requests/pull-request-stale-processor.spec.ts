@@ -147,11 +147,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
             dryRun: false,
           })
         );
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleLabel,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleLabel,
+            })
+          );
         githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy = jest
           .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabelToPullRequest`)
           .mockImplementation();
@@ -313,11 +315,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestDaysBeforeStale: 30,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestDaysBeforeStale: 30,
+            })
+          );
       });
 
       it(`should get the number of days before the pull request should be stale`, (): void => {

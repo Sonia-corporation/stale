@@ -20,7 +20,7 @@ describe(`InputsService`, (): void => {
         .spyOn(IssuesInputsService.getInstance(), `initialize`)
         .mockImplementation();
       pullRequestsInputsServiceServiceInitializeSpy = jest
-        .spyOn(PullRequestsInputsService, `initialize`)
+        .spyOn(PullRequestsInputsService.getInstance(), `initialize`)
         .mockImplementation();
     });
 
@@ -71,7 +71,7 @@ describe(`InputsService`, (): void => {
         .spyOn(IssuesInputsService.getInstance(), `logInputs`)
         .mockImplementation();
       pullRequestsInputsServiceServiceLogInputsSpy = jest
-        .spyOn(PullRequestsInputsService, `logInputs`)
+        .spyOn(PullRequestsInputsService.getInstance(), `logInputs`)
         .mockImplementation();
     });
 

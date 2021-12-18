@@ -45,7 +45,7 @@ export class PullRequestRemoveStaleProcessor {
       await this.githubApiPullRequestTimelineItemsService$$.fetchPullRequestAddedLabels(
         this.pullRequestProcessor.githubPullRequest.number
       );
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsPullRequestLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
       pullRequestsInputs.pullRequestStaleLabel
@@ -102,7 +102,7 @@ export class PullRequestRemoveStaleProcessor {
   public async removeStale(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Removing the stale state from this pull request...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
     this.pullRequestProcessor.logger.info(

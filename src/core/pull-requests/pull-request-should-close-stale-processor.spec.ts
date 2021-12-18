@@ -43,11 +43,13 @@ describe(`PullRequestShouldCloseStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestShouldCloseStaleProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestDaysBeforeClose: 10,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestDaysBeforeClose: 10,
+            })
+          );
         pullRequestProcessorGetUpdatedAtSpy = jest
           .spyOn(pullRequestProcessor, `getUpdatedAt`)
           .mockReturnValue(DateTime.utc(2020));

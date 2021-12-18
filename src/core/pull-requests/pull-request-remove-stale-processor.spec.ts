@@ -59,11 +59,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
             `fetchPullRequestAddedLabels`
           )
           .mockResolvedValue(createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>());
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleLabel: `stale`,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleLabel: `stale`,
+            })
+          );
         pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
       });
@@ -173,11 +175,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
             pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
           });
 
@@ -243,11 +247,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
             pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
           });
 
@@ -351,11 +357,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
             pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
           });
 
@@ -429,11 +437,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
             pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
           });
 
@@ -510,11 +520,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
             pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
           });
 
@@ -590,11 +602,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
             dryRun: false,
           })
         );
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleLabel,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleLabel,
+            })
+          );
         githubApiPullRequestLabelsServiceRemoveLabelFromPullRequestSpy = jest
           .spyOn(pullRequestRemoveStaleProcessor.githubApiPullRequestLabelsService$$, `removeLabelFromPullRequest`)
           .mockImplementation();

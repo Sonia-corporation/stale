@@ -21,7 +21,7 @@ export class PullRequestShouldCloseStaleProcessor {
   public shouldClose(): boolean {
     this.pullRequestProcessor.logger.info(`Checking if the pull request should be close...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const pullRequestUpdatedAt: DateTime = this.pullRequestProcessor.getUpdatedAt();
     const pullRequestShouldClosedAt: DateTime = addXDaysToDate(
       pullRequestUpdatedAt,

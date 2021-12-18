@@ -36,7 +36,7 @@ export class PullRequestStaleProcessor {
     this.pullRequestProcessor.logger.info(`Adding the stale state to this pull request...`);
 
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     this.pullRequestProcessor.logger.info(
       `Fetching the stale label`,
@@ -80,7 +80,7 @@ export class PullRequestStaleProcessor {
     this.pullRequestProcessor.logger.info(`Checking if the pull request should be stale based on the update date...`);
 
     const updatedAt: DateTime = this.pullRequestProcessor.getUpdatedAt();
-    const inputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const inputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     this.pullRequestProcessor.logger.info(
       `The pull request was updated for the last time the`,

@@ -42,11 +42,13 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIsStaleProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleLabel: `stale`,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleLabel: `stale`,
+            })
+          );
       });
 
       it(`should check if the stale label is already added to this pull request`, (): void => {
