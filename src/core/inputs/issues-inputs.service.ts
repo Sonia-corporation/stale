@@ -1,24 +1,29 @@
+import { AbstractInputsService } from '@core/inputs/abstract-inputs.service';
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
 /**
  * @description
  * Used to get the issues inputs coming from action
  */
-export class IssuesInputsService {
-  public static inputs$$: IIssuesInputs | undefined = undefined;
+export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
+  private static _instance: IssuesInputsService;
 
-  public static initialize(): IssuesInputsService {
-    IssuesInputsService.setInputs();
-    IssuesInputsService.logInputs();
+  public static getInstance(): IssuesInputsService {
+    if (_.isNil(IssuesInputsService._instance)) {
+      IssuesInputsService._instance = new IssuesInputsService();
+    }
 
-    return IssuesInputsService;
+    return IssuesInputsService._instance;
   }
 
-  public static setInputs(): IIssuesInputs {
-    IssuesInputsService.inputs$$ = {
+  public readonly inputsName: `Issues` = `Issues`;
+
+  public setInputs(): IIssuesInputs {
+    this.inputs$$ = {
       issueCloseComment: core.getInput(EInputs.ISSUE_CLOSE_COMMENT, { required: false }),
       issueDaysBeforeClose: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_CLOSE, { required: false }),
       issueDaysBeforeStale: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
@@ -32,20 +37,6 @@ export class IssuesInputsService {
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
     };
 
-    return IssuesInputsService.inputs$$;
-  }
-
-  public static logInputs(): IssuesInputsService {
-    CoreInputsService.logInputs(`Issues inputs`, IssuesInputsService.getInputs());
-
-    return IssuesInputsService;
-  }
-
-  public static getInputs(): IIssuesInputs | never {
-    if (!IssuesInputsService.inputs$$) {
-      throw new Error(`The issues inputs are unset`);
-    }
-
-    return IssuesInputsService.inputs$$;
+    return this.inputs$$;
   }
 }

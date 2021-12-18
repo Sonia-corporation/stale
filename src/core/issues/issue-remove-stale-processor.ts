@@ -41,7 +41,7 @@ export class IssueRemoveStaleProcessor {
 
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
       await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsIssueLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
       issuesInputs.issueStaleLabel
@@ -91,7 +91,7 @@ export class IssueRemoveStaleProcessor {
   public async removeStale(): Promise<void> {
     this.issueProcessor.logger.info(`Removing the stale state from this issue...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
     this.issueProcessor.logger.info(

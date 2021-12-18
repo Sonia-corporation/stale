@@ -31,7 +31,7 @@ export class IssueIsStaleProcessor {
   }
 
   private _getStaleLabel(): IGithubApiLabel | undefined {
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     return this.issueProcessor.githubIssue.labels.nodes.find(
       (label: Readonly<IGithubApiLabel>): boolean => label.name === issuesInputs.issueStaleLabel

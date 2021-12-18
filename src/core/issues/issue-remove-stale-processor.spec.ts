@@ -56,7 +56,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         githubApiIssueTimelineItemsServiceFetchIssueAddedLabelsSpy = jest
           .spyOn(issueRemoveStaleProcessor.githubApiIssueTimelineItemsService$$, `fetchIssueAddedLabels`)
           .mockResolvedValue(createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>());
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueStaleLabel: `stale`,
           })
@@ -167,11 +167,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueStaleLabel: `stale`,
+                })
+              );
             issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
           });
 
@@ -234,11 +236,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueStaleLabel: `stale`,
+                })
+              );
             issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
           });
 
@@ -336,11 +340,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueStaleLabel: `stale`,
+                })
+              );
             issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
           });
 
@@ -411,11 +417,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueStaleLabel: `stale`,
+                })
+              );
             issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
           });
 
@@ -486,11 +494,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
                   },
                 })
               );
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueStaleLabel: `stale`,
+                })
+              );
             issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
           });
 
@@ -563,7 +573,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             dryRun: false,
           })
         );
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueStaleLabel,
           })

@@ -384,7 +384,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAllAssignees: false,
           })
@@ -496,11 +496,13 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueIgnoreAllAssignees: true,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllAssignees: true,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -532,7 +534,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAllProjectCards: false,
           })
@@ -647,7 +649,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreAllProjectCards: true,
               })
@@ -684,7 +686,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreBeforeCreationDate: ``,
           })
@@ -827,7 +829,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAllLabels: false,
           })
@@ -943,7 +945,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreAllLabels: true,
                 issueStaleLabel: `stale`,
@@ -980,7 +982,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreAllLabels: true,
                 issueStaleLabel: `stale`,
@@ -1028,7 +1030,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.issueProcessor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreAllLabels: true,
                 issueStaleLabel: `stale`,
@@ -1069,7 +1071,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `warning`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyLabels: [`ignored-label`],
           })
@@ -1255,7 +1257,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.issueProcessor.logger, `warning`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyAssignees: [`ignored-assignee`],
           })

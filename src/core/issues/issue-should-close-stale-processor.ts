@@ -21,7 +21,7 @@ export class IssueShouldCloseStaleProcessor {
   public shouldClose(): boolean {
     this.issueProcessor.logger.info(`Checking if the issue should be close...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const issueUpdatedAt: DateTime = this.issueProcessor.getUpdatedAt();
     const issueShouldClosedAt: DateTime = addXDaysToDate(issueUpdatedAt, issuesInputs.issueDaysBeforeClose);
 

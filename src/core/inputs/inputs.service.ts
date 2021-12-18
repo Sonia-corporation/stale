@@ -5,7 +5,7 @@ import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.ser
 export class InputsService {
   public static initialize(): InputsService {
     CommonInputsService.getInstance().initialize();
-    IssuesInputsService.initialize();
+    IssuesInputsService.getInstance().initialize();
     PullRequestsInputsService.initialize();
 
     return InputsService;
@@ -13,7 +13,7 @@ export class InputsService {
 
   public static logInputs(): InputsService {
     CommonInputsService.getInstance().logInputs();
-    IssuesInputsService.logInputs();
+    IssuesInputsService.getInstance().logInputs();
     PullRequestsInputsService.logInputs();
 
     return InputsService;

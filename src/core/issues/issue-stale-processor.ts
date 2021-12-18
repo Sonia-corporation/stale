@@ -36,7 +36,7 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`Adding the stale state to this issue...`);
 
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     this.issueProcessor.logger.info(
       `Fetching the stale label`,
@@ -77,7 +77,7 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`Checking if the issue should be stale based on the update date...`);
 
     const updatedAt: DateTime = this.issueProcessor.getUpdatedAt();
-    const inputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const inputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(updatedAt));
 
