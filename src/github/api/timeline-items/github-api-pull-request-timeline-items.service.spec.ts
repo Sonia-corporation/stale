@@ -25,7 +25,7 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
 
       const result = new GithubApiPullRequestTimelineItemsService(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 

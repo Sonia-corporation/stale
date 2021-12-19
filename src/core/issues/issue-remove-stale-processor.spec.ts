@@ -545,7 +545,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
       let githubApiIssueLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
-      let githubApiIssueLabelsServiceRemoveLabelFromIssueSpy: jest.SpyInstance;
+      let githubApiIssueLabelsServiceRemoveLabelSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
@@ -578,8 +578,8 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
             issueStaleLabel,
           })
         );
-        githubApiIssueLabelsServiceRemoveLabelFromIssueSpy = jest
-          .spyOn(issueRemoveStaleProcessor.githubApiIssueLabelsService$$, `removeLabelFromIssue`)
+        githubApiIssueLabelsServiceRemoveLabelSpy = jest
+          .spyOn(issueRemoveStaleProcessor.githubApiIssueLabelsService$$, `removeLabel`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueRemoveStaleProcessor.issueProcessor.logger, `info`)
@@ -660,8 +660,8 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
 
             await issueRemoveStaleProcessor.removeStale();
 
-            expect(githubApiIssueLabelsServiceRemoveLabelFromIssueSpy).toHaveBeenCalledTimes(1);
-            expect(githubApiIssueLabelsServiceRemoveLabelFromIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
+            expect(githubApiIssueLabelsServiceRemoveLabelSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssueLabelsServiceRemoveLabelSpy).toHaveBeenCalledWith(issueId, staleLabelId);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was removed`);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
@@ -685,7 +685,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
 
             await issueRemoveStaleProcessor.removeStale();
 
-            expect(githubApiIssueLabelsServiceRemoveLabelFromIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueLabelsServiceRemoveLabelSpy).not.toHaveBeenCalled();
             expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,

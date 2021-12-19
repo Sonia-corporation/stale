@@ -23,7 +23,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
 
       const result = new GithubApiIssueCommentsService(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
@@ -34,7 +34,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
     });
 
-    describe(`addCommentToIssue()`, (): void => {
+    describe(`addComment()`, (): void => {
       let issueId: IUuid;
       let comment: IComment;
       let graphqlMock: jest.Mock;
@@ -60,7 +60,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
       it(`should add the comment on the issue`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiIssueCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
+        await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -88,7 +88,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssueCommentsService.addCommentToIssue(issueId, comment)).rejects.toThrow(
+          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
@@ -110,7 +110,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssueCommentsService.addCommentToIssue(issueId, comment);
+          await githubApiIssueCommentsService.addComment(issueId, comment);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

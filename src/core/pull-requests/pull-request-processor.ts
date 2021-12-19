@@ -20,6 +20,7 @@ import { DateTime } from 'luxon';
 export class PullRequestProcessor {
   public readonly githubPullRequest: IGithubApiPullRequest;
   public readonly logger: PullRequestLogger;
+  public readonly type: 'pull request' = `pull request`;
 
   public constructor(pullRequest: Readonly<IGithubApiPullRequest>) {
     this.githubPullRequest = pullRequest;

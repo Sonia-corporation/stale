@@ -36,7 +36,7 @@ export class PullRequestCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.pullRequestProcessor.logger.info(`Adding the stale comment...`);
 
-      await this.githubApiPullRequestCommentsService$$.addCommentToPullRequest(
+      await this.githubApiPullRequestCommentsService$$.addComment(
         this.pullRequestProcessor.githubPullRequest.id,
         pullRequestsInputs.pullRequestStaleComment
       );
@@ -66,7 +66,7 @@ export class PullRequestCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.pullRequestProcessor.logger.info(`Adding the close comment...`);
 
-      await this.githubApiPullRequestCommentsService$$.addCommentToPullRequest(
+      await this.githubApiPullRequestCommentsService$$.addComment(
         this.pullRequestProcessor.githubPullRequest.id,
         pullRequestsInputs.pullRequestCloseComment
       );

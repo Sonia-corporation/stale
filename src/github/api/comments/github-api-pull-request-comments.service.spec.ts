@@ -23,7 +23,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
 
       const result = new GithubApiPullRequestCommentsService(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 
@@ -34,7 +34,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
       pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
     });
 
-    describe(`addCommentToPullRequest()`, (): void => {
+    describe(`addComment()`, (): void => {
       let pullRequestId: IUuid;
       let comment: IComment;
       let graphqlMock: jest.Mock;
@@ -60,9 +60,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
       it(`should add the comment on the pull request`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(
-          githubApiPullRequestCommentsService.addCommentToPullRequest(pullRequestId, comment)
-        ).rejects.toThrow(new Error(`graphql error`));
+        await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
 
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
@@ -88,9 +88,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(
-            githubApiPullRequestCommentsService.addCommentToPullRequest(pullRequestId, comment)
-          ).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
@@ -110,7 +110,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiPullRequestCommentsService.addCommentToPullRequest(pullRequestId, comment);
+          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment);
 
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

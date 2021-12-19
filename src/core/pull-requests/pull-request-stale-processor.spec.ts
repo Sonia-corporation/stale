@@ -119,7 +119,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let githubApiPullRequestLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
-      let githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy: jest.SpyInstance;
+      let githubApiPullRequestLabelsServiceAddLabelSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
@@ -154,8 +154,8 @@ describe(`PullRequestStaleProcessor`, (): void => {
               pullRequestStaleLabel,
             })
           );
-        githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy = jest
-          .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabelToPullRequest`)
+        githubApiPullRequestLabelsServiceAddLabelSpy = jest
+          .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabel`)
           .mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
@@ -246,11 +246,8 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             await pullRequestStaleProcessor.stale();
 
-            expect(githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy).toHaveBeenCalledTimes(1);
-            expect(githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy).toHaveBeenCalledWith(
-              pullRequestId,
-              staleLabelId
-            );
+            expect(githubApiPullRequestLabelsServiceAddLabelSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiPullRequestLabelsServiceAddLabelSpy).toHaveBeenCalledWith(pullRequestId, staleLabelId);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
             expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
@@ -283,7 +280,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             await pullRequestStaleProcessor.stale();
 
-            expect(githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy).not.toHaveBeenCalled();
+            expect(githubApiPullRequestLabelsServiceAddLabelSpy).not.toHaveBeenCalled();
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,

@@ -61,10 +61,7 @@ export class PullRequestStaleProcessor {
     this.pullRequestProcessor.logger.info(`Adding the stale label to this pull request...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiPullRequestLabelsService$$.addLabelToPullRequest(
-        this.pullRequestProcessor.githubPullRequest.id,
-        label.id
-      );
+      await this.githubApiPullRequestLabelsService$$.addLabel(this.pullRequestProcessor.githubPullRequest.id, label.id);
 
       this.pullRequestProcessor.logger.info(`The stale label was added`);
     } else {

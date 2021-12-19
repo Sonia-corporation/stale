@@ -117,7 +117,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let githubApiIssueLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
-      let githubApiIssueLabelsServiceAddLabelToIssueSpy: jest.SpyInstance;
+      let githubApiIssueLabelsServiceAddLabelSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
@@ -150,8 +150,8 @@ describe(`IssueStaleProcessor`, (): void => {
             issueStaleLabel,
           })
         );
-        githubApiIssueLabelsServiceAddLabelToIssueSpy = jest
-          .spyOn(issueStaleProcessor.githubApiIssueLabelsService$$, `addLabelToIssue`)
+        githubApiIssueLabelsServiceAddLabelSpy = jest
+          .spyOn(issueStaleProcessor.githubApiIssueLabelsService$$, `addLabel`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueStaleProcessor.issueProcessor.logger, `info`)
@@ -236,8 +236,8 @@ describe(`IssueStaleProcessor`, (): void => {
 
             await issueStaleProcessor.stale();
 
-            expect(githubApiIssueLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledTimes(1);
-            expect(githubApiIssueLabelsServiceAddLabelToIssueSpy).toHaveBeenCalledWith(issueId, staleLabelId);
+            expect(githubApiIssueLabelsServiceAddLabelSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssueLabelsServiceAddLabelSpy).toHaveBeenCalledWith(issueId, staleLabelId);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
@@ -270,7 +270,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
             await issueStaleProcessor.stale();
 
-            expect(githubApiIssueLabelsServiceAddLabelToIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueLabelsServiceAddLabelSpy).not.toHaveBeenCalled();
             expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,
