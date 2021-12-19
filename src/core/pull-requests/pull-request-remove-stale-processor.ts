@@ -128,7 +128,7 @@ export class PullRequestRemoveStaleProcessor {
     this.pullRequestProcessor.logger.info(`Removing the stale label from this pull request...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiPullRequestLabelsService$$.removeLabelFromPullRequest(
+      await this.githubApiPullRequestLabelsService$$.removeLabel(
         this.pullRequestProcessor.githubPullRequest.id,
         label.id
       );

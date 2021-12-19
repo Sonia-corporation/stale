@@ -117,7 +117,7 @@ export class IssueRemoveStaleProcessor {
     this.issueProcessor.logger.info(`Removing the stale label from this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiIssueLabelsService$$.removeLabelFromIssue(this.issueProcessor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.removeLabel(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was removed`);
     } else {

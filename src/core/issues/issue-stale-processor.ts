@@ -61,7 +61,7 @@ export class IssueStaleProcessor {
     this.issueProcessor.logger.info(`Adding the stale label to this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiIssueLabelsService$$.addLabelToIssue(this.issueProcessor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.addLabel(this.issueProcessor.githubIssue.id, label.id);
 
       this.issueProcessor.logger.info(`The stale label was added`);
     } else {
