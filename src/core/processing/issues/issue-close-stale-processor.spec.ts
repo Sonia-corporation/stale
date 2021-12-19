@@ -24,7 +24,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
       const result = new IssueCloseStaleProcessor(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
 
     it(`should create the GithubApiIssuesService`, (): void => {
@@ -73,10 +73,10 @@ describe(`IssueCloseStaleProcessor`, (): void => {
           .spyOn(issueCloseStaleProcessor.githubApiIssuesService$$, `closeIssue`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueCloseStaleProcessor.issueProcessor.logger, `info`)
+          .spyOn(issueCloseStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         issueProcessorLoggerNoticeSpy = jest
-          .spyOn(issueCloseStaleProcessor.issueProcessor.logger, `notice`)
+          .spyOn(issueCloseStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({

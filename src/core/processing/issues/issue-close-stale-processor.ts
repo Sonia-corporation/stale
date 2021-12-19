@@ -1,35 +1,32 @@
-import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { AbstractCloseStaleProcessor } from '@core/processing/abstract-close-stale-processor';
 import { IssueCommentsProcessor } from '@core/processing/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IUuid } from '@utils/types/uuid';
 
 /**
  * @description
  * The processor to close an issue
  */
-export class IssueCloseStaleProcessor {
-  public readonly issueProcessor: IssueProcessor;
+export class IssueCloseStaleProcessor extends AbstractCloseStaleProcessor<IssueProcessor> {
   public readonly githubApiIssuesService$$: GithubApiIssuesService;
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
-    this.issueProcessor = issueProcessor;
-    this.githubApiIssuesService$$ = new GithubApiIssuesService(this.issueProcessor);
-    this.issueCommentsProcessor$$ = new IssueCommentsProcessor(this.issueProcessor);
+    super(issueProcessor);
+    this.githubApiIssuesService$$ = new GithubApiIssuesService(issueProcessor);
+    this.issueCommentsProcessor$$ = new IssueCommentsProcessor(issueProcessor);
   }
 
-  public async close(): Promise<void> {
-    this.issueProcessor.logger.info(`Closing this issue...`);
+  protected _closeItem(itemId: Readonly<IUuid>): Promise<void> {
+    return this.githubApiIssuesService$$.closeIssue(itemId);
+  }
 
-    if (!CommonInputsService.getInstance().getInputs().dryRun) {
-      await this.githubApiIssuesService$$.closeIssue(this.issueProcessor.githubIssue.id);
-      this.issueProcessor.logger.info(`The issue was closed`);
-    } else {
-      this.issueProcessor.logger.info(`The issue was not closed due to the dry-run mode`);
-    }
+  protected _processCloseComment(): Promise<void> {
+    return this.issueCommentsProcessor$$.processCloseComment();
+  }
 
-    await this.issueCommentsProcessor$$.processCloseComment();
-
-    this.issueProcessor.logger.notice(`The issue is now closed`);
+  protected _getItemId(): IUuid {
+    return this.processor.githubIssue.id;
   }
 }
