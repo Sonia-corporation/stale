@@ -1,12 +1,23 @@
+import { AbstractOutputsService } from '@core/outputs/abstract-outputs.service';
 import { EIssuesOutputs } from '@core/outputs/enums/issues-outputs.enum';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
-import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
-export class IssuesOutputsService {
-  public static setOutputs(): IssuesOutputsService {
-    LoggerService.info(`Creating the issues outputs...`);
+export class IssuesOutputsService extends AbstractOutputsService {
+  private static _instance: IssuesOutputsService;
 
+  public static getInstance(): IssuesOutputsService {
+    if (_.isNil(IssuesOutputsService._instance)) {
+      IssuesOutputsService._instance = new IssuesOutputsService();
+    }
+
+    return IssuesOutputsService._instance;
+  }
+
+  protected readonly _outputsName: 'issues' = `issues`;
+
+  protected _setOutputs(): void {
     core.setOutput(
       EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT,
       IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$
@@ -24,9 +35,5 @@ export class IssuesOutputsService {
       EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT,
       IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$
     );
-
-    LoggerService.info(`Issues outputs created`);
-
-    return IssuesOutputsService;
   }
 }

@@ -11,9 +11,11 @@ describe(`OutputsService`, (): void => {
     let pullRequestsOutputsServiceSetOutputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      issuesOutputsServiceSetOutputsSpy = jest.spyOn(IssuesOutputsService, `setOutputs`).mockImplementation();
+      issuesOutputsServiceSetOutputsSpy = jest
+        .spyOn(IssuesOutputsService.getInstance(), `setOutputs`)
+        .mockImplementation();
       pullRequestsOutputsServiceSetOutputsSpy = jest
-        .spyOn(PullRequestsOutputsService, `setOutputs`)
+        .spyOn(PullRequestsOutputsService.getInstance(), `setOutputs`)
         .mockImplementation();
     });
 
