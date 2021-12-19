@@ -90,10 +90,10 @@ describe(`PullRequestProcessor`, (): void => {
         loggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         createLinkSpy = jest.spyOn(CreateLinkModule, `createLink`).mockReturnValue(`dummy-link`);
         pullRequestsStatisticsServiceIncreaseIgnoredPullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseIgnoredPullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseIgnoredPullRequestsCount`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseAlreadyStalePullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAlreadyStalePullRequestsCount`)
           .mockImplementation();
       });
 
@@ -445,10 +445,10 @@ describe(`PullRequestProcessor`, (): void => {
 
         stopProcessingSpy = jest.spyOn(pullRequestProcessor, `stopProcessing$$`).mockImplementation();
         pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseStalePullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseStalePullRequestsCount`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseUnalteredPullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseUnalteredPullRequestsCount`)
           .mockImplementation();
       });
 
@@ -600,7 +600,7 @@ describe(`PullRequestProcessor`, (): void => {
         mockedPullRequestRemoveStaleProcessor.mockClear();
 
         pullRequestsStatisticsServiceIncreaseRemoveStalePullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseRemoveStalePullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseRemoveStalePullRequestsCount`)
           .mockImplementation();
       });
 
@@ -696,10 +696,10 @@ describe(`PullRequestProcessor`, (): void => {
 
         stopProcessingSpy = jest.spyOn(pullRequestProcessor, `stopProcessing$$`).mockImplementation();
         pullRequestsStatisticsServiceIncreaseClosedPullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseClosedPullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseClosedPullRequestsCount`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseUnalteredPullRequestsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseUnalteredPullRequestsCount`)
           .mockImplementation();
       });
 

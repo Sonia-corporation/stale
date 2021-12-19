@@ -42,7 +42,7 @@ export class PullRequestCommentsProcessor {
       );
     }
 
-    PullRequestsStatisticsService.increaseAddedPullRequestsCommentsCount();
+    PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsCommentsCount();
     this.pullRequestProcessor.logger.notice(`Stale comment added`);
   }
 
@@ -72,7 +72,7 @@ export class PullRequestCommentsProcessor {
       );
     }
 
-    PullRequestsStatisticsService.increaseAddedPullRequestsCommentsCount();
+    PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsCommentsCount();
     this.pullRequestProcessor.logger.notice(`Close comment added`);
   }
 }

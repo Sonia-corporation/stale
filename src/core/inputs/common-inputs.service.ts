@@ -19,7 +19,7 @@ export class CommonInputsService extends AbstractInputsService<ICommonInputs> {
     return CommonInputsService._instance;
   }
 
-  public readonly inputsName: `Common` = `Common`;
+  protected readonly _inputsName: `common` = `common`;
 
   public setInputs(): ICommonInputs {
     this.inputs$$ = {

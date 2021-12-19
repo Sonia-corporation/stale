@@ -20,7 +20,7 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
     return IssuesInputsService._instance;
   }
 
-  public readonly inputsName: `Issues` = `Issues`;
+  protected readonly _inputsName: `issues` = `issues`;
 
   public setInputs(): IIssuesInputs {
     this.inputs$$ = {

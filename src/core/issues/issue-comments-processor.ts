@@ -39,7 +39,7 @@ export class IssueCommentsProcessor {
       );
     }
 
-    IssuesStatisticsService.increaseAddedIssuesCommentsCount();
+    IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
     this.issueProcessor.logger.notice(`Stale comment added`);
   }
 
@@ -66,7 +66,7 @@ export class IssueCommentsProcessor {
       );
     }
 
-    IssuesStatisticsService.increaseAddedIssuesCommentsCount();
+    IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
     this.issueProcessor.logger.notice(`Close comment added`);
   }
 }

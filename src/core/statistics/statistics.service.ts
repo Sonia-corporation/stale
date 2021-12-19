@@ -8,15 +8,15 @@ export class StatisticsService {
    * @returns {StatisticsService} The service
    */
   public static initialize(): StatisticsService {
-    IssuesStatisticsService.initialize();
-    PullRequestsStatisticsService.initialize();
+    IssuesStatisticsService.getInstance().initialize();
+    PullRequestsStatisticsService.getInstance().initialize();
 
     return StatisticsService;
   }
 
   public static logsAllStatistics(): StatisticsService {
-    IssuesStatisticsService.logsAllStatistics();
-    PullRequestsStatisticsService.logsAllStatistics();
+    IssuesStatisticsService.getInstance().logsAllStatistics();
+    PullRequestsStatisticsService.getInstance().logsAllStatistics();
 
     return StatisticsService;
   }

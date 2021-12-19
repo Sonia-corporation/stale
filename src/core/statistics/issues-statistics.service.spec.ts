@@ -5,188 +5,212 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`IssuesStatisticsService`, (): void => {
+  let service: IssuesStatisticsService;
+
+  beforeEach((): void => {
+    service = IssuesStatisticsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a IssuesStatisticsService`, (): void => {
+      expect.assertions(1);
+
+      service = IssuesStatisticsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(IssuesStatisticsService));
+    });
+
+    it(`should return the created IssuesStatisticsService`, (): void => {
+      expect.assertions(1);
+
+      const result = IssuesStatisticsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
       expect.assertions(8);
-      IssuesStatisticsService.processedIssuesCount$$ = 1;
-      IssuesStatisticsService.ignoredIssuesCount$$ = 1;
-      IssuesStatisticsService.unalteredIssuesCount$$ = 1;
-      IssuesStatisticsService.staleIssuesCount$$ = 1;
-      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.removeStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.closedIssuesCount$$ = 1;
-      IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
+      service.processedIssuesCount$$ = 1;
+      service.ignoredIssuesCount$$ = 1;
+      service.unalteredIssuesCount$$ = 1;
+      service.staleIssuesCount$$ = 1;
+      service.alreadyStaleIssuesCount$$ = 1;
+      service.removeStaleIssuesCount$$ = 1;
+      service.closedIssuesCount$$ = 1;
+      service.addedIssuesCommentsCount$$ = 1;
 
-      IssuesStatisticsService.initialize();
+      service.initialize();
 
-      expect(IssuesStatisticsService.processedIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.staleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.closedIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(0);
+      expect(service.processedIssuesCount$$).toBe(0);
+      expect(service.ignoredIssuesCount$$).toBe(0);
+      expect(service.unalteredIssuesCount$$).toBe(0);
+      expect(service.staleIssuesCount$$).toBe(0);
+      expect(service.alreadyStaleIssuesCount$$).toBe(0);
+      expect(service.removeStaleIssuesCount$$).toBe(0);
+      expect(service.closedIssuesCount$$).toBe(0);
+      expect(service.addedIssuesCommentsCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.initialize();
+      const result = service.initialize();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseProcessedIssuesCount()`, (): void => {
     it(`should increase the processed issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.processedIssuesCount$$ = 0;
+      service.processedIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseProcessedIssuesCount();
+      service.increaseProcessedIssuesCount();
 
-      expect(IssuesStatisticsService.processedIssuesCount$$).toBe(1);
+      expect(service.processedIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseProcessedIssuesCount();
+      const result = service.increaseProcessedIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseIgnoredIssuesCount()`, (): void => {
     it(`should increase the ignored issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.ignoredIssuesCount$$ = 0;
+      service.ignoredIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseIgnoredIssuesCount();
+      service.increaseIgnoredIssuesCount();
 
-      expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(1);
+      expect(service.ignoredIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseIgnoredIssuesCount();
+      const result = service.increaseIgnoredIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseUnalteredIssuesCount()`, (): void => {
     it(`should increase the unaltered issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.unalteredIssuesCount$$ = 0;
+      service.unalteredIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseUnalteredIssuesCount();
+      service.increaseUnalteredIssuesCount();
 
-      expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(1);
+      expect(service.unalteredIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseUnalteredIssuesCount();
+      const result = service.increaseUnalteredIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseStaleIssuesCount()`, (): void => {
     it(`should increase the stale issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.staleIssuesCount$$ = 0;
+      service.staleIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseStaleIssuesCount();
+      service.increaseStaleIssuesCount();
 
-      expect(IssuesStatisticsService.staleIssuesCount$$).toBe(1);
+      expect(service.staleIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseStaleIssuesCount();
+      const result = service.increaseStaleIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseAlreadyStaleIssuesCount()`, (): void => {
     it(`should increase the already stale issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 0;
+      service.alreadyStaleIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseAlreadyStaleIssuesCount();
+      service.increaseAlreadyStaleIssuesCount();
 
-      expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(1);
+      expect(service.alreadyStaleIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseAlreadyStaleIssuesCount();
+      const result = service.increaseAlreadyStaleIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseRemoveStaleIssuesCount()`, (): void => {
     it(`should increase the stale issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.removeStaleIssuesCount$$ = 0;
+      service.removeStaleIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseRemoveStaleIssuesCount();
+      service.increaseRemoveStaleIssuesCount();
 
-      expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(1);
+      expect(service.removeStaleIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseRemoveStaleIssuesCount();
+      const result = service.increaseRemoveStaleIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseClosedIssuesCount()`, (): void => {
     it(`should increase the close issues count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.closedIssuesCount$$ = 0;
+      service.closedIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseClosedIssuesCount();
+      service.increaseClosedIssuesCount();
 
-      expect(IssuesStatisticsService.closedIssuesCount$$).toBe(1);
+      expect(service.closedIssuesCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseClosedIssuesCount();
+      const result = service.increaseClosedIssuesCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseAddedIssuesCommentsCount()`, (): void => {
     it(`should increase the added issues comments count`, (): void => {
       expect.assertions(1);
-      IssuesStatisticsService.closedIssuesCount$$ = 0;
+      service.closedIssuesCount$$ = 0;
 
-      IssuesStatisticsService.increaseAddedIssuesCommentsCount();
+      service.increaseAddedIssuesCommentsCount();
 
-      expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(1);
+      expect(service.addedIssuesCommentsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.increaseAddedIssuesCommentsCount();
+      const result = service.increaseAddedIssuesCommentsCount();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
@@ -204,28 +228,28 @@ describe(`IssuesStatisticsService`, (): void => {
     it(`should create a group of logs`, (): void => {
       expect.assertions(2);
 
-      IssuesStatisticsService.logsAllStatistics();
+      service.logsAllStatistics();
 
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Statistics`);
+      expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Issues statistics`);
     });
 
     describe(`when all the statistics are at 0 count`, (): void => {
       beforeEach((): void => {
-        IssuesStatisticsService.processedIssuesCount$$ = 0;
-        IssuesStatisticsService.ignoredIssuesCount$$ = 0;
-        IssuesStatisticsService.unalteredIssuesCount$$ = 0;
-        IssuesStatisticsService.staleIssuesCount$$ = 0;
-        IssuesStatisticsService.alreadyStaleIssuesCount$$ = 0;
-        IssuesStatisticsService.removeStaleIssuesCount$$ = 0;
-        IssuesStatisticsService.closedIssuesCount$$ = 0;
-        IssuesStatisticsService.addedIssuesCommentsCount$$ = 0;
+        service.processedIssuesCount$$ = 0;
+        service.ignoredIssuesCount$$ = 0;
+        service.unalteredIssuesCount$$ = 0;
+        service.staleIssuesCount$$ = 0;
+        service.alreadyStaleIssuesCount$$ = 0;
+        service.removeStaleIssuesCount$$ = 0;
+        service.closedIssuesCount$$ = 0;
+        service.addedIssuesCommentsCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
         expect.assertions(1);
 
-        IssuesStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).not.toHaveBeenCalled();
       });
@@ -233,20 +257,20 @@ describe(`IssuesStatisticsService`, (): void => {
 
     describe(`when there is only one statistic with a count more to 0`, (): void => {
       beforeEach((): void => {
-        IssuesStatisticsService.processedIssuesCount$$ = 1;
-        IssuesStatisticsService.ignoredIssuesCount$$ = 0;
-        IssuesStatisticsService.unalteredIssuesCount$$ = 0;
-        IssuesStatisticsService.staleIssuesCount$$ = 0;
-        IssuesStatisticsService.removeStaleIssuesCount$$ = 0;
-        IssuesStatisticsService.alreadyStaleIssuesCount$$ = 0;
-        IssuesStatisticsService.closedIssuesCount$$ = 0;
-        IssuesStatisticsService.addedIssuesCommentsCount$$ = 0;
+        service.processedIssuesCount$$ = 1;
+        service.ignoredIssuesCount$$ = 0;
+        service.unalteredIssuesCount$$ = 0;
+        service.staleIssuesCount$$ = 0;
+        service.removeStaleIssuesCount$$ = 0;
+        service.alreadyStaleIssuesCount$$ = 0;
+        service.closedIssuesCount$$ = 0;
+        service.addedIssuesCommentsCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
         expect.assertions(2);
 
-        IssuesStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`white-└──`, `whiteBright-Processed issues`, `value-1`);
@@ -255,20 +279,20 @@ describe(`IssuesStatisticsService`, (): void => {
 
     describe(`when there is a bunch of statistics with a count more to 0`, (): void => {
       beforeEach((): void => {
-        IssuesStatisticsService.processedIssuesCount$$ = 1;
-        IssuesStatisticsService.ignoredIssuesCount$$ = 2;
-        IssuesStatisticsService.unalteredIssuesCount$$ = 0;
-        IssuesStatisticsService.staleIssuesCount$$ = 3;
-        IssuesStatisticsService.alreadyStaleIssuesCount$$ = 4;
-        IssuesStatisticsService.removeStaleIssuesCount$$ = 5;
-        IssuesStatisticsService.closedIssuesCount$$ = 6;
-        IssuesStatisticsService.addedIssuesCommentsCount$$ = 7;
+        service.processedIssuesCount$$ = 1;
+        service.ignoredIssuesCount$$ = 2;
+        service.unalteredIssuesCount$$ = 0;
+        service.staleIssuesCount$$ = 3;
+        service.alreadyStaleIssuesCount$$ = 4;
+        service.removeStaleIssuesCount$$ = 5;
+        service.closedIssuesCount$$ = 6;
+        service.addedIssuesCommentsCount$$ = 7;
       });
 
       it(`should log the statistics`, (): void => {
         expect.assertions(8);
 
-        IssuesStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(7);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -319,7 +343,7 @@ describe(`IssuesStatisticsService`, (): void => {
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 
-      IssuesStatisticsService.logsAllStatistics();
+      service.logsAllStatistics();
 
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledWith();
@@ -328,9 +352,9 @@ describe(`IssuesStatisticsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesStatisticsService.logsAllStatistics();
+      const result = service.logsAllStatistics();
 
-      expect(result).toStrictEqual(IssuesStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 });

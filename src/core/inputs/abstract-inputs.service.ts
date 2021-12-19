@@ -14,7 +14,7 @@ export abstract class AbstractInputsService<TInputs extends IInputs> {
    * Used only for the logs
    * @type {string}
    */
-  public abstract readonly inputsName: string;
+  protected abstract readonly _inputsName: string;
 
   /**
    * @description
@@ -46,7 +46,7 @@ export abstract class AbstractInputsService<TInputs extends IInputs> {
    * @returns {AbstractInputsService<TInputs>} The service
    */
   public logInputs(): AbstractInputsService<TInputs> {
-    CoreInputsService.logInputs(`${_.upperFirst(this.inputsName)} inputs`, this.getInputs());
+    CoreInputsService.logInputs(`${_.upperFirst(this._inputsName)} inputs`, this.getInputs());
 
     return this;
   }
@@ -60,7 +60,7 @@ export abstract class AbstractInputsService<TInputs extends IInputs> {
    */
   public getInputs(): TInputs | never {
     if (!this.inputs$$) {
-      throw new Error(`The ${_.toLower(this.inputsName)} inputs are unset`);
+      throw new Error(`The ${_.toLower(this._inputsName)} inputs are unset`);
     }
 
     return this.inputs$$;

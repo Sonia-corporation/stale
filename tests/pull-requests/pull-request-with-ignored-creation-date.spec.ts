@@ -24,14 +24,14 @@ describe(`Pull request with ignored creation date`, (): void => {
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
     });
   });
 
@@ -54,14 +54,14 @@ describe(`Pull request with ignored creation date`, (): void => {
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
     });
   });
 });

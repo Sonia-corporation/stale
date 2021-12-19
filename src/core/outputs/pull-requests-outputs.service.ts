@@ -9,35 +9,35 @@ export class PullRequestsOutputsService {
 
     core.setOutput(
       EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.IGNORED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.ignoredPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.UNALTERED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.unalteredPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.stalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.PROCESSED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.processedPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.REMOVE_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.removeStalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.CLOSE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.closedPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$
     );
     core.setOutput(
       EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT,
-      PullRequestsStatisticsService.addedPullRequestsCommentsCount$$
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$
     );
 
     LoggerService.info(`Pull requests outputs created`);

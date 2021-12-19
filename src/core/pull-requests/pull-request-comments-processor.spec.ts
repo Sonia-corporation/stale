@@ -83,7 +83,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseAddedPullRequestsCommentsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
           .mockImplementation();
         githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy = jest
           .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addCommentToPullRequest`)
@@ -265,7 +265,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService, `increaseAddedPullRequestsCommentsCount`)
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
           .mockImplementation();
         githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy = jest
           .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addCommentToPullRequest`)

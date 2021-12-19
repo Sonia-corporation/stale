@@ -41,7 +41,7 @@ export class IssueProcessor {
 
     if (this.shouldIgnore$$()) {
       this.logger.info(`Ignored`);
-      IssuesStatisticsService.increaseIgnoredIssuesCount();
+      IssuesStatisticsService.getInstance().increaseIgnoredIssuesCount();
       this.stopProcessing$$();
 
       return;
@@ -49,7 +49,7 @@ export class IssueProcessor {
 
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
-      IssuesStatisticsService.increaseAlreadyStaleIssuesCount();
+      IssuesStatisticsService.getInstance().increaseAlreadyStaleIssuesCount();
 
       const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
@@ -113,9 +113,9 @@ export class IssueProcessor {
 
     if (issueStaleProcessor.shouldStale()) {
       await issueStaleProcessor.stale();
-      IssuesStatisticsService.increaseStaleIssuesCount();
+      IssuesStatisticsService.getInstance().increaseStaleIssuesCount();
     } else {
-      IssuesStatisticsService.increaseUnalteredIssuesCount();
+      IssuesStatisticsService.getInstance().increaseUnalteredIssuesCount();
     }
 
     this.stopProcessing$$();
@@ -144,7 +144,7 @@ export class IssueProcessor {
 
     if (await issueRemoveStaleProcessor.shouldRemoveStale()) {
       await issueRemoveStaleProcessor.removeStale();
-      IssuesStatisticsService.increaseRemoveStaleIssuesCount();
+      IssuesStatisticsService.getInstance().increaseRemoveStaleIssuesCount();
 
       return Promise.resolve(true);
     }
@@ -159,9 +159,9 @@ export class IssueProcessor {
       const issueCloseStaleProcessor: IssueCloseStaleProcessor = new IssueCloseStaleProcessor(this);
 
       await issueCloseStaleProcessor.close();
-      IssuesStatisticsService.increaseClosedIssuesCount();
+      IssuesStatisticsService.getInstance().increaseClosedIssuesCount();
     } else {
-      IssuesStatisticsService.increaseUnalteredIssuesCount();
+      IssuesStatisticsService.getInstance().increaseUnalteredIssuesCount();
     }
 
     this.stopProcessing$$();

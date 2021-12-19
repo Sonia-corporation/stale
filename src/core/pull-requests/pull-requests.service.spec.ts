@@ -70,7 +70,7 @@ describe(`PullRequestsService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       processBatchesSpy = jest.spyOn(PullRequestsService, `processBatches`);
       pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy = jest
-        .spyOn(PullRequestsStatisticsService, `increaseProcessedPullRequestsCount`)
+        .spyOn(PullRequestsStatisticsService.getInstance(), `increaseProcessedPullRequestsCount`)
         .mockImplementation();
     });
 
