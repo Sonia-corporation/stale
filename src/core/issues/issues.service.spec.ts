@@ -65,7 +65,7 @@ describe(`IssuesService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       processBatchesSpy = jest.spyOn(IssuesService, `processBatches`);
       issuesStatisticsServiceIncreaseProcessedIssuesCountSpy = jest
-        .spyOn(IssuesStatisticsService, `increaseProcessedIssuesCount`)
+        .spyOn(IssuesStatisticsService.getInstance(), `increaseProcessedIssuesCount`)
         .mockImplementation();
     });
 

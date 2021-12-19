@@ -20,7 +20,7 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
     return PullRequestsInputsService._instance;
   }
 
-  public readonly inputsName: `Pull requests` = `Pull requests`;
+  protected readonly _inputsName: `pull requests` = `pull requests`;
 
   public setInputs(): IPullRequestsInputs {
     this.inputs$$ = {

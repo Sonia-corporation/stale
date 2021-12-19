@@ -81,7 +81,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseAddedIssuesCommentsCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
         githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
           .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)
@@ -258,7 +258,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseAddedIssuesCommentsCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
         githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
           .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)

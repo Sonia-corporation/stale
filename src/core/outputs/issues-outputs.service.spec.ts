@@ -28,14 +28,14 @@ describe(`IssuesOutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      IssuesStatisticsService.processedIssuesCount$$ = 1;
-      IssuesStatisticsService.ignoredIssuesCount$$ = 1;
-      IssuesStatisticsService.unalteredIssuesCount$$ = 1;
-      IssuesStatisticsService.staleIssuesCount$$ = 1;
-      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.removeStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.closedIssuesCount$$ = 1;
-      IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
+      IssuesStatisticsService.getInstance().processedIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().ignoredIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().unalteredIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().staleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().removeStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().closedIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$ = 1;
 
       IssuesOutputsService.setOutputs();
 

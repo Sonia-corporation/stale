@@ -37,7 +37,7 @@ export class IssuesService {
       // eslint-disable-next-line no-await-in-loop
       await new IssueProcessor(issue).process();
 
-      IssuesStatisticsService.increaseProcessedIssuesCount();
+      IssuesStatisticsService.getInstance().increaseProcessedIssuesCount();
     }
 
     LoggerService.info(

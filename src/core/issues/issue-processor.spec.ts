@@ -90,10 +90,10 @@ describe(`IssueProcessor`, (): void => {
         loggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         createLinkSpy = jest.spyOn(CreateLinkModule, `createLink`).mockReturnValue(`dummy-link`);
         issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseIgnoredIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseIgnoredIssuesCount`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseAlreadyStaleIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseAlreadyStaleIssuesCount`)
           .mockImplementation();
       });
 
@@ -439,10 +439,10 @@ describe(`IssueProcessor`, (): void => {
 
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
         issuesStatisticsServiceIncreaseStaleIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseStaleIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseStaleIssuesCount`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseUnalteredIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseUnalteredIssuesCount`)
           .mockImplementation();
       });
 
@@ -594,7 +594,7 @@ describe(`IssueProcessor`, (): void => {
         mockedIssueRemoveStaleProcessor.mockClear();
 
         issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseRemoveStaleIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseRemoveStaleIssuesCount`)
           .mockImplementation();
       });
 
@@ -692,10 +692,10 @@ describe(`IssueProcessor`, (): void => {
 
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
         issuesStatisticsServiceIncreaseClosedIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseClosedIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseClosedIssuesCount`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy = jest
-          .spyOn(IssuesStatisticsService, `increaseUnalteredIssuesCount`)
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseUnalteredIssuesCount`)
           .mockImplementation();
       });
 
