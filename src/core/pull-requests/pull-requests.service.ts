@@ -39,7 +39,7 @@ export class PullRequestsService {
       // eslint-disable-next-line no-await-in-loop
       await new PullRequestProcessor(pullRequest).process();
 
-      PullRequestsStatisticsService.increaseProcessedPullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseProcessedPullRequestsCount();
     }
 
     LoggerService.info(

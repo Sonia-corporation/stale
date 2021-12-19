@@ -5,188 +5,212 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`PullRequestsStatisticsService`, (): void => {
+  let service: PullRequestsStatisticsService;
+
+  beforeEach((): void => {
+    service = PullRequestsStatisticsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a PullRequestsStatisticsService`, (): void => {
+      expect.assertions(1);
+
+      service = PullRequestsStatisticsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(PullRequestsStatisticsService));
+    });
+
+    it(`should return the created PullRequestsStatisticsService`, (): void => {
+      expect.assertions(1);
+
+      const result = PullRequestsStatisticsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
       expect.assertions(8);
-      PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.stalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.closedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 1;
+      service.processedPullRequestsCount$$ = 1;
+      service.ignoredPullRequestsCount$$ = 1;
+      service.unalteredPullRequestsCount$$ = 1;
+      service.stalePullRequestsCount$$ = 1;
+      service.alreadyStalePullRequestsCount$$ = 1;
+      service.removeStalePullRequestsCount$$ = 1;
+      service.closedPullRequestsCount$$ = 1;
+      service.addedPullRequestsCommentsCount$$ = 1;
 
-      PullRequestsStatisticsService.initialize();
+      service.initialize();
 
-      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(0);
+      expect(service.processedPullRequestsCount$$).toBe(0);
+      expect(service.ignoredPullRequestsCount$$).toBe(0);
+      expect(service.unalteredPullRequestsCount$$).toBe(0);
+      expect(service.stalePullRequestsCount$$).toBe(0);
+      expect(service.alreadyStalePullRequestsCount$$).toBe(0);
+      expect(service.removeStalePullRequestsCount$$).toBe(0);
+      expect(service.closedPullRequestsCount$$).toBe(0);
+      expect(service.addedPullRequestsCommentsCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.initialize();
+      const result = service.initialize();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseProcessedPullRequestsCount()`, (): void => {
     it(`should increase the processed pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.processedPullRequestsCount$$ = 0;
+      service.processedPullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseProcessedPullRequestsCount();
+      service.increaseProcessedPullRequestsCount();
 
-      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(1);
+      expect(service.processedPullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseProcessedPullRequestsCount();
+      const result = service.increaseProcessedPullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseIgnoredPullRequestsCount()`, (): void => {
     it(`should increase the ignored pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 0;
+      service.ignoredPullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseIgnoredPullRequestsCount();
+      service.increaseIgnoredPullRequestsCount();
 
-      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(1);
+      expect(service.ignoredPullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseIgnoredPullRequestsCount();
+      const result = service.increaseIgnoredPullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseUnalteredPullRequestsCount()`, (): void => {
     it(`should increase the unaltered pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 0;
+      service.unalteredPullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseUnalteredPullRequestsCount();
+      service.increaseUnalteredPullRequestsCount();
 
-      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(1);
+      expect(service.unalteredPullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseUnalteredPullRequestsCount();
+      const result = service.increaseUnalteredPullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseStalePullRequestsCount()`, (): void => {
     it(`should increase the stale pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.stalePullRequestsCount$$ = 0;
+      service.stalePullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseStalePullRequestsCount();
+      service.increaseStalePullRequestsCount();
 
-      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(1);
+      expect(service.stalePullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseStalePullRequestsCount();
+      const result = service.increaseStalePullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseAlreadyStalePullRequestsCount()`, (): void => {
     it(`should increase the already stale pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 0;
+      service.alreadyStalePullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseAlreadyStalePullRequestsCount();
+      service.increaseAlreadyStalePullRequestsCount();
 
-      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(1);
+      expect(service.alreadyStalePullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseAlreadyStalePullRequestsCount();
+      const result = service.increaseAlreadyStalePullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseRemoveStalePullRequestsCount()`, (): void => {
     it(`should increase the stale pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 0;
+      service.removeStalePullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseRemoveStalePullRequestsCount();
+      service.increaseRemoveStalePullRequestsCount();
 
-      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(1);
+      expect(service.removeStalePullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseRemoveStalePullRequestsCount();
+      const result = service.increaseRemoveStalePullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseClosedPullRequestsCount()`, (): void => {
     it(`should increase the close pull requests count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.closedPullRequestsCount$$ = 0;
+      service.closedPullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseClosedPullRequestsCount();
+      service.increaseClosedPullRequestsCount();
 
-      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(1);
+      expect(service.closedPullRequestsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseClosedPullRequestsCount();
+      const result = service.increaseClosedPullRequestsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`increaseAddedPullRequestsCommentsCount()`, (): void => {
     it(`should increase the added pull requests comments count`, (): void => {
       expect.assertions(1);
-      PullRequestsStatisticsService.closedPullRequestsCount$$ = 0;
+      service.closedPullRequestsCount$$ = 0;
 
-      PullRequestsStatisticsService.increaseAddedPullRequestsCommentsCount();
+      service.increaseAddedPullRequestsCommentsCount();
 
-      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(1);
+      expect(service.addedPullRequestsCommentsCount$$).toBe(1);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.increaseAddedPullRequestsCommentsCount();
+      const result = service.increaseAddedPullRequestsCommentsCount();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
@@ -204,28 +228,28 @@ describe(`PullRequestsStatisticsService`, (): void => {
     it(`should create a group of logs`, (): void => {
       expect.assertions(2);
 
-      PullRequestsStatisticsService.logsAllStatistics();
+      service.logsAllStatistics();
 
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Statistics`);
+      expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Pull requests statistics`);
     });
 
     describe(`when all the statistics are at 0 count`, (): void => {
       beforeEach((): void => {
-        PullRequestsStatisticsService.processedPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.stalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.closedPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 0;
+        service.processedPullRequestsCount$$ = 0;
+        service.ignoredPullRequestsCount$$ = 0;
+        service.unalteredPullRequestsCount$$ = 0;
+        service.stalePullRequestsCount$$ = 0;
+        service.alreadyStalePullRequestsCount$$ = 0;
+        service.removeStalePullRequestsCount$$ = 0;
+        service.closedPullRequestsCount$$ = 0;
+        service.addedPullRequestsCommentsCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
         expect.assertions(1);
 
-        PullRequestsStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).not.toHaveBeenCalled();
       });
@@ -233,20 +257,20 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
     describe(`when there is only one statistic with a count more to 0`, (): void => {
       beforeEach((): void => {
-        PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
-        PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.stalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.closedPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 0;
+        service.processedPullRequestsCount$$ = 1;
+        service.ignoredPullRequestsCount$$ = 0;
+        service.unalteredPullRequestsCount$$ = 0;
+        service.stalePullRequestsCount$$ = 0;
+        service.removeStalePullRequestsCount$$ = 0;
+        service.alreadyStalePullRequestsCount$$ = 0;
+        service.closedPullRequestsCount$$ = 0;
+        service.addedPullRequestsCommentsCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
         expect.assertions(2);
 
-        PullRequestsStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
@@ -259,20 +283,20 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
     describe(`when there is a bunch of statistics with a count more to 0`, (): void => {
       beforeEach((): void => {
-        PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
-        PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 2;
-        PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 0;
-        PullRequestsStatisticsService.stalePullRequestsCount$$ = 3;
-        PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 4;
-        PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 5;
-        PullRequestsStatisticsService.closedPullRequestsCount$$ = 6;
-        PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 7;
+        service.processedPullRequestsCount$$ = 1;
+        service.ignoredPullRequestsCount$$ = 2;
+        service.unalteredPullRequestsCount$$ = 0;
+        service.stalePullRequestsCount$$ = 3;
+        service.alreadyStalePullRequestsCount$$ = 4;
+        service.removeStalePullRequestsCount$$ = 5;
+        service.closedPullRequestsCount$$ = 6;
+        service.addedPullRequestsCommentsCount$$ = 7;
       });
 
       it(`should log the statistics`, (): void => {
         expect.assertions(8);
 
-        PullRequestsStatisticsService.logsAllStatistics();
+        service.logsAllStatistics();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(7);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -323,7 +347,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 
-      PullRequestsStatisticsService.logsAllStatistics();
+      service.logsAllStatistics();
 
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledWith();
@@ -332,9 +356,9 @@ describe(`PullRequestsStatisticsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsStatisticsService.logsAllStatistics();
+      const result = service.logsAllStatistics();
 
-      expect(result).toStrictEqual(PullRequestsStatisticsService);
+      expect(result).toStrictEqual(service);
     });
   });
 });

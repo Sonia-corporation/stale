@@ -9,14 +9,14 @@ export class StatisticsService {
    */
   public static initialize(): StatisticsService {
     IssuesStatisticsService.getInstance().initialize();
-    PullRequestsStatisticsService.initialize();
+    PullRequestsStatisticsService.getInstance().initialize();
 
     return StatisticsService;
   }
 
   public static logsAllStatistics(): StatisticsService {
     IssuesStatisticsService.getInstance().logsAllStatistics();
-    PullRequestsStatisticsService.logsAllStatistics();
+    PullRequestsStatisticsService.getInstance().logsAllStatistics();
 
     return StatisticsService;
   }

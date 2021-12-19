@@ -41,7 +41,7 @@ export class PullRequestProcessor {
 
     if (this.shouldIgnore$$()) {
       this.logger.info(`Ignored`);
-      PullRequestsStatisticsService.increaseIgnoredPullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseIgnoredPullRequestsCount();
       this.stopProcessing$$();
 
       return;
@@ -49,7 +49,7 @@ export class PullRequestProcessor {
 
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
-      PullRequestsStatisticsService.increaseAlreadyStalePullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseAlreadyStalePullRequestsCount();
 
       const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
 
@@ -113,9 +113,9 @@ export class PullRequestProcessor {
 
     if (pullRequestStaleProcessor.shouldStale()) {
       await pullRequestStaleProcessor.stale();
-      PullRequestsStatisticsService.increaseStalePullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseStalePullRequestsCount();
     } else {
-      PullRequestsStatisticsService.increaseUnalteredPullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseUnalteredPullRequestsCount();
     }
 
     this.stopProcessing$$();
@@ -144,7 +144,7 @@ export class PullRequestProcessor {
 
     if (await pullRequestRemoveStaleProcessor.shouldRemoveStale()) {
       await pullRequestRemoveStaleProcessor.removeStale();
-      PullRequestsStatisticsService.increaseRemoveStalePullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseRemoveStalePullRequestsCount();
 
       return Promise.resolve(true);
     }
@@ -160,9 +160,9 @@ export class PullRequestProcessor {
       const pullRequestCloseStaleProcessor: PullRequestCloseStaleProcessor = new PullRequestCloseStaleProcessor(this);
 
       await pullRequestCloseStaleProcessor.close();
-      PullRequestsStatisticsService.increaseClosedPullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseClosedPullRequestsCount();
     } else {
-      PullRequestsStatisticsService.increaseUnalteredPullRequestsCount();
+      PullRequestsStatisticsService.getInstance().increaseUnalteredPullRequestsCount();
     }
 
     this.stopProcessing$$();

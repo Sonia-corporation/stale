@@ -61,14 +61,14 @@ describe(`Pull request to close`, (): void => {
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.processedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.ignoredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.unalteredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.stalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.alreadyStalePullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.removeStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.closedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.addedPullRequestsCommentsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
     });
   });
 });

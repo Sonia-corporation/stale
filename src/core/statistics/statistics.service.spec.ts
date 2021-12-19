@@ -15,7 +15,7 @@ describe(`StatisticsService`, (): void => {
         .spyOn(IssuesStatisticsService.getInstance(), `initialize`)
         .mockImplementation();
       pullRequestsStatisticsServiceInitializeSpy = jest
-        .spyOn(PullRequestsStatisticsService, `initialize`)
+        .spyOn(PullRequestsStatisticsService.getInstance(), `initialize`)
         .mockImplementation();
     });
 

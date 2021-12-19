@@ -28,14 +28,14 @@ describe(`PullRequestsOutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.stalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.closedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$ = 1;
 
       PullRequestsOutputsService.setOutputs();
 
