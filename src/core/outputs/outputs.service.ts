@@ -4,7 +4,7 @@ import { PullRequestsOutputsService } from '@core/outputs/pull-requests-outputs.
 export class OutputsService {
   public static setOutputs(): OutputsService {
     IssuesOutputsService.getInstance().setOutputs();
-    PullRequestsOutputsService.setOutputs();
+    PullRequestsOutputsService.getInstance().setOutputs();
 
     return OutputsService;
   }

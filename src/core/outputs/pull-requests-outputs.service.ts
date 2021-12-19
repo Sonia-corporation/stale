@@ -1,12 +1,23 @@
+import { AbstractOutputsService } from '@core/outputs/abstract-outputs.service';
 import { EPullRequestsOutputs } from '@core/outputs/enums/pull-requests-outputs.enum';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
-import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
-export class PullRequestsOutputsService {
-  public static setOutputs(): PullRequestsOutputsService {
-    LoggerService.info(`Creating the pull requests outputs...`);
+export class PullRequestsOutputsService extends AbstractOutputsService {
+  private static _instance: PullRequestsOutputsService;
 
+  public static getInstance(): PullRequestsOutputsService {
+    if (_.isNil(PullRequestsOutputsService._instance)) {
+      PullRequestsOutputsService._instance = new PullRequestsOutputsService();
+    }
+
+    return PullRequestsOutputsService._instance;
+  }
+
+  protected readonly _outputsName: 'pull requests' = `pull requests`;
+
+  protected _setOutputs(): void {
     core.setOutput(
       EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT,
       PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$
@@ -39,9 +50,5 @@ export class PullRequestsOutputsService {
       EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT,
       PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$
     );
-
-    LoggerService.info(`Pull requests outputs created`);
-
-    return PullRequestsOutputsService;
   }
 }
