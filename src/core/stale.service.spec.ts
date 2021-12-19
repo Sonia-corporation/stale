@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
-import { IssuesService } from '@core/issues/issues.service';
 import { OutputsService } from '@core/outputs/outputs.service';
-import { PullRequestsService } from '@core/pull-requests/pull-requests.service';
+import { IssuesService } from '@core/processing/issues/issues.service';
+import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
 import { StaleService } from '@core/stale.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';

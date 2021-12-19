@@ -1,5 +1,5 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { OctokitService } from '@github/octokit/octokit.service';

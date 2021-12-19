@@ -1,5 +1,5 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';

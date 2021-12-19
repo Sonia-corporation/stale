@@ -1,4 +1,4 @@
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';

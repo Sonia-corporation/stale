@@ -1,5 +1,5 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 
 export abstract class AbstractGithubApiService<TProcessor extends IssueProcessor | PullRequestProcessor> {
   public readonly processor: TProcessor;

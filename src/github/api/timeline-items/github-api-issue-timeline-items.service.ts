@@ -1,4 +1,4 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { AbstractGithubApiTimelineItemsService } from '@github/api/timeline-items/abstract-github-api-timeline-items.service';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';

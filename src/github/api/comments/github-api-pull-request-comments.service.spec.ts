@@ -1,4 +1,4 @@
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GithubApiPullRequestCommentsService } from '@github/api/comments/github-api-pull-request-comments.service';
 import { OctokitService } from '@github/octokit/octokit.service';

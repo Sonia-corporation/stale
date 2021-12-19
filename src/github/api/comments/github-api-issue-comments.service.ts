@@ -1,4 +1,4 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { AbstractGithubApiCommentsService } from '@github/api/comments/abstract-github-api-comments.service';
 
 export class GithubApiIssueCommentsService extends AbstractGithubApiCommentsService<IssueProcessor> {
