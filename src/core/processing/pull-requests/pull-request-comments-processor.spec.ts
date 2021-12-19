@@ -26,7 +26,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
       const result = new PullRequestCommentsProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
 
     it(`should create the GithubApiPullRequestCommentsService`, (): void => {
@@ -77,10 +77,10 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             })
           );
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestCommentsProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `notice`)
+          .spyOn(pullRequestCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
@@ -259,10 +259,10 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             })
           );
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestCommentsProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `notice`)
+          .spyOn(pullRequestCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)

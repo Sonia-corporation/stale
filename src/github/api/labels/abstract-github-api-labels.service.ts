@@ -97,7 +97,7 @@ export abstract class AbstractGithubApiLabelsService<
     this.processor.logger.info(
       `Adding the label`,
       LoggerService.value(labelId),
-      LoggerFormatService.whiteBright(`on the ${this._type}`),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -110,7 +110,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
-          LoggerFormatService.green(`added to the ${this._type}`),
+          LoggerFormatService.green(`added to the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -118,7 +118,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(
           `Failed to add the label`,
           LoggerService.value(labelId),
-          LoggerFormatService.red(`on the ${this._type}`),
+          LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
 
@@ -130,7 +130,7 @@ export abstract class AbstractGithubApiLabelsService<
     this.processor.logger.info(
       `Removing the label`,
       LoggerService.value(labelId),
-      LoggerFormatService.whiteBright(`from the ${this._type}`),
+      LoggerFormatService.whiteBright(`from the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -143,7 +143,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
-          LoggerFormatService.green(`removed from the ${this._type}`),
+          LoggerFormatService.green(`removed from the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -151,7 +151,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(
           `Failed to remove the label`,
           LoggerService.value(labelId),
-          LoggerFormatService.red(`from the ${this._type}`),
+          LoggerFormatService.red(`from the ${this.type}`),
           LoggerService.value(targetId)
         );
 

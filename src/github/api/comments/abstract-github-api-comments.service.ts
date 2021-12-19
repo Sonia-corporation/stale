@@ -19,7 +19,7 @@ export abstract class AbstractGithubApiCommentsService<
     this.processor.logger.info(
       `Adding the comment`,
       LoggerService.value(comment),
-      LoggerFormatService.whiteBright(`on the ${this._type}`),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -32,7 +32,7 @@ export abstract class AbstractGithubApiCommentsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Comment`),
           LoggerService.value(comment),
-          LoggerFormatService.green(`added to the ${this._type}`),
+          LoggerFormatService.green(`added to the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -40,7 +40,7 @@ export abstract class AbstractGithubApiCommentsService<
         this.processor.logger.error(
           `Failed to add the comment`,
           LoggerService.value(comment),
-          LoggerFormatService.red(`on the ${this._type}`),
+          LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
 

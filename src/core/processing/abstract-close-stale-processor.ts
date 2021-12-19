@@ -1,15 +1,14 @@
 import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import { IUuid } from '@utils/types/uuid';
 
-export abstract class AbstractCloseStaleProcessor<TProcessor extends IssueProcessor | PullRequestProcessor> {
-  public readonly processor: TProcessor;
-  public readonly type: 'issue' | 'pull request';
-
+export abstract class AbstractCloseStaleProcessor<
+  TProcessor extends IssueProcessor | PullRequestProcessor
+> extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
-    this.processor = processor;
-    this.type = this.processor.type;
+    super(processor);
   }
 
   public async close(): Promise<void> {
