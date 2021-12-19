@@ -25,7 +25,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
 
       const result = new GithubApiIssueTimelineItemsService(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 

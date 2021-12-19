@@ -15,7 +15,7 @@ import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 import _ from 'lodash';
 
-export class AbstractGithubApiLabelsService<
+export abstract class AbstractGithubApiLabelsService<
   TProcessor extends IssueProcessor | PullRequestProcessor
 > extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {

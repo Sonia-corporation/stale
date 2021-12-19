@@ -1,7 +1,7 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
 
-export class AbstractGithubApiService<TProcessor extends IssueProcessor | PullRequestProcessor> {
+export abstract class AbstractGithubApiService<TProcessor extends IssueProcessor | PullRequestProcessor> {
   public readonly processor: TProcessor;
   protected readonly _targetType: 'issue' | 'pull request';
 
