@@ -6,9 +6,10 @@ export abstract class AbstractOutputsService {
    * @description
    * The name of the outputs that will be stored inside this service
    * Used only for the logs
-   * @type {string}
+   * @type {'issues' | 'pull requests'}
+   * @protected
    */
-  protected abstract readonly _outputsName: string;
+  protected abstract readonly _outputsName: 'issues' | 'pull requests';
 
   public setOutputs(): AbstractOutputsService {
     LoggerService.info(`Creating the ${_.lowerCase(this._outputsName)} outputs...`);

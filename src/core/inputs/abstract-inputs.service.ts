@@ -12,9 +12,10 @@ export abstract class AbstractInputsService<TInputs extends IInputs> {
    * @description
    * The name of the inputs that will be stored inside this service
    * Used only for the logs
-   * @type {string}
+   * @type {'common' | 'issues' | 'pull requests'}
+   * @protected
    */
-  protected abstract readonly _inputsName: string;
+  protected abstract readonly _inputsName: 'common' | 'issues' | 'pull requests';
 
   /**
    * @description
