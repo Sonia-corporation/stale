@@ -1,42 +1,32 @@
-import { CoreInputsService } from '@core/inputs/core-inputs.service';
+import { AbstractInputsService } from '@core/inputs/abstract-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
 /**
  * @description
  * Used to get the common inputs coming from action
  */
-export class CommonInputsService {
-  public static inputs$$: ICommonInputs | undefined = undefined;
+export class CommonInputsService extends AbstractInputsService<ICommonInputs> {
+  private static _instance: CommonInputsService;
 
-  public static initialize(): CommonInputsService {
-    CommonInputsService.setInputs();
-    CommonInputsService.logInputs();
+  public static getInstance(): CommonInputsService {
+    if (_.isNil(CommonInputsService._instance)) {
+      CommonInputsService._instance = new CommonInputsService();
+    }
 
-    return CommonInputsService;
+    return CommonInputsService._instance;
   }
 
-  public static setInputs(): ICommonInputs {
-    CommonInputsService.inputs$$ = {
+  public readonly inputsName: `Common` = `Common`;
+
+  public setInputs(): ICommonInputs {
+    this.inputs$$ = {
       dryRun: core.getBooleanInput(EInputs.DRY_RUN, { required: false }),
       githubToken: core.getInput(EInputs.GITHUB_TOKEN, { required: false }),
     };
 
-    return CommonInputsService.inputs$$;
-  }
-
-  public static logInputs(): CommonInputsService {
-    CoreInputsService.logInputs(`Common inputs`, CommonInputsService.getInputs());
-
-    return CommonInputsService;
-  }
-
-  public static getInputs(): ICommonInputs | never {
-    if (!CommonInputsService.inputs$$) {
-      throw new Error(`The common inputs are unset`);
-    }
-
-    return CommonInputsService.inputs$$;
+    return this.inputs$$;
   }
 }

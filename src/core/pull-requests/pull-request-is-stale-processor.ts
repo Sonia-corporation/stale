@@ -31,7 +31,7 @@ export class PullRequestIsStaleProcessor {
   }
 
   private _getStaleLabel(): IGithubApiLabel | undefined {
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     return this.pullRequestProcessor.githubPullRequest.labels.nodes.find(
       (label: Readonly<IGithubApiLabel>): boolean => label.name === pullRequestsInputs.pullRequestStaleLabel

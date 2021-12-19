@@ -393,11 +393,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreAllAssignees: false,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllAssignees: false,
+            })
+          );
       });
 
       it(`should log about checking if the pull request should ignore all the assignees`, (): void => {
@@ -508,11 +510,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreAllAssignees: true,
-              })
-            );
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllAssignees: true,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -544,11 +548,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreAllProjectCards: false,
-          })
-        );
+        pullRequestsInputsServiceGetInputs = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllProjectCards: false,
+            })
+          );
       });
 
       it(`should log about checking if the pull request should ignore all the project cards`, (): void => {
@@ -659,11 +665,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreAllProjectCards: true,
-              })
-            );
+            pullRequestsInputsServiceGetInputs = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllProjectCards: true,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -696,11 +704,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreBeforeCreationDate: ``,
-          })
-        );
+        pullRequestsInputsServiceGetInputs = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreBeforeCreationDate: ``,
+            })
+          );
         pullRequestProcessorGetCreatedAtSpy = jest
           .spyOn(pullRequestProcessor, `getCreatedAt`)
           .mockReturnValue(DateTime.utc(2020));
@@ -841,11 +851,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreAllLabels: false,
-          })
-        );
+        pullRequestsInputsServiceGetInputs = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllLabels: false,
+            })
+          );
       });
 
       it(`should log about checking if the pull request should ignore all the labels`, (): void => {
@@ -960,12 +972,14 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreAllLabels: true,
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputs = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllLabels: true,
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return false`, (): void => {
@@ -1000,12 +1014,14 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreAllLabels: true,
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputs = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllLabels: true,
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -1048,12 +1064,14 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreAllLabels: true,
-                pullRequestStaleLabel: `stale`,
-              })
-            );
+            pullRequestsInputsServiceGetInputs = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllLabels: true,
+                  pullRequestStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -1089,11 +1107,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreAnyLabels: [`ignored-label`],
-          })
-        );
+        pullRequestsInputsServiceGetInputs = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAnyLabels: [`ignored-label`],
+            })
+          );
       });
 
       it(`should log about checking if the pull request has one of the ignored labels`, (): void => {
@@ -1275,11 +1295,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestIgnoreAnyAssignees: [`ignored-assignee`],
-          })
-        );
+        pullRequestsInputsServiceGetInputs = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAnyAssignees: [`ignored-assignee`],
+            })
+          );
       });
 
       it(`should log about checking if the pull request has one of the ignored assignees`, (): void => {

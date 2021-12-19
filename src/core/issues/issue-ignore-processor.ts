@@ -56,7 +56,7 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredAssignees$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the assignees on this issue should be ignored...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllAssignees) {
       this.issueProcessor.logger.info(
@@ -94,7 +94,7 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredProjectCards$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllProjectCards) {
       this.issueProcessor.logger.info(
@@ -132,7 +132,7 @@ export class IssueIgnoreProcessor {
   public hasIgnoredCreationDate$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue should be ignored based on its creation date...`);
     let issueIgnoreBeforeCreationDate: DateTime;
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     try {
       issueIgnoreBeforeCreationDate = iso8601ToDatetime(issuesInputs.issueIgnoreBeforeCreationDate);
@@ -170,7 +170,7 @@ export class IssueIgnoreProcessor {
   public hasAllIgnoredLabels$$(): boolean {
     this.issueProcessor.logger.info(`Checking if all the labels on this issue should be ignored...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllLabels) {
       this.issueProcessor.logger.info(
@@ -211,7 +211,7 @@ export class IssueIgnoreProcessor {
   public hasAnyIgnoredLabels$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue has one of the ignored labels...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedLabels: string[] = getDuplicates(
       this._getLabels(this.issueProcessor.githubIssue.labels.nodes),
       issuesInputs.issueIgnoreAnyLabels
@@ -253,7 +253,7 @@ export class IssueIgnoreProcessor {
   public hasAnyIgnoredAssignees$$(): boolean {
     this.issueProcessor.logger.info(`Checking if this issue has one of the ignored assignees...`);
 
-    const issuesInputs: IIssuesInputs = IssuesInputsService.getInputs();
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
       this._getAssignees(this.issueProcessor.githubIssue.assignees.nodes),
       issuesInputs.issueIgnoreAnyAssignees

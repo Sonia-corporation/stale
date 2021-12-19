@@ -78,7 +78,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         pullRequestProcessorLoggerNoticeSpy = jest
           .spyOn(pullRequestCloseStaleProcessor.pullRequestProcessor.logger, `notice`)
           .mockImplementation();
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: true,
           })

@@ -48,7 +48,9 @@ describe(`OctokitService`, (): void => {
       });
 
       setOctokitSpy = jest.spyOn(github, `getOctokit`).mockReturnValue(githubInstance);
-      commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(inputs);
+      commonInputsServiceGetInputsSpy = jest
+        .spyOn(CommonInputsService.getInstance(), `getInputs`)
+        .mockReturnValue(inputs);
     });
 
     it(`should create the GitHub octokit`, (): void => {

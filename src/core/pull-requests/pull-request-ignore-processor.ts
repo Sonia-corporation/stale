@@ -56,7 +56,7 @@ export class PullRequestIgnoreProcessor {
   public hasAllIgnoredAssignees$$(): boolean {
     this.pullRequestProcessor.logger.info(`Checking if all the assignees on this pull request should be ignored...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     if (!pullRequestsInputs.pullRequestIgnoreAllAssignees) {
       this.pullRequestProcessor.logger.info(
@@ -96,7 +96,7 @@ export class PullRequestIgnoreProcessor {
       `Checking if all the project cards on this pull request should be ignored...`
     );
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     if (!pullRequestsInputs.pullRequestIgnoreAllProjectCards) {
       this.pullRequestProcessor.logger.info(
@@ -136,7 +136,7 @@ export class PullRequestIgnoreProcessor {
       `Checking if this pull request should be ignored based on its creation date...`
     );
     let pullRequestIgnoreBeforeCreationDate: DateTime;
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     try {
       pullRequestIgnoreBeforeCreationDate = iso8601ToDatetime(pullRequestsInputs.pullRequestIgnoreBeforeCreationDate);
@@ -174,7 +174,7 @@ export class PullRequestIgnoreProcessor {
   public hasAllIgnoredLabels$$(): boolean {
     this.pullRequestProcessor.logger.info(`Checking if all the labels on this pull request should be ignored...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     if (!pullRequestsInputs.pullRequestIgnoreAllLabels) {
       this.pullRequestProcessor.logger.info(
@@ -215,7 +215,7 @@ export class PullRequestIgnoreProcessor {
   public hasAnyIgnoredLabels$$(): boolean {
     this.pullRequestProcessor.logger.info(`Checking if this pull request has one of the ignored labels...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const duplicatedLabels: string[] = getDuplicates(
       this._getLabels(this.pullRequestProcessor.githubPullRequest.labels.nodes),
       pullRequestsInputs.pullRequestIgnoreAnyLabels
@@ -259,7 +259,7 @@ export class PullRequestIgnoreProcessor {
   public hasAnyIgnoredAssignees$$(): boolean {
     this.pullRequestProcessor.logger.info(`Checking if this pull request has one of the ignored assignees...`);
 
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
       this._getAssignees(this.pullRequestProcessor.githubPullRequest.assignees.nodes),
       pullRequestsInputs.pullRequestIgnoreAnyAssignees

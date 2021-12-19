@@ -142,16 +142,18 @@ describe(`PullRequestStaleProcessor`, (): void => {
               id: staleLabelId,
             })
           );
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
         );
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleLabel,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleLabel,
+            })
+          );
         githubApiPullRequestLabelsServiceAddLabelToPullRequestSpy = jest
           .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabelToPullRequest`)
           .mockImplementation();
@@ -230,11 +232,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: false,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: false,
+                })
+              );
           });
 
           it(`should add the stale label on the pull request`, async (): Promise<void> => {
@@ -265,11 +269,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: true,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: true,
+                })
+              );
           });
 
           it(`should not add the stale label on the pull request`, async (): Promise<void> => {
@@ -309,11 +315,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestDaysBeforeStale: 30,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestDaysBeforeStale: 30,
+            })
+          );
       });
 
       it(`should get the number of days before the pull request should be stale`, (): void => {

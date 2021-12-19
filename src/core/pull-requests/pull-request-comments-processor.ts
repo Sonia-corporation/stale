@@ -19,8 +19,8 @@ export class PullRequestCommentsProcessor {
   public async processStaleComment(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Checking if a stale comment should be added...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     if (pullRequestsInputs.pullRequestStaleComment === ``) {
       this.pullRequestProcessor.logger.info(`The stale comment is unset. Continuing...`);
@@ -49,8 +49,8 @@ export class PullRequestCommentsProcessor {
   public async processCloseComment(): Promise<void> {
     this.pullRequestProcessor.logger.info(`Checking if a close comment should be added...`);
 
-    const commonInputs: ICommonInputs = CommonInputsService.getInputs();
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInputs();
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     if (pullRequestsInputs.pullRequestCloseComment === ``) {
       this.pullRequestProcessor.logger.info(`The close comment is unset. Continuing...`);

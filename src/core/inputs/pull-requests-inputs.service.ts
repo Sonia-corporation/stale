@@ -1,24 +1,29 @@
+import { AbstractInputsService } from '@core/inputs/abstract-inputs.service';
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import * as core from '@actions/core';
+import _ from 'lodash';
 
 /**
  * @description
  * Used to get the pull requests inputs coming from action
  */
-export class PullRequestsInputsService {
-  public static inputs$$: IPullRequestsInputs | undefined = undefined;
+export class PullRequestsInputsService extends AbstractInputsService<IPullRequestsInputs> {
+  private static _instance: PullRequestsInputsService;
 
-  public static initialize(): PullRequestsInputsService {
-    PullRequestsInputsService.setInputs();
-    PullRequestsInputsService.logInputs();
+  public static getInstance(): PullRequestsInputsService {
+    if (_.isNil(PullRequestsInputsService._instance)) {
+      PullRequestsInputsService._instance = new PullRequestsInputsService();
+    }
 
-    return PullRequestsInputsService;
+    return PullRequestsInputsService._instance;
   }
 
-  public static setInputs(): IPullRequestsInputs {
-    PullRequestsInputsService.inputs$$ = {
+  public readonly inputsName: `Pull requests` = `Pull requests`;
+
+  public setInputs(): IPullRequestsInputs {
+    this.inputs$$ = {
       pullRequestCloseComment: core.getInput(EInputs.PULL_REQUEST_CLOSE_COMMENT, { required: false }),
       pullRequestDaysBeforeClose: CoreInputsService.getNumberInput$$(EInputs.PULL_REQUEST_DAYS_BEFORE_CLOSE, {
         required: false,
@@ -44,20 +49,6 @@ export class PullRequestsInputsService {
       pullRequestStaleLabel: core.getInput(EInputs.PULL_REQUEST_STALE_LABEL, { required: false }),
     };
 
-    return PullRequestsInputsService.inputs$$;
-  }
-
-  public static logInputs(): PullRequestsInputsService {
-    CoreInputsService.logInputs(`Pull requests inputs`, PullRequestsInputsService.getInputs());
-
-    return PullRequestsInputsService;
-  }
-
-  public static getInputs(): IPullRequestsInputs | never {
-    if (!PullRequestsInputsService.inputs$$) {
-      throw new Error(`The pull requests inputs are unset`);
-    }
-
-    return PullRequestsInputsService.inputs$$;
+    return this.inputs$$;
   }
 }

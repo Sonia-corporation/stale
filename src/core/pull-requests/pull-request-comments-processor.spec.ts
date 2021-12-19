@@ -64,16 +64,18 @@ describe(`PullRequestCommentsProcessor`, (): void => {
         });
         pullRequestCommentsProcessor = new PullRequestCommentsProcessor(pullRequestProcessor);
 
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
         );
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestStaleComment: ``,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestStaleComment: ``,
+            })
+          );
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();
@@ -244,16 +246,18 @@ describe(`PullRequestCommentsProcessor`, (): void => {
         });
         pullRequestCommentsProcessor = new PullRequestCommentsProcessor(pullRequestProcessor);
 
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
         );
-        pullRequestsInputsServiceGetInputsSpy = jest.spyOn(PullRequestsInputsService, `getInputs`).mockReturnValue(
-          createHydratedMock<IPullRequestsInputs>({
-            pullRequestCloseComment: ``,
-          })
-        );
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestCloseComment: ``,
+            })
+          );
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestCommentsProcessor.pullRequestProcessor.logger, `info`)
           .mockImplementation();

@@ -140,12 +140,12 @@ describe(`IssueStaleProcessor`, (): void => {
               id: staleLabelId,
             })
           );
-        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
             dryRun: false,
           })
         );
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueStaleLabel,
           })
@@ -222,11 +222,13 @@ describe(`IssueStaleProcessor`, (): void => {
 
         describe(`when the action is not in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: false,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: false,
+                })
+              );
           });
 
           it(`should add the stale label on the issue`, async (): Promise<void> => {
@@ -254,11 +256,13 @@ describe(`IssueStaleProcessor`, (): void => {
 
         describe(`when the action is in dry-run mode`, (): void => {
           beforeEach((): void => {
-            commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService, `getInputs`).mockReturnValue(
-              createHydratedMock<ICommonInputs>({
-                dryRun: true,
-              })
-            );
+            commonInputsServiceGetInputsSpy = jest
+              .spyOn(CommonInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<ICommonInputs>({
+                  dryRun: true,
+                })
+              );
           });
 
           it(`should not add the stale label on the issue`, async (): Promise<void> => {
@@ -298,7 +302,7 @@ describe(`IssueStaleProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueStaleProcessor.issueProcessor.logger, `info`)
           .mockImplementation();
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService, `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueDaysBeforeStale: 30,
           })

@@ -12,7 +12,7 @@ export class OctokitService {
   }
 
   public static setOctokit(): InstanceType<typeof GitHub> {
-    OctokitService.octokit$$ = github.getOctokit(CommonInputsService.getInputs().githubToken);
+    OctokitService.octokit$$ = github.getOctokit(CommonInputsService.getInstance().getInputs().githubToken);
 
     return OctokitService.octokit$$;
   }

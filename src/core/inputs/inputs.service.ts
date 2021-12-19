@@ -4,17 +4,17 @@ import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.ser
 
 export class InputsService {
   public static initialize(): InputsService {
-    CommonInputsService.initialize();
-    IssuesInputsService.initialize();
-    PullRequestsInputsService.initialize();
+    CommonInputsService.getInstance().initialize();
+    IssuesInputsService.getInstance().initialize();
+    PullRequestsInputsService.getInstance().initialize();
 
     return InputsService;
   }
 
   public static logInputs(): InputsService {
-    CommonInputsService.logInputs();
-    IssuesInputsService.logInputs();
-    PullRequestsInputsService.logInputs();
+    CommonInputsService.getInstance().logInputs();
+    IssuesInputsService.getInstance().logInputs();
+    PullRequestsInputsService.getInstance().logInputs();
 
     return InputsService;
   }
