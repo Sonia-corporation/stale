@@ -1,5 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
@@ -14,13 +15,11 @@ import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 import _ from 'lodash';
 
-export class AbstractGithubApiLabelsService<TProcessor extends IssueProcessor | PullRequestProcessor> {
-  public readonly processor: TProcessor;
-  private readonly _targetType: 'issue' | 'pull request';
-
-  protected constructor(processor: Readonly<TProcessor>) {
-    this.processor = processor;
-    this._targetType = this.processor.type;
+export class AbstractGithubApiLabelsService<
+  TProcessor extends IssueProcessor | PullRequestProcessor
+> extends AbstractGithubApiService<TProcessor> {
+  protected constructor(processor: TProcessor) {
+    super(processor);
   }
 
   /**

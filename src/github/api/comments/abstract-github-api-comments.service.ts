@@ -1,5 +1,6 @@
 import { IssueProcessor } from '@core/issues/issue-processor';
 import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -8,13 +9,11 @@ import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 import _ from 'lodash';
 
-export abstract class AbstractGithubApiCommentsService<TProcessor extends IssueProcessor | PullRequestProcessor> {
-  public readonly processor: TProcessor;
-  private readonly _targetType: 'issue' | 'pull request';
-
+export abstract class AbstractGithubApiCommentsService<
+  TProcessor extends IssueProcessor | PullRequestProcessor
+> extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {
-    this.processor = processor;
-    this._targetType = this.processor.type;
+    super(processor);
   }
 
   public addComment(targetId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void> | never {
