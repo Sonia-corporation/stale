@@ -24,7 +24,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
       const result = new PullRequestCloseStaleProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
 
     it(`should create the GithubApiPullRequestsService`, (): void => {
@@ -73,10 +73,10 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
           .spyOn(pullRequestCloseStaleProcessor.githubApiPullRequestsService$$, `closePullRequest`)
           .mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestCloseStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestCloseStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCloseStaleProcessor.pullRequestProcessor.logger, `notice`)
+          .spyOn(pullRequestCloseStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
@@ -99,7 +99,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Closing this pull request...`);
       });
 
-      describe(`when the dryn-run mode is disabled`, (): void => {
+      describe(`when the dry-run mode is disabled`, (): void => {
         beforeEach((): void => {
           commonInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<ICommonInputs>({
@@ -131,7 +131,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         });
       });
 
-      describe(`when the dryn-run mode is enabled`, (): void => {
+      describe(`when the dry-run mode is enabled`, (): void => {
         beforeEach((): void => {
           commonInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<ICommonInputs>({

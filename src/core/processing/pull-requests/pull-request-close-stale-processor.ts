@@ -1,35 +1,32 @@
-import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { AbstractCloseStaleProcessor } from '@core/processing/abstract-close-stale-processor';
 import { PullRequestCommentsProcessor } from '@core/processing/pull-requests/pull-request-comments-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
+import { IUuid } from '@utils/types/uuid';
 
 /**
  * @description
  * The processor to close a pull request
  */
-export class PullRequestCloseStaleProcessor {
-  public readonly pullRequestProcessor: PullRequestProcessor;
+export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<PullRequestProcessor> {
   public readonly githubApiPullRequestsService$$: GithubApiPullRequestsService;
   public readonly pullRequestCommentsProcessor$$: PullRequestCommentsProcessor;
 
   public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
-    this.pullRequestProcessor = pullRequestProcessor;
-    this.githubApiPullRequestsService$$ = new GithubApiPullRequestsService(this.pullRequestProcessor);
-    this.pullRequestCommentsProcessor$$ = new PullRequestCommentsProcessor(this.pullRequestProcessor);
+    super(pullRequestProcessor);
+    this.githubApiPullRequestsService$$ = new GithubApiPullRequestsService(pullRequestProcessor);
+    this.pullRequestCommentsProcessor$$ = new PullRequestCommentsProcessor(pullRequestProcessor);
   }
 
-  public async close(): Promise<void> {
-    this.pullRequestProcessor.logger.info(`Closing this pull request...`);
+  protected _processCloseComment(): Promise<void> {
+    return this.pullRequestCommentsProcessor$$.processCloseComment();
+  }
 
-    if (!CommonInputsService.getInstance().getInputs().dryRun) {
-      await this.githubApiPullRequestsService$$.closePullRequest(this.pullRequestProcessor.githubPullRequest.id);
-      this.pullRequestProcessor.logger.info(`The pull request was closed`);
-    } else {
-      this.pullRequestProcessor.logger.info(`The pull request was not closed due to the dry-run mode`);
-    }
+  protected _closeItem(itemId: Readonly<IUuid>): Promise<void> {
+    return this.githubApiPullRequestsService$$.closePullRequest(itemId);
+  }
 
-    await this.pullRequestCommentsProcessor$$.processCloseComment();
-
-    this.pullRequestProcessor.logger.notice(`The pull request is now closed`);
+  protected _getItemId(): IUuid {
+    return this.processor.githubPullRequest.id;
   }
 }

@@ -99,7 +99,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Closing this issue...`);
       });
 
-      describe(`when the dryn-run mode is disabled`, (): void => {
+      describe(`when the dry-run mode is disabled`, (): void => {
         beforeEach((): void => {
           commonInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<ICommonInputs>({
@@ -131,7 +131,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         });
       });
 
-      describe(`when the dryn-run mode is enabled`, (): void => {
+      describe(`when the dry-run mode is enabled`, (): void => {
         beforeEach((): void => {
           commonInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<ICommonInputs>({
