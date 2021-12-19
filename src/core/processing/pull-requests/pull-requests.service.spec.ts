@@ -14,28 +14,52 @@ jest.mock(`@utils/loggers/logger-format.service`);
 jest.mock(`@core/processing/pull-requests/pull-request-processor`);
 
 describe(`PullRequestsService`, (): void => {
+  let service: PullRequestsService;
+
+  beforeEach((): void => {
+    service = PullRequestsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a PullRequestsService`, (): void => {
+      expect.assertions(1);
+
+      service = PullRequestsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(PullRequestsService));
+    });
+
+    it(`should return the created PullRequestsService`, (): void => {
+      expect.assertions(1);
+
+      const result = PullRequestsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`process()`, (): void => {
-    let processBatchedSpy: jest.SpyInstance;
+    let processBatchSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      processBatchedSpy = jest.spyOn(PullRequestsService, `processBatches`).mockImplementation();
+      processBatchSpy = jest.spyOn(service, `processBatch`).mockImplementation();
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
     });
 
     it(`should process the batches of pull requests`, async (): Promise<void> => {
       expect.assertions(2);
 
-      await PullRequestsService.process();
+      await service.process();
 
-      expect(processBatchedSpy).toHaveBeenCalledTimes(1);
-      expect(processBatchedSpy).toHaveBeenCalledWith();
+      expect(processBatchSpy).toHaveBeenCalledTimes(1);
+      expect(processBatchSpy).toHaveBeenCalledWith();
     });
 
     it(`should log when all the pull requests were processed`, async (): Promise<void> => {
       expect.assertions(2);
 
-      await PullRequestsService.process();
+      await service.process();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`green-All the pull requests were processed`);
@@ -50,7 +74,7 @@ describe(`PullRequestsService`, (): void => {
 
     let githubApiPullRequestsServiceFetchPullRequestsSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
-    let processBatchesSpy: jest.SpyInstance;
+    let processBatchSpy: jest.SpyInstance;
     let pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy: jest.SpyInstance;
 
     beforeEach((): void => {
@@ -68,7 +92,7 @@ describe(`PullRequestsService`, (): void => {
           })
         );
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
-      processBatchesSpy = jest.spyOn(PullRequestsService, `processBatches`);
+      processBatchSpy = jest.spyOn(service, `processBatch`);
       pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy = jest
         .spyOn(PullRequestsStatisticsService.getInstance(), `increaseProcessedPullRequestsCount`)
         .mockImplementation();
@@ -77,7 +101,7 @@ describe(`PullRequestsService`, (): void => {
     it(`should log about the fetch of this batch of pull requests`, async (): Promise<void> => {
       expect.assertions(2);
 
-      await PullRequestsService.processBatches();
+      await service.processBatch();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -90,7 +114,7 @@ describe(`PullRequestsService`, (): void => {
     it(`should fetch the pull requests to process`, async (): Promise<void> => {
       expect.assertions(2);
 
-      await PullRequestsService.processBatches(1);
+      await service.processBatch(1);
 
       expect(githubApiPullRequestsServiceFetchPullRequestsSpy).toHaveBeenCalledTimes(1);
       expect(githubApiPullRequestsServiceFetchPullRequestsSpy).toHaveBeenCalledWith(undefined);
@@ -121,7 +145,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should log about the successful fetch of pull request for this batch`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -136,7 +160,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should increase the counter of processed pull requests statistic by 1`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy).toHaveBeenCalledTimes(1);
         expect(pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy).toHaveBeenCalledWith();
@@ -145,7 +169,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should process the pull request`, async (): Promise<void> => {
         expect.assertions(4);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(mockedPullRequestProcessor).toHaveBeenCalledTimes(1);
         expect(mockedPullRequestProcessor).toHaveBeenCalledWith(gitHubApiPullRequest);
@@ -181,7 +205,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should log about the successful fetch of pull requests for this batch`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -196,7 +220,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should increase the counter of processed pull requests statistic by 2`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy).toHaveBeenCalledTimes(2);
         expect(pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy).toHaveBeenCalledWith();
@@ -205,7 +229,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should process the two pull requests`, async (): Promise<void> => {
         expect.assertions(6);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(mockedPullRequestProcessor).toHaveBeenCalledTimes(2);
         expect(mockedPullRequestProcessor).toHaveBeenNthCalledWith(1, gitHubApiPullRequest1);
@@ -219,7 +243,7 @@ describe(`PullRequestsService`, (): void => {
     it(`should log the end of the batch processing`, async (): Promise<void> => {
       expect.assertions(2);
 
-      await PullRequestsService.processBatches();
+      await service.processBatch();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -254,7 +278,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should log about the success of the process of all the pull requests`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `green-All the pull requests batches were processed`);
@@ -299,7 +323,7 @@ describe(`PullRequestsService`, (): void => {
       it(`should log about the need of creating a new batch to process the next pull requests`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Continuing with the next batch of pull requests`);
@@ -308,10 +332,10 @@ describe(`PullRequestsService`, (): void => {
       it(`should process the next batch of pull requests`, async (): Promise<void> => {
         expect.assertions(2);
 
-        await PullRequestsService.processBatches();
+        await service.processBatch();
 
-        expect(processBatchesSpy).toHaveBeenCalledTimes(2);
-        expect(processBatchesSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
+        expect(processBatchSpy).toHaveBeenCalledTimes(2);
+        expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
       });
     });
   });

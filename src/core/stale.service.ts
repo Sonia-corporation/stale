@@ -16,7 +16,7 @@ export class StaleService {
       InputsService.initialize();
       OctokitService.initialize();
       await IssuesService.getInstance().process();
-      await PullRequestsService.process();
+      await PullRequestsService.getInstance().process();
       LoggerService.info(LoggerFormatService.green(`The stale processing is over`));
       StatisticsService.logsAllStatistics();
       OutputsService.setOutputs();
