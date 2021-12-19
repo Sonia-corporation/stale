@@ -26,7 +26,7 @@ describe(`IssueCommentsProcessor`, (): void => {
 
       const result = new IssueCommentsProcessor(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
 
     it(`should create the GithubApiIssueCommentsService`, (): void => {
@@ -74,11 +74,9 @@ describe(`IssueCommentsProcessor`, (): void => {
             issueStaleComment: ``,
           })
         );
-        issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueCommentsProcessor.issueProcessor.logger, `info`)
-          .mockImplementation();
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueCommentsProcessor.processor.logger, `info`).mockImplementation();
         issueProcessorLoggerNoticeSpy = jest
-          .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
+          .spyOn(issueCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)
@@ -251,11 +249,9 @@ describe(`IssueCommentsProcessor`, (): void => {
             issueCloseComment: ``,
           })
         );
-        issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueCommentsProcessor.issueProcessor.logger, `info`)
-          .mockImplementation();
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueCommentsProcessor.processor.logger, `info`).mockImplementation();
         issueProcessorLoggerNoticeSpy = jest
-          .spyOn(issueCommentsProcessor.issueProcessor.logger, `notice`)
+          .spyOn(issueCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)

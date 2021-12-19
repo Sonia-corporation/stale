@@ -1,72 +1,41 @@
-import { CommonInputsService } from '@core/inputs/common-inputs.service';
-import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
+import { AbstractCommentsProcessor } from '@core/processing/abstract-comments-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
-import { LoggerService } from '@utils/loggers/logger.service';
+import { IComment } from '@utils/types/comment';
+import { IUuid } from '@utils/types/uuid';
 
-export class IssueCommentsProcessor {
-  public readonly issueProcessor: IssueProcessor;
+export class IssueCommentsProcessor extends AbstractCommentsProcessor<IssueProcessor> {
   public readonly githubApiIssueCommentsService$$: GithubApiIssueCommentsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
-    this.issueProcessor = issueProcessor;
-    this.githubApiIssueCommentsService$$ = new GithubApiIssueCommentsService(this.issueProcessor);
+    super(issueProcessor);
+    this.githubApiIssueCommentsService$$ = new GithubApiIssueCommentsService(issueProcessor);
   }
 
-  public async processStaleComment(): Promise<void> {
-    this.issueProcessor.logger.info(`Checking if a stale comment should be added...`);
-
-    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+  protected _getStaleComment(): IComment | '' {
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (issuesInputs.issueStaleComment === ``) {
-      this.issueProcessor.logger.info(`The stale comment is unset. Continuing...`);
-
-      return;
-    }
-
-    this.issueProcessor.logger.info(`The stale comment is set to`, LoggerService.value(issuesInputs.issueStaleComment));
-
-    if (!commonInputs.dryRun) {
-      this.issueProcessor.logger.info(`Adding the stale comment...`);
-
-      await this.githubApiIssueCommentsService$$.addComment(
-        this.issueProcessor.githubIssue.id,
-        issuesInputs.issueStaleComment
-      );
-    }
-
-    IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
-    this.issueProcessor.logger.notice(`Stale comment added`);
+    return issuesInputs.issueStaleComment;
   }
 
-  public async processCloseComment(): Promise<void> {
-    this.issueProcessor.logger.info(`Checking if a close comment should be added...`);
-
-    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+  protected _getCloseComment(): IComment | '' {
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (issuesInputs.issueCloseComment === ``) {
-      this.issueProcessor.logger.info(`The close comment is unset. Continuing...`);
+    return issuesInputs.issueCloseComment;
+  }
 
-      return;
-    }
+  protected _getItemId(): IUuid {
+    return this.processor.githubIssue.id;
+  }
 
-    this.issueProcessor.logger.info(`The close comment is set to`, LoggerService.value(issuesInputs.issueCloseComment));
-
-    if (!commonInputs.dryRun) {
-      this.issueProcessor.logger.info(`Adding the close comment...`);
-
-      await this.githubApiIssueCommentsService$$.addComment(
-        this.issueProcessor.githubIssue.id,
-        issuesInputs.issueCloseComment
-      );
-    }
-
+  protected _increaseAddedCommentsCount(): void {
     IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
-    this.issueProcessor.logger.notice(`Close comment added`);
+  }
+
+  protected _addComment(itemId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void> {
+    return this.githubApiIssueCommentsService$$.addComment(itemId, comment);
   }
 }
