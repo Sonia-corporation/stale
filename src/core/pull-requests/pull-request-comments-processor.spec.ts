@@ -53,7 +53,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy: jest.SpyInstance;
-      let githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy: jest.SpyInstance;
+      let githubApiPullRequestCommentsServiceAddCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -85,8 +85,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
           .mockImplementation();
-        githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy = jest
-          .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addCommentToPullRequest`)
+        githubApiPullRequestCommentsServiceAddCommentSpy = jest
+          .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addComment`)
           .mockImplementation();
       });
 
@@ -126,7 +126,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             `The stale comment is unset. Continuing...`
           );
           expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy).not.toHaveBeenCalled();
+          expect(githubApiPullRequestCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -153,7 +153,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processStaleComment();
 
-            expect(githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy).not.toHaveBeenCalled();
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {
@@ -235,7 +235,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy: jest.SpyInstance;
-      let githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy: jest.SpyInstance;
+      let githubApiPullRequestCommentsServiceAddCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -267,8 +267,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
           .mockImplementation();
-        githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy = jest
-          .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addCommentToPullRequest`)
+        githubApiPullRequestCommentsServiceAddCommentSpy = jest
+          .spyOn(pullRequestCommentsProcessor.githubApiPullRequestCommentsService$$, `addComment`)
           .mockImplementation();
       });
 
@@ -308,7 +308,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             `The close comment is unset. Continuing...`
           );
           expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy).not.toHaveBeenCalled();
+          expect(githubApiPullRequestCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -335,7 +335,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processCloseComment();
 
-            expect(githubApiPullRequestCommentsServiceAddCommentToPullRequestSpy).not.toHaveBeenCalled();
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {

@@ -20,6 +20,7 @@ import { DateTime } from 'luxon';
 export class IssueProcessor {
   public readonly githubIssue: IGithubApiIssue;
   public readonly logger: IssueLogger;
+  public readonly type: 'issue' = `issue`;
 
   public constructor(issue: Readonly<IGithubApiIssue>) {
     this.githubIssue = issue;

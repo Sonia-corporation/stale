@@ -53,7 +53,7 @@ describe(`IssueCommentsProcessor`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
-      let githubApiIssueCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
+      let githubApiIssueCommentsServiceAddCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -83,8 +83,8 @@ describe(`IssueCommentsProcessor`, (): void => {
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
-        githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
-          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)
+        githubApiIssueCommentsServiceAddCommentSpy = jest
+          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addComment`)
           .mockImplementation();
       });
 
@@ -121,7 +121,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The stale comment is unset. Continuing...`);
           expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+          expect(githubApiIssueCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -148,7 +148,7 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processStaleComment();
 
-            expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
@@ -230,7 +230,7 @@ describe(`IssueCommentsProcessor`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy: jest.SpyInstance;
-      let githubApiIssueCommentsServiceAddCommentToIssueSpy: jest.SpyInstance;
+      let githubApiIssueCommentsServiceAddCommentSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -260,8 +260,8 @@ describe(`IssueCommentsProcessor`, (): void => {
         issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesCommentsCount`)
           .mockImplementation();
-        githubApiIssueCommentsServiceAddCommentToIssueSpy = jest
-          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addCommentToIssue`)
+        githubApiIssueCommentsServiceAddCommentSpy = jest
+          .spyOn(issueCommentsProcessor.githubApiIssueCommentsService$$, `addComment`)
           .mockImplementation();
       });
 
@@ -298,7 +298,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The close comment is unset. Continuing...`);
           expect(issuesStatisticsServiceIncreaseAddedIssuesCommentsCountSpy).not.toHaveBeenCalled();
-          expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+          expect(githubApiIssueCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -325,7 +325,7 @@ describe(`IssueCommentsProcessor`, (): void => {
 
             await issueCommentsProcessor.processCloseComment();
 
-            expect(githubApiIssueCommentsServiceAddCommentToIssueSpy).not.toHaveBeenCalled();
+            expect(githubApiIssueCommentsServiceAddCommentSpy).not.toHaveBeenCalled();
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {

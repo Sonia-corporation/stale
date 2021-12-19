@@ -33,7 +33,7 @@ export class IssueCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the stale comment...`);
 
-      await this.githubApiIssueCommentsService$$.addCommentToIssue(
+      await this.githubApiIssueCommentsService$$.addComment(
         this.issueProcessor.githubIssue.id,
         issuesInputs.issueStaleComment
       );
@@ -60,7 +60,7 @@ export class IssueCommentsProcessor {
     if (!commonInputs.dryRun) {
       this.issueProcessor.logger.info(`Adding the close comment...`);
 
-      await this.githubApiIssueCommentsService$$.addCommentToIssue(
+      await this.githubApiIssueCommentsService$$.addComment(
         this.issueProcessor.githubIssue.id,
         issuesInputs.issueCloseComment
       );
