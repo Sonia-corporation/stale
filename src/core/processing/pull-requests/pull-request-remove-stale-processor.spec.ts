@@ -28,7 +28,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
 
       const result = new PullRequestRemoveStaleProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 
@@ -613,13 +613,13 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           .spyOn(pullRequestRemoveStaleProcessor.githubApiPullRequestLabelsService$$, `removeLabel`)
           .mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestRemoveStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestRemoveStaleProcessor.pullRequestProcessor.logger, `notice`)
+          .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest
-          .spyOn(pullRequestRemoveStaleProcessor.pullRequestProcessor.logger, `error`)
+          .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `error`)
           .mockImplementation();
       });
 

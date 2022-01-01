@@ -2,6 +2,7 @@ import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
+import { AbstractIsStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -19,15 +20,14 @@ import { DateTime } from 'luxon';
  * @description
  * The processor to remove the stale state from an issue
  */
-export class IssueRemoveStaleProcessor {
-  public readonly issueProcessor: IssueProcessor;
+export class IssueRemoveStaleProcessor extends AbstractIsStaleProcessor<IssueProcessor> {
   public readonly githubApiIssueTimelineItemsService$$: GithubApiIssueTimelineItemsService;
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
 
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
-    this.issueProcessor = issueProcessor;
-    this.githubApiIssueTimelineItemsService$$ = new GithubApiIssueTimelineItemsService(this.issueProcessor);
-    this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.issueProcessor);
+    super(issueProcessor);
+    this.githubApiIssueTimelineItemsService$$ = new GithubApiIssueTimelineItemsService(this.processor);
+    this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.processor);
   }
 
   /**
@@ -37,17 +37,17 @@ export class IssueRemoveStaleProcessor {
    * @returns {Promise<boolean>} Returns true when the stale state should be removed
    */
   public async shouldRemoveStale(): Promise<boolean> | never {
-    this.issueProcessor.logger.info(`Checking if the stale state should be removed...`);
+    this.processor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
-      await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.issueProcessor.githubIssue.number);
+      await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.processor.githubIssue.number);
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsIssueLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
       issuesInputs.issueStaleLabel
     );
 
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(
       `Found`,
       LoggerService.value(staleLabelEvents.length),
       LoggerFormatService.whiteBright(`stale label added event${staleLabelEvents.length > 1 ? `s` : ``} on this issue`)
@@ -56,28 +56,28 @@ export class IssueRemoveStaleProcessor {
       this._getMostRecentStaleLabelEvent(staleLabelEvents);
 
     if (!lastAddedStaleLabelEvent) {
-      this.issueProcessor.logger.error(`Could not find the stale label in the added labels events`);
+      this.processor.logger.error(`Could not find the stale label in the added labels events`);
 
       throw new Error(`Could not find the stale label in the added labels events`);
     }
 
     const lastAddedStaleLabelAt: DateTime = iso8601ToDatetime(lastAddedStaleLabelEvent.createdAt);
-    const issueUpdatedAt: DateTime = this.issueProcessor.getUpdatedAt();
+    const issueUpdatedAt: DateTime = this.processor.getUpdatedAt();
 
-    this.issueProcessor.logger.info(`The stale label was added the`, LoggerService.date(lastAddedStaleLabelAt));
-    this.issueProcessor.logger.info(`The issue was updated for the last time the`, LoggerService.date(issueUpdatedAt));
+    this.processor.logger.info(`The stale label was added the`, LoggerService.date(lastAddedStaleLabelAt));
+    this.processor.logger.info(`The issue was updated for the last time the`, LoggerService.date(issueUpdatedAt));
 
-    // If the update date is more recent that the last time where the stale label was added
+    // If the update date is more recent that the last time when the stale label was added
     // It means that an update occurred
     if (isDateMoreRecent(issueUpdatedAt, lastAddedStaleLabelAt)) {
-      this.issueProcessor.logger.info(`The last update on the issue is more recent that the last time it was stale`);
-      this.issueProcessor.logger.info(`The stale state should be removed`);
+      this.processor.logger.info(`The last update on the issue is more recent that the last time it was stale`);
+      this.processor.logger.info(`The stale state should be removed`);
 
       return true;
     }
 
-    this.issueProcessor.logger.info(`There was no update since the last time this issue was stale`);
-    this.issueProcessor.logger.info(`The stale state should not be removed`);
+    this.processor.logger.info(`There was no update since the last time this issue was stale`);
+    this.processor.logger.info(`The stale state should not be removed`);
 
     return false;
   }
@@ -89,12 +89,12 @@ export class IssueRemoveStaleProcessor {
    * @returns {Promise<void>} A promise
    */
   public async removeStale(): Promise<void> {
-    this.issueProcessor.logger.info(`Removing the stale state from this issue...`);
+    this.processor.logger.info(`Removing the stale state from this issue...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(
       `Fetching the stale label`,
       LoggerService.value(issuesInputs.issueStaleLabel),
       LoggerFormatService.whiteBright(`to remove from this issue...`)
@@ -105,26 +105,23 @@ export class IssueRemoveStaleProcessor {
     );
 
     if (!label) {
-      this.issueProcessor.logger.error(
-        `Could not find the stale label`,
-        LoggerService.value(issuesInputs.issueStaleLabel)
-      );
+      this.processor.logger.error(`Could not find the stale label`, LoggerService.value(issuesInputs.issueStaleLabel));
 
       throw new Error(`Could not find the stale label ${issuesInputs.issueStaleLabel}`);
     }
 
-    this.issueProcessor.logger.info(`The stale label was fetched`);
-    this.issueProcessor.logger.info(`Removing the stale label from this issue...`);
+    this.processor.logger.info(`The stale label was fetched`);
+    this.processor.logger.info(`Removing the stale label from this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiIssueLabelsService$$.removeLabel(this.issueProcessor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.removeLabel(this.processor.githubIssue.id, label.id);
 
-      this.issueProcessor.logger.info(`The stale label was removed`);
+      this.processor.logger.info(`The stale label was removed`);
     } else {
-      this.issueProcessor.logger.info(`The stale label was not removed due to the dry-run mode`);
+      this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.issueProcessor.logger.notice(`The issue is no longer stale`);
+    this.processor.logger.notice(`The issue is no longer stale`);
   }
 
   private _getStaleLabelEvents(

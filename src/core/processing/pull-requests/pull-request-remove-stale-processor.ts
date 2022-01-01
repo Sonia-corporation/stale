@@ -2,6 +2,7 @@ import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
+import { AbstractIsStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GithubApiPullRequestLabelsService } from '@github/api/labels/github-api-pull-request-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -19,17 +20,14 @@ import { DateTime } from 'luxon';
  * @description
  * The processor to remove the stale state from a pull request
  */
-export class PullRequestRemoveStaleProcessor {
-  public readonly pullRequestProcessor: PullRequestProcessor;
+export class PullRequestRemoveStaleProcessor extends AbstractIsStaleProcessor<PullRequestProcessor> {
   public readonly githubApiPullRequestTimelineItemsService$$: GithubApiPullRequestTimelineItemsService;
   public readonly githubApiPullRequestLabelsService$$: GithubApiPullRequestLabelsService;
 
   public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
-    this.pullRequestProcessor = pullRequestProcessor;
-    this.githubApiPullRequestTimelineItemsService$$ = new GithubApiPullRequestTimelineItemsService(
-      this.pullRequestProcessor
-    );
-    this.githubApiPullRequestLabelsService$$ = new GithubApiPullRequestLabelsService(this.pullRequestProcessor);
+    super(pullRequestProcessor);
+    this.githubApiPullRequestTimelineItemsService$$ = new GithubApiPullRequestTimelineItemsService(this.processor);
+    this.githubApiPullRequestLabelsService$$ = new GithubApiPullRequestLabelsService(this.processor);
   }
 
   /**
@@ -39,11 +37,11 @@ export class PullRequestRemoveStaleProcessor {
    * @returns {Promise<boolean>} Returns true when the stale state should be removed
    */
   public async shouldRemoveStale(): Promise<boolean> | never {
-    this.pullRequestProcessor.logger.info(`Checking if the stale state should be removed...`);
+    this.processor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsPullRequestLabeledEvents =
       await this.githubApiPullRequestTimelineItemsService$$.fetchPullRequestAddedLabels(
-        this.pullRequestProcessor.githubPullRequest.number
+        this.processor.githubPullRequest.number
       );
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsPullRequestLabeledEvent[] = this._getStaleLabelEvents(
@@ -51,7 +49,7 @@ export class PullRequestRemoveStaleProcessor {
       pullRequestsInputs.pullRequestStaleLabel
     );
 
-    this.pullRequestProcessor.logger.info(
+    this.processor.logger.info(
       `Found`,
       LoggerService.value(staleLabelEvents.length),
       LoggerFormatService.whiteBright(
@@ -62,33 +60,31 @@ export class PullRequestRemoveStaleProcessor {
       this._getMostRecentStaleLabelEvent(staleLabelEvents);
 
     if (!lastAddedStaleLabelEvent) {
-      this.pullRequestProcessor.logger.error(`Could not find the stale label in the added labels events`);
+      this.processor.logger.error(`Could not find the stale label in the added labels events`);
 
       throw new Error(`Could not find the stale label in the added labels events`);
     }
 
     const lastAddedStaleLabelAt: DateTime = iso8601ToDatetime(lastAddedStaleLabelEvent.createdAt);
-    const pullRequestUpdatedAt: DateTime = this.pullRequestProcessor.getUpdatedAt();
+    const pullRequestUpdatedAt: DateTime = this.processor.getUpdatedAt();
 
-    this.pullRequestProcessor.logger.info(`The stale label was added the`, LoggerService.date(lastAddedStaleLabelAt));
-    this.pullRequestProcessor.logger.info(
+    this.processor.logger.info(`The stale label was added the`, LoggerService.date(lastAddedStaleLabelAt));
+    this.processor.logger.info(
       `The pull request was updated for the last time the`,
       LoggerService.date(pullRequestUpdatedAt)
     );
 
-    // If the update date is more recent that the last time where the stale label was added
+    // If the update date is more recent that the last time when the stale label was added
     // It means that an update occurred
     if (isDateMoreRecent(pullRequestUpdatedAt, lastAddedStaleLabelAt)) {
-      this.pullRequestProcessor.logger.info(
-        `The last update on the pull request is more recent that the last time it was stale`
-      );
-      this.pullRequestProcessor.logger.info(`The stale state should be removed`);
+      this.processor.logger.info(`The last update on the pull request is more recent that the last time it was stale`);
+      this.processor.logger.info(`The stale state should be removed`);
 
       return true;
     }
 
-    this.pullRequestProcessor.logger.info(`There was no update since the last time this pull request was stale`);
-    this.pullRequestProcessor.logger.info(`The stale state should not be removed`);
+    this.processor.logger.info(`There was no update since the last time this pull request was stale`);
+    this.processor.logger.info(`The stale state should not be removed`);
 
     return false;
   }
@@ -100,12 +96,12 @@ export class PullRequestRemoveStaleProcessor {
    * @returns {Promise<void>} A promise
    */
   public async removeStale(): Promise<void> {
-    this.pullRequestProcessor.logger.info(`Removing the stale state from this pull request...`);
+    this.processor.logger.info(`Removing the stale state from this pull request...`);
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
-    this.pullRequestProcessor.logger.info(
+    this.processor.logger.info(
       `Fetching the stale label`,
       LoggerService.value(pullRequestsInputs.pullRequestStaleLabel),
       LoggerFormatService.whiteBright(`to remove from this pull request...`)
@@ -116,7 +112,7 @@ export class PullRequestRemoveStaleProcessor {
     );
 
     if (!label) {
-      this.pullRequestProcessor.logger.error(
+      this.processor.logger.error(
         `Could not find the stale label`,
         LoggerService.value(pullRequestsInputs.pullRequestStaleLabel)
       );
@@ -124,21 +120,18 @@ export class PullRequestRemoveStaleProcessor {
       throw new Error(`Could not find the stale label ${pullRequestsInputs.pullRequestStaleLabel}`);
     }
 
-    this.pullRequestProcessor.logger.info(`The stale label was fetched`);
-    this.pullRequestProcessor.logger.info(`Removing the stale label from this pull request...`);
+    this.processor.logger.info(`The stale label was fetched`);
+    this.processor.logger.info(`Removing the stale label from this pull request...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiPullRequestLabelsService$$.removeLabel(
-        this.pullRequestProcessor.githubPullRequest.id,
-        label.id
-      );
+      await this.githubApiPullRequestLabelsService$$.removeLabel(this.processor.githubPullRequest.id, label.id);
 
-      this.pullRequestProcessor.logger.info(`The stale label was removed`);
+      this.processor.logger.info(`The stale label was removed`);
     } else {
-      this.pullRequestProcessor.logger.info(`The stale label was not removed due to the dry-run mode`);
+      this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.pullRequestProcessor.logger.notice(`The pull request is no longer stale`);
+    this.processor.logger.notice(`The pull request is no longer stale`);
   }
 
   private _getStaleLabelEvents(

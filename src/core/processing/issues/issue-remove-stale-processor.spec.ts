@@ -28,7 +28,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
 
       const result = new IssueRemoveStaleProcessor(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
@@ -582,13 +582,13 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           .spyOn(issueRemoveStaleProcessor.githubApiIssueLabelsService$$, `removeLabel`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueRemoveStaleProcessor.issueProcessor.logger, `info`)
+          .spyOn(issueRemoveStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         issueProcessorLoggerNoticeSpy = jest
-          .spyOn(issueRemoveStaleProcessor.issueProcessor.logger, `notice`)
+          .spyOn(issueRemoveStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         issueProcessorLoggerErrorSpy = jest
-          .spyOn(issueRemoveStaleProcessor.issueProcessor.logger, `error`)
+          .spyOn(issueRemoveStaleProcessor.processor.logger, `error`)
           .mockImplementation();
       });
 
