@@ -21,6 +21,10 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     super(pullRequestProcessor);
   }
 
+  public shouldIgnore(): boolean {
+    return super.shouldIgnore() || this.isDraft$$();
+  }
+
   public hasAllIgnoredAssignees$$(): boolean {
     this.processor.logger.info(`Checking if all the assignees on this pull request should be ignored...`);
 
@@ -256,7 +260,39 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     return false;
   }
 
-  protected _isLocked(): boolean {
-    return this.processor.item.locked;
+  public isDraft$$(): boolean {
+    this.processor.logger.info(`Checking if this pull request is a draft...`);
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (!pullRequestsInputs.pullRequestIgnoreDraft) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_IGNORE_DRAFT),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_IGNORE_DRAFT),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    if (this._isDraft()) {
+      this.processor.logger.info(`The pull request is a draft`);
+
+      return true;
+    }
+
+    this.processor.logger.info(`Not a draft. Continuing...`);
+
+    return false;
+  }
+
+  private _isDraft(): boolean {
+    return this.processor.item.isDraft;
   }
 }

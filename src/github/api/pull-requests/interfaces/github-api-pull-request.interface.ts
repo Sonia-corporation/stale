@@ -9,6 +9,7 @@ export interface IGithubApiPullRequest {
   readonly assignees: IGithubApiAssigneesPagination;
   readonly createdAt: IIso8601Date;
   readonly id: IUuid;
+  readonly isDraft: boolean;
   readonly labels: IGithubApiLabelsPagination;
   readonly locked: boolean;
   readonly number: IGithubApiPullRequestNumber;

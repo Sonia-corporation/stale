@@ -253,8 +253,4 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     return false;
   }
-
-  protected _isLocked(): boolean {
-    return this.processor.item.locked;
-  }
 }

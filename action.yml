@@ -85,6 +85,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
     default: ''
+  pull-request-ignore-draft:
+    description: 'Allow to ignore the processing of pull requests that are drafts.'
+    required: false
+    default: 'false'
   pull-request-days-before-stale:
     description: 'The number of days until the pull request is considered as stale.'
     required: false

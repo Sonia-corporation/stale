@@ -12,6 +12,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestIgnoreAnyAssignees: string[];
   readonly pullRequestIgnoreAnyLabels: string[];
   readonly pullRequestIgnoreBeforeCreationDate: IIso8601Date | '';
+  readonly pullRequestIgnoreDraft: boolean;
   readonly pullRequestStaleComment: IComment | '';
   readonly pullRequestStaleLabel: string;
 }

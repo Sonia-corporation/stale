@@ -45,6 +45,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestIgnoreBeforeCreationDate: core.getInput(EInputs.PULL_REQUEST_IGNORE_BEFORE_CREATION_DATE, {
         required: false,
       }),
+      pullRequestIgnoreDraft: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_DRAFT, {
+        required: false,
+      }),
       pullRequestStaleComment: core.getInput(EInputs.PULL_REQUEST_STALE_COMMENT, { required: false }),
       pullRequestStaleLabel: core.getInput(EInputs.PULL_REQUEST_STALE_LABEL, { required: false }),
     };

@@ -54,6 +54,10 @@ export abstract class AbstractIgnoreProcessor<
     return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
   }
 
+  private _isLocked(): boolean {
+    return this.processor.item.locked;
+  }
+
   public abstract hasAllIgnoredAssignees$$(): boolean;
 
   public abstract hasAllIgnoredProjectCards$$(): boolean;
@@ -65,6 +69,4 @@ export abstract class AbstractIgnoreProcessor<
   public abstract hasAnyIgnoredLabels$$(): boolean;
 
   public abstract hasAnyIgnoredAssignees$$(): boolean;
-
-  protected abstract _isLocked(): boolean;
 }
