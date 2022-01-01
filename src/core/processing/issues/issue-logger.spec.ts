@@ -18,7 +18,7 @@ describe(`IssueLogger`, (): void => {
 
       const result = new IssueLogger(issueNumber);
 
-      expect(result.issueNumber).toBe(8);
+      expect(result.itemNumber).toBe(8);
     });
   });
 

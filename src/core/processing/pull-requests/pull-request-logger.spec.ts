@@ -18,7 +18,7 @@ describe(`PullRequestLogger`, (): void => {
 
       const result = new PullRequestLogger(pullRequestNumber);
 
-      expect(result.pullRequestNumber).toBe(8);
+      expect(result.itemNumber).toBe(8);
     });
   });
 
