@@ -1,5 +1,15 @@
 # Semantic Versioning Changelog
 
+## [1.25.1](https://github.com/Sonia-corporation/stale/compare/1.25.0...1.25.1) (2022-01-01)
+
+
+### :bug: Bug Fixes
+
+* **processing:** fix an issue with infinite batches processing ([218f164](https://github.com/Sonia-corporation/stale/commit/218f1641633388297bc4302bec4ad71048e89848))
+  if the number of issues or pull requests to process was higher than 20, the processing was ending up in a infinity loop
+this was due to a missing parameter from the endpoint request "endCursor" which was not requested and so, leading to undefined value
+when the cursor is undefined, the first batch is processed hence the infinity loop
+
 # [1.25.0](https://github.com/Sonia-corporation/stale/compare/1.24.0...1.25.0) (2022-01-01)
 
 
