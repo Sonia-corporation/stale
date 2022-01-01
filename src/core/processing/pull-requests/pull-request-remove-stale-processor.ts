@@ -2,7 +2,7 @@ import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
-import { AbstractIsStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
+import { AbstractRemoveStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GithubApiPullRequestLabelsService } from '@github/api/labels/github-api-pull-request-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -20,7 +20,7 @@ import { DateTime } from 'luxon';
  * @description
  * The processor to remove the stale state from a pull request
  */
-export class PullRequestRemoveStaleProcessor extends AbstractIsStaleProcessor<PullRequestProcessor> {
+export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcessor<PullRequestProcessor> {
   public readonly githubApiPullRequestTimelineItemsService$$: GithubApiPullRequestTimelineItemsService;
   public readonly githubApiPullRequestLabelsService$$: GithubApiPullRequestLabelsService;
 

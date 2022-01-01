@@ -2,7 +2,7 @@ import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
-import { AbstractIsStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
+import { AbstractRemoveStaleProcessor } from '@core/processing/abstract-remove-stale-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -20,7 +20,7 @@ import { DateTime } from 'luxon';
  * @description
  * The processor to remove the stale state from an issue
  */
-export class IssueRemoveStaleProcessor extends AbstractIsStaleProcessor<IssueProcessor> {
+export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<IssueProcessor> {
   public readonly githubApiIssueTimelineItemsService$$: GithubApiIssueTimelineItemsService;
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
 

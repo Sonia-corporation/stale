@@ -21,7 +21,7 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
 
       const result = new IssueShouldCloseStaleProcessor(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
@@ -41,7 +41,7 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
         issueShouldCloseStaleProcessor = new IssueShouldCloseStaleProcessor(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueShouldCloseStaleProcessor.issueProcessor.logger, `info`)
+          .spyOn(issueShouldCloseStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
