@@ -108,7 +108,7 @@ describe(`PullRequestsInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(1, `pull-request-close-comment`, { required: false });
-      expect(service.inputs$$?.pullRequestCloseComment).toStrictEqual(`dummy-pull-request-close-comment`);
+      expect(service.inputs$$?.pullRequestCloseComment).toBe(`dummy-pull-request-close-comment`);
     });
 
     it(`should get the pull-request-days-before-close input, parse it and set it`, (): void => {
@@ -208,7 +208,7 @@ describe(`PullRequestsInputsService`, (): void => {
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(2, `pull-request-ignore-before-creation-date`, {
         required: false,
       });
-      expect(service.inputs$$?.pullRequestIgnoreBeforeCreationDate).toStrictEqual(
+      expect(service.inputs$$?.pullRequestIgnoreBeforeCreationDate).toBe(
         `dummy-pull-request-ignore-before-creation-date`
       );
     });
@@ -220,7 +220,7 @@ describe(`PullRequestsInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(3, `pull-request-stale-comment`, { required: false });
-      expect(service.inputs$$?.pullRequestStaleComment).toStrictEqual(`dummy-pull-request-stale-comment`);
+      expect(service.inputs$$?.pullRequestStaleComment).toBe(`dummy-pull-request-stale-comment`);
     });
 
     it(`should get the pull-request-stale-label input, parse it and set it`, (): void => {
@@ -230,7 +230,7 @@ describe(`PullRequestsInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(4, `pull-request-stale-label`, { required: false });
-      expect(service.inputs$$?.pullRequestStaleLabel).toStrictEqual(`dummy-pull-request-stale-label`);
+      expect(service.inputs$$?.pullRequestStaleLabel).toBe(`dummy-pull-request-stale-label`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {

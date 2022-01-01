@@ -99,7 +99,7 @@ describe(`CommonInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
       expect(coreGetInputSpy).toHaveBeenCalledWith(`github-token`, { required: false });
-      expect(service.inputs$$?.githubToken).toStrictEqual(`dummy-github-token`);
+      expect(service.inputs$$?.githubToken).toBe(`dummy-github-token`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {
