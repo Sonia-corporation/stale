@@ -1,10 +1,9 @@
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
+import { AbstractIgnoreProcessor } from '@core/processing/abstract-ignore-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
-import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
-import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
@@ -17,49 +16,18 @@ import { DateTime } from 'luxon';
  * @description
  * The processor to ignore an issue
  */
-export class IssueIgnoreProcessor {
-  public readonly issueProcessor: IssueProcessor;
-
+export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor> {
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
-    this.issueProcessor = issueProcessor;
-  }
-
-  public shouldIgnore(): boolean {
-    this.issueProcessor.logger.info(`Checking if this issue should be ignored...`);
-
-    return (
-      this.isLocked$$() ||
-      this.hasAllIgnoredLabels$$() ||
-      this.hasAnyIgnoredLabels$$() ||
-      this.hasAllIgnoredAssignees$$() ||
-      this.hasAnyIgnoredAssignees$$() ||
-      this.hasAllIgnoredProjectCards$$() ||
-      this.hasIgnoredCreationDate$$()
-    );
-  }
-
-  public isLocked$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if this issue is locked...`);
-
-    if (this.issueProcessor.githubIssue.locked) {
-      this.issueProcessor.logger.info(`Locked`);
-      this.issueProcessor.logger.debug(`We do not process locked issues; it is in the name: locked`);
-
-      return true;
-    }
-
-    this.issueProcessor.logger.info(`Not locked. Continuing...`);
-
-    return false;
+    super(issueProcessor);
   }
 
   public hasAllIgnoredAssignees$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if all the assignees on this issue should be ignored...`);
+    this.processor.logger.info(`Checking if all the assignees on this issue should be ignored...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllAssignees) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
@@ -68,36 +36,34 @@ export class IssueIgnoreProcessor {
       return false;
     }
 
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(
       `The input`,
       LoggerService.input(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.issueProcessor.githubIssue.assignees.totalCount > 0) {
-      this.issueProcessor.logger.info(
+    if (this.processor.githubIssue.assignees.totalCount > 0) {
+      this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.issueProcessor.githubIssue.assignees.totalCount),
-        LoggerFormatService.whiteBright(
-          `assignee${this.issueProcessor.githubIssue.assignees.totalCount > 1 ? `s` : ``}`
-        )
+        LoggerService.value(this.processor.githubIssue.assignees.totalCount),
+        LoggerFormatService.whiteBright(`assignee${this.processor.githubIssue.assignees.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
     }
 
-    this.issueProcessor.logger.info(`The issue has no assignee. Continuing...`);
+    this.processor.logger.info(`The issue has no assignee. Continuing...`);
 
     return false;
   }
 
   public hasAllIgnoredProjectCards$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
+    this.processor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllProjectCards) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
@@ -106,38 +72,38 @@ export class IssueIgnoreProcessor {
       return false;
     }
 
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(
       `The input`,
       LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.issueProcessor.githubIssue.projectCards.totalCount > 0) {
-      this.issueProcessor.logger.info(
+    if (this.processor.githubIssue.projectCards.totalCount > 0) {
+      this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.issueProcessor.githubIssue.projectCards.totalCount),
+        LoggerService.value(this.processor.githubIssue.projectCards.totalCount),
         LoggerFormatService.whiteBright(
-          `project card${this.issueProcessor.githubIssue.projectCards.totalCount > 1 ? `s` : ``}`
+          `project card${this.processor.githubIssue.projectCards.totalCount > 1 ? `s` : ``}`
         )
       );
 
       return true;
     }
 
-    this.issueProcessor.logger.info(`The issue has no project card. Continuing...`);
+    this.processor.logger.info(`The issue has no project card. Continuing...`);
 
     return false;
   }
 
   public hasIgnoredCreationDate$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if this issue should be ignored based on its creation date...`);
+    this.processor.logger.info(`Checking if this issue should be ignored based on its creation date...`);
     let issueIgnoreBeforeCreationDate: DateTime;
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     try {
       issueIgnoreBeforeCreationDate = iso8601ToDatetime(issuesInputs.issueIgnoreBeforeCreationDate);
     } catch (error) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_BEFORE_CREATION_DATE),
         LoggerFormatService.whiteBright(`is either unset or not convertible to a valid ISO 8601 date. Continuing...`)
@@ -146,34 +112,32 @@ export class IssueIgnoreProcessor {
       return false;
     }
 
-    const createdAt: DateTime = this.issueProcessor.getCreatedAt();
+    const createdAt: DateTime = this.processor.getCreatedAt();
 
-    this.issueProcessor.logger.info(`The issue was created the`, LoggerService.date(createdAt));
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(`The issue was created the`, LoggerService.date(createdAt));
+    this.processor.logger.info(
       `The minimal processing creation date is set to the`,
       LoggerService.date(issueIgnoreBeforeCreationDate)
     );
 
     if (isDateMoreRecent(createdAt, issueIgnoreBeforeCreationDate)) {
-      this.issueProcessor.logger.info(
-        `The issue was created after the minimal processing creation date. Continuing...`
-      );
+      this.processor.logger.info(`The issue was created after the minimal processing creation date. Continuing...`);
 
       return false;
     }
 
-    this.issueProcessor.logger.info(`The issue was created before the minimal processing creation date`);
+    this.processor.logger.info(`The issue was created before the minimal processing creation date`);
 
     return true;
   }
 
   public hasAllIgnoredLabels$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if all the labels on this issue should be ignored...`);
+    this.processor.logger.info(`Checking if all the labels on this issue should be ignored...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     if (!issuesInputs.issueIgnoreAllLabels) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_IGNORE_ALL_LABELS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
@@ -182,19 +146,19 @@ export class IssueIgnoreProcessor {
       return false;
     }
 
-    this.issueProcessor.logger.info(
+    this.processor.logger.info(
       `The input`,
       LoggerService.input(EInputs.ISSUE_IGNORE_ALL_LABELS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
     const staleLabel: string = issuesInputs.issueStaleLabel;
-    const allLabels: string[] = this._getLabels(this.issueProcessor.githubIssue.labels.nodes).filter(
+    const allLabels: string[] = this._getLabels(this.processor.githubIssue.labels.nodes).filter(
       (label: Readonly<string>): boolean => label !== staleLabel
     );
 
     if (allLabels.length > 0) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `The issue has`,
         LoggerService.value(allLabels.length),
         LoggerFormatService.whiteBright(`label${allLabels.length > 1 ? `s` : ``}`)
@@ -203,23 +167,23 @@ export class IssueIgnoreProcessor {
       return true;
     }
 
-    this.issueProcessor.logger.info(`The issue has no label. Continuing...`);
+    this.processor.logger.info(`The issue has no label. Continuing...`);
 
     return false;
   }
 
   public hasAnyIgnoredLabels$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if this issue has one of the ignored labels...`);
+    this.processor.logger.info(`Checking if this issue has one of the ignored labels...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedLabels: string[] = getDuplicates(
-      this._getLabels(this.issueProcessor.githubIssue.labels.nodes),
+      this._getLabels(this.processor.githubIssue.labels.nodes),
       issuesInputs.issueIgnoreAnyLabels
     );
     const firstDuplicatedLabel: string | undefined = _.head(duplicatedLabels);
 
     if (!_.isUndefined(firstDuplicatedLabel)) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `Containing one of the ignored labels`,
         LoggerFormatService.white(`->`),
         LoggerService.value(firstDuplicatedLabel)
@@ -228,13 +192,13 @@ export class IssueIgnoreProcessor {
       return true;
     }
 
-    this.issueProcessor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.issueProcessor.githubIssue.labels;
+    const { totalCount } = this.processor.githubIssue.labels;
 
     if (totalCount > GithubApiIssuesService.labelsPerIssue) {
-      this.issueProcessor.logger.warning(
+      this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
@@ -245,23 +209,23 @@ export class IssueIgnoreProcessor {
       );
     }
 
-    this.issueProcessor.logger.info(`Not containing an ignored label. Continuing...`);
+    this.processor.logger.info(`Not containing an ignored label. Continuing...`);
 
     return false;
   }
 
   public hasAnyIgnoredAssignees$$(): boolean {
-    this.issueProcessor.logger.info(`Checking if this issue has one of the ignored assignees...`);
+    this.processor.logger.info(`Checking if this issue has one of the ignored assignees...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
-      this._getAssignees(this.issueProcessor.githubIssue.assignees.nodes),
+      this._getAssignees(this.processor.githubIssue.assignees.nodes),
       issuesInputs.issueIgnoreAnyAssignees
     );
     const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssignees);
 
     if (!_.isUndefined(firstDuplicatedAssignee)) {
-      this.issueProcessor.logger.info(
+      this.processor.logger.info(
         `Containing one of the ignored assignees`,
         LoggerFormatService.white(`->`),
         LoggerService.value(firstDuplicatedAssignee)
@@ -270,13 +234,13 @@ export class IssueIgnoreProcessor {
       return true;
     }
 
-    this.issueProcessor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.issueProcessor.githubIssue.assignees;
+    const { totalCount } = this.processor.githubIssue.assignees;
 
     if (totalCount > GithubApiIssuesService.assigneesPerIssue) {
-      this.issueProcessor.logger.warning(
+      this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
@@ -287,16 +251,12 @@ export class IssueIgnoreProcessor {
       );
     }
 
-    this.issueProcessor.logger.info(`Not containing an ignored assignee. Continuing...`);
+    this.processor.logger.info(`Not containing an ignored assignee. Continuing...`);
 
     return false;
   }
 
-  private _getLabels(labels: ReadonlyArray<IGithubApiLabel>): string[] {
-    return _.map(labels, (label: Readonly<IGithubApiLabel>): string => label.name);
-  }
-
-  private _getAssignees(assignees: ReadonlyArray<IGithubApiAssignee>): string[] {
-    return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
+  protected _isLocked(): boolean {
+    return this.processor.githubIssue.locked;
   }
 }

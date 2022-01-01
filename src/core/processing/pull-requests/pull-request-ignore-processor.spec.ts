@@ -23,7 +23,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
       const result = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 
@@ -288,10 +288,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerDebugSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `debug`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `debug`)
           .mockImplementation();
       });
 
@@ -317,10 +317,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
           pullRequestProcessorLoggerDebugSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `debug`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `debug`)
             .mockImplementation();
         });
 
@@ -356,10 +356,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
           pullRequestProcessorLoggerDebugSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `debug`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `debug`)
             .mockImplementation();
         });
 
@@ -391,7 +391,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -478,7 +478,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
           });
 
@@ -508,7 +508,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
             pullRequestsInputsServiceGetInputsSpy = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -546,7 +546,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputs = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -633,7 +633,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
           });
 
@@ -663,7 +663,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
             pullRequestsInputsServiceGetInputs = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -702,7 +702,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputs = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -849,7 +849,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputs = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -936,7 +936,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
           });
 
@@ -970,7 +970,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
             pullRequestsInputsServiceGetInputs = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -1012,7 +1012,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
             pullRequestsInputsServiceGetInputs = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -1062,7 +1062,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
             pullRequestsInputsServiceGetInputs = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -1102,10 +1102,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerWarningSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputs = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -1146,7 +1146,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -1189,7 +1189,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -1222,7 +1222,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerWarningSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
           });
 
@@ -1257,7 +1257,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerWarningSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
           });
 
@@ -1290,10 +1290,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerWarningSpy = jest
-          .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputs = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -1334,7 +1334,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -1377,7 +1377,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -1410,7 +1410,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerWarningSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
           });
 
@@ -1445,7 +1445,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerWarningSpy = jest
-              .spyOn(pullRequestIgnoreProcessor.pullRequestProcessor.logger, `warning`)
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
           });
 
