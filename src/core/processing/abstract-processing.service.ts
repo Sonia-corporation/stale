@@ -24,9 +24,13 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
    * @returns {Promise<void>}
    */
   public async process(): Promise<void> {
-    await this.processBatch();
+    const processedItemsCount: number = await this.processBatch();
 
-    LoggerService.info(LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s were processed`));
+    LoggerService.info(
+      LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s`),
+      LoggerFormatService.white(`(${LoggerService.value(processedItemsCount)}${LoggerFormatService.white(`)`)}`),
+      LoggerFormatService.green(`were processed`)
+    );
   }
 
   /**
@@ -34,9 +38,9 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
    * Process a single batch
    * @param {Readonly<number>} batch The batch index
    * @param {Readonly<string>} fromPageId The id of the previous page (GitHub)
-   * @returns {Promise<void>}
+   * @returns {Promise<number>} The number of processed items
    */
-  public async processBatch(batch: Readonly<number> = 1, fromPageId?: Readonly<string>): Promise<void> {
+  public async processBatch(batch: Readonly<number> = 1, fromPageId?: Readonly<string>): Promise<number> {
     LoggerService.info(
       `Fetching the batch of ${_.toLower(this._itemType)}s`,
       `${LoggerFormatService.white(`#`)}${LoggerService.value(_.toString(batch))}${LoggerFormatService.whiteBright(
@@ -74,8 +78,14 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
 
       await this.processBatch(++batch, this._getPagination(items).pageInfo.endCursor);
     } else {
-      LoggerService.info(LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s batches were processed`));
+      LoggerService.info(
+        LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s batches`),
+        LoggerFormatService.white(`(${LoggerService.value(batch)}${LoggerFormatService.white(`)`)}`),
+        LoggerFormatService.green(`were processed`)
+      );
     }
+
+    return this._getPagination(items).totalCount;
   }
 
   /**
