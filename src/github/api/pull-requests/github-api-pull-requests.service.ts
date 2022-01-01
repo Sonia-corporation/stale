@@ -45,6 +45,12 @@ export class GithubApiPullRequestsService {
               LoggerFormatService.whiteBright(`pull request${totalCount > 1 ? `s` : ``} can be processed`)
             );
           }
+        } else {
+          LoggerService.debug(
+            `Fetched from the page id`,
+            LoggerService.value(fromPageId),
+            LoggerFormatService.whiteBright(`(afterCursor)`)
+          );
         }
 
         return response;

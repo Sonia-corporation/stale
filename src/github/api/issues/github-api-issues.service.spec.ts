@@ -46,6 +46,7 @@ describe(`GithubApiIssuesService`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceNoticeSpy: jest.SpyInstance;
+    let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
     beforeEach((): void => {
@@ -54,6 +55,7 @@ describe(`GithubApiIssuesService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
+      loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
         // @ts-ignore
         graphql: graphqlMock,
@@ -134,10 +136,29 @@ describe(`GithubApiIssuesService`, (): void => {
         });
 
         describe(`when the issues are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiIssuesService.fetchIssues(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched issues`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+            await GithubApiIssuesService.fetchIssues(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });
@@ -169,10 +190,29 @@ describe(`GithubApiIssuesService`, (): void => {
         });
 
         describe(`when the issues are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiIssuesService.fetchIssues(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched issues`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+            await GithubApiIssuesService.fetchIssues(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });
@@ -204,10 +244,29 @@ describe(`GithubApiIssuesService`, (): void => {
         });
 
         describe(`when the issues are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiIssuesService.fetchIssues(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched issues`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiIssuesService.fetchIssues(faker.datatype.string());
+            await GithubApiIssuesService.fetchIssues(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });
