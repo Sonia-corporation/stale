@@ -356,7 +356,9 @@ rules:
     - error
     - allow:
         - decoratedFunctions
-  padding-line-between-statements:
+  # Override by @typescript-eslint/padding-line-between-statements
+  padding-line-between-statements: off
+  '@typescript-eslint/padding-line-between-statements':
     - error
     - blankLine: always
       prev:
@@ -369,6 +371,10 @@ rules:
         - return
         - switch
         - try
+        - function
+        - interface
+        - type
+        - export
     - blankLine: always
       prev:
         - block-like
@@ -385,6 +391,10 @@ rules:
         - const
         - let
         - var
+  lines-between-class-members:
+    - error
+    - always
+    - exceptAfterSingleLine: true
   '@typescript-eslint/explicit-member-accessibility': error
 overrides:
   - files:
@@ -503,7 +513,8 @@ overrides:
       '@typescript-eslint/ban-ts-comment': off
       '@typescript-eslint/unbound-method': off # Disabled as expected by jest because it has it's own version
       jest/unbound-method: error
-      padding-line-between-statements:
+      padding-line-between-statements: off
+      '@typescript-eslint/padding-line-between-statements':
         - error
         - blankLine: always
           prev:
@@ -516,6 +527,10 @@ overrides:
             - return
             - switch
             - try
+            - function
+            - interface
+            - type
+            - export
         - blankLine: always
           prev:
             - block-like

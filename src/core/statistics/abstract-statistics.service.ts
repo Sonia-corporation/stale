@@ -11,9 +11,10 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
    * @description
    * The name of the statistics that will be stored inside this service
    * Used only for the logs
-   * @type {string}
+   * @type {'issues' | 'pull requests'}
+   * @protected
    */
-  protected abstract readonly _statisticsName: string;
+  protected abstract readonly _statisticsName: 'issues' | 'pull requests';
 
   /**
    * @description

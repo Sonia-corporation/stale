@@ -1,4 +1,4 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ASSIGNEES_PER_ISSUE } from '@github/api/issues/constants/github-assignees-per-issue';
@@ -58,7 +58,7 @@ export class GithubApiIssuesService {
 
   public readonly issueProcessor: IssueProcessor;
 
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     this.issueProcessor = issueProcessor;
   }
 

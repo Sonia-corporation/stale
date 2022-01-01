@@ -1,4 +1,4 @@
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_ASSIGNEES_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-assignees-per-pull-request';
@@ -58,7 +58,7 @@ export class GithubApiPullRequestsService {
 
   public readonly pullRequestProcessor: PullRequestProcessor;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     this.pullRequestProcessor = pullRequestProcessor;
   }
 

@@ -1,5 +1,5 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -7,7 +7,6 @@ import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
-import _ from 'lodash';
 
 export abstract class AbstractGithubApiCommentsService<
   TProcessor extends IssueProcessor | PullRequestProcessor
@@ -20,7 +19,7 @@ export abstract class AbstractGithubApiCommentsService<
     this.processor.logger.info(
       `Adding the comment`,
       LoggerService.value(comment),
-      LoggerFormatService.whiteBright(`on the ${_.toLower(this._targetType)}`),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -33,7 +32,7 @@ export abstract class AbstractGithubApiCommentsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Comment`),
           LoggerService.value(comment),
-          LoggerFormatService.green(`added to the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.green(`added to the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -41,7 +40,7 @@ export abstract class AbstractGithubApiCommentsService<
         this.processor.logger.error(
           `Failed to add the comment`,
           LoggerService.value(comment),
-          LoggerFormatService.red(`on the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
 

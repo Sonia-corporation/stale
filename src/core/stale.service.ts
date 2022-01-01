@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
-import { IssuesService } from '@core/issues/issues.service';
 import { OutputsService } from '@core/outputs/outputs.service';
-import { PullRequestsService } from '@core/pull-requests/pull-requests.service';
+import { IssuesService } from '@core/processing/issues/issues.service';
+import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -15,8 +15,8 @@ export class StaleService {
       StatisticsService.initialize();
       InputsService.initialize();
       OctokitService.initialize();
-      await IssuesService.process();
-      await PullRequestsService.process();
+      await IssuesService.getInstance().process();
+      await PullRequestsService.getInstance().process();
       LoggerService.info(LoggerFormatService.green(`The stale processing is over`));
       StatisticsService.logsAllStatistics();
       OutputsService.setOutputs();

@@ -1,5 +1,5 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
@@ -13,7 +13,6 @@ import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
-import _ from 'lodash';
 
 export abstract class AbstractGithubApiLabelsService<
   TProcessor extends IssueProcessor | PullRequestProcessor
@@ -98,7 +97,7 @@ export abstract class AbstractGithubApiLabelsService<
     this.processor.logger.info(
       `Adding the label`,
       LoggerService.value(labelId),
-      LoggerFormatService.whiteBright(`on the ${_.toLower(this._targetType)}`),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -111,7 +110,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
-          LoggerFormatService.green(`added to the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.green(`added to the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -119,7 +118,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(
           `Failed to add the label`,
           LoggerService.value(labelId),
-          LoggerFormatService.red(`on the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
 
@@ -131,7 +130,7 @@ export abstract class AbstractGithubApiLabelsService<
     this.processor.logger.info(
       `Removing the label`,
       LoggerService.value(labelId),
-      LoggerFormatService.whiteBright(`from the ${_.toLower(this._targetType)}`),
+      LoggerFormatService.whiteBright(`from the ${this.type}`),
       `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
     );
 
@@ -144,7 +143,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
-          LoggerFormatService.green(`removed from the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.green(`removed from the ${this.type}`),
           LoggerService.value(targetId)
         );
       })
@@ -152,7 +151,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(
           `Failed to remove the label`,
           LoggerService.value(labelId),
-          LoggerFormatService.red(`from the ${_.toLower(this._targetType)}`),
+          LoggerFormatService.red(`from the ${this.type}`),
           LoggerService.value(targetId)
         );
 
