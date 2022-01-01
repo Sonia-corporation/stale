@@ -1,5 +1,18 @@
 # Semantic Versioning Changelog
 
+# [1.25.0](https://github.com/Sonia-corporation/stale/compare/1.24.0...1.25.0) (2022-01-01)
+
+
+### :rocket: Features
+
+* **pull-request:** add new input `pull-request-ignore-draft` ([639e9ba](https://github.com/Sonia-corporation/stale/commit/639e9ba357d41de615e0423f31ac3ecf72e98dcf))
+  a pull request in draft can now be ignored from the processing
+
+
+### :zap: Performance Improvements
+
+* fix jest performances issues when running locally ([cb4a833](https://github.com/Sonia-corporation/stale/commit/cb4a833196ff07022e3f0f34d840a0e8039f85c0))
+
 # [1.24.0](https://github.com/Sonia-corporation/stale/compare/1.23.0...1.24.0) (2021-12-16)
 
 
