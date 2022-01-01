@@ -3,6 +3,7 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
     repository(name: $repository, owner: $owner) {
       pullRequests(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $pullRequestsPerPage, after: $afterCursor) {
         pageInfo {
+          endCursor
           hasNextPage
         }
         totalCount

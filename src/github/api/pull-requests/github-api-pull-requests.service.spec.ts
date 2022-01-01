@@ -46,6 +46,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let loggerServiceNoticeSpy: jest.SpyInstance;
+    let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
 
     beforeEach((): void => {
@@ -54,6 +55,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
+      loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
         // @ts-ignore
         graphql: graphqlMock,
@@ -134,10 +136,29 @@ describe(`GithubApiPullRequestsService`, (): void => {
         });
 
         describe(`when the pull requests are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched pull requests`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiPullRequestsService.fetchPullRequests(faker.datatype.string());
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });
@@ -173,10 +194,29 @@ describe(`GithubApiPullRequestsService`, (): void => {
         });
 
         describe(`when the pull requests are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched pull requests`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiPullRequestsService.fetchPullRequests(faker.datatype.string());
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });
@@ -212,10 +252,29 @@ describe(`GithubApiPullRequestsService`, (): void => {
         });
 
         describe(`when the pull requests are fetched from the a previous page`, (): void => {
+          let fromPageId: string;
+
+          beforeEach((): void => {
+            fromPageId = faker.datatype.string();
+          });
+
+          it(`should log the id of the previous page`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
+
+            expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+            expect(loggerServiceDebugSpy).toHaveBeenCalledWith(
+              `Fetched from the page id`,
+              `value-${fromPageId}`,
+              `whiteBright-(afterCursor)`
+            );
+          });
+
           it(`should not log the number of fetched pull requests`, async (): Promise<void> => {
             expect.assertions(1);
 
-            await GithubApiPullRequestsService.fetchPullRequests(faker.datatype.string());
+            await GithubApiPullRequestsService.fetchPullRequests(fromPageId);
 
             expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
           });

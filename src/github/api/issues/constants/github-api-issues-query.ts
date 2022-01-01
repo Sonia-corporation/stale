@@ -3,6 +3,7 @@ export const GITHUB_API_ISSUES_QUERY = `
     repository(name: $repository, owner: $owner) {
       issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
         pageInfo {
+          endCursor
           hasNextPage
         }
         totalCount
