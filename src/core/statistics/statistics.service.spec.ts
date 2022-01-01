@@ -11,9 +11,11 @@ describe(`StatisticsService`, (): void => {
     let pullRequestsStatisticsServiceInitializeSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      issuesStatisticsServiceInitializeSpy = jest.spyOn(IssuesStatisticsService, `initialize`).mockImplementation();
+      issuesStatisticsServiceInitializeSpy = jest
+        .spyOn(IssuesStatisticsService.getInstance(), `initialize`)
+        .mockImplementation();
       pullRequestsStatisticsServiceInitializeSpy = jest
-        .spyOn(PullRequestsStatisticsService, `initialize`)
+        .spyOn(PullRequestsStatisticsService.getInstance(), `initialize`)
         .mockImplementation();
     });
 
@@ -50,10 +52,10 @@ describe(`StatisticsService`, (): void => {
 
     beforeEach((): void => {
       issuesStatisticsServiceLogsAllStatisticsSpy = jest
-        .spyOn(IssuesStatisticsService, `logsAllStatistics`)
+        .spyOn(IssuesStatisticsService.getInstance(), `logsAllStatistics`)
         .mockImplementation();
       pullRequestsStatisticsServiceLogsAllStatisticsSpy = jest
-        .spyOn(IssuesStatisticsService, `logsAllStatistics`)
+        .spyOn(IssuesStatisticsService.getInstance(), `logsAllStatistics`)
         .mockImplementation();
     });
 

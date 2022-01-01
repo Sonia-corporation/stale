@@ -8,19 +8,43 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`CommonInputsService`, (): void => {
+  let service: CommonInputsService;
+
+  beforeEach((): void => {
+    service = CommonInputsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a CommonInputsService`, (): void => {
+      expect.assertions(1);
+
+      service = CommonInputsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(CommonInputsService));
+    });
+
+    it(`should return the created CommonInputsService`, (): void => {
+      expect.assertions(1);
+
+      const result = CommonInputsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     let setInputsSpy: jest.SpyInstance;
     let logInputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      setInputsSpy = jest.spyOn(CommonInputsService, `setInputs`).mockImplementation();
-      logInputsSpy = jest.spyOn(CommonInputsService, `logInputs`).mockImplementation();
+      setInputsSpy = jest.spyOn(service, `setInputs`).mockImplementation();
+      logInputsSpy = jest.spyOn(service, `logInputs`).mockImplementation();
     });
 
     it(`should get, parse and set the common inputs coming from the action`, (): void => {
       expect.assertions(2);
 
-      CommonInputsService.initialize();
+      service.initialize();
 
       expect(setInputsSpy).toHaveBeenCalledTimes(1);
       expect(setInputsSpy).toHaveBeenCalledWith();
@@ -29,7 +53,7 @@ describe(`CommonInputsService`, (): void => {
     it(`should log the list of common inputs and their values`, (): void => {
       expect.assertions(2);
 
-      CommonInputsService.initialize();
+      service.initialize();
 
       expect(logInputsSpy).toHaveBeenCalledTimes(1);
       expect(logInputsSpy).toHaveBeenCalledWith();
@@ -38,9 +62,9 @@ describe(`CommonInputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = CommonInputsService.initialize();
+      const result = service.initialize();
 
-      expect(result).toStrictEqual(CommonInputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
@@ -49,7 +73,7 @@ describe(`CommonInputsService`, (): void => {
     let coreGetBooleanInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      CommonInputsService.inputs$$ = createHydratedMock<ICommonInputs>({
+      service.inputs$$ = createHydratedMock<ICommonInputs>({
         dryRun: true,
         githubToken: `github-token`,
       });
@@ -61,27 +85,27 @@ describe(`CommonInputsService`, (): void => {
     it(`should get the dry-run input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      CommonInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(1);
       expect(coreGetBooleanInputSpy).toHaveBeenCalledWith(`dry-run`, { required: false });
-      expect(CommonInputsService.inputs$$?.dryRun).toBeFalse();
+      expect(service.inputs$$?.dryRun).toBeFalse();
     });
 
     it(`should get the github-token input, parse it and set it`, (): void => {
       expect.assertions(3);
 
-      CommonInputsService.setInputs();
+      service.setInputs();
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
       expect(coreGetInputSpy).toHaveBeenCalledWith(`github-token`, { required: false });
-      expect(CommonInputsService.inputs$$?.githubToken).toStrictEqual(`dummy-github-token`);
+      expect(service.inputs$$?.githubToken).toBe(`dummy-github-token`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {
       expect.assertions(1);
 
-      const result = CommonInputsService.setInputs();
+      const result = service.setInputs();
 
       expect(result).toStrictEqual({
         dryRun: false,
@@ -106,7 +130,7 @@ describe(`CommonInputsService`, (): void => {
     it(`should create a group of logs`, (): void => {
       expect.assertions(2);
 
-      CommonInputsService.logInputs();
+      service.logInputs();
 
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceStartGroupSpy).toHaveBeenCalledWith(`Common inputs`);
@@ -114,7 +138,7 @@ describe(`CommonInputsService`, (): void => {
 
     describe(`when the inputs are set`, (): void => {
       beforeEach((): void => {
-        CommonInputsService.inputs$$ = createHydratedMock<ICommonInputs>({
+        service.inputs$$ = createHydratedMock<ICommonInputs>({
           dryRun: false,
           githubToken: `dummy-github-token`,
         });
@@ -123,7 +147,7 @@ describe(`CommonInputsService`, (): void => {
       it(`should log the dry-run input`, (): void => {
         expect.assertions(4);
 
-        CommonInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `white-├──`, `input-dry-run`, `value-false`);
@@ -134,7 +158,7 @@ describe(`CommonInputsService`, (): void => {
       it(`should log the github token input`, (): void => {
         expect.assertions(4);
 
-        CommonInputsService.logInputs();
+        service.logInputs();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -151,7 +175,7 @@ describe(`CommonInputsService`, (): void => {
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 
-      CommonInputsService.logInputs();
+      service.logInputs();
 
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledTimes(1);
       expect(loggerServiceEndGroupSpy).toHaveBeenCalledWith();
@@ -160,22 +184,22 @@ describe(`CommonInputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = CommonInputsService.logInputs();
+      const result = service.logInputs();
 
-      expect(result).toStrictEqual(CommonInputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 
   describe(`getInputs()`, (): void => {
     describe(`when the common inputs are unset`, (): void => {
       beforeEach((): void => {
-        delete CommonInputsService.inputs$$;
+        delete service.inputs$$;
       });
 
       it(`should throw an error`, (): void => {
         expect.assertions(1);
 
-        expect((): ICommonInputs => CommonInputsService.getInputs()).toThrow(new Error(`The common inputs are unset`));
+        expect((): ICommonInputs => service.getInputs()).toThrow(new Error(`The common inputs are unset`));
       });
     });
 
@@ -184,13 +208,13 @@ describe(`CommonInputsService`, (): void => {
 
       beforeEach((): void => {
         inputs = createHydratedMock<ICommonInputs>();
-        CommonInputsService.inputs$$ = inputs;
+        service.inputs$$ = inputs;
       });
 
       it(`should return the common inputs`, (): void => {
         expect.assertions(1);
 
-        const result = CommonInputsService.getInputs();
+        const result = service.getInputs();
 
         expect(result).toStrictEqual(inputs);
       });

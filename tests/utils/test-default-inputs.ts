@@ -24,6 +24,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreAnyAssignees: [`pull-request-ignore-any-assignee-1`, `pull-request-ignore-any-assignee-2`],
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
   pullRequestIgnoreBeforeCreationDate: ``,
+  pullRequestIgnoreDraft: false,
   pullRequestStaleComment: `stale-comment`,
   pullRequestStaleLabel: `stale`,
 };

@@ -8,6 +8,30 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`IssuesOutputsService`, (): void => {
+  let service: IssuesOutputsService;
+
+  beforeEach((): void => {
+    service = IssuesOutputsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a IssuesOutputsService`, (): void => {
+      expect.assertions(1);
+
+      service = IssuesOutputsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(IssuesOutputsService));
+    });
+
+    it(`should return the created IssuesOutputsService`, (): void => {
+      expect.assertions(1);
+
+      const result = IssuesOutputsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`setOutputs()`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let coreSetOutputSpy: jest.SpyInstance;
@@ -20,7 +44,7 @@ describe(`IssuesOutputsService`, (): void => {
     it(`should log about setting the issues outputs`, (): void => {
       expect.assertions(2);
 
-      IssuesOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Creating the issues outputs...`);
@@ -28,16 +52,16 @@ describe(`IssuesOutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      IssuesStatisticsService.processedIssuesCount$$ = 1;
-      IssuesStatisticsService.ignoredIssuesCount$$ = 1;
-      IssuesStatisticsService.unalteredIssuesCount$$ = 1;
-      IssuesStatisticsService.staleIssuesCount$$ = 1;
-      IssuesStatisticsService.alreadyStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.removeStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.closedIssuesCount$$ = 1;
-      IssuesStatisticsService.addedIssuesCommentsCount$$ = 1;
+      IssuesStatisticsService.getInstance().processedIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().ignoredIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().unalteredIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().staleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().removeStaleIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().closedIssuesCount$$ = 1;
+      IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$ = 1;
 
-      IssuesOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
@@ -53,7 +77,7 @@ describe(`IssuesOutputsService`, (): void => {
     it(`should log about the end of the issues output setup`, (): void => {
       expect.assertions(2);
 
-      IssuesOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Issues outputs created`);
@@ -62,9 +86,9 @@ describe(`IssuesOutputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = IssuesOutputsService.setOutputs();
+      const result = service.setOutputs();
 
-      expect(result).toStrictEqual(IssuesOutputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 });

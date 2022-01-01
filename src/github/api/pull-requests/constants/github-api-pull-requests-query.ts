@@ -13,6 +13,7 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
           updatedAt
           url
           id
+          isDraft
           labels(first: $labelsPerPullRequest) {
             totalCount
             nodes {

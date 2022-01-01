@@ -1,4 +1,4 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/github-api-issue-timeline-items.service';
@@ -25,7 +25,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
 
       const result = new GithubApiIssueTimelineItemsService(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 

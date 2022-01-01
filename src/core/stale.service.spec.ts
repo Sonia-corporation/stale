@@ -1,7 +1,7 @@
 import { InputsService } from '@core/inputs/inputs.service';
-import { IssuesService } from '@core/issues/issues.service';
 import { OutputsService } from '@core/outputs/outputs.service';
-import { PullRequestsService } from '@core/pull-requests/pull-requests.service';
+import { IssuesService } from '@core/processing/issues/issues.service';
+import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
 import { StaleService } from '@core/stale.service';
 import { StatisticsService } from '@core/statistics/statistics.service';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -29,8 +29,8 @@ describe(`StaleService`, (): void => {
       statisticsServiceInitializeSpy = jest.spyOn(StatisticsService, `initialize`).mockImplementation();
       inputsServiceInitializeSpy = jest.spyOn(InputsService, `initialize`).mockImplementation();
       octokitServiceInitializeSpy = jest.spyOn(OctokitService, `initialize`).mockImplementation();
-      issuesServiceProcessSpy = jest.spyOn(IssuesService, `process`).mockResolvedValue();
-      pullRequestsServiceProcessSpy = jest.spyOn(PullRequestsService, `process`).mockResolvedValue();
+      issuesServiceProcessSpy = jest.spyOn(IssuesService.getInstance(), `process`).mockResolvedValue();
+      pullRequestsServiceProcessSpy = jest.spyOn(PullRequestsService.getInstance(), `process`).mockResolvedValue();
       coreSetFailedSpy = jest.spyOn(core, `setFailed`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();

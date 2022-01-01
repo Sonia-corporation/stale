@@ -1,4 +1,4 @@
-import { PullRequestProcessor } from '@core/pull-requests/pull-request-processor';
+import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiPullRequestNumber } from '@github/api/pull-requests/github-api-pull-request-number';
 import { GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-pull-request-labeled-event-query';
 import { GithubApiPullRequestTimelineItemsService } from '@github/api/timeline-items/github-api-pull-request-timeline-items.service';
@@ -25,7 +25,7 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
 
       const result = new GithubApiPullRequestTimelineItemsService(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 

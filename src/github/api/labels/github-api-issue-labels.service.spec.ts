@@ -1,4 +1,4 @@
-import { IssueProcessor } from '@core/issues/issue-processor';
+import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
@@ -29,7 +29,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
 
       const result = new GithubApiIssueLabelsService(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
@@ -374,7 +374,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       });
     });
 
-    describe(`addLabelToIssue()`, (): void => {
+    describe(`addLabel()`, (): void => {
       let issueId: IUuid;
       let labelId: IUuid;
       let graphqlMock: jest.Mock;
@@ -400,7 +400,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       it(`should add the label on the issue`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiIssueLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+        await expect(githubApiIssueLabelsService.addLabel(issueId, labelId)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -428,7 +428,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssueLabelsService.addLabelToIssue(issueId, labelId)).rejects.toThrow(
+          await expect(githubApiIssueLabelsService.addLabel(issueId, labelId)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
@@ -450,7 +450,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssueLabelsService.addLabelToIssue(issueId, labelId);
+          await githubApiIssueLabelsService.addLabel(issueId, labelId);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -464,7 +464,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       });
     });
 
-    describe(`removeLabelFromIssue()`, (): void => {
+    describe(`removeLabel()`, (): void => {
       let issueId: IUuid;
       let labelId: IUuid;
       let graphqlMock: jest.Mock;
@@ -490,7 +490,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       it(`should remove the label on the issue`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiIssueLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
+        await expect(githubApiIssueLabelsService.removeLabel(issueId, labelId)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -518,7 +518,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssueLabelsService.removeLabelFromIssue(issueId, labelId)).rejects.toThrow(
+          await expect(githubApiIssueLabelsService.removeLabel(issueId, labelId)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
@@ -540,7 +540,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
         it(`should log about the success of the removal`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssueLabelsService.removeLabelFromIssue(issueId, labelId);
+          await githubApiIssueLabelsService.removeLabel(issueId, labelId);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

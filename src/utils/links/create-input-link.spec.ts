@@ -23,6 +23,6 @@ describe(`createInputLink()`, (): void => {
       `github-token`,
       `https://github.com/Sonia-corporation/stale#github-token`
     );
-    expect(result).toStrictEqual(`fake-input-link`);
+    expect(result).toBe(`fake-input-link`);
   });
 });

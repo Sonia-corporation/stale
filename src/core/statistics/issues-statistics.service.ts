@@ -1,9 +1,4 @@
-import { LoggerFormatService } from '@utils/loggers/logger-format.service';
-import { LoggerService } from '@utils/loggers/logger.service';
-import { getMapLastKey } from '@utils/maps/get-map-last-key';
-import { getMapLongestKey } from '@utils/maps/get-map-longest-key';
-import { mapFilter } from '@utils/maps/map-filter';
-import { ETreeRows } from '@utils/trees/tree-rows.enum';
+import { AbstractStatisticsService } from '@core/statistics/abstract-statistics.service';
 import _ from 'lodash';
 
 type IStat =
@@ -16,134 +11,102 @@ type IStat =
   | 'Closed issues'
   | 'Added issues comments';
 
-export class IssuesStatisticsService {
-  public static processedIssuesCount$$: number = 0;
-  public static ignoredIssuesCount$$: number = 0;
-  public static unalteredIssuesCount$$: number = 0;
-  public static staleIssuesCount$$: number = 0;
-  public static alreadyStaleIssuesCount$$: number = 0;
-  public static removeStaleIssuesCount$$: number = 0;
-  public static closedIssuesCount$$: number = 0;
-  public static addedIssuesCommentsCount$$: number = 0;
+export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
+  private static _instance: IssuesStatisticsService;
+
+  public static getInstance(): IssuesStatisticsService {
+    if (_.isNil(IssuesStatisticsService._instance)) {
+      IssuesStatisticsService._instance = new IssuesStatisticsService();
+    }
+
+    return IssuesStatisticsService._instance;
+  }
+
+  public processedIssuesCount$$: number = 0;
+  public ignoredIssuesCount$$: number = 0;
+  public unalteredIssuesCount$$: number = 0;
+  public staleIssuesCount$$: number = 0;
+  public alreadyStaleIssuesCount$$: number = 0;
+  public removeStaleIssuesCount$$: number = 0;
+  public closedIssuesCount$$: number = 0;
+  public addedIssuesCommentsCount$$: number = 0;
+  protected readonly _statisticsName: 'issues' = `issues`;
 
   /**
    * @description
    * Only used for the tests to reset the state
    * @returns {IssuesStatisticsService} The service
    */
-  public static initialize(): IssuesStatisticsService {
-    IssuesStatisticsService.processedIssuesCount$$ = 0;
-    IssuesStatisticsService.ignoredIssuesCount$$ = 0;
-    IssuesStatisticsService.unalteredIssuesCount$$ = 0;
-    IssuesStatisticsService.staleIssuesCount$$ = 0;
-    IssuesStatisticsService.alreadyStaleIssuesCount$$ = 0;
-    IssuesStatisticsService.removeStaleIssuesCount$$ = 0;
-    IssuesStatisticsService.closedIssuesCount$$ = 0;
-    IssuesStatisticsService.addedIssuesCommentsCount$$ = 0;
+  public initialize(): IssuesStatisticsService {
+    this.processedIssuesCount$$ = 0;
+    this.ignoredIssuesCount$$ = 0;
+    this.unalteredIssuesCount$$ = 0;
+    this.staleIssuesCount$$ = 0;
+    this.alreadyStaleIssuesCount$$ = 0;
+    this.removeStaleIssuesCount$$ = 0;
+    this.closedIssuesCount$$ = 0;
+    this.addedIssuesCommentsCount$$ = 0;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseProcessedIssuesCount(): IssuesStatisticsService {
+  public increaseProcessedIssuesCount(): IssuesStatisticsService {
     this.processedIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseIgnoredIssuesCount(): IssuesStatisticsService {
+  public increaseIgnoredIssuesCount(): IssuesStatisticsService {
     this.ignoredIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseUnalteredIssuesCount(): IssuesStatisticsService {
+  public increaseUnalteredIssuesCount(): IssuesStatisticsService {
     this.unalteredIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseStaleIssuesCount(): IssuesStatisticsService {
+  public increaseStaleIssuesCount(): IssuesStatisticsService {
     this.staleIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseAlreadyStaleIssuesCount(): IssuesStatisticsService {
+  public increaseAlreadyStaleIssuesCount(): IssuesStatisticsService {
     this.alreadyStaleIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseRemoveStaleIssuesCount(): IssuesStatisticsService {
+  public increaseRemoveStaleIssuesCount(): IssuesStatisticsService {
     this.removeStaleIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseClosedIssuesCount(): IssuesStatisticsService {
+  public increaseClosedIssuesCount(): IssuesStatisticsService {
     this.closedIssuesCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static increaseAddedIssuesCommentsCount(): IssuesStatisticsService {
+  public increaseAddedIssuesCommentsCount(): IssuesStatisticsService {
     this.addedIssuesCommentsCount$$++;
 
-    return IssuesStatisticsService;
+    return this;
   }
 
-  public static logsAllStatistics(): IssuesStatisticsService {
-    LoggerService.startGroup(`Statistics`);
-    this._logsAllStatistics();
-    LoggerService.endGroup();
-
-    return IssuesStatisticsService;
-  }
-
-  private static _logsAllStatistics(): IssuesStatisticsService {
-    const allStatistics: Map<IStat, number> = IssuesStatisticsService._getAllFilteredStatisticsMap();
-    const lastStatistic: IStat | undefined = getMapLastKey(allStatistics);
-    const longestStatisticLength: number = getMapLongestKey(allStatistics);
-
-    allStatistics.forEach((count: Readonly<number>, statistic: Readonly<IStat>): void => {
-      const prefix: ETreeRows = statistic === lastStatistic ? ETreeRows.LAST : ETreeRows.ANY;
-
-      this._log(prefix, _.padEnd(statistic, longestStatisticLength), count);
-    });
-
-    return IssuesStatisticsService;
-  }
-
-  private static _log(
-    prefix: Readonly<ETreeRows>,
-    statistic: Readonly<IStat | string>,
-    count: Readonly<number>
-  ): IssuesStatisticsService {
-    LoggerService.info(
-      LoggerFormatService.white(prefix),
-      LoggerFormatService.whiteBright(statistic),
-      LoggerService.value(count)
-    );
-
-    return IssuesStatisticsService;
-  }
-
-  private static _getAllStatisticsMap(): Map<IStat, number> {
+  protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
-      .set(`Processed issues`, IssuesStatisticsService.processedIssuesCount$$)
-      .set(`Ignored issues`, IssuesStatisticsService.ignoredIssuesCount$$)
-      .set(`Unaltered issues`, IssuesStatisticsService.unalteredIssuesCount$$)
-      .set(`Stale issues`, IssuesStatisticsService.staleIssuesCount$$)
-      .set(`Already stale issues`, IssuesStatisticsService.alreadyStaleIssuesCount$$)
-      .set(`Remove stale issues`, IssuesStatisticsService.removeStaleIssuesCount$$)
-      .set(`Closed issues`, IssuesStatisticsService.closedIssuesCount$$)
-      .set(`Added issues comments`, IssuesStatisticsService.addedIssuesCommentsCount$$);
-  }
-
-  private static _getAllFilteredStatisticsMap(): Map<IStat, number> {
-    return mapFilter<IStat, number>(
-      IssuesStatisticsService._getAllStatisticsMap(),
-      ([_statistic, count]): boolean => count > 0
-    );
+      .set(`Processed issues`, this.processedIssuesCount$$)
+      .set(`Ignored issues`, this.ignoredIssuesCount$$)
+      .set(`Unaltered issues`, this.unalteredIssuesCount$$)
+      .set(`Stale issues`, this.staleIssuesCount$$)
+      .set(`Already stale issues`, this.alreadyStaleIssuesCount$$)
+      .set(`Remove stale issues`, this.removeStaleIssuesCount$$)
+      .set(`Closed issues`, this.closedIssuesCount$$)
+      .set(`Added issues comments`, this.addedIssuesCommentsCount$$);
   }
 }

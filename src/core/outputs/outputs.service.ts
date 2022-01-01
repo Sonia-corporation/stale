@@ -3,8 +3,8 @@ import { PullRequestsOutputsService } from '@core/outputs/pull-requests-outputs.
 
 export class OutputsService {
   public static setOutputs(): OutputsService {
-    IssuesOutputsService.setOutputs();
-    PullRequestsOutputsService.setOutputs();
+    IssuesOutputsService.getInstance().setOutputs();
+    PullRequestsOutputsService.getInstance().setOutputs();
 
     return OutputsService;
   }

@@ -23,7 +23,7 @@ describe(`createLink()`, (): void => {
 
     expect(terminalLinkSpy).toHaveBeenCalledTimes(1);
     expect(terminalLinkSpy).toHaveBeenCalledWith(name, link);
-    expect(result).toStrictEqual(`dummy-link`);
+    expect(result).toBe(`dummy-link`);
   });
 
   it(`should create a link formatted for a terminal and return it (functional)`, (): void => {
@@ -35,6 +35,6 @@ describe(`createLink()`, (): void => {
     expect(terminalLinkSpy).toHaveBeenCalledTimes(1);
     expect(terminalLinkSpy).toHaveBeenCalledWith(name, link);
     // eslint-disable-next-line no-irregular-whitespace
-    expect(result).toStrictEqual(`${name} (​https://github.com/Sonia-corporation/stale/issues/1​)`);
+    expect(result).toBe(`${name} (​https://github.com/Sonia-corporation/stale/issues/1​)`);
   });
 });

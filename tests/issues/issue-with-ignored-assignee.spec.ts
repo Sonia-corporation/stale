@@ -28,14 +28,14 @@ describe(`Issue with ignored assignee`, (): void => {
 
       await issueSut.process();
 
-      expect(IssuesStatisticsService.processedIssuesCount$$).toBe(1);
-      expect(IssuesStatisticsService.ignoredIssuesCount$$).toBe(1);
-      expect(IssuesStatisticsService.unalteredIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.staleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.alreadyStaleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.removeStaleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.closedIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.addedIssuesCommentsCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().processedIssuesCount$$).toBe(1);
+      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount$$).toBe(1);
+      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().staleIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(0);
     });
   });
 });

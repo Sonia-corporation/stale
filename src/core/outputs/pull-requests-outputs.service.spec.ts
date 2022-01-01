@@ -8,6 +8,30 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
 describe(`PullRequestsOutputsService`, (): void => {
+  let service: PullRequestsOutputsService;
+
+  beforeEach((): void => {
+    service = PullRequestsOutputsService.getInstance();
+  });
+
+  describe(`getInstance()`, (): void => {
+    it(`should create a PullRequestsOutputsService`, (): void => {
+      expect.assertions(1);
+
+      service = PullRequestsOutputsService.getInstance();
+
+      expect(service).toStrictEqual(expect.any(PullRequestsOutputsService));
+    });
+
+    it(`should return the created PullRequestsOutputsService`, (): void => {
+      expect.assertions(1);
+
+      const result = PullRequestsOutputsService.getInstance();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`setOutputs()`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let coreSetOutputSpy: jest.SpyInstance;
@@ -20,7 +44,7 @@ describe(`PullRequestsOutputsService`, (): void => {
     it(`should log about setting the pull requests outputs`, (): void => {
       expect.assertions(2);
 
-      PullRequestsOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Creating the pull requests outputs...`);
@@ -28,16 +52,16 @@ describe(`PullRequestsOutputsService`, (): void => {
 
     it(`should set the statistics outputs`, (): void => {
       expect.assertions(9);
-      PullRequestsStatisticsService.processedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.ignoredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.unalteredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.stalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.alreadyStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.removeStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.closedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.addedPullRequestsCommentsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$ = 1;
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$ = 1;
 
-      PullRequestsOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT, 1);
@@ -53,7 +77,7 @@ describe(`PullRequestsOutputsService`, (): void => {
     it(`should log about the end of the pull requests output setup`, (): void => {
       expect.assertions(2);
 
-      PullRequestsOutputsService.setOutputs();
+      service.setOutputs();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `Pull requests outputs created`);
@@ -62,9 +86,9 @@ describe(`PullRequestsOutputsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = PullRequestsOutputsService.setOutputs();
+      const result = service.setOutputs();
 
-      expect(result).toStrictEqual(PullRequestsOutputsService);
+      expect(result).toStrictEqual(service);
     });
   });
 });

@@ -13,10 +13,14 @@ describe(`InputsService`, (): void => {
     let pullRequestsInputsServiceServiceInitializeSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      commonInputsServiceInitializeSpy = jest.spyOn(CommonInputsService, `initialize`).mockImplementation();
-      issuesInputsServiceServiceInitializeSpy = jest.spyOn(IssuesInputsService, `initialize`).mockImplementation();
+      commonInputsServiceInitializeSpy = jest
+        .spyOn(CommonInputsService.getInstance(), `initialize`)
+        .mockImplementation();
+      issuesInputsServiceServiceInitializeSpy = jest
+        .spyOn(IssuesInputsService.getInstance(), `initialize`)
+        .mockImplementation();
       pullRequestsInputsServiceServiceInitializeSpy = jest
-        .spyOn(PullRequestsInputsService, `initialize`)
+        .spyOn(PullRequestsInputsService.getInstance(), `initialize`)
         .mockImplementation();
     });
 
@@ -62,10 +66,12 @@ describe(`InputsService`, (): void => {
     let pullRequestsInputsServiceServiceLogInputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      commonInputsServiceLogInputsSpy = jest.spyOn(CommonInputsService, `logInputs`).mockImplementation();
-      issuesInputsServiceServiceLogInputsSpy = jest.spyOn(IssuesInputsService, `logInputs`).mockImplementation();
+      commonInputsServiceLogInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `logInputs`).mockImplementation();
+      issuesInputsServiceServiceLogInputsSpy = jest
+        .spyOn(IssuesInputsService.getInstance(), `logInputs`)
+        .mockImplementation();
       pullRequestsInputsServiceServiceLogInputsSpy = jest
-        .spyOn(PullRequestsInputsService, `logInputs`)
+        .spyOn(PullRequestsInputsService.getInstance(), `logInputs`)
         .mockImplementation();
     });
 
