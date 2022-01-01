@@ -29,7 +29,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
       const result = new PullRequestStaleProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
 
     it(`should create the GithubApiPullRequestLabelsService`, (): void => {
@@ -65,7 +65,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         isStaleByUpdateDateSpy = jest.spyOn(pullRequestStaleProcessor, `isStaleByUpdateDate$$`).mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
           .mockImplementation();
       });
 
@@ -158,13 +158,13 @@ describe(`PullRequestStaleProcessor`, (): void => {
           .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabel`)
           .mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `notice`)
+          .spyOn(pullRequestStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest
-          .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `error`)
+          .spyOn(pullRequestStaleProcessor.processor.logger, `error`)
           .mockImplementation();
         pullRequestCommentsProcessorProcessStaleCommentSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestCommentsProcessor$$, `processStaleComment`)
@@ -310,7 +310,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
       beforeEach((): void => {
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -349,7 +349,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
           pullRequestStaleProcessor = new PullRequestStaleProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -390,7 +390,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
             pullRequestStaleProcessor = new PullRequestStaleProcessor(pullRequestProcessor);
 
             pullRequestProcessorLoggerInfoSpy = jest
-              .spyOn(pullRequestStaleProcessor.pullRequestProcessor.logger, `info`)
+              .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
               .mockImplementation();
           });
 
