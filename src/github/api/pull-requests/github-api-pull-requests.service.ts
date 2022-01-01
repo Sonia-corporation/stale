@@ -58,7 +58,7 @@ export class GithubApiPullRequestsService {
 
   public readonly pullRequestProcessor: PullRequestProcessor;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     this.pullRequestProcessor = pullRequestProcessor;
   }
 

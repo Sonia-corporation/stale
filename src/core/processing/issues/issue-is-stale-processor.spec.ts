@@ -61,7 +61,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
       describe(`when the issue has already the stale label`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -93,7 +93,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
       describe(`when the issue does not have the stale label`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({

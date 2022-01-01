@@ -9,7 +9,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 
 export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelineItemsService<IssueProcessor> {
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
   }
 

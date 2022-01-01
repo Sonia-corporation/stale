@@ -1,3 +1,4 @@
+import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
@@ -12,6 +13,7 @@ import { mocked } from 'ts-jest/utils';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 jest.mock(`@core/processing/pull-requests/pull-request-processor`);
+jest.mock(`@core/processing/pull-requests/pull-request-logger`);
 
 describe(`PullRequestsService`, (): void => {
   let service: PullRequestsService;
@@ -71,6 +73,7 @@ describe(`PullRequestsService`, (): void => {
       PullRequestProcessor,
       true
     );
+    const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = mocked(PullRequestLogger, true);
 
     let githubApiPullRequestsServiceFetchPullRequestsSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
@@ -79,6 +82,7 @@ describe(`PullRequestsService`, (): void => {
 
     beforeEach((): void => {
       mockedPullRequestProcessor.mockClear();
+      mockedPullRequestLogger.mockClear();
 
       githubApiPullRequestsServiceFetchPullRequestsSpy = jest
         .spyOn(GithubApiPullRequestsService, `fetchPullRequests`)
@@ -126,7 +130,10 @@ describe(`PullRequestsService`, (): void => {
 
       beforeEach((): void => {
         mockedPullRequestProcessor.mockClear();
-        gitHubApiPullRequest = createHydratedMock<IGithubApiPullRequest>();
+        mockedPullRequestLogger.mockClear();
+        gitHubApiPullRequest = createHydratedMock<IGithubApiPullRequest>({
+          number: 8,
+        });
         githubApiPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {
             pullRequests: {
@@ -167,14 +174,19 @@ describe(`PullRequestsService`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await service.processBatch();
 
         expect(mockedPullRequestProcessor).toHaveBeenCalledTimes(1);
-        expect(mockedPullRequestProcessor).toHaveBeenCalledWith(gitHubApiPullRequest);
+        expect(mockedPullRequestProcessor).toHaveBeenCalledWith(
+          gitHubApiPullRequest,
+          mockedPullRequestLogger.mock.instances[0]
+        );
         expect(mockedPullRequestProcessor.prototype.process.mock.calls).toHaveLength(1);
         expect(mockedPullRequestProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
+        expect(mockedPullRequestLogger).toHaveBeenCalledTimes(1);
+        expect(mockedPullRequestLogger).toHaveBeenCalledWith(8);
       });
     });
 
@@ -185,8 +197,13 @@ describe(`PullRequestsService`, (): void => {
 
       beforeEach((): void => {
         mockedPullRequestProcessor.mockClear();
-        gitHubApiPullRequest1 = createHydratedMock<IGithubApiPullRequest>();
-        gitHubApiPullRequest2 = createHydratedMock<IGithubApiPullRequest>();
+        mockedPullRequestLogger.mockClear();
+        gitHubApiPullRequest1 = createHydratedMock<IGithubApiPullRequest>({
+          number: 1,
+        });
+        gitHubApiPullRequest2 = createHydratedMock<IGithubApiPullRequest>({
+          number: 2,
+        });
         githubApiPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {
             pullRequests: {
@@ -227,16 +244,27 @@ describe(`PullRequestsService`, (): void => {
       });
 
       it(`should process the two pull requests`, async (): Promise<void> => {
-        expect.assertions(6);
+        expect.assertions(9);
 
         await service.processBatch();
 
         expect(mockedPullRequestProcessor).toHaveBeenCalledTimes(2);
-        expect(mockedPullRequestProcessor).toHaveBeenNthCalledWith(1, gitHubApiPullRequest1);
-        expect(mockedPullRequestProcessor).toHaveBeenNthCalledWith(2, gitHubApiPullRequest2);
+        expect(mockedPullRequestProcessor).toHaveBeenNthCalledWith(
+          1,
+          gitHubApiPullRequest1,
+          mockedPullRequestLogger.mock.instances[0]
+        );
+        expect(mockedPullRequestProcessor).toHaveBeenNthCalledWith(
+          2,
+          gitHubApiPullRequest2,
+          mockedPullRequestLogger.mock.instances[1]
+        );
         expect(mockedPullRequestProcessor.prototype.process.mock.calls).toHaveLength(2);
         expect(mockedPullRequestProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
         expect(mockedPullRequestProcessor.prototype.process.mock.calls[1]).toHaveLength(0);
+        expect(mockedPullRequestProcessor).toHaveBeenCalledTimes(2);
+        expect(mockedPullRequestLogger).toHaveBeenNthCalledWith(1, 1);
+        expect(mockedPullRequestLogger).toHaveBeenNthCalledWith(2, 2);
       });
     });
 
@@ -260,6 +288,8 @@ describe(`PullRequestsService`, (): void => {
       let githubApiPullRequests: IGithubApiGetPullRequests;
 
       beforeEach((): void => {
+        gitHubApiPullRequest1 = createHydratedMock<IGithubApiPullRequest>();
+        gitHubApiPullRequest2 = createHydratedMock<IGithubApiPullRequest>();
         githubApiPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {
             pullRequests: {
@@ -291,6 +321,8 @@ describe(`PullRequestsService`, (): void => {
       let githubApiPullRequests: IGithubApiGetPullRequests;
 
       beforeEach((): void => {
+        gitHubApiPullRequest1 = createHydratedMock<IGithubApiPullRequest>();
+        gitHubApiPullRequest2 = createHydratedMock<IGithubApiPullRequest>();
         githubApiPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {
             pullRequests: {

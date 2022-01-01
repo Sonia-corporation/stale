@@ -9,7 +9,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
 
 export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiTimelineItemsService<PullRequestProcessor> {
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
   }
 

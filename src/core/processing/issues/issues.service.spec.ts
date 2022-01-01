@@ -1,3 +1,4 @@
+import { IssueLogger } from '@core/processing/issues/issue-logger';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesService } from '@core/processing/issues/issues.service';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
@@ -12,6 +13,7 @@ import { mocked } from 'ts-jest/utils';
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 jest.mock(`@core/processing/issues/issue-processor`);
+jest.mock(`@core/processing/issues/issue-logger`);
 
 describe(`IssuesService`, (): void => {
   let service: IssuesService;
@@ -68,6 +70,7 @@ describe(`IssuesService`, (): void => {
 
   describe(`processBatch()`, (): void => {
     const mockedIssueProcessor: MockedObjectDeep<typeof IssueProcessor> = mocked(IssueProcessor, true);
+    const mockedIssueLogger: MockedObjectDeep<typeof IssueLogger> = mocked(IssueLogger, true);
 
     let githubApiIssuesServiceFetchIssuesSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
@@ -76,6 +79,7 @@ describe(`IssuesService`, (): void => {
 
     beforeEach((): void => {
       mockedIssueProcessor.mockClear();
+      mockedIssueLogger.mockClear();
 
       githubApiIssuesServiceFetchIssuesSpy = jest.spyOn(GithubApiIssuesService, `fetchIssues`).mockResolvedValue(
         createHydratedMock<IGithubApiGetIssues>({
@@ -121,7 +125,10 @@ describe(`IssuesService`, (): void => {
 
       beforeEach((): void => {
         mockedIssueProcessor.mockClear();
-        gitHubApiIssue = createHydratedMock<IGithubApiIssue>();
+        mockedIssueLogger.mockClear();
+        gitHubApiIssue = createHydratedMock<IGithubApiIssue>({
+          number: 8,
+        });
         githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
@@ -162,14 +169,16 @@ describe(`IssuesService`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(4);
+        expect.assertions(6);
 
         await service.processBatch();
 
         expect(mockedIssueProcessor).toHaveBeenCalledTimes(1);
-        expect(mockedIssueProcessor).toHaveBeenCalledWith(gitHubApiIssue);
+        expect(mockedIssueProcessor).toHaveBeenCalledWith(gitHubApiIssue, mockedIssueLogger.mock.instances[0]);
         expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(1);
         expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
+        expect(mockedIssueLogger).toHaveBeenCalledTimes(1);
+        expect(mockedIssueLogger).toHaveBeenCalledWith(8);
       });
     });
 
@@ -180,8 +189,13 @@ describe(`IssuesService`, (): void => {
 
       beforeEach((): void => {
         mockedIssueProcessor.mockClear();
-        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
-        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
+        mockedIssueLogger.mockClear();
+        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>({
+          number: 1,
+        });
+        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>({
+          number: 2,
+        });
         githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
@@ -222,16 +236,19 @@ describe(`IssuesService`, (): void => {
       });
 
       it(`should process the two issues`, async (): Promise<void> => {
-        expect.assertions(6);
+        expect.assertions(9);
 
         await service.processBatch();
 
         expect(mockedIssueProcessor).toHaveBeenCalledTimes(2);
-        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(1, gitHubApiIssue1);
-        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(2, gitHubApiIssue2);
+        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(1, gitHubApiIssue1, mockedIssueLogger.mock.instances[0]);
+        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(2, gitHubApiIssue2, mockedIssueLogger.mock.instances[1]);
         expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(2);
         expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
         expect(mockedIssueProcessor.prototype.process.mock.calls[1]).toHaveLength(0);
+        expect(mockedIssueLogger).toHaveBeenCalledTimes(2);
+        expect(mockedIssueLogger).toHaveBeenNthCalledWith(1, 1);
+        expect(mockedIssueLogger).toHaveBeenNthCalledWith(2, 2);
       });
     });
 
@@ -255,6 +272,9 @@ describe(`IssuesService`, (): void => {
       let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
+        mockedIssueLogger.mockClear();
+        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
         githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {
@@ -286,6 +306,8 @@ describe(`IssuesService`, (): void => {
       let githubApiIssues: IGithubApiGetIssues;
 
       beforeEach((): void => {
+        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
         githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {
             issues: {

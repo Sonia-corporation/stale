@@ -129,7 +129,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
         pullRequestStaleLabel = faker.random.word();
         staleLabelId = faker.datatype.uuid();
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             id: pullRequestId,
           },
         });

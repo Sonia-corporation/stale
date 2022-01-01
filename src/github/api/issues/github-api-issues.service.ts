@@ -58,7 +58,7 @@ export class GithubApiIssuesService {
 
   public readonly issueProcessor: IssueProcessor;
 
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     this.issueProcessor = issueProcessor;
   }
 

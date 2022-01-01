@@ -275,7 +275,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>({
-          githubIssue: {
+          item: {
             locked: false,
           },
         });
@@ -297,7 +297,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue is locked`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               locked: true,
             },
           });
@@ -334,7 +334,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue is not locked`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               locked: false,
             },
           });
@@ -448,7 +448,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has no assignee`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 assignees: {
                   totalCount: 0,
                 },
@@ -475,7 +475,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has one assignee`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 assignees: {
                   totalCount: 1,
                 },
@@ -596,7 +596,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has no project card`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 projectCards: {
                   totalCount: 0,
                 },
@@ -626,7 +626,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has one project card`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 projectCards: {
                   totalCount: 1,
                 },
@@ -887,7 +887,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has no label`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [],
                 },
@@ -914,7 +914,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has one label which is the stale one`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -951,7 +951,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has one label which is not the stale one`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -993,7 +993,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has three labels which are not the stale one`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1077,7 +1077,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue has one of the ignored labels`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -1118,7 +1118,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue does not have one of the ignored labels`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -1148,7 +1148,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has more than 20 labels`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1183,7 +1183,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe.each([19, 20])(`when the issue has less or just 20 labels`, (totalCount: number): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1257,7 +1257,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue has one of the ignored assignees`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               assignees: {
                 nodes: [
                   createHydratedMock<IGithubApiAssignee>({
@@ -1298,7 +1298,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       describe(`when the issue does not have one of the ignored assignees`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
-            githubIssue: {
+            item: {
               assignees: {
                 nodes: [
                   createHydratedMock<IGithubApiAssignee>({
@@ -1328,7 +1328,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the issue has more than 20 assignees`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 assignees: {
                   nodes: [
                     createHydratedMock<IGithubApiAssignee>({
@@ -1363,7 +1363,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe.each([19, 20])(`when the issue has less or just 20 assignees`, (totalCount: number): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
-              githubIssue: {
+              item: {
                 assignees: {
                   nodes: [
                     createHydratedMock<IGithubApiAssignee>({

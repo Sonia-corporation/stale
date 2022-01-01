@@ -17,7 +17,7 @@ import { DateTime } from 'luxon';
  * The processor to ignore a pull request
  */
 export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequestProcessor> {
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
   }
 
@@ -42,13 +42,11 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.githubPullRequest.assignees.totalCount > 0) {
+    if (this.processor.item.assignees.totalCount > 0) {
       this.processor.logger.info(
         `The pull request has`,
-        LoggerService.value(this.processor.githubPullRequest.assignees.totalCount),
-        LoggerFormatService.whiteBright(
-          `assignee${this.processor.githubPullRequest.assignees.totalCount > 1 ? `s` : ``}`
-        )
+        LoggerService.value(this.processor.item.assignees.totalCount),
+        LoggerFormatService.whiteBright(`assignee${this.processor.item.assignees.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
@@ -80,13 +78,11 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.githubPullRequest.projectCards.totalCount > 0) {
+    if (this.processor.item.projectCards.totalCount > 0) {
       this.processor.logger.info(
         `The pull request has`,
-        LoggerService.value(this.processor.githubPullRequest.projectCards.totalCount),
-        LoggerFormatService.whiteBright(
-          `project card${this.processor.githubPullRequest.projectCards.totalCount > 1 ? `s` : ``}`
-        )
+        LoggerService.value(this.processor.item.projectCards.totalCount),
+        LoggerFormatService.whiteBright(`project card${this.processor.item.projectCards.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
@@ -157,7 +153,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     );
 
     const staleLabel: string = pullRequestsInputs.pullRequestStaleLabel;
-    const allLabels: string[] = this._getLabels(this.processor.githubPullRequest.labels.nodes).filter(
+    const allLabels: string[] = this._getLabels(this.processor.item.labels.nodes).filter(
       (label: Readonly<string>): boolean => label !== staleLabel
     );
 
@@ -181,7 +177,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const duplicatedLabels: string[] = getDuplicates(
-      this._getLabels(this.processor.githubPullRequest.labels.nodes),
+      this._getLabels(this.processor.item.labels.nodes),
       pullRequestsInputs.pullRequestIgnoreAnyLabels
     );
     const firstDuplicatedLabel: string | undefined = _.head(duplicatedLabels);
@@ -199,7 +195,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.githubPullRequest.labels;
+    const { totalCount } = this.processor.item.labels;
 
     if (totalCount > GithubApiPullRequestsService.labelsPerPullRequest) {
       this.processor.logger.warning(
@@ -223,7 +219,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
-      this._getAssignees(this.processor.githubPullRequest.assignees.nodes),
+      this._getAssignees(this.processor.item.assignees.nodes),
       pullRequestsInputs.pullRequestIgnoreAnyAssignees
     );
     const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssignees);
@@ -241,7 +237,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.githubPullRequest.assignees;
+    const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {
       this.processor.logger.warning(
@@ -261,6 +257,6 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
   }
 
   protected _isLocked(): boolean {
-    return this.processor.githubPullRequest.locked;
+    return this.processor.item.locked;
   }
 }

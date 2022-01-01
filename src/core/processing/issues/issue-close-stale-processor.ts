@@ -12,7 +12,7 @@ export class IssueCloseStaleProcessor extends AbstractCloseStaleProcessor<IssueP
   public readonly githubApiIssuesService$$: GithubApiIssuesService;
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
 
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssuesService$$ = new GithubApiIssuesService(issueProcessor);
     this.issueCommentsProcessor$$ = new IssueCommentsProcessor(issueProcessor);
@@ -27,6 +27,6 @@ export class IssueCloseStaleProcessor extends AbstractCloseStaleProcessor<IssueP
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubIssue.id;
+    return this.processor.item.id;
   }
 }

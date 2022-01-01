@@ -281,7 +281,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             locked: false,
           },
         });
@@ -310,7 +310,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request is locked`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               locked: true,
             },
           });
@@ -349,7 +349,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request is not locked`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               locked: false,
             },
           });
@@ -469,7 +469,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has no assignee`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 assignees: {
                   totalCount: 0,
                 },
@@ -499,7 +499,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has one assignee`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 assignees: {
                   totalCount: 1,
                 },
@@ -624,7 +624,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has no project card`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 projectCards: {
                   totalCount: 0,
                 },
@@ -654,7 +654,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has one project card`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 projectCards: {
                   totalCount: 1,
                 },
@@ -927,7 +927,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has no label`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [],
                 },
@@ -957,7 +957,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has one label which is the stale one`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -999,7 +999,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has one label which is not the stale one`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1043,7 +1043,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has three labels which are not the stale one`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1133,7 +1133,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request has one of the ignored labels`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -1176,7 +1176,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request does not have one of the ignored labels`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -1208,7 +1208,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has more than 20 labels`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1243,7 +1243,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe.each([19, 20])(`when the pull request has less or just 20 labels`, (totalCount: number): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 labels: {
                   nodes: [
                     createHydratedMock<IGithubApiLabel>({
@@ -1321,7 +1321,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request has one of the ignored assignees`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               assignees: {
                 nodes: [
                   createHydratedMock<IGithubApiAssignee>({
@@ -1364,7 +1364,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       describe(`when the pull request does not have one of the ignored assignees`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               assignees: {
                 nodes: [
                   createHydratedMock<IGithubApiAssignee>({
@@ -1396,7 +1396,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the pull request has more than 20 assignees`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 assignees: {
                   nodes: [
                     createHydratedMock<IGithubApiAssignee>({
@@ -1431,7 +1431,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe.each([19, 20])(`when the pull request has less or just 20 assignees`, (totalCount: number): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-              githubPullRequest: {
+              item: {
                 assignees: {
                   nodes: [
                     createHydratedMock<IGithubApiAssignee>({

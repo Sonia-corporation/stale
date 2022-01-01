@@ -9,7 +9,7 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
  * The processor to check if a pull request is stale
  */
 export class PullRequestIsStaleProcessor extends AbstractIsStaleProcessor<PullRequestProcessor> {
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
   }
 
@@ -20,6 +20,6 @@ export class PullRequestIsStaleProcessor extends AbstractIsStaleProcessor<PullRe
   }
 
   protected _getLabels(): IGithubApiLabel[] {
-    return this.processor.githubPullRequest.labels.nodes;
+    return this.processor.item.labels.nodes;
   }
 }

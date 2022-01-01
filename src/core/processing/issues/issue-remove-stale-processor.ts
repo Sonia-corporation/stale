@@ -24,7 +24,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
   public readonly githubApiIssueTimelineItemsService$$: GithubApiIssueTimelineItemsService;
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
 
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssueTimelineItemsService$$ = new GithubApiIssueTimelineItemsService(this.processor);
     this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(this.processor);
@@ -40,7 +40,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
     this.processor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsIssueLabeledEvents =
-      await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.processor.githubIssue.number);
+      await this.githubApiIssueTimelineItemsService$$.fetchIssueAddedLabels(this.processor.item.number);
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsIssueLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
@@ -114,7 +114,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
     this.processor.logger.info(`Removing the stale label from this issue...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiIssueLabelsService$$.removeLabel(this.processor.githubIssue.id, label.id);
+      await this.githubApiIssueLabelsService$$.removeLabel(this.processor.item.id, label.id);
 
       this.processor.logger.info(`The stale label was removed`);
     } else {

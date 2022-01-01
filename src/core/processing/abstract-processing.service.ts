@@ -2,6 +2,7 @@ import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-ge
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { IGithubApiIssuesPagination } from '@github/api/issues/interfaces/github-api-issues-pagination.interface';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
+import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
 import { IGithubApiPullRequestsPagination } from '@github/api/pull-requests/interfaces/github-api-pull-requests-pagination.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -118,11 +119,11 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
   /**
    * @description
    * Process the given item
-   * @param {Readonly<IGithubApiIssue>} item The item to process
+   * @param {Readonly<IGithubApiIssue | IGithubApiPullRequest>} item The item to process
    * @returns {Promise<void>}
    * @protected
    */
-  protected abstract _process(item: Readonly<IGithubApiIssue>): Promise<void>;
+  protected abstract _process(item: Readonly<IGithubApiIssue | IGithubApiPullRequest>): Promise<void>;
 
   /**
    * @description

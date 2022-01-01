@@ -8,7 +8,7 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
  * The processor to check if a stale pull request should be closed
  */
 export class PullRequestShouldCloseStaleProcessor extends AbstractShouldCloseStaleProcessor<PullRequestProcessor> {
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
   }
 

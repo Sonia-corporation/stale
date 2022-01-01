@@ -47,7 +47,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             number: 888,
           },
         });
@@ -584,7 +584,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
         staleLabelId = faker.datatype.uuid();
         pullRequestId = faker.datatype.uuid();
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             id: pullRequestId,
           },
         });

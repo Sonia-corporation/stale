@@ -125,7 +125,7 @@ describe(`IssueStaleProcessor`, (): void => {
         issueStaleLabel = faker.random.word();
         staleLabelId = faker.datatype.uuid();
         issueProcessor = createHydratedMock<IssueProcessor>({
-          githubIssue: {
+          item: {
             id: issueId,
           },
         });

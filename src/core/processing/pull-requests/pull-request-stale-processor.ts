@@ -15,7 +15,7 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
   public readonly githubApiPullRequestLabelsService$$: GithubApiPullRequestLabelsService;
   public readonly pullRequestCommentsProcessor$$: PullRequestCommentsProcessor;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
     this.githubApiPullRequestLabelsService$$ = new GithubApiPullRequestLabelsService(this.processor);
     this.pullRequestCommentsProcessor$$ = new PullRequestCommentsProcessor(this.processor);
@@ -34,7 +34,7 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubPullRequest.id;
+    return this.processor.item.id;
   }
 
   protected _addLabel(targetId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> {

@@ -12,7 +12,7 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
   public readonly githubApiPullRequestsService$$: GithubApiPullRequestsService;
   public readonly pullRequestCommentsProcessor$$: PullRequestCommentsProcessor;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
     this.githubApiPullRequestsService$$ = new GithubApiPullRequestsService(pullRequestProcessor);
     this.pullRequestCommentsProcessor$$ = new PullRequestCommentsProcessor(pullRequestProcessor);
@@ -27,6 +27,6 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubPullRequest.id;
+    return this.processor.item.id;
   }
 }

@@ -68,7 +68,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
       describe(`when the pull request has already the stale label`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({
@@ -102,7 +102,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
       describe(`when the pull request does not have the stale label`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-            githubPullRequest: {
+            item: {
               labels: {
                 nodes: [
                   createHydratedMock<IGithubApiLabel>({

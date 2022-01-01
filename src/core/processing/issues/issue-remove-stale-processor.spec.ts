@@ -47,7 +47,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>({
-          githubIssue: {
+          item: {
             number: 888,
           },
         });
@@ -555,7 +555,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         staleLabelId = faker.datatype.uuid();
         issueId = faker.datatype.uuid();
         issueProcessor = createHydratedMock<IssueProcessor>({
-          githubIssue: {
+          item: {
             id: issueId,
           },
         });

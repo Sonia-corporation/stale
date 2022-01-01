@@ -26,32 +26,28 @@ jest.mock(`@core/processing/pull-requests/pull-request-close-stale-processor`);
 
 describe(`PullRequestProcessor`, (): void => {
   let gitHubApiPullRequest: IGithubApiPullRequest;
+  let logger: PullRequestLogger;
 
   beforeEach((): void => {
     gitHubApiPullRequest = createHydratedMock<IGithubApiPullRequest>();
+    logger = createHydratedMock<PullRequestLogger>();
   });
 
   describe(`constructor()`, (): void => {
     it(`should save the given pull request`, (): void => {
       expect.assertions(1);
 
-      const result = new PullRequestProcessor(gitHubApiPullRequest);
+      const result = new PullRequestProcessor(gitHubApiPullRequest, logger);
 
-      expect(result.githubPullRequest).toStrictEqual(gitHubApiPullRequest);
+      expect(result.item).toStrictEqual(gitHubApiPullRequest);
     });
 
-    it(`should create a logger just for this pull request`, (): void => {
-      expect.assertions(3);
-      const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = mocked(PullRequestLogger, true);
-      gitHubApiPullRequest = createHydratedMock<IGithubApiPullRequest>({
-        number: 8,
-      });
+    it(`should save the given logger`, (): void => {
+      expect.assertions(1);
 
-      const result = new PullRequestProcessor(gitHubApiPullRequest);
+      const result = new PullRequestProcessor(gitHubApiPullRequest, logger);
 
-      expect(mockedPullRequestLogger).toHaveBeenCalledTimes(1);
-      expect(mockedPullRequestLogger).toHaveBeenCalledWith(8);
-      expect(result.logger).toBeInstanceOf(PullRequestLogger);
+      expect(result.logger).toStrictEqual(logger);
     });
   });
 
@@ -63,7 +59,7 @@ describe(`PullRequestProcessor`, (): void => {
         number: 8,
         url: `dummy-url`,
       });
-      pullRequestProcessor = new PullRequestProcessor(gitHubApiPullRequest);
+      pullRequestProcessor = new PullRequestProcessor(gitHubApiPullRequest, logger);
     });
 
     describe(`process()`, (): void => {
@@ -278,7 +274,8 @@ describe(`PullRequestProcessor`, (): void => {
           pullRequestProcessor = new PullRequestProcessor(
             createHydratedMock<IGithubApiPullRequest>({
               updatedAt: `dummy-wrong-date`,
-            })
+            }),
+            logger
           );
         });
 
@@ -296,7 +293,8 @@ describe(`PullRequestProcessor`, (): void => {
               updatedAt: DateTime.now().toISO({
                 includeOffset: false,
               }),
-            })
+            }),
+            logger
           );
         });
 
@@ -317,7 +315,8 @@ describe(`PullRequestProcessor`, (): void => {
           pullRequestProcessor = new PullRequestProcessor(
             createHydratedMock<IGithubApiPullRequest>({
               createdAt: `dummy-wrong-date`,
-            })
+            }),
+            logger
           );
         });
 
@@ -335,7 +334,8 @@ describe(`PullRequestProcessor`, (): void => {
               createdAt: DateTime.now().toISO({
                 includeOffset: false,
               }),
-            })
+            }),
+            logger
           );
         });
 

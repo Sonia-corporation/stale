@@ -63,7 +63,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
         issueProcessor = createHydratedMock<IssueProcessor>({
-          githubIssue: {
+          item: {
             id: issueId,
           },
         });

@@ -58,7 +58,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             id: pullRequestId,
           },
         });
@@ -240,7 +240,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
-          githubPullRequest: {
+          item: {
             id: pullRequestId,
           },
         });

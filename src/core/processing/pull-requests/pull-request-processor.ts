@@ -1,3 +1,4 @@
+import { AbstractProcessor } from '@core/processing/abstract-processor';
 import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-close-stale-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
@@ -7,83 +8,13 @@ import { PullRequestShouldCloseStaleProcessor } from '@core/processing/pull-requ
 import { PullRequestStaleProcessor } from '@core/processing/pull-requests/pull-request-stale-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
-import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
-import { createLink } from '@utils/links/create-link';
-import { LoggerFormatService } from '@utils/loggers/logger-format.service';
-import _ from 'lodash';
-import { DateTime } from 'luxon';
 
 /**
  * @description
  * The main processor to process a pull request
  */
-export class PullRequestProcessor {
-  public readonly githubPullRequest: IGithubApiPullRequest;
-  public readonly logger: PullRequestLogger;
+export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullRequest, PullRequestLogger> {
   public readonly type: 'pull request' = `pull request`;
-
-  public constructor(pullRequest: Readonly<IGithubApiPullRequest>) {
-    this.githubPullRequest = pullRequest;
-    this.logger = new PullRequestLogger(this.githubPullRequest.number);
-  }
-
-  /**
-   * @description
-   * First step to process a pull request
-   * @returns {Promise<void>}
-   */
-  public async process(): Promise<void> {
-    this.logger.startGroup(
-      `Processing the pull request`,
-      `${LoggerFormatService.magenta(
-        createLink(_.toString(this.githubPullRequest.number), this.githubPullRequest.url)
-      )}${LoggerFormatService.whiteBright(`...`)}`
-    );
-
-    if (this.shouldIgnore$$()) {
-      this.logger.info(`Ignored`);
-      PullRequestsStatisticsService.getInstance().increaseIgnoredPullRequestsCount();
-      this.stopProcessing$$();
-
-      return;
-    }
-
-    if (this.isAlreadyStale$$()) {
-      this.logger.info(`Already stale`);
-      PullRequestsStatisticsService.getInstance().increaseAlreadyStalePullRequestsCount();
-
-      const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
-
-      if (!isStaleStateRemoved) {
-        await this.processForClose$$();
-      } else {
-        this.stopProcessing$$();
-      }
-
-      return;
-    }
-
-    return this.processForStale$$();
-  }
-
-  /**
-   * @description
-   * Return the updatedAt pull request field formatted as a {DateTime}
-   * @returns {DateTime} Returns the updatedAt field formatted as a {DateTime}
-   */
-  public getUpdatedAt(): DateTime {
-    return iso8601ToDatetime(this.githubPullRequest.updatedAt);
-  }
-
-  /**
-   * @description
-   * Return the createdAt pull request field formatted as a {DateTime}
-   * @returns {DateTime} Returns the createdAt field formatted as a {DateTime}
-   */
-  public getCreatedAt(): DateTime {
-    return iso8601ToDatetime(this.githubPullRequest.createdAt);
-  }
-
   /**
    * @description
    * Only used log the end of the processing for this pull request
@@ -167,5 +98,13 @@ export class PullRequestProcessor {
     }
 
     this.stopProcessing$$();
+  }
+
+  protected _increaseIgnoredCount(): void {
+    PullRequestsStatisticsService.getInstance().increaseIgnoredPullRequestsCount();
+  }
+
+  protected _increaseAlreadyStaleCount(): void {
+    PullRequestsStatisticsService.getInstance().increaseAlreadyStalePullRequestsCount();
   }
 }

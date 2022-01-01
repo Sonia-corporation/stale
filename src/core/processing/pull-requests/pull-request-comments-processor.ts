@@ -10,7 +10,7 @@ import { IUuid } from '@utils/types/uuid';
 export class PullRequestCommentsProcessor extends AbstractCommentsProcessor<PullRequestProcessor> {
   public readonly githubApiPullRequestCommentsService$$: GithubApiPullRequestCommentsService;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
     this.githubApiPullRequestCommentsService$$ = new GithubApiPullRequestCommentsService(pullRequestProcessor);
   }
@@ -28,7 +28,7 @@ export class PullRequestCommentsProcessor extends AbstractCommentsProcessor<Pull
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubPullRequest.id;
+    return this.processor.item.id;
   }
 
   protected _increaseAddedCommentsCount(): void {

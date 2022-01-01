@@ -15,7 +15,7 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
 
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(issueProcessor);
     this.issueCommentsProcessor$$ = new IssueCommentsProcessor(issueProcessor);
@@ -34,7 +34,7 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubIssue.id;
+    return this.processor.item.id;
   }
 
   protected _addLabel(targetId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> {

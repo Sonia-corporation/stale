@@ -2,7 +2,7 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
 import { AbstractGithubApiLabelsService } from '@github/api/labels/abstract-github-api-labels.service';
 
 export class GithubApiPullRequestLabelsService extends AbstractGithubApiLabelsService<PullRequestProcessor> {
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
   }
 }

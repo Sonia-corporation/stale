@@ -17,7 +17,7 @@ import { DateTime } from 'luxon';
  * The processor to ignore an issue
  */
 export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor> {
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
   }
 
@@ -42,11 +42,11 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.githubIssue.assignees.totalCount > 0) {
+    if (this.processor.item.assignees.totalCount > 0) {
       this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.processor.githubIssue.assignees.totalCount),
-        LoggerFormatService.whiteBright(`assignee${this.processor.githubIssue.assignees.totalCount > 1 ? `s` : ``}`)
+        LoggerService.value(this.processor.item.assignees.totalCount),
+        LoggerFormatService.whiteBright(`assignee${this.processor.item.assignees.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
@@ -78,13 +78,11 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.githubIssue.projectCards.totalCount > 0) {
+    if (this.processor.item.projectCards.totalCount > 0) {
       this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.processor.githubIssue.projectCards.totalCount),
-        LoggerFormatService.whiteBright(
-          `project card${this.processor.githubIssue.projectCards.totalCount > 1 ? `s` : ``}`
-        )
+        LoggerService.value(this.processor.item.projectCards.totalCount),
+        LoggerFormatService.whiteBright(`project card${this.processor.item.projectCards.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
@@ -153,7 +151,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     );
 
     const staleLabel: string = issuesInputs.issueStaleLabel;
-    const allLabels: string[] = this._getLabels(this.processor.githubIssue.labels.nodes).filter(
+    const allLabels: string[] = this._getLabels(this.processor.item.labels.nodes).filter(
       (label: Readonly<string>): boolean => label !== staleLabel
     );
 
@@ -177,7 +175,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedLabels: string[] = getDuplicates(
-      this._getLabels(this.processor.githubIssue.labels.nodes),
+      this._getLabels(this.processor.item.labels.nodes),
       issuesInputs.issueIgnoreAnyLabels
     );
     const firstDuplicatedLabel: string | undefined = _.head(duplicatedLabels);
@@ -195,7 +193,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.githubIssue.labels;
+    const { totalCount } = this.processor.item.labels;
 
     if (totalCount > GithubApiIssuesService.labelsPerIssue) {
       this.processor.logger.warning(
@@ -219,7 +217,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedAssignees: string[] = getDuplicates(
-      this._getAssignees(this.processor.githubIssue.assignees.nodes),
+      this._getAssignees(this.processor.item.assignees.nodes),
       issuesInputs.issueIgnoreAnyAssignees
     );
     const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssignees);
@@ -237,7 +235,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.githubIssue.assignees;
+    const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiIssuesService.assigneesPerIssue) {
       this.processor.logger.warning(
@@ -257,6 +255,6 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
   }
 
   protected _isLocked(): boolean {
-    return this.processor.githubIssue.locked;
+    return this.processor.item.locked;
   }
 }

@@ -24,7 +24,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
   public readonly githubApiPullRequestTimelineItemsService$$: GithubApiPullRequestTimelineItemsService;
   public readonly githubApiPullRequestLabelsService$$: GithubApiPullRequestLabelsService;
 
-  public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
+  public constructor(pullRequestProcessor: PullRequestProcessor) {
     super(pullRequestProcessor);
     this.githubApiPullRequestTimelineItemsService$$ = new GithubApiPullRequestTimelineItemsService(this.processor);
     this.githubApiPullRequestLabelsService$$ = new GithubApiPullRequestLabelsService(this.processor);
@@ -40,9 +40,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
     this.processor.logger.info(`Checking if the stale state should be removed...`);
 
     const addedLabelEvents: IGithubApiTimelineItemsPullRequestLabeledEvents =
-      await this.githubApiPullRequestTimelineItemsService$$.fetchPullRequestAddedLabels(
-        this.processor.githubPullRequest.number
-      );
+      await this.githubApiPullRequestTimelineItemsService$$.fetchPullRequestAddedLabels(this.processor.item.number);
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
     const staleLabelEvents: IGithubApiTimelineItemsPullRequestLabeledEvent[] = this._getStaleLabelEvents(
       addedLabelEvents,
@@ -124,7 +122,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
     this.processor.logger.info(`Removing the stale label from this pull request...`);
 
     if (!commonInputs.dryRun) {
-      await this.githubApiPullRequestLabelsService$$.removeLabel(this.processor.githubPullRequest.id, label.id);
+      await this.githubApiPullRequestLabelsService$$.removeLabel(this.processor.item.id, label.id);
 
       this.processor.logger.info(`The stale label was removed`);
     } else {

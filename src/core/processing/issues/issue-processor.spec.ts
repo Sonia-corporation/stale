@@ -26,32 +26,28 @@ jest.mock(`@core/processing/issues/issue-close-stale-processor`);
 
 describe(`IssueProcessor`, (): void => {
   let gitHubApiIssue: IGithubApiIssue;
+  let logger: IssueLogger;
 
   beforeEach((): void => {
     gitHubApiIssue = createHydratedMock<IGithubApiIssue>();
+    logger = createHydratedMock<IssueLogger>();
   });
 
   describe(`constructor()`, (): void => {
     it(`should save the given issue`, (): void => {
       expect.assertions(1);
 
-      const result = new IssueProcessor(gitHubApiIssue);
+      const result = new IssueProcessor(gitHubApiIssue, logger);
 
-      expect(result.githubIssue).toStrictEqual(gitHubApiIssue);
+      expect(result.item).toStrictEqual(gitHubApiIssue);
     });
 
-    it(`should create a logger just for this issue`, (): void => {
-      expect.assertions(3);
-      const mockedIssueLogger: MockedObjectDeep<typeof IssueLogger> = mocked(IssueLogger, true);
-      gitHubApiIssue = createHydratedMock<IGithubApiIssue>({
-        number: 8,
-      });
+    it(`should save the given logger`, (): void => {
+      expect.assertions(1);
 
-      const result = new IssueProcessor(gitHubApiIssue);
+      const result = new IssueProcessor(gitHubApiIssue, logger);
 
-      expect(mockedIssueLogger).toHaveBeenCalledTimes(1);
-      expect(mockedIssueLogger).toHaveBeenCalledWith(8);
-      expect(result.logger).toBeInstanceOf(IssueLogger);
+      expect(result.logger).toStrictEqual(logger);
     });
   });
 
@@ -63,7 +59,7 @@ describe(`IssueProcessor`, (): void => {
         number: 8,
         url: `dummy-url`,
       });
-      issueProcessor = new IssueProcessor(gitHubApiIssue);
+      issueProcessor = new IssueProcessor(gitHubApiIssue, logger);
     });
 
     describe(`process()`, (): void => {
@@ -275,7 +271,8 @@ describe(`IssueProcessor`, (): void => {
           issueProcessor = new IssueProcessor(
             createHydratedMock<IGithubApiIssue>({
               updatedAt: `dummy-wrong-date`,
-            })
+            }),
+            logger
           );
         });
 
@@ -293,7 +290,8 @@ describe(`IssueProcessor`, (): void => {
               updatedAt: DateTime.now().toISO({
                 includeOffset: false,
               }),
-            })
+            }),
+            logger
           );
         });
 
@@ -314,7 +312,8 @@ describe(`IssueProcessor`, (): void => {
           issueProcessor = new IssueProcessor(
             createHydratedMock<IGithubApiIssue>({
               createdAt: `dummy-wrong-date`,
-            })
+            }),
+            logger
           );
         });
 
@@ -332,7 +331,8 @@ describe(`IssueProcessor`, (): void => {
               createdAt: DateTime.now().toISO({
                 includeOffset: false,
               }),
-            })
+            }),
+            logger
           );
         });
 

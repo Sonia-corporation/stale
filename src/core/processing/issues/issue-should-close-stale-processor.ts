@@ -8,7 +8,7 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
  * The processor to check if a stale issue should be closed
  */
 export class IssueShouldCloseStaleProcessor extends AbstractShouldCloseStaleProcessor<IssueProcessor> {
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
   }
 

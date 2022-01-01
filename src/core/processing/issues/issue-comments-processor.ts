@@ -10,7 +10,7 @@ import { IUuid } from '@utils/types/uuid';
 export class IssueCommentsProcessor extends AbstractCommentsProcessor<IssueProcessor> {
   public readonly githubApiIssueCommentsService$$: GithubApiIssueCommentsService;
 
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssueCommentsService$$ = new GithubApiIssueCommentsService(issueProcessor);
   }
@@ -28,7 +28,7 @@ export class IssueCommentsProcessor extends AbstractCommentsProcessor<IssueProce
   }
 
   protected _getItemId(): IUuid {
-    return this.processor.githubIssue.id;
+    return this.processor.item.id;
   }
 
   protected _increaseAddedCommentsCount(): void {

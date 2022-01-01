@@ -1,4 +1,5 @@
 import { AbstractProcessingService } from '@core/processing/abstract-processing.service';
+import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
@@ -24,7 +25,7 @@ export class PullRequestsService extends AbstractProcessingService<IGithubApiGet
   }
 
   protected _process(pullRequest: Readonly<IGithubApiPullRequest>): Promise<void> {
-    return new PullRequestProcessor(pullRequest).process();
+    return new PullRequestProcessor(pullRequest, new PullRequestLogger(pullRequest.number)).process();
   }
 
   protected _getItems(fromPageId: Readonly<string | undefined>): Promise<IGithubApiGetPullRequests> {

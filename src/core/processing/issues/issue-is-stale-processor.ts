@@ -9,7 +9,7 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
  * The processor to check if an issue is stale
  */
 export class IssueIsStaleProcessor extends AbstractIsStaleProcessor<IssueProcessor> {
-  public constructor(issueProcessor: Readonly<IssueProcessor>) {
+  public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
   }
 
@@ -20,6 +20,6 @@ export class IssueIsStaleProcessor extends AbstractIsStaleProcessor<IssueProcess
   }
 
   protected _getLabels(): IGithubApiLabel[] {
-    return this.processor.githubIssue.labels.nodes;
+    return this.processor.item.labels.nodes;
   }
 }

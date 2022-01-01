@@ -1,3 +1,4 @@
+import { AbstractProcessor } from '@core/processing/abstract-processor';
 import { IssueCloseStaleProcessor } from '@core/processing/issues/issue-close-stale-processor';
 import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-processor';
 import { IssueIsStaleProcessor } from '@core/processing/issues/issue-is-stale-processor';
@@ -7,91 +8,13 @@ import { IssueShouldCloseStaleProcessor } from '@core/processing/issues/issue-sh
 import { IssueStaleProcessor } from '@core/processing/issues/issue-stale-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
-import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
-import { createLink } from '@utils/links/create-link';
-import { LoggerFormatService } from '@utils/loggers/logger-format.service';
-import _ from 'lodash';
-import { DateTime } from 'luxon';
 
 /**
  * @description
  * The main processor to process an issue
  */
-export class IssueProcessor {
-  public readonly githubIssue: IGithubApiIssue;
-  public readonly logger: IssueLogger;
+export class IssueProcessor extends AbstractProcessor<IGithubApiIssue, IssueLogger> {
   public readonly type: 'issue' = `issue`;
-
-  public constructor(issue: Readonly<IGithubApiIssue>) {
-    this.githubIssue = issue;
-    this.logger = new IssueLogger(this.githubIssue.number);
-  }
-
-  /**
-   * @description
-   * First step to process an issue
-   * @returns {Promise<void>}
-   */
-  public async process(): Promise<void> {
-    this.logger.startGroup(
-      `Processing the issue`,
-      `${LoggerFormatService.magenta(
-        createLink(_.toString(this.githubIssue.number), this.githubIssue.url)
-      )}${LoggerFormatService.whiteBright(`...`)}`
-    );
-
-    if (this.shouldIgnore$$()) {
-      this.logger.info(`Ignored`);
-      IssuesStatisticsService.getInstance().increaseIgnoredIssuesCount();
-      this.stopProcessing$$();
-
-      return;
-    }
-
-    if (this.isAlreadyStale$$()) {
-      this.logger.info(`Already stale`);
-      IssuesStatisticsService.getInstance().increaseAlreadyStaleIssuesCount();
-
-      const isStaleStateRemoved: boolean = await this.processToRemoveStale$$();
-
-      if (!isStaleStateRemoved) {
-        await this.processForClose$$();
-      } else {
-        this.stopProcessing$$();
-      }
-
-      return;
-    }
-
-    return this.processForStale$$();
-  }
-
-  /**
-   * @description
-   * Return the updatedAt issue field formatted as a {DateTime}
-   * @returns {DateTime} Returns the updatedAt field formatted as a {DateTime}
-   */
-  public getUpdatedAt(): DateTime {
-    return iso8601ToDatetime(this.githubIssue.updatedAt);
-  }
-
-  /**
-   * @description
-   * Return the createdAt issue field formatted as a {DateTime}
-   * @returns {DateTime} Returns the createdAt field formatted as a {DateTime}
-   */
-  public getCreatedAt(): DateTime {
-    return iso8601ToDatetime(this.githubIssue.createdAt);
-  }
-
-  /**
-   * @description
-   * Only used log the end of the processing for this issue
-   */
-  public stopProcessing$$(): void {
-    this.logger.info(`Processing stopped`);
-    this.logger.endGroup();
-  }
 
   /**
    * @description
@@ -166,5 +89,13 @@ export class IssueProcessor {
     }
 
     this.stopProcessing$$();
+  }
+
+  protected _increaseIgnoredCount(): void {
+    IssuesStatisticsService.getInstance().increaseIgnoredIssuesCount();
+  }
+
+  protected _increaseAlreadyStaleCount(): void {
+    IssuesStatisticsService.getInstance().increaseAlreadyStaleIssuesCount();
   }
 }
