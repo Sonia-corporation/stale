@@ -127,7 +127,7 @@ describe(`IssueLogger`, (): void => {
         await issueLogger.group(`dummy name`, (): Promise<void> => Promise.resolve());
 
         expect(loggerServiceGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceGroupSpy.mock.calls[0][0]).toStrictEqual(`red-[#8] whiteBright-dummy name`);
+        expect(loggerServiceGroupSpy.mock.calls[0][0]).toBe(`red-[#8] whiteBright-dummy name`);
         expect(loggerServiceGroupSpy.mock.calls[0][1]).toBeFunction();
       });
     });

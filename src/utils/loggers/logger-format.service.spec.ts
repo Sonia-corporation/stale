@@ -15,7 +15,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `whiteBright`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -33,7 +33,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `yellowBright`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -51,7 +51,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `magenta`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -69,7 +69,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `cyan`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -87,7 +87,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `yellow`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -105,7 +105,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `white`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -123,7 +123,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `green`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -141,7 +141,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `red`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -159,7 +159,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `blue`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 
@@ -177,7 +177,7 @@ describe(`LoggerFormatService`, (): void => {
 
       expect(formatSpy).toHaveBeenCalledTimes(1);
       expect(formatSpy).toHaveBeenCalledWith(`dummy message`, `bold`);
-      expect(result).toStrictEqual(`formatted message`);
+      expect(result).toBe(`formatted message`);
     });
   });
 

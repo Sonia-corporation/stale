@@ -108,7 +108,7 @@ describe(`IssuesInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(1, `issue-close-comment`, { required: false });
-      expect(service.inputs$$?.issueCloseComment).toStrictEqual(`dummy-issue-close-comment`);
+      expect(service.inputs$$?.issueCloseComment).toBe(`dummy-issue-close-comment`);
     });
 
     it(`should get the issue-days-before-close input, parse it and set it`, (): void => {
@@ -198,7 +198,7 @@ describe(`IssuesInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(2, `issue-ignore-before-creation-date`, { required: false });
-      expect(service.inputs$$?.issueIgnoreBeforeCreationDate).toStrictEqual(`dummy-issue-ignore-before-creation-date`);
+      expect(service.inputs$$?.issueIgnoreBeforeCreationDate).toBe(`dummy-issue-ignore-before-creation-date`);
     });
 
     it(`should get the issue-stale-comment input, parse it and set it`, (): void => {
@@ -208,7 +208,7 @@ describe(`IssuesInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(3, `issue-stale-comment`, { required: false });
-      expect(service.inputs$$?.issueStaleComment).toStrictEqual(`dummy-issue-stale-comment`);
+      expect(service.inputs$$?.issueStaleComment).toBe(`dummy-issue-stale-comment`);
     });
 
     it(`should get the issue-stale-label input, parse it and set it`, (): void => {
@@ -218,7 +218,7 @@ describe(`IssuesInputsService`, (): void => {
 
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(4, `issue-stale-label`, { required: false });
-      expect(service.inputs$$?.issueStaleLabel).toStrictEqual(`dummy-issue-stale-label`);
+      expect(service.inputs$$?.issueStaleLabel).toBe(`dummy-issue-stale-label`);
     });
 
     it(`should return the list of parsed inputs`, (): void => {

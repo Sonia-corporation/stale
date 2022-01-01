@@ -210,7 +210,7 @@ describe(`LoggerService`, (): void => {
       await LoggerService.group(`dummy name`, (): Promise<void> => Promise.resolve());
 
       expect(coreGroupSpy).toHaveBeenCalledTimes(1);
-      expect(coreGroupSpy.mock.calls[0][0]).toStrictEqual(`whiteBright-dummy name`);
+      expect(coreGroupSpy.mock.calls[0][0]).toBe(`whiteBright-dummy name`);
       expect(coreGroupSpy.mock.calls[0][1]).toBeFunction();
     });
   });
@@ -284,7 +284,7 @@ describe(`LoggerService`, (): void => {
 
       const result = LoggerService.input(EInputs.GITHUB_TOKEN);
 
-      expect(result).toStrictEqual(`magenta-github-token`);
+      expect(result).toBe(`magenta-github-token`);
     });
   });
 
@@ -301,7 +301,7 @@ describe(`LoggerService`, (): void => {
 
         const result = LoggerService.value(value);
 
-        expect(result).toStrictEqual(`cyan-${value}`);
+        expect(result).toBe(`cyan-${value}`);
       });
     });
 
@@ -315,7 +315,7 @@ describe(`LoggerService`, (): void => {
 
         const result = LoggerService.value(value);
 
-        expect(result).toStrictEqual(`cyan-true`);
+        expect(result).toBe(`cyan-true`);
       });
     });
 
@@ -329,7 +329,7 @@ describe(`LoggerService`, (): void => {
 
         const result = LoggerService.value(value);
 
-        expect(result).toStrictEqual(`cyan-false`);
+        expect(result).toBe(`cyan-false`);
       });
     });
 
@@ -348,7 +348,7 @@ describe(`LoggerService`, (): void => {
 
         const result = LoggerService.value(value);
 
-        expect(result).toStrictEqual(`cyan-${value1}, ${value2}`);
+        expect(result).toBe(`cyan-${value1}, ${value2}`);
       });
     });
   });

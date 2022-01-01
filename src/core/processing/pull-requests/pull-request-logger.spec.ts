@@ -130,7 +130,7 @@ describe(`PullRequestLogger`, (): void => {
         await pullRequestLogger.group(`dummy name`, (): Promise<void> => Promise.resolve());
 
         expect(loggerServiceGroupSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceGroupSpy.mock.calls[0][0]).toStrictEqual(`blue-[#8] whiteBright-dummy name`);
+        expect(loggerServiceGroupSpy.mock.calls[0][0]).toBe(`blue-[#8] whiteBright-dummy name`);
         expect(loggerServiceGroupSpy.mock.calls[0][1]).toBeFunction();
       });
     });
