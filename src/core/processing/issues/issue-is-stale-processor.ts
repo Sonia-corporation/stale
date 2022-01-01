@@ -1,5 +1,6 @@
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
+import { AbstractIsStaleProcessor } from '@core/processing/abstract-is-stale-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 
@@ -7,34 +8,18 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
  * @description
  * The processor to check if an issue is stale
  */
-export class IssueIsStaleProcessor {
-  public readonly issueProcessor: IssueProcessor;
-
+export class IssueIsStaleProcessor extends AbstractIsStaleProcessor<IssueProcessor> {
   public constructor(issueProcessor: Readonly<IssueProcessor>) {
-    this.issueProcessor = issueProcessor;
+    super(issueProcessor);
   }
 
-  public isStale(): boolean {
-    this.issueProcessor.logger.info(`Checking if the issue is already stale...`);
-
-    const staleLabel: IGithubApiLabel | undefined = this._getStaleLabel();
-
-    if (staleLabel) {
-      this.issueProcessor.logger.info(`The stale label is already added on this issue`);
-
-      return true;
-    }
-
-    this.issueProcessor.logger.info(`The stale label is not yet on this issue`);
-
-    return false;
-  }
-
-  private _getStaleLabel(): IGithubApiLabel | undefined {
+  protected _getInputStaleLabel(): string {
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    return this.issueProcessor.githubIssue.labels.nodes.find(
-      (label: Readonly<IGithubApiLabel>): boolean => label.name === issuesInputs.issueStaleLabel
-    );
+    return issuesInputs.issueStaleLabel;
+  }
+
+  protected _getLabels(): IGithubApiLabel[] {
+    return this.processor.githubIssue.labels.nodes;
   }
 }

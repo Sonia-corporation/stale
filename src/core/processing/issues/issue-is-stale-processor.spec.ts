@@ -21,7 +21,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
 
       const result = new IssueIsStaleProcessor(issueProcessor);
 
-      expect(result.issueProcessor).toStrictEqual(issueProcessor);
+      expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
@@ -39,9 +39,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
       beforeEach((): void => {
         issueIsStaleProcessor = new IssueIsStaleProcessor(issueProcessor);
 
-        issueProcessorLoggerInfoSpy = jest
-          .spyOn(issueIsStaleProcessor.issueProcessor.logger, `info`)
-          .mockImplementation();
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIsStaleProcessor.processor.logger, `info`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueStaleLabel: `stale`,
@@ -75,9 +73,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
           });
           issueIsStaleProcessor = new IssueIsStaleProcessor(issueProcessor);
 
-          issueProcessorLoggerInfoSpy = jest
-            .spyOn(issueIsStaleProcessor.issueProcessor.logger, `info`)
-            .mockImplementation();
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIsStaleProcessor.processor.logger, `info`).mockImplementation();
         });
 
         it(`should return true`, (): void => {
@@ -112,9 +108,7 @@ describe(`IssueIsStaleProcessor`, (): void => {
           });
           issueIsStaleProcessor = new IssueIsStaleProcessor(issueProcessor);
 
-          issueProcessorLoggerInfoSpy = jest
-            .spyOn(issueIsStaleProcessor.issueProcessor.logger, `info`)
-            .mockImplementation();
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIsStaleProcessor.processor.logger, `info`).mockImplementation();
         });
 
         it(`should return false`, (): void => {

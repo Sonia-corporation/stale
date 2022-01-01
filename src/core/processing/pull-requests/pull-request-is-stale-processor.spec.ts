@@ -21,7 +21,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
 
       const result = new PullRequestIsStaleProcessor(pullRequestProcessor);
 
-      expect(result.pullRequestProcessor).toStrictEqual(pullRequestProcessor);
+      expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 
@@ -40,7 +40,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
         pullRequestIsStaleProcessor = new PullRequestIsStaleProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
-          .spyOn(pullRequestIsStaleProcessor.pullRequestProcessor.logger, `info`)
+          .spyOn(pullRequestIsStaleProcessor.processor.logger, `info`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -81,7 +81,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
           pullRequestIsStaleProcessor = new PullRequestIsStaleProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIsStaleProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIsStaleProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 
@@ -118,7 +118,7 @@ describe(`PullRequestIsStaleProcessor`, (): void => {
           pullRequestIsStaleProcessor = new PullRequestIsStaleProcessor(pullRequestProcessor);
 
           pullRequestProcessorLoggerInfoSpy = jest
-            .spyOn(pullRequestIsStaleProcessor.pullRequestProcessor.logger, `info`)
+            .spyOn(pullRequestIsStaleProcessor.processor.logger, `info`)
             .mockImplementation();
         });
 

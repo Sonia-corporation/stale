@@ -1,5 +1,6 @@
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
+import { AbstractIsStaleProcessor } from '@core/processing/abstract-is-stale-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 
@@ -7,34 +8,18 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
  * @description
  * The processor to check if a pull request is stale
  */
-export class PullRequestIsStaleProcessor {
-  public readonly pullRequestProcessor: PullRequestProcessor;
-
+export class PullRequestIsStaleProcessor extends AbstractIsStaleProcessor<PullRequestProcessor> {
   public constructor(pullRequestProcessor: Readonly<PullRequestProcessor>) {
-    this.pullRequestProcessor = pullRequestProcessor;
+    super(pullRequestProcessor);
   }
 
-  public isStale(): boolean {
-    this.pullRequestProcessor.logger.info(`Checking if the pull request is already stale...`);
-
-    const staleLabel: IGithubApiLabel | undefined = this._getStaleLabel();
-
-    if (staleLabel) {
-      this.pullRequestProcessor.logger.info(`The stale label is already added on this pull request`);
-
-      return true;
-    }
-
-    this.pullRequestProcessor.logger.info(`The stale label is not yet on this pull request`);
-
-    return false;
-  }
-
-  private _getStaleLabel(): IGithubApiLabel | undefined {
+  protected _getInputStaleLabel(): string {
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
-    return this.pullRequestProcessor.githubPullRequest.labels.nodes.find(
-      (label: Readonly<IGithubApiLabel>): boolean => label.name === pullRequestsInputs.pullRequestStaleLabel
-    );
+    return pullRequestsInputs.pullRequestStaleLabel;
+  }
+
+  protected _getLabels(): IGithubApiLabel[] {
+    return this.processor.githubPullRequest.labels.nodes;
   }
 }
