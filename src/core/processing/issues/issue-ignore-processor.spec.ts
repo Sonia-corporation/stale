@@ -515,14 +515,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
     describe(`hasAllIgnoredProjectCards$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputs: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>();
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAllProjectCards: false,
           })
@@ -539,13 +539,13 @@ describe(`IssueIgnoreProcessor`, (): void => {
           1,
           `Checking if all the project cards on this issue should be ignored...`
         );
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the input to ignore issue with a project card is disabled`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreAllProjectCards: false,
             })
@@ -570,7 +570,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
       describe(`when the input to ignore issue with a project card is enabled`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreAllProjectCards: true,
             })
@@ -589,8 +589,8 @@ describe(`IssueIgnoreProcessor`, (): void => {
             `input-issue-ignore-all-project-cards`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-          expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         });
 
         describe(`when the issue has no project card`, (): void => {
@@ -637,11 +637,13 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueIgnoreAllProjectCards: true,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllProjectCards: true,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -664,7 +666,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
     describe(`hasIgnoredCreationDate$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputs: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorGetCreatedAtSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -672,7 +674,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreBeforeCreationDate: ``,
           })
@@ -690,13 +692,13 @@ describe(`IssueIgnoreProcessor`, (): void => {
           1,
           `Checking if this issue should be ignored based on its creation date...`
         );
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the date is not valid`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreBeforeCreationDate: `dummy`,
             })
@@ -721,7 +723,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
       describe(`when the date is valid`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                 includeOffset: false,
@@ -753,7 +755,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the creation date of the issue is more recent that the creation date input`, (): void => {
           beforeEach((): void => {
             issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.now());
-            issuesInputsServiceGetInputs.mockReturnValue(
+            issuesInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                   includeOffset: false,
@@ -779,7 +781,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         describe(`when the creation date of the issue is older that the creation date input`, (): void => {
           beforeEach((): void => {
             issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.utc(2019));
-            issuesInputsServiceGetInputs.mockReturnValue(
+            issuesInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IIssuesInputs>({
                 issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                   includeOffset: false,
@@ -806,14 +808,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
     describe(`hasAllIgnoredLabels$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputs: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>();
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAllLabels: false,
           })
@@ -830,13 +832,13 @@ describe(`IssueIgnoreProcessor`, (): void => {
           1,
           `Checking if all the labels on this issue should be ignored...`
         );
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the input to ignore issue with a label is disabled`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreAllLabels: false,
             })
@@ -861,7 +863,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
       describe(`when the input to ignore issue with a label is enabled`, (): void => {
         beforeEach((): void => {
-          issuesInputsServiceGetInputs.mockReturnValue(
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
               issueIgnoreAllLabels: true,
             })
@@ -880,8 +882,8 @@ describe(`IssueIgnoreProcessor`, (): void => {
             `input-issue-ignore-all-labels`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-          expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         });
 
         describe(`when the issue has no label`, (): void => {
@@ -929,12 +931,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueIgnoreAllLabels: true,
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllLabels: true,
+                  issueStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return false`, (): void => {
@@ -966,12 +970,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueIgnoreAllLabels: true,
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllLabels: true,
+                  issueStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -1014,12 +1020,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerInfoSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
-              createHydratedMock<IIssuesInputs>({
-                issueIgnoreAllLabels: true,
-                issueStaleLabel: `stale`,
-              })
-            );
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllLabels: true,
+                  issueStaleLabel: `stale`,
+                })
+              );
           });
 
           it(`should return true`, (): void => {
@@ -1043,7 +1051,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredLabels$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerWarningSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputs: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>();
@@ -1053,7 +1061,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyLabels: [`ignored-label`],
           })
@@ -1070,8 +1078,8 @@ describe(`IssueIgnoreProcessor`, (): void => {
           1,
           `Checking if this issue has one of the ignored labels...`
         );
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the issue has one of the ignored labels`, (): void => {
@@ -1223,7 +1231,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredAssignees$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerWarningSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputs: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>();
@@ -1233,7 +1241,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
-        issuesInputsServiceGetInputs = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyAssignees: [`ignored-assignee`],
           })
@@ -1250,8 +1258,8 @@ describe(`IssueIgnoreProcessor`, (): void => {
           1,
           `Checking if this issue has one of the ignored assignees...`
         );
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the issue has one of the ignored assignees`, (): void => {

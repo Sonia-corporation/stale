@@ -42,6 +42,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
+      let isDraftSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
@@ -61,6 +62,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         hasIgnoredCreationDateSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasIgnoredCreationDate$$`)
           .mockImplementation();
+        isDraftSpy = jest.spyOn(pullRequestIgnoreProcessor, `isDraft$$`).mockImplementation();
       });
 
       it(`should check if the pull request is locked`, (): void => {
@@ -245,12 +247,41 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                       hasIgnoredCreationDateSpy.mockReturnValue(false);
                     });
 
-                    it(`should return false`, (): void => {
-                      expect.assertions(1);
+                    it(`should check if the pull request is a draft`, (): void => {
+                      expect.assertions(2);
 
-                      const result = pullRequestIgnoreProcessor.shouldIgnore();
+                      pullRequestIgnoreProcessor.shouldIgnore();
 
-                      expect(result).toBeFalse();
+                      expect(isDraftSpy).toHaveBeenCalledTimes(1);
+                      expect(isDraftSpy).toHaveBeenCalledWith();
+                    });
+
+                    describe(`when the pull request is not a draft`, (): void => {
+                      beforeEach((): void => {
+                        isDraftSpy.mockReturnValue(false);
+                      });
+
+                      it(`should return true`, (): void => {
+                        expect.assertions(1);
+
+                        const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                        expect(result).toBeFalse();
+                      });
+                    });
+
+                    describe(`when the pull request is a draft`, (): void => {
+                      beforeEach((): void => {
+                        isDraftSpy.mockReturnValue(true);
+                      });
+
+                      it(`should return true`, (): void => {
+                        expect.assertions(1);
+
+                        const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                        expect(result).toBeTrue();
+                      });
                     });
                   });
                 });
@@ -539,7 +570,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
     describe(`hasAllIgnoredProjectCards$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestsInputsServiceGetInputs: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
@@ -548,7 +579,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest
+        pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
@@ -567,13 +598,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           1,
           `Checking if all the project cards on this pull request should be ignored...`
         );
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the input to ignore pull request with a project card is disabled`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreAllProjectCards: false,
             })
@@ -598,7 +629,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
       describe(`when the input to ignore pull request with a project card is enabled`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreAllProjectCards: true,
             })
@@ -617,8 +648,8 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             `input-pull-request-ignore-all-project-cards`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-          expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         });
 
         describe(`when the pull request has no project card`, (): void => {
@@ -665,7 +696,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest
+            pullRequestsInputsServiceGetInputsSpy = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
               .mockReturnValue(
                 createHydratedMock<IPullRequestsInputs>({
@@ -694,7 +725,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
     describe(`hasIgnoredCreationDate$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestsInputsServiceGetInputs: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestProcessorGetCreatedAtSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -704,7 +735,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest
+        pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
@@ -726,13 +757,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           1,
           `Checking if this pull request should be ignored based on its creation date...`
         );
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the date is not valid`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreBeforeCreationDate: `dummy`,
             })
@@ -757,7 +788,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
       describe(`when the date is valid`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                 includeOffset: false,
@@ -789,7 +820,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the creation date of the pull request is more recent that the creation date input`, (): void => {
           beforeEach((): void => {
             pullRequestProcessorGetCreatedAtSpy.mockReturnValue(DateTime.now());
-            pullRequestsInputsServiceGetInputs.mockReturnValue(
+            pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IPullRequestsInputs>({
                 pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                   includeOffset: false,
@@ -815,7 +846,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         describe(`when the creation date of the pull request is older that the creation date input`, (): void => {
           beforeEach((): void => {
             pullRequestProcessorGetCreatedAtSpy.mockReturnValue(DateTime.utc(2019));
-            pullRequestsInputsServiceGetInputs.mockReturnValue(
+            pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IPullRequestsInputs>({
                 pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
                   includeOffset: false,
@@ -842,7 +873,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
     describe(`hasAllIgnoredLabels$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestsInputsServiceGetInputs: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
@@ -851,7 +882,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest
+        pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
@@ -870,13 +901,13 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           1,
           `Checking if all the labels on this pull request should be ignored...`
         );
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the input to ignore pull request with a label is disabled`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreAllLabels: false,
             })
@@ -901,7 +932,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
       describe(`when the input to ignore pull request with a label is enabled`, (): void => {
         beforeEach((): void => {
-          pullRequestsInputsServiceGetInputs.mockReturnValue(
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
               pullRequestIgnoreAllLabels: true,
             })
@@ -920,8 +951,8 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             `input-pull-request-ignore-all-labels`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-          expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         });
 
         describe(`when the pull request has no label`, (): void => {
@@ -972,7 +1003,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest
+            pullRequestsInputsServiceGetInputsSpy = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
               .mockReturnValue(
                 createHydratedMock<IPullRequestsInputs>({
@@ -1014,7 +1045,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest
+            pullRequestsInputsServiceGetInputsSpy = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
               .mockReturnValue(
                 createHydratedMock<IPullRequestsInputs>({
@@ -1064,7 +1095,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerInfoSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
               .mockImplementation();
-            pullRequestsInputsServiceGetInputs = jest
+            pullRequestsInputsServiceGetInputsSpy = jest
               .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
               .mockReturnValue(
                 createHydratedMock<IPullRequestsInputs>({
@@ -1095,7 +1126,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredLabels$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
-      let pullRequestsInputsServiceGetInputs: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
@@ -1107,7 +1138,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest
+        pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
@@ -1126,8 +1157,8 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           1,
           `Checking if this pull request has one of the ignored labels...`
         );
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the pull request has one of the ignored labels`, (): void => {
@@ -1283,7 +1314,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredAssignees$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
-      let pullRequestsInputsServiceGetInputs: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
@@ -1295,7 +1326,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
-        pullRequestsInputsServiceGetInputs = jest
+        pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
@@ -1314,8 +1345,8 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           1,
           `Checking if this pull request has one of the ignored assignees...`
         );
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledTimes(1);
-        expect(pullRequestsInputsServiceGetInputs).toHaveBeenCalledWith();
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
       describe(`when the pull request has one of the ignored assignees`, (): void => {
@@ -1464,6 +1495,159 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           const result = pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
 
           expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`isDraft$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreDraft: false,
+            })
+          );
+      });
+
+      it(`should log about checking the draft ignore state`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIgnoreProcessor.isDraft$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request is a draft...`
+        );
+      });
+
+      it(`should get the pull request inputs`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIgnoreProcessor.isDraft$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the input to ignore draft pull request is disabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreDraft: false,
+            })
+          );
+        });
+
+        it(`should log about it and return false`, (): void => {
+          expect.assertions(3);
+
+          const result = pullRequestIgnoreProcessor.isDraft$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-ignore-draft`,
+            `whiteBright-is disabled. Continuing...`
+          );
+          expect(result).toBe(false);
+        });
+      });
+
+      describe(`when the input to ignore draft pull request is enabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreDraft: true,
+            })
+          );
+        });
+
+        it(`should log about having the ignore draft pull request input enabled`, (): void => {
+          expect.assertions(3);
+
+          const result = pullRequestIgnoreProcessor.isDraft$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-ignore-draft`,
+            `whiteBright-is enabled. Checking...`
+          );
+          expect(result).toBe(false);
+        });
+
+        describe(`when the pull request is not a draft`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                isDraft: false,
+              },
+            });
+            pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreDraft: true,
+                })
+              );
+          });
+
+          it(`should log about it and return false`, (): void => {
+            expect.assertions(3);
+
+            const result = pullRequestIgnoreProcessor.isDraft$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Not a draft. Continuing...`);
+            expect(result).toBe(false);
+          });
+        });
+
+        describe(`when the pull request is a draft`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                isDraft: true,
+              },
+            });
+            pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreDraft: true,
+                })
+              );
+          });
+
+          it(`should log about it and return true`, (): void => {
+            expect.assertions(3);
+
+            const result = pullRequestIgnoreProcessor.isDraft$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is a draft`);
+            expect(result).toBe(true);
+          });
         });
       });
     });

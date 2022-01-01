@@ -107,6 +107,7 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-ignore-any-assignees        | Allow to ignore the processing of pull requests that contains one of those assignees (multiline).                                                        |         |
 | pull-request-ignore-all-project-cards    | Allow to ignore the processing of pull requests that contains any project cards.                                                                         | `false` |
 | pull-request-ignore-before-creation-date | Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
+| pull-request-ignore-draft                | Allow to ignore the processing of pull requests that are drafts.                                                                                         | `false` |
 | pull-request-days-before-stale           | The number of days until the pull request is considered as stale.                                                                                        | `30`    |
 | pull-request-stale-comment               | The comment that will be sent once the pull request is stale (keep empty to not send a comment).                                                         |         |
 | pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
@@ -211,6 +212,7 @@ jobs:
           pull-request-close-comment: |
             This pull request is now closed!
           pull-request-ignore-all-project-cards: false
+          pull-request-ignore-draft: false
 ```
 
 ## Debug the action
