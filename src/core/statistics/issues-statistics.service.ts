@@ -52,48 +52,56 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
 
   public increaseProcessedIssuesCount(): IssuesStatisticsService {
     this.processedIssuesCount$$++;
+    this._logIncreaseCount(`Processed issues count statistic increased by`, 1, this.processedIssuesCount$$);
 
     return this;
   }
 
   public increaseIgnoredIssuesCount(): IssuesStatisticsService {
     this.ignoredIssuesCount$$++;
+    this._logIncreaseCount(`Ignored issues count statistic increased by`, 1, this.ignoredIssuesCount$$);
 
     return this;
   }
 
   public increaseUnalteredIssuesCount(): IssuesStatisticsService {
     this.unalteredIssuesCount$$++;
+    this._logIncreaseCount(`Unaltered issues count statistic increased by`, 1, this.unalteredIssuesCount$$);
 
     return this;
   }
 
   public increaseStaleIssuesCount(): IssuesStatisticsService {
     this.staleIssuesCount$$++;
+    this._logIncreaseCount(`Stale issues count statistic increased by`, 1, this.staleIssuesCount$$);
 
     return this;
   }
 
   public increaseAlreadyStaleIssuesCount(): IssuesStatisticsService {
     this.alreadyStaleIssuesCount$$++;
+    this._logIncreaseCount(`Already stale issues count statistic increased by`, 1, this.alreadyStaleIssuesCount$$);
 
     return this;
   }
 
   public increaseRemoveStaleIssuesCount(): IssuesStatisticsService {
     this.removeStaleIssuesCount$$++;
+    this._logIncreaseCount(`Remove stale issues count statistic increased by`, 1, this.removeStaleIssuesCount$$);
 
     return this;
   }
 
   public increaseClosedIssuesCount(): IssuesStatisticsService {
     this.closedIssuesCount$$++;
+    this._logIncreaseCount(`Closed issues count statistic increased by`, 1, this.closedIssuesCount$$);
 
     return this;
   }
 
   public increaseAddedIssuesCommentsCount(): IssuesStatisticsService {
     this.addedIssuesCommentsCount$$++;
+    this._logIncreaseCount(`Added issues comments count statistic increased by`, 1, this.addedIssuesCommentsCount$$);
 
     return this;
   }
