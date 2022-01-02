@@ -458,7 +458,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           });
         });
 
-        describe(`when the last update on the issue is older or equal to the addition of all the stale label events (descensing)`, (): void => {
+        describe(`when the last update on the issue is older or equal to the addition of all the stale label events (descending)`, (): void => {
           beforeEach((): void => {
             jest.spyOn(issueProcessor, `getUpdatedAt`).mockReturnValue(DateTime.utc(2020));
 
