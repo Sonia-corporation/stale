@@ -24,7 +24,7 @@ describe(`Pull request with ignored assignee`, (): void => {
     });
 
     it(`should ignore the pull request`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await pullRequestSut.process();
 
@@ -36,6 +36,7 @@ describe(`Pull request with ignored assignee`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
     });
   });
 });

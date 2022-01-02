@@ -6,6 +6,7 @@ import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-a
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
@@ -41,11 +42,15 @@ describe(`PullRequestsService`, (): void => {
   });
 
   describe(`process()`, (): void => {
+    let processedPullRequestsCount: number;
+
     let processBatchSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      processBatchSpy = jest.spyOn(service, `processBatch`).mockImplementation();
+      processedPullRequestsCount = faker.datatype.number();
+
+      processBatchSpy = jest.spyOn(service, `processBatch`).mockResolvedValue(processedPullRequestsCount);
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
     });
 
@@ -64,7 +69,11 @@ describe(`PullRequestsService`, (): void => {
       await service.process();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`green-All the pull requests were processed`);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+        `green-All the pull requests`,
+        `white-(value-${processedPullRequestsCount}white-)`,
+        `green-were processed`
+      );
     });
   });
 
@@ -311,7 +320,12 @@ describe(`PullRequestsService`, (): void => {
         await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `green-All the pull requests batches were processed`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          4,
+          `green-All the pull requests batches`,
+          `white-(value-1white-)`,
+          `green-were processed`
+        );
       });
     });
 

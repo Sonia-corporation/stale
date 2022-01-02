@@ -47,6 +47,10 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
       PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$
     );
     core.setOutput(
+      EPullRequestsOutputs.DELETED_PULL_REQUESTS_BRANCHES_COUNT,
+      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$
+    );
+    core.setOutput(
       EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT,
       PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$
     );

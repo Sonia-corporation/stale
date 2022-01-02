@@ -14,6 +14,7 @@ import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/consta
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
+import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-pull-request-labeled-event-query';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
@@ -77,7 +78,7 @@ export class FakePullRequestsProcessor {
     });
   }
 
-  private readonly _inputs: IAllInputs;
+  private _inputs: IAllInputs;
   private _githubApiPullRequests: IGithubApiPullRequest[] = [];
   private _githubApiPullRequestsFetchCount = 0;
   private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
@@ -88,6 +89,9 @@ export class FakePullRequestsProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_CLOSE_PULL_REQUEST_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_DELETE_REFERENCE_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_ISSUES_QUERY](): Promise<IGithubApiGetIssues> {
@@ -246,6 +250,34 @@ export class FakePullRequestsProcessor {
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
+  }
+
+  /**
+   * @description
+   * Enable the dry-run mode to skip some part of the process
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public dryRun(): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      dryRun: true,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Disable the dry-run mode to include every part of the process
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public normalRun(): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      dryRun: false,
+    });
+
+    return this;
   }
 
   /**

@@ -112,19 +112,21 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-stale-comment               | The comment that will be sent once the pull request is stale (keep empty to not send a comment).                                                         |         |
 | pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
 | pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
+| pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
 
 ## All the pull requests outputs
 
-| Output                             | Description                                                                        |
-| ---------------------------------- | ---------------------------------------------------------------------------------- |
-| processed-pull-requests-count      | The number of pull requests processed.                                             |
-| ignored-pull-requests-count        | The number of pull requests ignored.                                               |
-| unaltered-pull-requests-count      | The number of pull requests unaltered (either not good to stale or already stale). |
-| stale-pull-requests-count          | The number of pull requests stale.                                                 |
-| already-stale-pull-requests-count  | The number of pull requests processed which were already stale.                    |
-| remove-stale-pull-requests-count   | The number of pull requests from where the stale state was removed.                |
-| close-pull-requests-count          | The number of pull requests closed.                                                |
-| added-pull-requests-comments-count | The number of added pull requests comments.                                        |
+| Output                               | Description                                                                        |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| processed-pull-requests-count        | The number of pull requests processed.                                             |
+| ignored-pull-requests-count          | The number of pull requests ignored.                                               |
+| unaltered-pull-requests-count        | The number of pull requests unaltered (either not good to stale or already stale). |
+| stale-pull-requests-count            | The number of pull requests stale.                                                 |
+| already-stale-pull-requests-count    | The number of pull requests processed which were already stale.                    |
+| remove-stale-pull-requests-count     | The number of pull requests from where the stale state was removed.                |
+| close-pull-requests-count            | The number of pull requests closed.                                                |
+| deleted-pull-requests-branches-count | The number of deleted pull requests branches closed.                               |
+| added-pull-requests-comments-count   | The number of added pull requests comments.                                        |
 
 ## Examples
 
@@ -213,6 +215,7 @@ jobs:
             This pull request is now closed!
           pull-request-ignore-all-project-cards: false
           pull-request-ignore-draft: false
+          pull-request-delete-branch-after-close: false
 ```
 
 ## Debug the action

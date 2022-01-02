@@ -15,6 +15,7 @@ export enum EInputs {
   PULL_REQUEST_DAYS_BEFORE_CLOSE = `pull-request-days-before-close`,
   PULL_REQUEST_DAYS_BEFORE_STALE = `pull-request-days-before-stale`,
   PULL_REQUEST_IGNORE_ALL_ASSIGNEES = `pull-request-ignore-all-assignees`,
+  PULL_REQUEST_DELETE_BRANCH_AFTER_CLOSE = `pull-request-delete-branch-after-close`,
   PULL_REQUEST_IGNORE_ANY_ASSIGNEES = `pull-request-ignore-any-assignees`,
   PULL_REQUEST_IGNORE_ALL_LABELS = `pull-request-ignore-all-labels`,
   PULL_REQUEST_IGNORE_DRAFT = `pull-request-ignore-draft`,

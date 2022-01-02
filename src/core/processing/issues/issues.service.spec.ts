@@ -6,6 +6,7 @@ import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.ser
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
@@ -41,11 +42,15 @@ describe(`IssuesService`, (): void => {
   });
 
   describe(`process()`, (): void => {
+    let processedIssuesCount: number;
+
     let processBatchSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      processBatchSpy = jest.spyOn(service, `processBatch`).mockImplementation();
+      processedIssuesCount = faker.datatype.number();
+
+      processBatchSpy = jest.spyOn(service, `processBatch`).mockResolvedValue(processedIssuesCount);
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
     });
 
@@ -64,7 +69,11 @@ describe(`IssuesService`, (): void => {
       await service.process();
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(`green-All the issues were processed`);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+        `green-All the issues`,
+        `white-(value-${processedIssuesCount}white-)`,
+        `green-were processed`
+      );
     });
   });
 
@@ -296,7 +305,12 @@ describe(`IssuesService`, (): void => {
         await service.processBatch();
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `green-All the issues batches were processed`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          4,
+          `green-All the issues batches`,
+          `white-(value-1white-)`,
+          `green-were processed`
+        );
       });
     });
 

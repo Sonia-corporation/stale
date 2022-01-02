@@ -166,6 +166,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
       - If it is old, close the pull request
       - Check if the action should also add a comment (coming from the `pull-request-close-comment` input)
         - When the input value is not empty, add a comment
+      - Check if the action should also delete the branch (coming from the `pull-request-delete-branch-after-close` input)
+        - When the input value is true, delete the branch
 - Check if the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
 - If the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
   - Add a label to stale (coming from the `pull-request-stale-label` input, ignored in `dry-run` mode)

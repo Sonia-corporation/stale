@@ -18,6 +18,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestCloseComment: `close-comment`,
   pullRequestDaysBeforeClose: 10,
   pullRequestDaysBeforeStale: 30,
+  pullRequestDeleteBranchAfterClose: false,
   pullRequestIgnoreAllAssignees: false,
   pullRequestIgnoreAllLabels: false,
   pullRequestIgnoreAllProjectCards: false,
