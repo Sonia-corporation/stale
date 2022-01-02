@@ -1,4 +1,5 @@
 import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-close-stale-processor';
+import { PullRequestDeleteBranchProcessor } from '@core/processing/pull-requests/pull-request-delete-branch-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
@@ -23,6 +24,7 @@ jest.mock(`@core/processing/pull-requests/pull-request-is-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-remove-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-should-close-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-close-stale-processor`);
+jest.mock(`@core/processing/pull-requests/pull-request-delete-branch-processor`);
 
 describe(`PullRequestProcessor`, (): void => {
   let gitHubApiPullRequest: IGithubApiPullRequest;
@@ -689,6 +691,7 @@ describe(`PullRequestProcessor`, (): void => {
       let stopProcessingSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseClosedPullRequestsCountSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy: jest.SpyInstance;
+      let processToDeleteBranch$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         mockedPullRequestShouldCloseStaleProcessor.mockClear();
@@ -701,6 +704,7 @@ describe(`PullRequestProcessor`, (): void => {
         pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseUnalteredPullRequestsCount`)
           .mockImplementation();
+        processToDeleteBranch$$Spy = jest.spyOn(pullRequestProcessor, `processToDeleteBranch$$`).mockImplementation();
       });
 
       it(`should check if the pull request should be closed`, async (): Promise<void> => {
@@ -734,6 +738,14 @@ describe(`PullRequestProcessor`, (): void => {
 
           expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).toHaveBeenCalledWith();
+        });
+
+        it(`should not try to delete the pull request branch`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await pullRequestProcessor.processForClose$$();
+
+          expect(processToDeleteBranch$$Spy).not.toHaveBeenCalled();
         });
 
         it(`should stop to process this pull request`, async (): Promise<void> => {
@@ -778,6 +790,15 @@ describe(`PullRequestProcessor`, (): void => {
           expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).not.toHaveBeenCalled();
         });
 
+        it(`should try to delete the pull request branch`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await pullRequestProcessor.processForClose$$();
+
+          expect(processToDeleteBranch$$Spy).toHaveBeenCalledTimes(1);
+          expect(processToDeleteBranch$$Spy).toHaveBeenCalledWith();
+        });
+
         it(`should stop to process this pull request`, async (): Promise<void> => {
           expect.assertions(2);
 
@@ -786,6 +807,28 @@ describe(`PullRequestProcessor`, (): void => {
           expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
           expect(stopProcessingSpy).toHaveBeenCalledWith();
         });
+      });
+    });
+
+    describe(`processToDeleteBranch$$()`, (): void => {
+      const mockedPullRequestDeleteBranchProcessor: MockedObjectDeep<typeof PullRequestDeleteBranchProcessor> = mocked(
+        PullRequestDeleteBranchProcessor,
+        true
+      );
+
+      beforeEach((): void => {
+        mockedPullRequestDeleteBranchProcessor.mockClear();
+      });
+
+      it(`should check if the pull request branch should be deleted`, async (): Promise<void> => {
+        expect.assertions(4);
+
+        await pullRequestProcessor.processToDeleteBranch$$();
+
+        expect(mockedPullRequestDeleteBranchProcessor).toHaveBeenCalledTimes(1);
+        expect(mockedPullRequestDeleteBranchProcessor).toHaveBeenCalledWith(pullRequestProcessor);
+        expect(mockedPullRequestDeleteBranchProcessor.prototype.delete.mock.calls).toHaveLength(1);
+        expect(mockedPullRequestDeleteBranchProcessor.prototype.delete.mock.calls[0]).toHaveLength(0);
       });
     });
   });

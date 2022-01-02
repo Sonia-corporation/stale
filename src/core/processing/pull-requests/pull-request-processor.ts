@@ -1,5 +1,6 @@
 import { AbstractProcessor } from '@core/processing/abstract-processor';
 import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-close-stale-processor';
+import { PullRequestDeleteBranchProcessor } from '@core/processing/pull-requests/pull-request-delete-branch-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
@@ -93,11 +94,21 @@ export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullReques
 
       await pullRequestCloseStaleProcessor.close();
       PullRequestsStatisticsService.getInstance().increaseClosedPullRequestsCount();
+
+      await this.processToDeleteBranch$$();
     } else {
       PullRequestsStatisticsService.getInstance().increaseUnalteredPullRequestsCount();
     }
 
     this.stopProcessing$$();
+  }
+
+  public async processToDeleteBranch$$(): Promise<void> {
+    const pullRequestDeleteBranchProcessor: PullRequestDeleteBranchProcessor = new PullRequestDeleteBranchProcessor(
+      this
+    );
+
+    await pullRequestDeleteBranchProcessor.delete();
   }
 
   protected _increaseIgnoredCount(): void {

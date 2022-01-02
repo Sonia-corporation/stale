@@ -6,5 +6,6 @@ export enum EPullRequestsOutputs {
   PROCESSED_PULL_REQUESTS_COUNT = `processed-pull-requests-count`,
   REMOVE_STALE_PULL_REQUESTS_COUNT = `remove-stale-pull-requests-count`,
   CLOSE_PULL_REQUESTS_COUNT = `close-pull-requests-count`,
+  DELETED_PULL_REQUESTS_BRANCHES_COUNT = `deleted-pull-requests-branches-count`,
   ADDED_PULL_REQUESTS_COMMENTS_COUNT = `added-pull-requests-comments-count`,
 }

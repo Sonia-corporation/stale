@@ -14,6 +14,7 @@ import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
+import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
@@ -77,7 +78,7 @@ export class FakeIssuesProcessor {
     });
   }
 
-  private readonly _inputs: IAllInputs;
+  private _inputs: IAllInputs;
   private _githubApiIssues: IGithubApiIssue[] = [];
   private _githubApiIssuesFetchCount = 0;
   private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
@@ -88,6 +89,9 @@ export class FakeIssuesProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_CLOSE_ISSUE_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_DELETE_REFERENCE_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_ISSUES_QUERY]: (): Promise<IGithubApiGetIssues> => {
@@ -246,6 +250,34 @@ export class FakeIssuesProcessor {
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
+  }
+
+  /**
+   * @description
+   * Enable the dry-run mode to skip some part of the process
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public dryRun(): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      dryRun: true,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Disable the dry-run mode to include every part of the process
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public normalRun(): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      dryRun: false,
+    });
+
+    return this;
   }
 
   /**
