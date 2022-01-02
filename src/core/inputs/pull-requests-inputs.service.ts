@@ -31,6 +31,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestDaysBeforeStale: CoreInputsService.getNumberInput$$(EInputs.PULL_REQUEST_DAYS_BEFORE_STALE, {
         required: false,
       }),
+      pullRequestDeleteBranchAfterClose: core.getBooleanInput(EInputs.PULL_REQUEST_DELETE_BRANCH_AFTER_CLOSE, {
+        required: false,
+      }),
       pullRequestIgnoreAllAssignees: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_ALL_ASSIGNEES, {
         required: false,
       }),

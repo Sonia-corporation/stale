@@ -105,6 +105,10 @@ inputs:
     description: 'The comment that will be sent once the pull request is close (keep empty to not send a comment).'
     required: false
     default: ''
+  pull-request-delete-branch-after-close:
+    description: 'Delete the branch when the processing close the pull request.'
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

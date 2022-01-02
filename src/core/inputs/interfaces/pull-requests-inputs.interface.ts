@@ -6,6 +6,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestCloseComment: IComment | '';
   readonly pullRequestDaysBeforeClose: number;
   readonly pullRequestDaysBeforeStale: number;
+  readonly pullRequestDeleteBranchAfterClose: boolean;
   readonly pullRequestIgnoreAllAssignees: boolean;
   readonly pullRequestIgnoreAllLabels: boolean;
   readonly pullRequestIgnoreAllProjectCards: boolean;

@@ -56,7 +56,7 @@ describe(`Pull request stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the pull request`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await pullRequestSut.process();
 
@@ -68,6 +68,7 @@ describe(`Pull request stale and updated`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
     });
   });
 });

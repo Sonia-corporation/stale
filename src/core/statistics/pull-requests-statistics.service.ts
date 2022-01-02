@@ -9,6 +9,7 @@ type IStat =
   | 'Already stale pull requests'
   | 'Unaltered pull requests'
   | 'Closed pull requests'
+  | 'Deleted pull requests branches'
   | 'Added pull requests comments';
 
 export class PullRequestsStatisticsService extends AbstractStatisticsService<IStat> {
@@ -29,6 +30,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
   public alreadyStalePullRequestsCount$$: number = 0;
   public removeStalePullRequestsCount$$: number = 0;
   public closedPullRequestsCount$$: number = 0;
+  public deletedPullRequestsBranchesCount$$: number = 0;
   public addedPullRequestsCommentsCount$$: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
@@ -45,6 +47,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     this.alreadyStalePullRequestsCount$$ = 0;
     this.removeStalePullRequestsCount$$ = 0;
     this.closedPullRequestsCount$$ = 0;
+    this.deletedPullRequestsBranchesCount$$ = 0;
     this.addedPullRequestsCommentsCount$$ = 0;
 
     return this;
@@ -92,6 +95,12 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
+  public increaseDeletedPullRequestsBranchesCount(): PullRequestsStatisticsService {
+    this.deletedPullRequestsBranchesCount$$++;
+
+    return this;
+  }
+
   public increaseAddedPullRequestsCommentsCount(): PullRequestsStatisticsService {
     this.addedPullRequestsCommentsCount$$++;
 
@@ -107,6 +116,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Already stale pull requests`, this.alreadyStalePullRequestsCount$$)
       .set(`Remove stale pull requests`, this.removeStalePullRequestsCount$$)
       .set(`Closed pull requests`, this.closedPullRequestsCount$$)
+      .set(`Deleted pull requests branches`, this.deletedPullRequestsBranchesCount$$)
       .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount$$);
   }
 }

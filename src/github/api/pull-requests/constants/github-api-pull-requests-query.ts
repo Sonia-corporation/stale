@@ -34,6 +34,10 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
               id
             }
           }
+          headRef {
+            name
+            id
+          }
         }
       }
     }
