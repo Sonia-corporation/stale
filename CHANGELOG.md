@@ -1,5 +1,15 @@
 # Semantic Versioning Changelog
 
+# [1.26.0](https://github.com/Sonia-corporation/stale/compare/1.25.1...1.26.0) (2022-01-02)
+
+
+### :rocket: Features
+
+* **logs:** add counts in the batches and processed items logs ([2022cf0](https://github.com/Sonia-corporation/stale/commit/2022cf0e93c88f0105b8ac2f91cb17e1b9172320))
+* **pull-request:** add new input `pull-request-delete-branch-after-close` ([cc53931](https://github.com/Sonia-corporation/stale/commit/cc53931ad5625307f86e8a048c12b483d7f2af99))
+  When a pull request is closed by the processing, if the option is enabled and the dry-run is disabled, the related branch will be removed
+A new output was also added to track the number of deleted pull request branches
+
 ## [1.25.1](https://github.com/Sonia-corporation/stale/compare/1.25.0...1.25.1) (2022-01-01)
 
 
