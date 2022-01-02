@@ -55,54 +55,87 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
 
   public increaseProcessedPullRequestsCount(): PullRequestsStatisticsService {
     this.processedPullRequestsCount$$++;
+    this._logIncreaseCount(
+      `Processed pull requests count statistic increased by`,
+      1,
+      this.processedPullRequestsCount$$
+    );
 
     return this;
   }
 
   public increaseIgnoredPullRequestsCount(): PullRequestsStatisticsService {
     this.ignoredPullRequestsCount$$++;
+    this._logIncreaseCount(`Ignored pull requests count statistic increased by`, 1, this.ignoredPullRequestsCount$$);
 
     return this;
   }
 
   public increaseUnalteredPullRequestsCount(): PullRequestsStatisticsService {
     this.unalteredPullRequestsCount$$++;
+    this._logIncreaseCount(
+      `Unaltered pull requests count statistic increased by`,
+      1,
+      this.unalteredPullRequestsCount$$
+    );
 
     return this;
   }
 
   public increaseStalePullRequestsCount(): PullRequestsStatisticsService {
     this.stalePullRequestsCount$$++;
+    this._logIncreaseCount(`Stale pull requests count statistic increased by`, 1, this.stalePullRequestsCount$$);
 
     return this;
   }
 
   public increaseAlreadyStalePullRequestsCount(): PullRequestsStatisticsService {
     this.alreadyStalePullRequestsCount$$++;
+    this._logIncreaseCount(
+      `Already stale pull requests count statistic increased by`,
+      1,
+      this.alreadyStalePullRequestsCount$$
+    );
 
     return this;
   }
 
   public increaseRemoveStalePullRequestsCount(): PullRequestsStatisticsService {
     this.removeStalePullRequestsCount$$++;
+    this._logIncreaseCount(
+      `Remove stale pull requests count statistic increased by`,
+      1,
+      this.removeStalePullRequestsCount$$
+    );
 
     return this;
   }
 
   public increaseClosedPullRequestsCount(): PullRequestsStatisticsService {
     this.closedPullRequestsCount$$++;
+    this._logIncreaseCount(`Closed pull requests count statistic increased by`, 1, this.closedPullRequestsCount$$);
 
     return this;
   }
 
   public increaseDeletedPullRequestsBranchesCount(): PullRequestsStatisticsService {
     this.deletedPullRequestsBranchesCount$$++;
+    this._logIncreaseCount(
+      `Deleted pull requests branches count statistic increased by`,
+      1,
+      this.deletedPullRequestsBranchesCount$$
+    );
 
     return this;
   }
 
   public increaseAddedPullRequestsCommentsCount(): PullRequestsStatisticsService {
     this.addedPullRequestsCommentsCount$$++;
+    this._logIncreaseCount(
+      `Added pull requests comments count statistic increased by`,
+      1,
+      this.addedPullRequestsCommentsCount$$
+    );
 
     return this;
   }
