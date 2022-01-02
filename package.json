@@ -128,7 +128,7 @@
     "eslint-config-recommended": "4.1.0",
     "eslint-import-resolver-typescript": "2.5.0",
     "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-jest": "25.3.3",
+    "eslint-plugin-jest": "25.3.4",
     "eslint-plugin-jsdoc": "37.5.0",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-progress": "0.0.1",
