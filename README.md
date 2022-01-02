@@ -41,8 +41,8 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=code&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
-[![](https://img.shields.io/npm/v/@sonia-corporation/stale?style=flat-square)](https://github.com/sonia-corporation/stale)
-[![](https://img.shields.io/npm/dm/@sonia-corporation/stale?color=blue&style=flat-square)](https://github.com/sonia-corporation/stale)
+[![](https://img.shields.io/npm/v/@sonia-corporation/stale?style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
+[![](https://img.shields.io/npm/dm/@sonia-corporation/stale?color=blue&style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
 
 ## Default configuration
 
