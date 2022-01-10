@@ -9,7 +9,8 @@ type IStat =
   | 'Already stale issues'
   | 'Unaltered issues'
   | 'Closed issues'
-  | 'Added issues comments';
+  | 'Added issues comments'
+  | 'Added issues labels';
 
 export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: IssuesStatisticsService;
@@ -30,6 +31,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   public removeStaleIssuesCount$$: number = 0;
   public closedIssuesCount$$: number = 0;
   public addedIssuesCommentsCount$$: number = 0;
+  public addedIssuesLabelsCount$$: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
 
   /**
@@ -46,6 +48,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     this.removeStaleIssuesCount$$ = 0;
     this.closedIssuesCount$$ = 0;
     this.addedIssuesCommentsCount$$ = 0;
+    this.addedIssuesLabelsCount$$ = 0;
 
     return this;
   }
@@ -106,6 +109,13 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
+  public increaseAddedIssuesLabelsCount(): IssuesStatisticsService {
+    this.addedIssuesLabelsCount$$++;
+    this._logIncreaseCount(`Added issues labels count statistic increased by`, 1, this.addedIssuesLabelsCount$$);
+
+    return this;
+  }
+
   protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
       .set(`Processed issues`, this.processedIssuesCount$$)
@@ -115,6 +125,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
       .set(`Already stale issues`, this.alreadyStaleIssuesCount$$)
       .set(`Remove stale issues`, this.removeStaleIssuesCount$$)
       .set(`Closed issues`, this.closedIssuesCount$$)
-      .set(`Added issues comments`, this.addedIssuesCommentsCount$$);
+      .set(`Added issues comments`, this.addedIssuesCommentsCount$$)
+      .set(`Added issues labels`, this.addedIssuesLabelsCount$$);
   }
 }

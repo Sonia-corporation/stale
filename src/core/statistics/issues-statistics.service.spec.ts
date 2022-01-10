@@ -31,7 +31,7 @@ describe(`IssuesStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(8);
+      expect.assertions(9);
       service.processedIssuesCount$$ = 1;
       service.ignoredIssuesCount$$ = 1;
       service.unalteredIssuesCount$$ = 1;
@@ -40,6 +40,7 @@ describe(`IssuesStatisticsService`, (): void => {
       service.removeStaleIssuesCount$$ = 1;
       service.closedIssuesCount$$ = 1;
       service.addedIssuesCommentsCount$$ = 1;
+      service.addedIssuesLabelsCount$$ = 1;
 
       service.initialize();
 
@@ -51,6 +52,7 @@ describe(`IssuesStatisticsService`, (): void => {
       expect(service.removeStaleIssuesCount$$).toBe(0);
       expect(service.closedIssuesCount$$).toBe(0);
       expect(service.addedIssuesCommentsCount$$).toBe(0);
+      expect(service.addedIssuesLabelsCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -214,6 +216,25 @@ describe(`IssuesStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseAddedIssuesLabelsCount()`, (): void => {
+    it(`should increase the added issues comments count`, (): void => {
+      expect.assertions(1);
+      service.addedIssuesLabelsCount$$ = 0;
+
+      service.increaseAddedIssuesLabelsCount();
+
+      expect(service.addedIssuesLabelsCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseAddedIssuesLabelsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -244,6 +265,7 @@ describe(`IssuesStatisticsService`, (): void => {
         service.removeStaleIssuesCount$$ = 0;
         service.closedIssuesCount$$ = 0;
         service.addedIssuesCommentsCount$$ = 0;
+        service.addedIssuesLabelsCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -265,6 +287,7 @@ describe(`IssuesStatisticsService`, (): void => {
         service.alreadyStaleIssuesCount$$ = 0;
         service.closedIssuesCount$$ = 0;
         service.addedIssuesCommentsCount$$ = 0;
+        service.addedIssuesLabelsCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -287,14 +310,15 @@ describe(`IssuesStatisticsService`, (): void => {
         service.removeStaleIssuesCount$$ = 5;
         service.closedIssuesCount$$ = 6;
         service.addedIssuesCommentsCount$$ = 7;
+        service.addedIssuesLabelsCount$$ = 8;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(8);
+        expect.assertions(9);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(7);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -333,9 +357,15 @@ describe(`IssuesStatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           7,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Added issues comments`,
           `value-7`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          8,
+          `white-└──`,
+          `whiteBright-Added issues labels  `,
+          `value-8`
         );
       });
     });
