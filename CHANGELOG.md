@@ -1,5 +1,19 @@
 # Semantic Versioning Changelog
 
+# [1.27.0](https://github.com/Sonia-corporation/stale/compare/1.26.0...1.27.0) (2022-01-10)
+
+
+### :rocket: Features
+
+* **logs:** add a log when a statistic is increased ([3885885](https://github.com/Sonia-corporation/stale/commit/388588543dd76c0dfc273ba4bd8cfb8c6cd232c7))
+  Showing by how many the count was increased and also showing the new total count
+* **stats:** add a new statistic for the number of issue added labels ([4805b65](https://github.com/Sonia-corporation/stale/commit/4805b659b2af24fa60055b5842a87219ad688e74))
+* **stats:** add a new statistic for the number of PR added labels ([ef5edab](https://github.com/Sonia-corporation/stale/commit/ef5edab8762acd5a9143da35d6240e60324d46ac))
+* **label:** add new inputs to add extra labels after marking as stale ([39433b0](https://github.com/Sonia-corporation/stale/commit/39433b0f83ca4e4debd9797a048801a77868199f))
+  Added the `issue-add-labels-after-stale` input
+Added the `pull-request-add-labels-after-stale` input
+* **outputs:** add new outputs for the count of added labels ([397a712](https://github.com/Sonia-corporation/stale/commit/397a712bde7fc45494b01b4afdeb2292f19862af))
+
 # [1.26.0](https://github.com/Sonia-corporation/stale/compare/1.25.1...1.26.0) (2022-01-02)
 
 
