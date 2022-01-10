@@ -20,39 +20,43 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
   protected _setOutputs(): void {
     core.setOutput(
       EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.IGNORED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.UNALTERED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().stalePullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.PROCESSED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().processedPullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.REMOVE_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.CLOSE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$
+      PullRequestsStatisticsService.getInstance().closedPullRequestsCount
     );
     core.setOutput(
       EPullRequestsOutputs.DELETED_PULL_REQUESTS_BRANCHES_COUNT,
-      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$
+      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount
     );
     core.setOutput(
       EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT,
-      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount
+    );
+    core.setOutput(
+      EPullRequestsOutputs.ADDED_PULL_REQUESTS_LABELS_COUNT,
+      PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount
     );
   }
 }

@@ -98,6 +98,7 @@ All the inputs that are used both for issues and pull requests.
 | remove-stale-issues-count   | The number of issues from where the stale state was removed.                |
 | close-issues-count          | The number of issues closed.                                                |
 | added-issues-comments-count | The number of added issues comments.                                        |
+| added-issues-labels-count   | The number of added issues labels.                                          |
 
 ## All the pull requests inputs
 
@@ -131,6 +132,7 @@ All the inputs that are used both for issues and pull requests.
 | close-pull-requests-count            | The number of pull requests closed.                                                |
 | deleted-pull-requests-branches-count | The number of deleted pull requests branches closed.                               |
 | added-pull-requests-comments-count   | The number of added pull requests comments.                                        |
+| added-pull-requests-labels-count     | The number of added pull requests labels.                                          |
 
 ## Examples
 
