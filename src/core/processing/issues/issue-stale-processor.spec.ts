@@ -120,6 +120,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
+      let processToAddExtraLabelsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -157,6 +158,7 @@ describe(`IssueStaleProcessor`, (): void => {
         issueCommentsProcessorProcessStaleCommentSpy = jest
           .spyOn(issueStaleProcessor.issueCommentsProcessor$$, `processStaleComment`)
           .mockImplementation();
+        processToAddExtraLabelsSpy = jest.spyOn(issueStaleProcessor, `processToAddExtraLabels$$`).mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -201,6 +203,26 @@ describe(`IssueStaleProcessor`, (): void => {
           );
           expect(issueCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
         });
+
+        it(`should not try to add a stale comment on the issue`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(issueCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not try to add extra labels`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(processToAddExtraLabelsSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label could be found`, (): void => {
@@ -244,6 +266,15 @@ describe(`IssueStaleProcessor`, (): void => {
             expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
             expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
           });
+
+          it(`should try to add extra labels`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueStaleProcessor.stale();
+
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
+          });
         });
 
         describe(`when the action is in dry-run mode`, (): void => {
@@ -279,6 +310,15 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
             expect(issueCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
+          });
+
+          it(`should try to add extra labels`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueStaleProcessor.stale();
+
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
           });
         });
       });
