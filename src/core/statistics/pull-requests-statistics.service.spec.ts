@@ -247,6 +247,17 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.addedPullRequestsLabelsCount$$).toBe(1);
     });
 
+    describe.each([0, 1, 2])(`when a specific count is given`, (count: number): void => {
+      it(`should increase the added pull requests comments count by the given count`, (): void => {
+        expect.assertions(1);
+        service.addedPullRequestsLabelsCount$$ = 0;
+
+        service.increaseAddedPullRequestsLabelsCount(count);
+
+        expect(service.addedPullRequestsLabelsCount$$).toBe(count);
+      });
+    });
+
     it(`should return the service`, (): void => {
       expect.assertions(1);
 

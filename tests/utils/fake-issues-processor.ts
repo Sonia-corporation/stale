@@ -1,3 +1,5 @@
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
@@ -247,9 +249,9 @@ export class FakeIssuesProcessor {
    * @description
    * Crate the SUT
    * You can pass the parameters to override the default inputs
-   * @param {Readonly<Partial<IAllInputs>>} inputs The override inputs
+   * @param {Readonly<Partial<ICommonInputs & IIssuesInputs>>} inputs The override inputs
    */
-  public constructor(inputs?: Readonly<Partial<IAllInputs>>) {
+  public constructor(inputs?: Readonly<Partial<ICommonInputs & IIssuesInputs>>) {
     this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
@@ -279,6 +281,21 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       dryRun: false,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to add on the issue when it is stale
+   * @param {ReadonlyArray<string>} labels The labels to add
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueAddLabelsAfterStale: labels,
     });
 
     return this;

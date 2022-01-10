@@ -106,6 +106,8 @@ export abstract class AbstractStaleProcessor<
 
     if (labelsToAdd.length === 0) {
       this.processor.logger.info(`No extra label to add. Continuing...`);
+
+      return;
     }
 
     this.processor.logger.info(
@@ -119,13 +121,18 @@ export abstract class AbstractStaleProcessor<
     );
 
     const labels: IGithubApiLabel[] = await this._fetchLabels(labelsToAdd);
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
-    await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
+    if (!commonInputs.dryRun) {
+      await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
 
-    this.processor.logger.notice(
-      LoggerService.value(labelsToAdd.length),
-      LoggerFormatService.whiteBright(`label${labelsToAdd.length > 1 ? `s` : ``} added`)
-    );
+      this.processor.logger.notice(
+        LoggerService.value(labelsToAdd.length),
+        LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
+      );
+    } else {
+      this.processor.logger.info(`The extra labels were not added due to the dry-run mode`);
+    }
   }
 
   private _fetchLabels(labelsName: ReadonlyArray<string>): Promise<IGithubApiLabel[]> {

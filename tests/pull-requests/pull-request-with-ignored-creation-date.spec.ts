@@ -20,7 +20,7 @@ describe(`Pull request with ignored creation date`, (): void => {
     });
 
     it(`should ignore the pull request`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -33,6 +33,7 @@ describe(`Pull request with ignored creation date`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(0);
     });
   });
 
@@ -51,7 +52,7 @@ describe(`Pull request with ignored creation date`, (): void => {
     });
 
     it(`should not ignore the pull request`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -64,6 +65,7 @@ describe(`Pull request with ignored creation date`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(0);
     });
   });
 });

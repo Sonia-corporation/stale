@@ -143,11 +143,11 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
-  public increaseAddedPullRequestsLabelsCount(): PullRequestsStatisticsService {
-    this.addedPullRequestsLabelsCount$$++;
+  public increaseAddedPullRequestsLabelsCount(count: Readonly<number> = 1): PullRequestsStatisticsService {
+    this.addedPullRequestsLabelsCount$$ += count;
     this._logIncreaseCount(
       `Added pull requests labels count statistic increased by`,
-      1,
+      count,
       this.addedPullRequestsLabelsCount$$
     );
 

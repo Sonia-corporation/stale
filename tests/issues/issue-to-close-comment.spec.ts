@@ -57,7 +57,7 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and add a close comment`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await issueSut.process();
 
@@ -69,6 +69,7 @@ describe(`Issue to close comment`, (): void => {
       expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(1);
       expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(1);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount$$).toBe(0);
     });
   });
 
@@ -121,7 +122,7 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and not add a close comment`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await issueSut.process();
 
@@ -133,6 +134,7 @@ describe(`Issue to close comment`, (): void => {
       expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(1);
       expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount$$).toBe(0);
     });
   });
 });

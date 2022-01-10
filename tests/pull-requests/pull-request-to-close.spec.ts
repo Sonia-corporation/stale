@@ -57,7 +57,7 @@ describe(`Pull request to close`, (): void => {
     });
 
     it(`should close the pull request`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -70,6 +70,7 @@ describe(`Pull request to close`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(0);
     });
   });
 });

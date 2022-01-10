@@ -1,3 +1,5 @@
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
@@ -247,9 +249,9 @@ export class FakePullRequestsProcessor {
    * @description
    * Crate the SUT
    * You can pass the parameters to override the default inputs
-   * @param {Readonly<Partial<IAllInputs>>} inputs The override inputs
+   * @param {Readonly<Partial<ICommonInputs & IPullRequestsInputs>>} inputs The override inputs
    */
-  public constructor(inputs?: Readonly<Partial<IAllInputs>>) {
+  public constructor(inputs?: Readonly<Partial<ICommonInputs & IPullRequestsInputs>>) {
     this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
@@ -279,6 +281,21 @@ export class FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       dryRun: false,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to add on the pull request when it is stale
+   * @param {ReadonlyArray<string>} labels The labels to add
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestAddLabelsAfterStale: labels,
     });
 
     return this;

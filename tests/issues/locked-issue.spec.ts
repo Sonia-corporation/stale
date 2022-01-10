@@ -12,7 +12,7 @@ describe(`Locked issue`, (): void => {
     });
 
     it(`should ignore the issue`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await issueSut.process();
 
@@ -24,6 +24,7 @@ describe(`Locked issue`, (): void => {
       expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount$$).toBe(0);
     });
   });
 
@@ -39,7 +40,7 @@ describe(`Locked issue`, (): void => {
     });
 
     it(`should ignore the issues`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await issueSut.process();
 
@@ -51,6 +52,7 @@ describe(`Locked issue`, (): void => {
       expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(0);
       expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount$$).toBe(0);
     });
   });
 });

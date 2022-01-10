@@ -109,9 +109,9 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
-  public increaseAddedIssuesLabelsCount(): IssuesStatisticsService {
-    this.addedIssuesLabelsCount$$++;
-    this._logIncreaseCount(`Added issues labels count statistic increased by`, 1, this.addedIssuesLabelsCount$$);
+  public increaseAddedIssuesLabelsCount(count: Readonly<number> = 1): IssuesStatisticsService {
+    this.addedIssuesLabelsCount$$ += count;
+    this._logIncreaseCount(`Added issues labels count statistic increased by`, count, this.addedIssuesLabelsCount$$);
 
     return this;
   }

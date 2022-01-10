@@ -13,7 +13,7 @@ describe(`Batch of pull requests`, (): void => {
     });
 
     it(`should not process the pull requests`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -26,6 +26,7 @@ describe(`Batch of pull requests`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(0);
     });
   });
 });

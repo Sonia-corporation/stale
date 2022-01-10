@@ -226,6 +226,17 @@ describe(`IssuesStatisticsService`, (): void => {
       expect(service.addedIssuesLabelsCount$$).toBe(1);
     });
 
+    describe.each([0, 1, 2])(`when a specific count is given`, (count: number): void => {
+      it(`should increase the added issues comments count by the given count`, (): void => {
+        expect.assertions(1);
+        service.addedIssuesLabelsCount$$ = 0;
+
+        service.increaseAddedIssuesLabelsCount(count);
+
+        expect(service.addedIssuesLabelsCount$$).toBe(count);
+      });
+    });
+
     it(`should return the service`, (): void => {
       expect.assertions(1);
 

@@ -23,7 +23,7 @@ describe(`Pull request to stale comment`, (): void => {
     });
 
     it(`should stale the pull request and add a stale comment`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -36,6 +36,7 @@ describe(`Pull request to stale comment`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(1);
     });
   });
 
@@ -57,7 +58,7 @@ describe(`Pull request to stale comment`, (): void => {
     });
 
     it(`should stale the pull request and not add a stale comment`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
@@ -70,6 +71,7 @@ describe(`Pull request to stale comment`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount$$).toBe(1);
     });
   });
 });
