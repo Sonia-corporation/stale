@@ -1,5 +1,6 @@
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import _ from 'lodash';
 
 export abstract class AbstractLogger {
   public readonly itemNumber: number;
@@ -9,31 +10,31 @@ export abstract class AbstractLogger {
   }
 
   public debug(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.debug(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
+    LoggerService.debug(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return this;
   }
 
   public info(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.info(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
+    LoggerService.info(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return this;
   }
 
   public notice(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.notice(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
+    LoggerService.notice(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return this;
   }
 
   public warning(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.warning(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
+    LoggerService.warning(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return this;
   }
 
   public error(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.error(this.getPrefix$$(), LoggerFormatService.whiteBright(message.join(` `)));
+    LoggerService.error(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return this;
   }
@@ -43,7 +44,7 @@ export abstract class AbstractLogger {
   }
 
   public startGroup(...name: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.startGroup(`${this.getPrefix$$()}`, LoggerFormatService.whiteBright(name.join(` `)));
+    LoggerService.startGroup(`${this.getPrefix$$()}`, LoggerFormatService.whiteBright(_.join(name, ` `)));
 
     return this;
   }

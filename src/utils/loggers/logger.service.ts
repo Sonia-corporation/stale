@@ -10,31 +10,31 @@ import { DateTime } from 'luxon';
  */
 export class LoggerService {
   public static debug(...message: ReadonlyArray<string>): LoggerService {
-    core.debug(LoggerFormatService.whiteBright(message.join(` `)));
+    core.debug(LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static info(...message: ReadonlyArray<string>): LoggerService {
-    core.info(LoggerFormatService.whiteBright(message.join(` `)));
+    core.info(LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static notice(...message: ReadonlyArray<string>): LoggerService {
-    core.notice(LoggerFormatService.whiteBright(message.join(` `)));
+    core.notice(LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static warning(...message: ReadonlyArray<string>): LoggerService {
-    core.warning(LoggerFormatService.yellow(message.join(` `)));
+    core.warning(LoggerFormatService.yellow(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static error(...message: ReadonlyArray<string>): LoggerService {
-    core.error(LoggerFormatService.red(message.join(` `)));
+    core.error(LoggerFormatService.red(_.join(message, ` `)));
 
     return LoggerService;
   }
@@ -44,7 +44,7 @@ export class LoggerService {
   }
 
   public static startGroup(...name: ReadonlyArray<string>): LoggerService {
-    core.startGroup(LoggerFormatService.whiteBright(name.join(` `)));
+    core.startGroup(LoggerFormatService.whiteBright(_.join(name, ` `)));
 
     return LoggerService;
   }

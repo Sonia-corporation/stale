@@ -115,8 +115,8 @@ export abstract class AbstractStaleProcessor<
       LoggerFormatService.whiteBright(`label${labelsToAdd.length > 1 ? `s` : ``} should be added`)
     );
     this.processor.logger.info(
-      `Fetching the extra labels`,
-      LoggerService.value(labelsToAdd),
+      `Fetching the extra label${labelsToAdd.length > 1 ? `s` : ``}`,
+      LoggerService.value(_.join(labelsToAdd, `, `)),
       LoggerFormatService.whiteBright(`to add on this ${this.type}...`)
     );
 
@@ -131,7 +131,9 @@ export abstract class AbstractStaleProcessor<
         LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
       );
     } else {
-      this.processor.logger.info(`The extra labels were not added due to the dry-run mode`);
+      this.processor.logger.info(
+        `The extra label${labelsToAdd.length > 1 ? `s were` : ` was`} not added due to the dry-run mode`
+      );
     }
   }
 
