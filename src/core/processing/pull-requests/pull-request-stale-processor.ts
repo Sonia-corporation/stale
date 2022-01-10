@@ -48,4 +48,14 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
   protected _fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null> {
     return this.githubApiPullRequestLabelsService$$.fetchLabelByName(labelName);
   }
+
+  protected _getExtraLabelsName(): string[] {
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    return pullRequestsInputs.pullRequestAddLabelsAfterStale;
+  }
+
+  protected _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    return this.githubApiPullRequestLabelsService$$.addLabels(targetId, labelsId);
+  }
 }

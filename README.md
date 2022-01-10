@@ -84,6 +84,7 @@ All the inputs that are used both for issues and pull requests.
 | issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
 | issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
 | issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                         |         |
+| issue-add-labels-after-stale      | A list of labels added when the processing stale the issue (multiline).                                                                           |         |
 
 ## All the issues outputs
 
@@ -115,6 +116,7 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
 | pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
 | pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
+| pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                           |         |
 
 ## All the pull requests outputs
 
@@ -173,6 +175,8 @@ jobs:
           issue-close-comment: |
             This issue is now closed!
           issue-ignore-all-project-cards: false
+          issue-add-labels-after-stale: |
+            wake up!
 ```
 
 ### All pull requests inputs example
@@ -218,6 +222,8 @@ jobs:
           pull-request-ignore-all-project-cards: false
           pull-request-ignore-draft: false
           pull-request-delete-branch-after-close: false
+          pull-request-add-labels-after-stale: |
+            wake up!
 ```
 
 ## Debug the action

@@ -13,8 +13,8 @@ import { IUuid } from '@utils/types/uuid';
  */
 export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> {
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
-
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
+
   public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(issueProcessor);
@@ -47,5 +47,15 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
 
   protected _fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null> {
     return this.githubApiIssueLabelsService$$.fetchLabelByName(labelName);
+  }
+
+  protected _getExtraLabelsName(): string[] {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    return issuesInputs.issueAddLabelsAfterStale;
+  }
+
+  protected _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    return this.githubApiIssueLabelsService$$.addLabels(targetId, labelsId);
   }
 }

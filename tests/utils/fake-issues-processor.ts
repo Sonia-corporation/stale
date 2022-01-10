@@ -7,6 +7,7 @@ import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issu
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -86,6 +87,9 @@ export class FakeIssuesProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_ADD_LABELS_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_CLOSE_ISSUE_MUTATION](): Promise<void> {
