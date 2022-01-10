@@ -10,7 +10,8 @@ type IStat =
   | 'Unaltered pull requests'
   | 'Closed pull requests'
   | 'Deleted pull requests branches'
-  | 'Added pull requests comments';
+  | 'Added pull requests comments'
+  | 'Added pull requests labels';
 
 export class PullRequestsStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: PullRequestsStatisticsService;
@@ -32,6 +33,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
   public closedPullRequestsCount$$: number = 0;
   public deletedPullRequestsBranchesCount$$: number = 0;
   public addedPullRequestsCommentsCount$$: number = 0;
+  public addedPullRequestsLabelsCount$$: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
   /**
@@ -49,6 +51,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     this.closedPullRequestsCount$$ = 0;
     this.deletedPullRequestsBranchesCount$$ = 0;
     this.addedPullRequestsCommentsCount$$ = 0;
+    this.addedPullRequestsLabelsCount$$ = 0;
 
     return this;
   }
@@ -140,6 +143,17 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
+  public increaseAddedPullRequestsLabelsCount(): PullRequestsStatisticsService {
+    this.addedPullRequestsLabelsCount$$++;
+    this._logIncreaseCount(
+      `Added pull requests labels count statistic increased by`,
+      1,
+      this.addedPullRequestsLabelsCount$$
+    );
+
+    return this;
+  }
+
   protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
       .set(`Processed pull requests`, this.processedPullRequestsCount$$)
@@ -150,6 +164,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Remove stale pull requests`, this.removeStalePullRequestsCount$$)
       .set(`Closed pull requests`, this.closedPullRequestsCount$$)
       .set(`Deleted pull requests branches`, this.deletedPullRequestsBranchesCount$$)
-      .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount$$);
+      .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount$$)
+      .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount$$);
   }
 }

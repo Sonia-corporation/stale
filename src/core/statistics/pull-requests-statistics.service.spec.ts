@@ -31,7 +31,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(9);
+      expect.assertions(10);
       service.processedPullRequestsCount$$ = 1;
       service.ignoredPullRequestsCount$$ = 1;
       service.unalteredPullRequestsCount$$ = 1;
@@ -41,6 +41,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       service.closedPullRequestsCount$$ = 1;
       service.deletedPullRequestsBranchesCount$$ = 1;
       service.addedPullRequestsCommentsCount$$ = 1;
+      service.addedPullRequestsLabelsCount$$ = 1;
 
       service.initialize();
 
@@ -53,6 +54,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.closedPullRequestsCount$$).toBe(0);
       expect(service.deletedPullRequestsBranchesCount$$).toBe(0);
       expect(service.addedPullRequestsCommentsCount$$).toBe(0);
+      expect(service.addedPullRequestsLabelsCount$$).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -235,6 +237,25 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseAddedPullRequestsLabelsCount()`, (): void => {
+    it(`should increase the added pull requests labels count`, (): void => {
+      expect.assertions(1);
+      service.addedPullRequestsLabelsCount$$ = 0;
+
+      service.increaseAddedPullRequestsLabelsCount();
+
+      expect(service.addedPullRequestsLabelsCount$$).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseAddedPullRequestsLabelsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -266,6 +287,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.closedPullRequestsCount$$ = 0;
         service.deletedPullRequestsBranchesCount$$ = 0;
         service.addedPullRequestsCommentsCount$$ = 0;
+        service.addedPullRequestsLabelsCount$$ = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -288,6 +310,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.closedPullRequestsCount$$ = 0;
         service.deletedPullRequestsBranchesCount$$ = 0;
         service.addedPullRequestsCommentsCount$$ = 0;
+        service.addedPullRequestsLabelsCount$$ = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -315,14 +338,15 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.closedPullRequestsCount$$ = 6;
         service.deletedPullRequestsBranchesCount$$ = 7;
         service.addedPullRequestsCommentsCount$$ = 8;
+        service.addedPullRequestsLabelsCount$$ = 9;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(9);
+        expect.assertions(10);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(9);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -367,9 +391,15 @@ describe(`PullRequestsStatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Added pull requests comments  `,
           `value-8`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          9,
+          `white-└──`,
+          `whiteBright-Added pull requests labels    `,
+          `value-9`
         );
       });
     });
