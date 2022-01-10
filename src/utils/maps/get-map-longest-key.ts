@@ -1,8 +1,8 @@
 /**
  * @description
  * Return the longest key length of a map
- * @template TKey The type of key used in the map
- * @template TValue The type of value used in the map
+ * @template TKey
+ * @template TValue
  * @param {Readonly<Map<TKey, TValue>>} map The map
  * @returns {number} Return the longest key length of the map
  */

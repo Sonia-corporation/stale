@@ -3,7 +3,7 @@ import _ from 'lodash';
 /**
  * @description
  * Return the identical values between the two sources
- * @template TType The type of values
+ * @template TType
  * @param {ReadonlyArray<TType>} source1 The first array
  * @param {ReadonlyArray<TType>} source2 The second array
  * @returns {TType[]} The duplicated values

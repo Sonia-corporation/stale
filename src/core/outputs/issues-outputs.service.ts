@@ -20,20 +20,24 @@ export class IssuesOutputsService extends AbstractOutputsService {
   protected _setOutputs(): void {
     core.setOutput(
       EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT,
-      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$
+      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount
     );
-    core.setOutput(EIssuesOutputs.IGNORED_ISSUES_COUNT, IssuesStatisticsService.getInstance().ignoredIssuesCount$$);
-    core.setOutput(EIssuesOutputs.UNALTERED_ISSUES_COUNT, IssuesStatisticsService.getInstance().unalteredIssuesCount$$);
-    core.setOutput(EIssuesOutputs.STALE_ISSUES_COUNT, IssuesStatisticsService.getInstance().staleIssuesCount$$);
-    core.setOutput(EIssuesOutputs.PROCESSED_ISSUES_COUNT, IssuesStatisticsService.getInstance().processedIssuesCount$$);
+    core.setOutput(EIssuesOutputs.IGNORED_ISSUES_COUNT, IssuesStatisticsService.getInstance().ignoredIssuesCount);
+    core.setOutput(EIssuesOutputs.UNALTERED_ISSUES_COUNT, IssuesStatisticsService.getInstance().unalteredIssuesCount);
+    core.setOutput(EIssuesOutputs.STALE_ISSUES_COUNT, IssuesStatisticsService.getInstance().staleIssuesCount);
+    core.setOutput(EIssuesOutputs.PROCESSED_ISSUES_COUNT, IssuesStatisticsService.getInstance().processedIssuesCount);
     core.setOutput(
       EIssuesOutputs.REMOVE_STALE_ISSUES_COUNT,
-      IssuesStatisticsService.getInstance().removeStaleIssuesCount$$
+      IssuesStatisticsService.getInstance().removeStaleIssuesCount
     );
-    core.setOutput(EIssuesOutputs.CLOSE_ISSUES_COUNT, IssuesStatisticsService.getInstance().closedIssuesCount$$);
+    core.setOutput(EIssuesOutputs.CLOSE_ISSUES_COUNT, IssuesStatisticsService.getInstance().closedIssuesCount);
     core.setOutput(
       EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT,
-      IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$
+      IssuesStatisticsService.getInstance().addedIssuesCommentsCount
+    );
+    core.setOutput(
+      EIssuesOutputs.ADDED_ISSUES_LABELS_COUNT,
+      IssuesStatisticsService.getInstance().addedIssuesLabelsCount
     );
   }
 }

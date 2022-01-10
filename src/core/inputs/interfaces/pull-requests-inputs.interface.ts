@@ -3,6 +3,7 @@ import { IIso8601Date } from '@utils/dates/iso-8601';
 import { IComment } from '@utils/types/comment';
 
 export interface IPullRequestsInputs extends IInputs {
+  readonly pullRequestAddLabelsAfterStale: string[];
   readonly pullRequestCloseComment: IComment | '';
   readonly pullRequestDaysBeforeClose: number;
   readonly pullRequestDaysBeforeStale: number;

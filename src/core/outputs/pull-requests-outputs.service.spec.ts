@@ -51,20 +51,21 @@ describe(`PullRequestsOutputsService`, (): void => {
     });
 
     it(`should set the statistics outputs`, (): void => {
-      expect.assertions(10);
-      PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$ = 1;
-      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$ = 1;
+      expect.assertions(11);
+      PullRequestsStatisticsService.getInstance().processedPullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().stalePullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().closedPullRequestsCount = 1;
+      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount = 1;
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount = 1;
+      PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount = 1;
 
       service.setOutputs();
 
-      expect(coreSetOutputSpy).toHaveBeenCalledTimes(9);
+      expect(coreSetOutputSpy).toHaveBeenCalledTimes(10);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EPullRequestsOutputs.IGNORED_PULL_REQUESTS_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EPullRequestsOutputs.UNALTERED_PULL_REQUESTS_COUNT, 1);
@@ -74,6 +75,7 @@ describe(`PullRequestsOutputsService`, (): void => {
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EPullRequestsOutputs.CLOSE_PULL_REQUESTS_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EPullRequestsOutputs.DELETED_PULL_REQUESTS_BRANCHES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(9, EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(10, EPullRequestsOutputs.ADDED_PULL_REQUESTS_LABELS_COUNT, 1);
     });
 
     it(`should log about the end of the pull requests output setup`, (): void => {

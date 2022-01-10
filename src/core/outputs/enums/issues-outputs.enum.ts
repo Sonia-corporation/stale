@@ -7,4 +7,5 @@ export enum EIssuesOutputs {
   REMOVE_STALE_ISSUES_COUNT = `remove-stale-issues-count`,
   CLOSE_ISSUES_COUNT = `close-issues-count`,
   ADDED_ISSUES_COMMENTS_COUNT = `added-issues-comments-count`,
+  ADDED_ISSUES_LABELS_COUNT = `added-issues-labels-count`,
 }

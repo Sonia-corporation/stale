@@ -1,5 +1,6 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -457,6 +458,96 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             2,
             `green-Label`,
             `value-${labelId}`,
+            `green-added to the issue`,
+            `value-${issueId}`
+          );
+        });
+      });
+    });
+
+    describe(`addLabels()`, (): void => {
+      let issueId: IUuid;
+      let labelsId: IUuid[];
+      let graphqlMock: jest.Mock;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueId = faker.datatype.uuid();
+        labelsId = [faker.datatype.uuid(), faker.datatype.uuid()];
+        graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+          // @ts-ignore
+          graphql: graphqlMock,
+        });
+      });
+
+      it(`should add the labels on the issue`, async (): Promise<void> => {
+        expect.assertions(7);
+
+        await expect(githubApiIssueLabelsService.addLabels(issueId, labelsId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Adding the labels`,
+          `value-${labelsId[0]},${labelsId[1]}`,
+          `whiteBright-on the issue`,
+          `value-${issueId}whiteBright-...`
+        );
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+        expect(graphqlMock).toHaveBeenCalledTimes(1);
+        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABELS_MUTATION, {
+          id: issueId,
+          labelsId,
+        });
+      });
+
+      describe(`when the labels failed to be added`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssueLabelsService.addLabels(issueId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Failed to add the labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
+            `red-on the issue`,
+            `value-${issueId}`
+          );
+        });
+      });
+
+      describe(`when the labels were successfully added`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockResolvedValue({});
+        });
+
+        it(`should log about the success of the addition`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiIssueLabelsService.addLabels(issueId, labelsId);
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `green-Labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
             `green-added to the issue`,
             `value-${issueId}`
           );

@@ -3,6 +3,7 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { AbstractStaleProcessor } from '@core/processing/abstract-stale-processor';
 import { IssueCommentsProcessor } from '@core/processing/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IUuid } from '@utils/types/uuid';
@@ -13,8 +14,8 @@ import { IUuid } from '@utils/types/uuid';
  */
 export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> {
   public readonly githubApiIssueLabelsService$$: GithubApiIssueLabelsService;
-
   public readonly issueCommentsProcessor$$: IssueCommentsProcessor;
+
   public constructor(issueProcessor: IssueProcessor) {
     super(issueProcessor);
     this.githubApiIssueLabelsService$$ = new GithubApiIssueLabelsService(issueProcessor);
@@ -37,8 +38,10 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
     return this.processor.item.id;
   }
 
-  protected _addLabel(targetId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> {
-    return this.githubApiIssueLabelsService$$.addLabel(targetId, labelId);
+  protected async _addLabel(targetId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> {
+    await this.githubApiIssueLabelsService$$.addLabel(targetId, labelId);
+
+    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount();
   }
 
   protected _processStaleComment(): Promise<void> {
@@ -47,5 +50,17 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
 
   protected _fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null> {
     return this.githubApiIssueLabelsService$$.fetchLabelByName(labelName);
+  }
+
+  protected _getExtraLabelsName(): string[] {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    return issuesInputs.issueAddLabelsAfterStale;
+  }
+
+  protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    await this.githubApiIssueLabelsService$$.addLabels(targetId, labelsId);
+
+    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(labelsId.length);
   }
 }

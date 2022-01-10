@@ -3,6 +3,7 @@ import { IIso8601Date } from '@utils/dates/iso-8601';
 import { IComment } from '@utils/types/comment';
 
 export interface IIssuesInputs extends IInputs {
+  readonly issueAddLabelsAfterStale: string[];
   readonly issueCloseComment: IComment | '';
   readonly issueDaysBeforeClose: number;
   readonly issueDaysBeforeStale: number;

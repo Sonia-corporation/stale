@@ -24,6 +24,7 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
 
   public setInputs(): IIssuesInputs {
     this.inputs$$ = {
+      issueAddLabelsAfterStale: core.getMultilineInput(EInputs.ISSUE_ADD_LABELS_AFTER_STALE, { required: false }),
       issueCloseComment: core.getInput(EInputs.ISSUE_CLOSE_COMMENT, { required: false }),
       issueDaysBeforeClose: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_CLOSE, { required: false }),
       issueDaysBeforeStale: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),

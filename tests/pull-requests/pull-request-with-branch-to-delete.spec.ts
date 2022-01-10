@@ -62,19 +62,20 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-        expect.assertions(9);
+        expect.assertions(10);
 
         await pullRequestSut.process();
 
-        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
       });
     });
 
@@ -84,19 +85,20 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request and delete the related branch`, async (): Promise<void> => {
-        expect.assertions(9);
+        expect.assertions(10);
 
         await pullRequestSut.process();
 
-        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
       });
     });
   });
@@ -150,19 +152,20 @@ describe(`Pull request with branch to delete`, (): void => {
     });
 
     it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(10);
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount$$).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount$$).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount$$).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
     });
   });
 });

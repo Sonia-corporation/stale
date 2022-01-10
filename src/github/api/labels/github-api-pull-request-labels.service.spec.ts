@@ -1,5 +1,6 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -462,6 +463,96 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             2,
             `green-Label`,
             `value-${labelId}`,
+            `green-added to the pull request`,
+            `value-${pullRequestId}`
+          );
+        });
+      });
+    });
+
+    describe(`addLabels()`, (): void => {
+      let pullRequestId: IUuid;
+      let labelsId: IUuid[];
+      let graphqlMock: jest.Mock;
+
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestId = faker.datatype.uuid();
+        labelsId = [faker.datatype.uuid(), faker.datatype.uuid()];
+        graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        githubApiPullRequestLabelsService = new GithubApiPullRequestLabelsService(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+          // @ts-ignore
+          graphql: graphqlMock,
+        });
+      });
+
+      it(`should add the labels on the pull request`, async (): Promise<void> => {
+        expect.assertions(7);
+
+        await expect(githubApiPullRequestLabelsService.addLabels(pullRequestId, labelsId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Adding the labels`,
+          `value-${labelsId[0]},${labelsId[1]}`,
+          `whiteBright-on the pull request`,
+          `value-${pullRequestId}whiteBright-...`
+        );
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+        expect(graphqlMock).toHaveBeenCalledTimes(1);
+        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_LABELS_MUTATION, {
+          id: pullRequestId,
+          labelsId,
+        });
+      });
+
+      describe(`when the labels failed to be added`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiPullRequestLabelsService.addLabels(pullRequestId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Failed to add the labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
+            `red-on the pull request`,
+            `value-${pullRequestId}`
+          );
+        });
+      });
+
+      describe(`when the labels were successfully added`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockResolvedValue({});
+        });
+
+        it(`should log about the success of the addition`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestLabelsService.addLabels(pullRequestId, labelsId);
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `green-Labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
             `green-added to the pull request`,
             `value-${pullRequestId}`
           );

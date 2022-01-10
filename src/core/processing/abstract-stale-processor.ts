@@ -55,6 +55,7 @@ export abstract class AbstractStaleProcessor<
     }
 
     await this._processStaleComment();
+    await this.processToAddExtraLabels$$();
 
     this.processor.logger.notice(`The ${this.type} is now stale`);
   }
@@ -98,6 +99,72 @@ export abstract class AbstractStaleProcessor<
     return isStale;
   }
 
+  public async processToAddExtraLabels$$(): Promise<void> {
+    this.processor.logger.info(`Checking if more labels should be added...`);
+
+    const labelsToAdd: string[] = this._getExtraLabelsName();
+
+    if (labelsToAdd.length === 0) {
+      this.processor.logger.info(`No extra label to add. Continuing...`);
+
+      return;
+    }
+
+    this.processor.logger.info(
+      LoggerService.value(labelsToAdd.length),
+      LoggerFormatService.whiteBright(`label${labelsToAdd.length > 1 ? `s` : ``} should be added`)
+    );
+    this.processor.logger.info(
+      `Fetching the extra label${labelsToAdd.length > 1 ? `s` : ``}`,
+      LoggerService.value(_.join(labelsToAdd, `, `)),
+      LoggerFormatService.whiteBright(`to add on this ${this.type}...`)
+    );
+
+    const labels: IGithubApiLabel[] = await this._fetchLabels(labelsToAdd);
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+
+    if (!commonInputs.dryRun) {
+      await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
+
+      this.processor.logger.notice(
+        LoggerService.value(labelsToAdd.length),
+        LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
+      );
+    } else {
+      this.processor.logger.info(
+        `The extra label${labelsToAdd.length > 1 ? `s were` : ` was`} not added due to the dry-run mode`
+      );
+    }
+  }
+
+  private _fetchLabels(labelsName: ReadonlyArray<string>): Promise<IGithubApiLabel[]> {
+    return Promise.all(
+      labelsName.map(async (labelName: Readonly<string>): Promise<IGithubApiLabel> => await this._fetchLabel(labelName))
+    );
+  }
+
+  private _getLabelsId(labels: ReadonlyArray<IGithubApiLabel>): IUuid[] {
+    return labels.map((label: Readonly<IGithubApiLabel>): IUuid => label.id);
+  }
+
+  private async _fetchLabel(labelName: Readonly<string>): Promise<IGithubApiLabel> | never {
+    const label: IGithubApiLabel | null = await this._fetchLabelByName(labelName);
+
+    if (!label) {
+      this.processor.logger.error(`Could not find the label`, LoggerService.value(labelName));
+
+      throw new Error(`Could not find the label ${labelName}`);
+    }
+
+    this.processor.logger.info(
+      `The label`,
+      LoggerService.value(labelName),
+      LoggerFormatService.whiteBright(`was fetched`)
+    );
+
+    return label;
+  }
+
   protected abstract _getDaysBeforeStale(): number;
 
   protected abstract _getStaleLabel(): string;
@@ -109,4 +176,8 @@ export abstract class AbstractStaleProcessor<
   protected abstract _processStaleComment(): Promise<void>;
 
   protected abstract _fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null>;
+
+  protected abstract _getExtraLabelsName(): string[];
+
+  protected abstract _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void>;
 }

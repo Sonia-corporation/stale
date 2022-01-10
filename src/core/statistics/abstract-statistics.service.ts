@@ -31,6 +31,31 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
 
   /**
    * @description
+   * Log the value of a new statistic and also show the new total count
+   * @template TStatistic
+   * @param {Readonly<string>} statistic The name of the increased statistic
+   * @param {Readonly<number>} count The count increase
+   * @param {Readonly<number>} totalCount The new total count
+   * @returns {AbstractStatisticsService<TStatistic>} The service
+   * @protected
+   */
+  protected _logIncreaseCount(
+    statistic: Readonly<string>,
+    count: Readonly<number>,
+    totalCount: Readonly<number>
+  ): AbstractStatisticsService<TStatistic> {
+    LoggerService.info(
+      LoggerFormatService.whiteBright(statistic),
+      LoggerService.value(count),
+      LoggerFormatService.whiteBright(`(${LoggerService.value(totalCount)}`),
+      LoggerFormatService.whiteBright(`in total)`)
+    );
+
+    return this;
+  }
+
+  /**
+   * @description
    * Internal logger to humanized and improve the logs when logging them all
    * @returns {AbstractStatisticsService} The service
    * @private

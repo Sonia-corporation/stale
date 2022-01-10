@@ -41,6 +41,8 @@
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=code&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=comments&style=flat-square)](https://github.com/sonia-corporation/stale)
 [![](https://tokei.rs/b1/github/sonia-corporation/stale?category=blanks&style=flat-square)](https://github.com/sonia-corporation/stale)
+[![](https://img.shields.io/npm/v/@sonia-corporation/stale?style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
+[![](https://img.shields.io/npm/dm/@sonia-corporation/stale?color=blue&style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
 
 ## Default configuration
 
@@ -82,6 +84,7 @@ All the inputs that are used both for issues and pull requests.
 | issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
 | issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
 | issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                         |         |
+| issue-add-labels-after-stale      | A list of labels added when the processing stale the issue (multiline).                                                                           |         |
 
 ## All the issues outputs
 
@@ -95,6 +98,7 @@ All the inputs that are used both for issues and pull requests.
 | remove-stale-issues-count   | The number of issues from where the stale state was removed.                |
 | close-issues-count          | The number of issues closed.                                                |
 | added-issues-comments-count | The number of added issues comments.                                        |
+| added-issues-labels-count   | The number of added issues labels.                                          |
 
 ## All the pull requests inputs
 
@@ -113,6 +117,7 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
 | pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
 | pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
+| pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                           |         |
 
 ## All the pull requests outputs
 
@@ -127,6 +132,7 @@ All the inputs that are used both for issues and pull requests.
 | close-pull-requests-count            | The number of pull requests closed.                                                |
 | deleted-pull-requests-branches-count | The number of deleted pull requests branches closed.                               |
 | added-pull-requests-comments-count   | The number of added pull requests comments.                                        |
+| added-pull-requests-labels-count     | The number of added pull requests labels.                                          |
 
 ## Examples
 
@@ -171,6 +177,8 @@ jobs:
           issue-close-comment: |
             This issue is now closed!
           issue-ignore-all-project-cards: false
+          issue-add-labels-after-stale: |
+            wake up!
 ```
 
 ### All pull requests inputs example
@@ -216,6 +224,8 @@ jobs:
           pull-request-ignore-all-project-cards: false
           pull-request-ignore-draft: false
           pull-request-delete-branch-after-close: false
+          pull-request-add-labels-after-stale: |
+            wake up!
 ```
 
 ## Debug the action

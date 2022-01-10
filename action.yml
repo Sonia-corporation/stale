@@ -56,6 +56,10 @@ inputs:
     description: 'The comment that will be sent once the issue is close (keep empty to not send a comment).'
     required: false
     default: ''
+  issue-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the issue (multiline).'
+    required: false
+    default: ''
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
@@ -109,6 +113,10 @@ inputs:
     description: 'Delete the branch when the processing close the pull request.'
     required: false
     default: 'false'
+  pull-request-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the pull request (multiline).'
+    required: false
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

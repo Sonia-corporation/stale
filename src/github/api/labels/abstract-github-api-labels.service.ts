@@ -2,6 +2,7 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -118,6 +119,39 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(
           `Failed to add the label`,
           LoggerService.value(labelId),
+          LoggerFormatService.red(`on the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+
+        throw error;
+      });
+  }
+
+  public addLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> | never {
+    this.processor.logger.info(
+      `Adding the labels`,
+      LoggerService.value(labelsId),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
+      `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(GITHUB_API_ADD_LABELS_MUTATION, {
+        id: targetId,
+        labelsId,
+      })
+      .then((): void => {
+        this.processor.logger.info(
+          LoggerFormatService.green(`Labels`),
+          LoggerService.value(labelsId),
+          LoggerFormatService.green(`added to the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        this.processor.logger.error(
+          `Failed to add the labels`,
+          LoggerService.value(labelsId),
           LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
