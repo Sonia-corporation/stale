@@ -124,6 +124,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
+      let processToAddExtraLabelsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestStaleLabel = faker.random.word();
@@ -168,6 +169,9 @@ describe(`PullRequestStaleProcessor`, (): void => {
           .mockImplementation();
         pullRequestCommentsProcessorProcessStaleCommentSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestCommentsProcessor$$, `processStaleComment`)
+          .mockImplementation();
+        processToAddExtraLabelsSpy = jest
+          .spyOn(pullRequestStaleProcessor, `processToAddExtraLabels$$`)
           .mockImplementation();
       });
 
@@ -219,6 +223,26 @@ describe(`PullRequestStaleProcessor`, (): void => {
           );
           expect(pullRequestCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
         });
+
+        it(`should not try to add a stale comment on the pull request`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
+          );
+
+          expect(pullRequestCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not try to add extra labels`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
+          );
+
+          expect(processToAddExtraLabelsSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label could be found`, (): void => {
@@ -262,6 +286,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
             expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
             expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
           });
+
+          it(`should try to add extra labels`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.stale();
+
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
+          });
         });
 
         describe(`when the action is in dry-run mode`, (): void => {
@@ -297,6 +330,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
             expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
+          });
+
+          it(`should try to add extra labels`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.stale();
+
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
+            expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
           });
         });
       });
@@ -415,6 +457,434 @@ describe(`PullRequestStaleProcessor`, (): void => {
           });
         }
       );
+    });
+
+    describe(`processToAddExtraLabels$$()`, (): void => {
+      let pullRequestId: IUuid;
+
+      let processorLoggerInfoSpy: jest.SpyInstance;
+      let processorLoggerErrorSpy: jest.SpyInstance;
+      let processorLoggerNoticeSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
+      let githubApiPullRequestLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
+      let githubApiPullRequestLabelsServiceAddLabelsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestId = faker.datatype.uuid();
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+          item: {
+            id: pullRequestId,
+          },
+        });
+        pullRequestStaleProcessor = new PullRequestStaleProcessor(pullRequestProcessor);
+
+        processorLoggerInfoSpy = jest.spyOn(pullRequestStaleProcessor.processor.logger, `info`).mockImplementation();
+        processorLoggerErrorSpy = jest.spyOn(pullRequestStaleProcessor.processor.logger, `error`).mockImplementation();
+        processorLoggerNoticeSpy = jest
+          .spyOn(pullRequestStaleProcessor.processor.logger, `notice`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>(<Partial<IPullRequestsInputs>>{
+              pullRequestAddLabelsAfterStale: [],
+            })
+          );
+        commonInputsServiceGetInputsSpy = jest
+          .spyOn(CommonInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(createHydratedMock<ICommonInputs>());
+        githubApiPullRequestLabelsServiceFetchLabelByNameSpy = jest
+          .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `fetchLabelByName`)
+          .mockResolvedValue(null);
+        githubApiPullRequestLabelsServiceAddLabelsSpy = jest
+          .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabels`)
+          .mockImplementation();
+      });
+
+      it(`should log about the processing of adding extra labels`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+        expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Checking if more labels should be added...`);
+      });
+
+      it(`should get the extra labels to add from the input`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when there is no extra labels to add`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>(<Partial<IPullRequestsInputs>>{
+              pullRequestAddLabelsAfterStale: [],
+            })
+          );
+        });
+
+        it(`should log and stop the processing`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+          expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `No extra label to add. Continuing...`);
+        });
+
+        it(`should not add the extra label on the pullRequest`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+          expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe(`when there is one extra label to add`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>(<Partial<IPullRequestsInputs>>{
+              pullRequestAddLabelsAfterStale: [`extra-label`],
+            })
+          );
+        });
+
+        it(`should log the extra label name`, async (): Promise<void> => {
+          expect.assertions(4);
+
+          await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+            new Error(`Could not find the label extra-label`)
+          );
+
+          expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `value-1`, `whiteBright-label should be added`);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `Fetching the extra label`,
+            `value-extra-label`,
+            `whiteBright-to add on this pull request...`
+          );
+        });
+
+        it(`should fetch the label`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+            new Error(`Could not find the label extra-label`)
+          );
+
+          expect(githubApiPullRequestLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(1);
+          expect(githubApiPullRequestLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledWith(`extra-label`);
+        });
+
+        describe(`when the label could not be found in the repository`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
+          });
+
+          it(`should log about the missing label error and throw an error`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(processorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+            expect(processorLoggerErrorSpy).toHaveBeenCalledWith(`Could not find the label`, `value-extra-label`);
+          });
+
+          it(`should not add the extra label on the pull request`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        describe(`when the label could be found in the repository`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestLabelsServiceFetchLabelByNameSpy.mockResolvedValue(
+              createHydratedMock<IGithubApiLabel>({
+                id: `dummy-extra-label-id`,
+              })
+            );
+          });
+
+          it(`should log about finding successfully the label`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The label`,
+              `value-extra-label`,
+              `whiteBright-was fetched`
+            );
+          });
+
+          it(`should check if the dry-run mode is enabled`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+            expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the dry-run mode is enabled`, (): void => {
+            beforeEach((): void => {
+              commonInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<ICommonInputs>(<Partial<ICommonInputs>>{
+                  dryRun: true,
+                })
+              );
+            });
+
+            it(`should log about doing nothing due to the dry-run mode`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `The extra label was not added due to the dry-run mode`
+              );
+            });
+
+            it(`should not add the extra label on the pull request`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+            });
+          });
+
+          describe(`when the dry-run mode is disabled`, (): void => {
+            beforeEach((): void => {
+              commonInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<ICommonInputs>(<Partial<ICommonInputs>>{
+                  dryRun: false,
+                })
+              );
+            });
+
+            it(`should add the extra label on the pull request`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).toHaveBeenCalledTimes(1);
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).toHaveBeenCalledWith(pullRequestId, [
+                `dummy-extra-label-id`,
+              ]);
+            });
+
+            it(`should log about successfully adding the extra label on this pull request`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-1`, `whiteBright-extra label added`);
+            });
+          });
+        });
+      });
+
+      describe(`when there is two extra labels to add`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>(<Partial<IPullRequestsInputs>>{
+              pullRequestAddLabelsAfterStale: [`extra-label-1`, `extra-label-2`],
+            })
+          );
+        });
+
+        it(`should log the extra labels name`, async (): Promise<void> => {
+          expect.assertions(4);
+
+          await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+            new Error(`Could not find the label extra-label-1`)
+          );
+
+          expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `value-2`, `whiteBright-labels should be added`);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `Fetching the extra labels`,
+            `value-extra-label-1, extra-label-2`,
+            `whiteBright-to add on this pull request...`
+          );
+        });
+
+        it(`should fetch the labels`, async (): Promise<void> => {
+          expect.assertions(4);
+
+          await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+            new Error(`Could not find the label extra-label-1`)
+          );
+
+          expect(githubApiPullRequestLabelsServiceFetchLabelByNameSpy).toHaveBeenCalledTimes(2);
+          expect(githubApiPullRequestLabelsServiceFetchLabelByNameSpy).toHaveBeenNthCalledWith(1, `extra-label-1`);
+          expect(githubApiPullRequestLabelsServiceFetchLabelByNameSpy).toHaveBeenNthCalledWith(2, `extra-label-2`);
+        });
+
+        describe(`when the labels could not be found in the repository`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
+          });
+
+          it(`should log about the missing label errors and throw an error`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(processorLoggerErrorSpy).toHaveBeenCalledTimes(2);
+            expect(processorLoggerErrorSpy).toHaveBeenNthCalledWith(
+              1,
+              `Could not find the label`,
+              `value-extra-label-1`
+            );
+            expect(processorLoggerErrorSpy).toHaveBeenNthCalledWith(
+              2,
+              `Could not find the label`,
+              `value-extra-label-2`
+            );
+          });
+
+          it(`should not add the extra labels on the pull request`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        describe(`when the labels could be found in the repository`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestLabelsServiceFetchLabelByNameSpy
+              .mockResolvedValueOnce(
+                createHydratedMock<IGithubApiLabel>({
+                  id: `dummy-extra-label-id-1`,
+                })
+              )
+              .mockResolvedValueOnce(
+                createHydratedMock<IGithubApiLabel>({
+                  id: `dummy-extra-label-id-2`,
+                })
+              );
+          });
+
+          it(`should log about finding successfully the labels`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `The label`,
+              `value-extra-label-1`,
+              `whiteBright-was fetched`
+            );
+            expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              5,
+              `The label`,
+              `value-extra-label-2`,
+              `whiteBright-was fetched`
+            );
+          });
+
+          it(`should check if the dry-run mode is enabled`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+            expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the dry-run mode is enabled`, (): void => {
+            beforeEach((): void => {
+              commonInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<ICommonInputs>(<Partial<ICommonInputs>>{
+                  dryRun: true,
+                })
+              );
+            });
+
+            it(`should log about doing nothing due to the dry-run mode`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                6,
+                `The extra labels were not added due to the dry-run mode`
+              );
+            });
+
+            it(`should not add the extra labels on the pull request`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+            });
+          });
+
+          describe(`when the dry-run mode is disabled`, (): void => {
+            beforeEach((): void => {
+              commonInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<ICommonInputs>(<Partial<ICommonInputs>>{
+                  dryRun: false,
+                })
+              );
+            });
+
+            it(`should add the extra labels on the pull request`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).toHaveBeenCalledTimes(1);
+              expect(githubApiPullRequestLabelsServiceAddLabelsSpy).toHaveBeenCalledWith(pullRequestId, [
+                `dummy-extra-label-id-1`,
+                `dummy-extra-label-id-2`,
+              ]);
+            });
+
+            it(`should log about successfully adding the extra labels on this pull request`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-2`, `whiteBright-extra labels added`);
+            });
+          });
+        });
+      });
     });
   });
 });

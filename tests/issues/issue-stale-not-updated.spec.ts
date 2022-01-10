@@ -56,18 +56,19 @@ describe(`Issue stale not updated`, (): void => {
     });
 
     it(`should not remove the stale state on the issue`, async (): Promise<void> => {
-      expect.assertions(8);
+      expect.assertions(9);
 
       await issueSut.process();
 
-      expect(IssuesStatisticsService.getInstance().processedIssuesCount$$).toBe(1);
-      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.getInstance().staleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$).toBe(1);
-      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount$$).toBe(0);
-      expect(IssuesStatisticsService.getInstance().closedIssuesCount$$).toBe(1);
-      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$).toBe(1);
+      expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
     });
   });
 });

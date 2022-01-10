@@ -1,3 +1,5 @@
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
+import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
@@ -7,6 +9,7 @@ import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issu
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
+import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
@@ -86,6 +89,9 @@ export class FakeIssuesProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_ADD_LABEL_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_ADD_LABELS_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_CLOSE_ISSUE_MUTATION](): Promise<void> {
@@ -243,9 +249,9 @@ export class FakeIssuesProcessor {
    * @description
    * Crate the SUT
    * You can pass the parameters to override the default inputs
-   * @param {Readonly<Partial<IAllInputs>>} inputs The override inputs
+   * @param {Readonly<Partial<ICommonInputs & IIssuesInputs>>} inputs The override inputs
    */
-  public constructor(inputs?: Readonly<Partial<IAllInputs>>) {
+  public constructor(inputs?: Readonly<Partial<ICommonInputs & IIssuesInputs>>) {
     this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
@@ -275,6 +281,21 @@ export class FakeIssuesProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       dryRun: false,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to add on the issue when it is stale
+   * @param {ReadonlyArray<string>} labels The labels to add
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueAddLabelsAfterStale: labels,
     });
 
     return this;

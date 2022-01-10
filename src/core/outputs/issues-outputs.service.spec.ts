@@ -51,19 +51,20 @@ describe(`IssuesOutputsService`, (): void => {
     });
 
     it(`should set the statistics outputs`, (): void => {
-      expect.assertions(9);
-      IssuesStatisticsService.getInstance().processedIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().ignoredIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().unalteredIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().staleIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().removeStaleIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().closedIssuesCount$$ = 1;
-      IssuesStatisticsService.getInstance().addedIssuesCommentsCount$$ = 1;
+      expect.assertions(10);
+      IssuesStatisticsService.getInstance().processedIssuesCount = 1;
+      IssuesStatisticsService.getInstance().ignoredIssuesCount = 1;
+      IssuesStatisticsService.getInstance().unalteredIssuesCount = 1;
+      IssuesStatisticsService.getInstance().staleIssuesCount = 1;
+      IssuesStatisticsService.getInstance().alreadyStaleIssuesCount = 1;
+      IssuesStatisticsService.getInstance().removeStaleIssuesCount = 1;
+      IssuesStatisticsService.getInstance().closedIssuesCount = 1;
+      IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 1;
+      IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 1;
 
       service.setOutputs();
 
-      expect(coreSetOutputSpy).toHaveBeenCalledTimes(8);
+      expect(coreSetOutputSpy).toHaveBeenCalledTimes(9);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EIssuesOutputs.IGNORED_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EIssuesOutputs.UNALTERED_ISSUES_COUNT, 1);
@@ -72,6 +73,7 @@ describe(`IssuesOutputsService`, (): void => {
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EIssuesOutputs.REMOVE_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EIssuesOutputs.CLOSE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(9, EIssuesOutputs.ADDED_ISSUES_LABELS_COUNT, 1);
     });
 
     it(`should log about the end of the issues output setup`, (): void => {

@@ -4,6 +4,7 @@ import faker from 'faker';
 export const TEST_DEFAULT_INPUTS: IAllInputs = {
   dryRun: false,
   githubToken: faker.datatype.uuid(),
+  issueAddLabelsAfterStale: [],
   issueCloseComment: `close-comment`,
   issueDaysBeforeClose: 10,
   issueDaysBeforeStale: 30,
@@ -15,6 +16,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueIgnoreBeforeCreationDate: ``,
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,
+  pullRequestAddLabelsAfterStale: [],
   pullRequestCloseComment: `close-comment`,
   pullRequestDaysBeforeClose: 10,
   pullRequestDaysBeforeStale: 30,
