@@ -133,7 +133,7 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-progress": "0.0.1",
     "eslint-plugin-typescript-sort-keys": "2.1.0",
-    "faker": "5.5.3",
+    "faker": "6.6.6",
     "husky": "7.0.4",
     "jest": "27.4.7",
     "jest-extended": "1.2.0",
