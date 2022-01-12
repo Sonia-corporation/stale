@@ -5,6 +5,7 @@ import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.ser
 import { PullRequestCommentsProcessor } from '@core/processing/pull-requests/pull-request-comments-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestStaleProcessor } from '@core/processing/pull-requests/pull-request-stale-processor';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestLabelsService } from '@github/api/labels/github-api-pull-request-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
@@ -125,6 +126,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestStaleLabel = faker.random.word();
@@ -172,6 +174,9 @@ describe(`PullRequestStaleProcessor`, (): void => {
           .mockImplementation();
         processToAddExtraLabelsSpy = jest
           .spyOn(pullRequestStaleProcessor, `processToAddExtraLabels$$`)
+          .mockImplementation();
+        pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsLabelsCount`)
           .mockImplementation();
       });
 
@@ -244,6 +249,16 @@ describe(`PullRequestStaleProcessor`, (): void => {
           expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
           expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
         });
+
+        it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label could be found`, (): void => {
@@ -277,6 +292,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
             expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now stale`);
+          });
+
+          it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestStaleProcessor.stale();
+
+            expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should try to add a stale comment on the pull request`, async (): Promise<void> => {
@@ -322,6 +346,14 @@ describe(`PullRequestStaleProcessor`, (): void => {
             );
             expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now stale`);
+          });
+
+          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestStaleProcessor.stale();
+
+            expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
           });
 
           it(`should try to add a stale comment on the pull request`, async (): Promise<void> => {
@@ -470,6 +502,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceAddLabelsSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -500,6 +533,9 @@ describe(`PullRequestStaleProcessor`, (): void => {
           .mockResolvedValue(null);
         githubApiPullRequestLabelsServiceAddLabelsSpy = jest
           .spyOn(pullRequestStaleProcessor.githubApiPullRequestLabelsService$$, `addLabels`)
+          .mockImplementation();
+        pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsLabelsCount`)
           .mockImplementation();
       });
 
@@ -539,12 +575,20 @@ describe(`PullRequestStaleProcessor`, (): void => {
           expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `No extra label to add. Continuing...`);
         });
 
-        it(`should not add the extra label on the pullRequest`, async (): Promise<void> => {
+        it(`should not add the extra label on the pull request`, async (): Promise<void> => {
           expect.assertions(1);
 
           await pullRequestStaleProcessor.processToAddExtraLabels$$();
 
           expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+          expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -610,6 +654,16 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
           });
+
+          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
+          });
         });
 
         describe(`when the label could be found in the repository`, (): void => {
@@ -672,6 +726,14 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
               expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
+
+            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
+            });
           });
 
           describe(`when the dry-run mode is disabled`, (): void => {
@@ -692,6 +754,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
               expect(githubApiPullRequestLabelsServiceAddLabelsSpy).toHaveBeenCalledWith(pullRequestId, [
                 `dummy-extra-label-id`,
               ]);
+            });
+
+            it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledWith(1);
             });
 
             it(`should log about successfully adding the extra label on this pull request`, async (): Promise<void> => {
@@ -778,6 +849,16 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
           });
+
+          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
+          });
         });
 
         describe(`when the labels could be found in the repository`, (): void => {
@@ -852,6 +933,14 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
               expect(githubApiPullRequestLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
+
+            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).not.toHaveBeenCalled();
+            });
           });
 
           describe(`when the dry-run mode is disabled`, (): void => {
@@ -873,6 +962,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
                 `dummy-extra-label-id-1`,
                 `dummy-extra-label-id-2`,
               ]);
+            });
+
+            it(`should increase the number of added labels count statistic by 2`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestStaleProcessor.processToAddExtraLabels$$();
+
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy).toHaveBeenCalledWith(2);
             });
 
             it(`should log about successfully adding the extra labels on this pull request`, async (): Promise<void> => {
