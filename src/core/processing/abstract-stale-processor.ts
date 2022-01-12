@@ -24,6 +24,15 @@ export abstract class AbstractStaleProcessor<
   }
 
   public async stale(): Promise<void> {
+    // This is important to add the extra information
+    // Like comments and labels
+    // Before adding the stale label
+    // Because the stale label will be used as a reference in comparison with the update date
+    // If an alteration is added after being labeled as stale, the update date will be more recent
+    // And the next run will consider the item as no longer stale
+    await this._processStaleComment();
+    await this.processToAddExtraLabels$$();
+
     this.processor.logger.info(`Adding the stale state to this ${this.type}...`);
 
     const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
@@ -53,9 +62,6 @@ export abstract class AbstractStaleProcessor<
     } else {
       this.processor.logger.info(`The stale label was not added due to the dry-run mode`);
     }
-
-    await this._processStaleComment();
-    await this.processToAddExtraLabels$$();
 
     this.processor.logger.notice(`The ${this.type} is now stale`);
   }
