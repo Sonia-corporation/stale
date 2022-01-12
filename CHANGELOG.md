@@ -1,5 +1,15 @@
 # Semantic Versioning Changelog
 
+## [1.27.1](https://github.com/Sonia-corporation/stale/compare/1.27.0...1.27.1) (2022-01-12)
+
+
+### :bug: Bug Fixes
+
+* **stale:** add in last the stale label to avoid removing the stale the next run ([cb7257d](https://github.com/Sonia-corporation/stale/commit/cb7257daf0d10d778ed05f36f31c2c62fa6fc2a8))
+  add the stale comment and the extra labels before adding the stale label
+this will avoid an issue with the update date being more recent than the stale label addition date
+* **deps:** update dependency luxon to v2.3.0 ([b3f91a7](https://github.com/Sonia-corporation/stale/commit/b3f91a744136951fe74f6900bc25d987727d6fc2))
+
 # [1.27.0](https://github.com/Sonia-corporation/stale/compare/1.26.0...1.27.0) (2022-01-10)
 
 
