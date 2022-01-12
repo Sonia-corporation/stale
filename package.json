@@ -143,7 +143,7 @@
     "node-notifier": "10.0.0",
     "prettier": "2.5.1",
     "rimraf": "3.0.2",
-    "semantic-release": "17.4.7",
+    "semantic-release": "18.0.1",
     "shx": "0.3.3",
     "ts-auto-mock": "3.5.0",
     "ts-jest": "27.1.2",
