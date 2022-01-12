@@ -210,7 +210,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
         });
 
         it(`should log and throw an error`, async (): Promise<void> => {
-          expect.assertions(4);
+          expect.assertions(3);
 
           await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
             `Could not find the stale label ${pullRequestStaleLabel}`
@@ -221,27 +221,28 @@ describe(`PullRequestStaleProcessor`, (): void => {
             `Could not find the stale label`,
             `value-${pullRequestStaleLabel}`
           );
-          expect(pullRequestCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
         });
 
-        it(`should not try to add a stale comment on the pull request`, async (): Promise<void> => {
-          expect.assertions(2);
+        it(`should try to add a stale comment on the pull request`, async (): Promise<void> => {
+          expect.assertions(3);
 
           await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
             `Could not find the stale label ${pullRequestStaleLabel}`
           );
 
-          expect(pullRequestCommentsProcessorProcessStaleCommentSpy).not.toHaveBeenCalled();
+          expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestCommentsProcessorProcessStaleCommentSpy).toHaveBeenCalledWith();
         });
 
-        it(`should not try to add extra labels`, async (): Promise<void> => {
-          expect.assertions(2);
+        it(`should try to add extra labels`, async (): Promise<void> => {
+          expect.assertions(3);
 
           await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
             `Could not find the stale label ${pullRequestStaleLabel}`
           );
 
-          expect(processToAddExtraLabelsSpy).not.toHaveBeenCalled();
+          expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
+          expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
         });
       });
 
