@@ -99,7 +99,7 @@
     "@octokit/webhooks-definitions": "3.67.3",
     "ansi-styles": "6.1.0",
     "lodash": "4.17.21",
-    "luxon": "2.2.0",
+    "luxon": "2.3.0",
     "terminal-link": "3.0.0",
     "tslib": "2.3.1"
   },
