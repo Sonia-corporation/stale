@@ -1558,7 +1558,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             `input-pull-request-ignore-draft`,
             `whiteBright-is disabled. Continuing...`
           );
-          expect(result).toBe(false);
+          expect(result).toBeFalse();
         });
       });
 
@@ -1583,7 +1583,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             `input-pull-request-ignore-draft`,
             `whiteBright-is enabled. Checking...`
           );
-          expect(result).toBe(false);
+          expect(result).toBeFalse();
         });
 
         describe(`when the pull request is not a draft`, (): void => {
@@ -1614,7 +1614,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Not a draft. Continuing...`);
-            expect(result).toBe(false);
+            expect(result).toBeFalse();
           });
         });
 
@@ -1646,7 +1646,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is a draft`);
-            expect(result).toBe(true);
+            expect(result).toBeTrue();
           });
         });
       });

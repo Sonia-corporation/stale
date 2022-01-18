@@ -303,6 +303,34 @@ export class FakeIssuesProcessor {
 
   /**
    * @description
+   * Enable the processing
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public enableProcessing(): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueProcessing: true,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Disable the processing
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public disableProcessing(): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueProcessing: false,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
    * This is the method which start the whole process
    * Call it when you are done with the arrange part
    * @returns {Promise<void>}
