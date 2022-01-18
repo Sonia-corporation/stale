@@ -1,5 +1,15 @@
 # Semantic Versioning Changelog
 
+# [1.28.0](https://github.com/Sonia-corporation/stale/compare/1.27.1...1.28.0) (2022-01-18)
+
+
+### :rocket: Features
+
+* **processing:** add new input to enable or disable the processing ([b57eac0](https://github.com/Sonia-corporation/stale/commit/b57eac07802080d49ce925ffdec34fc1fb23049c)), closes [#277](https://github.com/Sonia-corporation/stale/issues/277)
+  Add the `issue-processing` and `pull-request-processing` inputs.
+When enabled, the processing occurs as expected.
+When disabled, the processing will be skipped.
+
 ## [1.27.1](https://github.com/Sonia-corporation/stale/compare/1.27.0...1.27.1) (2022-01-12)
 
 
