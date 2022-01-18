@@ -49,6 +49,8 @@ settings:
         - ./tsconfig.app.json
         - ./tsconfig.spec.json
 rules:
+  jest/prefer-comparison-matcher: error
+  jest/prefer-equality-matcher: error
   '@typescript-eslint/no-inferrable-types': off
   no-restricted-imports:
     - error

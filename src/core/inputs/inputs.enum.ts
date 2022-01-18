@@ -13,6 +13,7 @@ export enum EInputs {
   ISSUE_STALE_LABEL = `issue-stale-label`,
   ISSUE_STALE_COMMENT = `issue-stale-comment`,
   ISSUE_CLOSE_COMMENT = `issue-close-comment`,
+  ISSUE_PROCESSING = `issue-processing`,
   PULL_REQUEST_DAYS_BEFORE_CLOSE = `pull-request-days-before-close`,
   PULL_REQUEST_DAYS_BEFORE_STALE = `pull-request-days-before-stale`,
   PULL_REQUEST_IGNORE_ALL_ASSIGNEES = `pull-request-ignore-all-assignees`,
@@ -27,4 +28,5 @@ export enum EInputs {
   PULL_REQUEST_STALE_LABEL = `pull-request-stale-label`,
   PULL_REQUEST_STALE_COMMENT = `pull-request-stale-comment`,
   PULL_REQUEST_CLOSE_COMMENT = `pull-request-close-comment`,
+  PULL_REQUEST_PROCESSING = `pull-request-processing`,
 }

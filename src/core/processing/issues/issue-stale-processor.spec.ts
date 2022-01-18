@@ -5,6 +5,7 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueCommentsProcessor } from '@core/processing/issues/issue-comments-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssueStaleProcessor } from '@core/processing/issues/issue-stale-processor';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
@@ -121,6 +122,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -159,6 +161,9 @@ describe(`IssueStaleProcessor`, (): void => {
           .spyOn(issueStaleProcessor.issueCommentsProcessor$$, `processStaleComment`)
           .mockImplementation();
         processToAddExtraLabelsSpy = jest.spyOn(issueStaleProcessor, `processToAddExtraLabels$$`).mockImplementation();
+        issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy = jest
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesLabelsCount`)
+          .mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -224,6 +229,16 @@ describe(`IssueStaleProcessor`, (): void => {
           expect(processToAddExtraLabelsSpy).toHaveBeenCalledTimes(1);
           expect(processToAddExtraLabelsSpy).toHaveBeenCalledWith();
         });
+
+        it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label could be found`, (): void => {
@@ -257,6 +272,15 @@ describe(`IssueStaleProcessor`, (): void => {
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          });
+
+          it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueStaleProcessor.stale();
+
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
@@ -302,6 +326,14 @@ describe(`IssueStaleProcessor`, (): void => {
             );
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+          });
+
+          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await issueStaleProcessor.stale();
+
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
@@ -442,6 +474,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiIssueLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
       let githubApiIssueLabelsServiceAddLabelsSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -468,6 +501,9 @@ describe(`IssueStaleProcessor`, (): void => {
           .mockResolvedValue(null);
         githubApiIssueLabelsServiceAddLabelsSpy = jest
           .spyOn(issueStaleProcessor.githubApiIssueLabelsService$$, `addLabels`)
+          .mockImplementation();
+        issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy = jest
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesLabelsCount`)
           .mockImplementation();
       });
 
@@ -513,6 +549,14 @@ describe(`IssueStaleProcessor`, (): void => {
           await issueStaleProcessor.processToAddExtraLabels$$();
 
           expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await issueStaleProcessor.processToAddExtraLabels$$();
+
+          expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -578,6 +622,16 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
           });
+
+          it(`should not increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(issueStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+          });
         });
 
         describe(`when the label could be found in the repository`, (): void => {
@@ -640,6 +694,14 @@ describe(`IssueStaleProcessor`, (): void => {
 
               expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
+
+            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await issueStaleProcessor.processToAddExtraLabels$$();
+
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+            });
           });
 
           describe(`when the dry-run mode is disabled`, (): void => {
@@ -658,6 +720,15 @@ describe(`IssueStaleProcessor`, (): void => {
 
               expect(githubApiIssueLabelsServiceAddLabelsSpy).toHaveBeenCalledTimes(1);
               expect(githubApiIssueLabelsServiceAddLabelsSpy).toHaveBeenCalledWith(issueId, [`dummy-extra-label-id`]);
+            });
+
+            it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await issueStaleProcessor.processToAddExtraLabels$$();
+
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
             });
 
             it(`should log about successfully adding the extra label on this issue`, async (): Promise<void> => {
@@ -744,6 +815,16 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
           });
+
+          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(issueStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+          });
         });
 
         describe(`when the labels could be found in the repository`, (): void => {
@@ -818,6 +899,14 @@ describe(`IssueStaleProcessor`, (): void => {
 
               expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
+
+            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await issueStaleProcessor.processToAddExtraLabels$$();
+
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+            });
           });
 
           describe(`when the dry-run mode is disabled`, (): void => {
@@ -839,6 +928,15 @@ describe(`IssueStaleProcessor`, (): void => {
                 `dummy-extra-label-id-1`,
                 `dummy-extra-label-id-2`,
               ]);
+            });
+
+            it(`should increase the number of added labels count statistic by 2`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await issueStaleProcessor.processToAddExtraLabels$$();
+
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(2);
             });
 
             it(`should log about successfully adding the extra labels on this issue`, async (): Promise<void> => {

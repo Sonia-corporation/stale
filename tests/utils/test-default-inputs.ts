@@ -14,6 +14,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueIgnoreAnyAssignees: [`issue-ignore-any-assignee-1`, `issue-ignore-any-assignee-2`],
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
   issueIgnoreBeforeCreationDate: ``,
+  issueProcessing: true,
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,
   pullRequestAddLabelsAfterStale: [],
@@ -28,6 +29,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
   pullRequestIgnoreBeforeCreationDate: ``,
   pullRequestIgnoreDraft: false,
+  pullRequestProcessing: true,
   pullRequestStaleComment: `stale-comment`,
   pullRequestStaleLabel: `stale`,
 };

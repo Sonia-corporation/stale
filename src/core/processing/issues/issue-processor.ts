@@ -15,7 +15,6 @@ import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.
  */
 export class IssueProcessor extends AbstractProcessor<IGithubApiIssue, IssueLogger> {
   public readonly type: 'issue' = `issue`;
-
   /**
    * @description
    * The first thing to do
