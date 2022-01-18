@@ -24,6 +24,10 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
    * @returns {Promise<void>}
    */
   public async process(): Promise<void> {
+    if (!this.isProcessingEnabled$$()) {
+      return;
+    }
+
     const processedItemsCount: number = await this.processBatch();
 
     LoggerService.info(
@@ -115,6 +119,14 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
   private _isIssueItems(_items: IGithubApiGetIssues | IGithubApiGetPullRequests): _items is IGithubApiGetIssues {
     return this._itemType === `issue`;
   }
+
+  /**
+   * @description
+   * Check if the processing is enabled based on the [x-processing] option
+   * Should log if needed
+   * @returns {boolean} Returns true when the processing is enabled
+   */
+  public abstract isProcessingEnabled$$(): boolean;
 
   /**
    * @description

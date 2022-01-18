@@ -34,6 +34,7 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
       issueIgnoreAnyAssignees: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_ASSIGNEES, { required: false }),
       issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueIgnoreBeforeCreationDate: core.getInput(EInputs.ISSUE_IGNORE_BEFORE_CREATION_DATE, { required: false }),
+      issueProcessing: core.getBooleanInput(EInputs.ISSUE_PROCESSING, { required: false }),
       issueStaleComment: core.getInput(EInputs.ISSUE_STALE_COMMENT, { required: false }),
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
     };

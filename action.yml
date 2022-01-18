@@ -60,6 +60,10 @@ inputs:
     description: 'A list of labels added when the processing stale the issue (multiline).'
     required: false
     default: ''
+  issue-processing:
+    description: 'Allow to process the issues.'
+    required: false
+    default: 'true'
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
@@ -117,6 +121,10 @@ inputs:
     description: 'A list of labels added when the processing stale the pull request (multiline).'
     required: false
     default: ''
+  pull-request-processing:
+    description: 'Allow to process the pull requests.'
+    required: false
+    default: 'true'
 runs:
   using: 'node12'
   main: 'dist/index.js'

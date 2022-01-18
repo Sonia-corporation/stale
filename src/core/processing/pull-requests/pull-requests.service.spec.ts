@@ -1,3 +1,5 @@
+import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
+import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
@@ -46,34 +48,64 @@ describe(`PullRequestsService`, (): void => {
 
     let processBatchSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
+    let isProcessingEnabledSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       processedPullRequestsCount = faker.datatype.number();
 
       processBatchSpy = jest.spyOn(service, `processBatch`).mockResolvedValue(processedPullRequestsCount);
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      isProcessingEnabledSpy = jest.spyOn(service, `isProcessingEnabled$$`).mockImplementation();
     });
 
-    it(`should process the batches of pull requests`, async (): Promise<void> => {
-      expect.assertions(2);
+    describe(`when the processing is disabled`, (): void => {
+      beforeEach((): void => {
+        isProcessingEnabledSpy.mockReturnValue(false);
+      });
 
-      await service.process();
+      it(`should not process the batches of pull requests`, async (): Promise<void> => {
+        expect.assertions(1);
 
-      expect(processBatchSpy).toHaveBeenCalledTimes(1);
-      expect(processBatchSpy).toHaveBeenCalledWith();
+        await service.process();
+
+        expect(processBatchSpy).not.toHaveBeenCalled();
+      });
+
+      it(`should not log when all the pull requests were processed`, async (): Promise<void> => {
+        expect.assertions(1);
+
+        await service.process();
+
+        expect(loggerServiceInfoSpy).not.toHaveBeenCalled();
+      });
     });
 
-    it(`should log when all the pull requests were processed`, async (): Promise<void> => {
-      expect.assertions(2);
+    describe(`when the processing is enabled`, (): void => {
+      beforeEach((): void => {
+        isProcessingEnabledSpy.mockReturnValue(true);
+      });
 
-      await service.process();
+      it(`should process the batches of pull requests`, async (): Promise<void> => {
+        expect.assertions(2);
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
-      expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
-        `green-All the pull requests`,
-        `white-(value-${processedPullRequestsCount}white-)`,
-        `green-were processed`
-      );
+        await service.process();
+
+        expect(processBatchSpy).toHaveBeenCalledTimes(1);
+        expect(processBatchSpy).toHaveBeenCalledWith();
+      });
+
+      it(`should log when all the pull requests were processed`, async (): Promise<void> => {
+        expect.assertions(2);
+
+        await service.process();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+          `green-All the pull requests`,
+          `white-(value-${processedPullRequestsCount}white-)`,
+          `green-were processed`
+        );
+      });
     });
   });
 
@@ -382,6 +414,89 @@ describe(`PullRequestsService`, (): void => {
 
         expect(processBatchSpy).toHaveBeenCalledTimes(2);
         expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
+      });
+    });
+  });
+
+  describe(`isProcessingEnabled$$()`, (): void => {
+    let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+    let loggerServiceInfoSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      pullRequestsInputsServiceGetInputsSpy = jest
+        .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+        .mockReturnValue(createHydratedMock<IPullRequestsInputs>());
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+    });
+
+    it(`should get the pull requests inputs`, (): void => {
+      expect.assertions(2);
+
+      service.isProcessingEnabled$$();
+
+      expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+      expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+    });
+
+    describe(`when the processing is disabled`, (): void => {
+      beforeEach((): void => {
+        pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
+            pullRequestProcessing: false,
+          })
+        );
+      });
+
+      it(`should log about it`, (): void => {
+        expect.assertions(2);
+
+        service.isProcessingEnabled$$();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+          `The input`,
+          `input-pull-request-processing`,
+          `whiteBright-is disabled. Skipping the processing of pull requests...`
+        );
+      });
+
+      it(`should return false`, (): void => {
+        expect.assertions(1);
+
+        const result = service.isProcessingEnabled$$();
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe(`when the processing is enabled`, (): void => {
+      beforeEach((): void => {
+        pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
+            pullRequestProcessing: true,
+          })
+        );
+      });
+
+      it(`should log about it`, (): void => {
+        expect.assertions(2);
+
+        service.isProcessingEnabled$$();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+          `The input`,
+          `input-pull-request-processing`,
+          `whiteBright-is enabled. Continuing...`
+        );
+      });
+
+      it(`should return true`, (): void => {
+        expect.assertions(1);
+
+        const result = service.isProcessingEnabled$$();
+
+        expect(result).toBeTrue();
       });
     });
   });

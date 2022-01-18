@@ -13,6 +13,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueIgnoreAnyAssignees: string[];
   readonly issueIgnoreAnyLabels: string[];
   readonly issueIgnoreBeforeCreationDate: IIso8601Date | '';
+  readonly issueProcessing: boolean;
   readonly issueStaleComment: IComment | '';
   readonly issueStaleLabel: string;
 }
