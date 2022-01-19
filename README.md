@@ -44,6 +44,10 @@
 [![](https://img.shields.io/npm/v/@sonia-corporation/stale?style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
 [![](https://img.shields.io/npm/dm/@sonia-corporation/stale?color=blue&style=flat-square)](https://www.npmjs.com/package/@sonia-corporation/stale)
 
+## Documentation
+
+To have in-depth documentation and examples, see the [documentation website](https://sonia-corporation.github.io/stale/).
+
 ## Default configuration
 
 ### Issues
