@@ -174,11 +174,15 @@ To help us have a clear vision over the workflow and also for you if you are jus
         - When the input value is true, delete the branch
 - Check if the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
 - If the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)
-  - Check if the action should also add a comment (coming from the `pull-request-stale-comment` input)
-    - When the input value is not empty, add a comment
-  - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-stale` input)
-    - When the input value is filled list, add the listed labels
-  - Add a label to stale (coming from the `pull-request-stale-label` input, ignored in `dry-run` mode)
+  - Check if the action should convert to draft or stale (coming from the `pull-request-to-draft-instead-of-stale`)
+    - If the draft mode is enabled
+      - Convert to draft and stop the processing
+    - If the draft mode is disabled
+      - Check if the action should also add a comment (coming from the `pull-request-stale-comment` input)
+        - When the input value is not empty, add a comment
+      - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-stale` input)
+        - When the input value is filled list, add the listed labels
+      - Add a label to stale (coming from the `pull-request-stale-label` input, ignored in `dry-run` mode)
 - When the batch was processed, go to the next one and proceed again
 
 ### Error handling

@@ -1,66 +1,62 @@
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
-import { createHydratedMock } from 'ts-auto-mock';
+import { DateTime } from 'luxon';
 
-describe(`Pull request with all project cards ignored`, (): void => {
+describe(`Pull request to draft`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when a pull request should ignore all the project cards`, (): void => {
+  describe(`when a pull request last update was older than 30 days`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestIgnoreAllProjectCards: true,
+        pullRequestDaysBeforeStale: 30,
+      }).addPullRequest({
+        locked: false,
+        updatedAt: DateTime.now()
+          .minus({
+            day: 31,
+          })
+          .toISO({
+            includeOffset: false,
+          }),
       });
     });
 
-    describe(`when there is no project card on the pull request`, (): void => {
+    describe(`when the pull request should be stale (with a label)`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.addPullRequest({
-          locked: false,
-          projectCards: {
-            nodes: [],
-            totalCount: 0,
-          },
-        });
+        pullRequestSut.disableDraftProcessing();
       });
 
-      it(`should not ignore the pull request`, async (): Promise<void> => {
+      it(`should stale the pull request`, async (): Promise<void> => {
         expect.assertions(11);
 
         await pullRequestSut.process();
 
         expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
-    describe(`when there is one project card on the pull request`, (): void => {
+    describe(`when the pull request should be stale (with the draft mode)`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.addPullRequest({
-          locked: false,
-          projectCards: {
-            nodes: [createHydratedMock<IGithubApiProjectCard>()],
-            totalCount: 1,
-          },
-        });
+        pullRequestSut.enableDraftProcessing();
       });
 
-      it(`should ignore the pull request`, async (): Promise<void> => {
+      it(`should stale the pull request by converting it to a draft`, async (): Promise<void> => {
         expect.assertions(11);
 
         await pullRequestSut.process();
 
         expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
@@ -69,7 +65,7 @@ describe(`Pull request with all project cards ignored`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
-        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(1);
       });
     });
   });

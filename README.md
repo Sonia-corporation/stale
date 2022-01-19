@@ -120,6 +120,7 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
 | pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                           |         |
 | pull-request-processing                  | Allow to process the pull requests.                                                                                                                      | `true`  |
+| pull-request-to-draft-instead-of-stale   | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                            | `false` |
 
 ## All the pull requests outputs
 
@@ -135,6 +136,7 @@ All the inputs that are used both for issues and pull requests.
 | deleted-pull-requests-branches-count | The number of deleted pull requests branches closed.                               |
 | added-pull-requests-comments-count   | The number of added pull requests comments.                                        |
 | added-pull-requests-labels-count     | The number of added pull requests labels.                                          |
+| draft-pull-requests-count            | The number of pull requests converted to draft.                                    |
 
 ## Examples
 

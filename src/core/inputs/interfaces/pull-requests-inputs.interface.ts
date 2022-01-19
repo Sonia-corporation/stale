@@ -18,4 +18,5 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestProcessing: boolean;
   readonly pullRequestStaleComment: IComment | '';
   readonly pullRequestStaleLabel: string;
+  readonly pullRequestToDraftInsteadOfStale: boolean;
 }

@@ -62,7 +62,7 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -76,6 +76,7 @@ describe(`Pull request with branch to delete`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
@@ -85,7 +86,7 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request and delete the related branch`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -99,6 +100,7 @@ describe(`Pull request with branch to delete`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
   });
@@ -152,7 +154,7 @@ describe(`Pull request with branch to delete`, (): void => {
     });
 
     it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-      expect.assertions(10);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
@@ -166,6 +168,7 @@ describe(`Pull request with branch to delete`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 });

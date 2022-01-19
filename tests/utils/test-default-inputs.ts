@@ -32,4 +32,5 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestProcessing: true,
   pullRequestStaleComment: `stale-comment`,
   pullRequestStaleLabel: `stale`,
+  pullRequestToDraftInsteadOfStale: false,
 };

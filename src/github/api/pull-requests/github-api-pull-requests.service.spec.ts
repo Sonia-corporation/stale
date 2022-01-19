@@ -1,5 +1,6 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
+import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
@@ -312,7 +313,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
       pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
     });
 
-    describe(`removeLabelFromPullRequest()`, (): void => {
+    describe(`closePullRequest()`, (): void => {
       let pullRequestId: IUuid;
       let graphqlMock: jest.Mock;
 
@@ -389,6 +390,89 @@ describe(`GithubApiPullRequestsService`, (): void => {
             `green-Pull request`,
             `value-${pullRequestId}`,
             `green-closed`
+          );
+        });
+      });
+    });
+
+    describe(`draftPullRequest()`, (): void => {
+      let pullRequestId: IUuid;
+      let graphqlMock: jest.Mock;
+
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let octokitServiceGetOctokitSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestId = faker.datatype.uuid();
+        graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        githubApiPullRequestsService = new GithubApiPullRequestsService(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
+        pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+          // @ts-ignore
+          graphql: graphqlMock,
+        });
+      });
+
+      it(`should convert the pull request to draft`, async (): Promise<void> => {
+        expect.assertions(7);
+
+        await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Converting the pull request`,
+          `value-${pullRequestId}`,
+          `whiteBright-to draft...`
+        );
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+        expect(graphqlMock).toHaveBeenCalledTimes(1);
+        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_DRAFT_PULL_REQUEST_MUTATION, {
+          pullRequestId,
+        });
+      });
+
+      describe(`when the pull request failed to be converted as draft`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Failed to draft the pull request`,
+            `value-${pullRequestId}`
+          );
+        });
+      });
+
+      describe(`when the pull request was successfully converted to a draft`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockResolvedValue({});
+        });
+
+        it(`should log about the success of the conversion to draft`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestsService.draftPullRequest(pullRequestId);
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `green-Pull request`,
+            `value-${pullRequestId}`,
+            `green-converted to draft`
           );
         });
       });

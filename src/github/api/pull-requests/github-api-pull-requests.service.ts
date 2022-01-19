@@ -1,5 +1,6 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
+import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_ASSIGNEES_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-assignees-per-pull-request';
 import { GITHUB_LABELS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-labels-per-pull-request';
@@ -87,6 +88,31 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         this.pullRequestProcessor.logger.error(`Failed to close the pull request`, LoggerService.value(pullRequestId));
+
+        throw error;
+      });
+  }
+
+  public draftPullRequest(pullRequestId: Readonly<IUuid>): Promise<void> | never {
+    this.pullRequestProcessor.logger.info(
+      `Converting the pull request`,
+      LoggerService.value(pullRequestId),
+      LoggerFormatService.whiteBright(`to draft...`)
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(GITHUB_API_DRAFT_PULL_REQUEST_MUTATION, {
+        pullRequestId,
+      })
+      .then((): void => {
+        this.pullRequestProcessor.logger.info(
+          LoggerFormatService.green(`Pull request`),
+          LoggerService.value(pullRequestId),
+          LoggerFormatService.green(`converted to draft`)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        this.pullRequestProcessor.logger.error(`Failed to draft the pull request`, LoggerService.value(pullRequestId));
 
         throw error;
       });

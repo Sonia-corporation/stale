@@ -304,7 +304,7 @@ describe(`GithubApiIssuesService`, (): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
     });
 
-    describe(`removeLabelFromIssue()`, (): void => {
+    describe(`closeIssue()`, (): void => {
       let issueId: IUuid;
       let graphqlMock: jest.Mock;
 
