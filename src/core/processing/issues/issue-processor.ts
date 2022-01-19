@@ -4,7 +4,7 @@ import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-proce
 import { IssueIsStaleProcessor } from '@core/processing/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/processing/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/processing/issues/issue-remove-stale-processor';
-import { IssueShouldCloseStaleProcessor } from '@core/processing/issues/issue-should-close-stale-processor';
+import { IssueShouldCloseProcessor } from '@core/processing/issues/issue-should-close-processor';
 import { IssueStaleProcessor } from '@core/processing/issues/issue-stale-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -76,7 +76,7 @@ export class IssueProcessor extends AbstractProcessor<IGithubApiIssue, IssueLogg
   }
 
   public async processForClose$$(): Promise<void> {
-    const issueShouldCloseStaleProcessor: IssueShouldCloseStaleProcessor = new IssueShouldCloseStaleProcessor(this);
+    const issueShouldCloseStaleProcessor: IssueShouldCloseProcessor = new IssueShouldCloseProcessor(this);
 
     if (issueShouldCloseStaleProcessor.shouldClose()) {
       const issueCloseStaleProcessor: IssueCloseStaleProcessor = new IssueCloseStaleProcessor(this);

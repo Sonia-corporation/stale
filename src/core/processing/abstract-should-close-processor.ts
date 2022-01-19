@@ -7,7 +7,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import { DateTime } from 'luxon';
 
-export abstract class AbstractShouldCloseStaleProcessor<
+export abstract class AbstractShouldCloseProcessor<
   TProcessor extends IssueProcessor | PullRequestProcessor
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {

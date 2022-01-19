@@ -1,7 +1,6 @@
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
-import { StaleService } from '@core/stale.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
@@ -20,11 +19,8 @@ import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { AbstractFakeProcessor } from '@tests/utils/abstract-fake-processor';
 import { TEST_DEFAULT_INPUTS } from '@tests/utils/test-default-inputs';
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import { context } from '@actions/github';
-import { GitHub } from '@actions/github/lib/utils';
 import faker from 'faker';
 import _ from 'lodash';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -36,7 +32,7 @@ import { createHydratedMock } from 'ts-auto-mock';
  * The goal is to mock the least among of code to have the real code called
  * So the logs are visible, and we have a local way to test a feature
  */
-export class FakeIssuesProcessor {
+export class FakeIssuesProcessor extends AbstractFakeProcessor {
   /**
    * @description
    * A common place to create a standard random issue mock for
@@ -81,10 +77,8 @@ export class FakeIssuesProcessor {
     });
   }
 
-  private _inputs: IAllInputs;
-  private _githubApiIssues: IGithubApiIssue[] = [];
-  private _githubApiIssuesFetchCount = 0;
-  private _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
+  protected _inputs: IAllInputs;
+  protected _apiMapper: Record<string, (data: Readonly<Record<string, unknown>>) => Promise<unknown>> = {
     [GITHUB_API_ADD_COMMENT_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
@@ -245,6 +239,9 @@ export class FakeIssuesProcessor {
     },
   };
 
+  private _githubApiIssues: IGithubApiIssue[] = [];
+  private _githubApiIssuesFetchCount = 0;
+
   /**
    * @description
    * Crate the SUT
@@ -252,38 +249,12 @@ export class FakeIssuesProcessor {
    * @param {Readonly<Partial<ICommonInputs & IIssuesInputs>>} inputs The override inputs
    */
   public constructor(inputs?: Readonly<Partial<ICommonInputs & IIssuesInputs>>) {
+    super();
+
     this._inputs = createHydratedMock<IAllInputs>({
       ...TEST_DEFAULT_INPUTS,
       ...inputs,
     });
-  }
-
-  /**
-   * @description
-   * Enable the dry-run mode to skip some part of the process
-   * @returns {FakeIssuesProcessor} The class
-   */
-  public dryRun(): FakeIssuesProcessor {
-    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
-      ...this._inputs,
-      dryRun: true,
-    });
-
-    return this;
-  }
-
-  /**
-   * @description
-   * Disable the dry-run mode to include every part of the process
-   * @returns {FakeIssuesProcessor} The class
-   */
-  public normalRun(): FakeIssuesProcessor {
-    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
-      ...this._inputs,
-      dryRun: false,
-    });
-
-    return this;
   }
 
   /**
@@ -346,23 +317,6 @@ export class FakeIssuesProcessor {
 
   /**
    * @description
-   * This is the method which start the whole process
-   * Call it when you are done with the arrange part
-   * @returns {Promise<void>}
-   */
-  public async process(): Promise<void> {
-    this._spy();
-
-    await StaleService.initialize().catch((error: unknown): void => {
-      console.error(`Caught error in the tests!`);
-      console.error(error);
-
-      throw error;
-    });
-  }
-
-  /**
-   * @description
    * Add a new issue to the list of issues
    * @param {Readonly<Partial<IGithubApiIssue>>} issue The issue to add
    * @returns {FakeIssuesProcessor} The class
@@ -414,58 +368,5 @@ export class FakeIssuesProcessor {
     this._apiMapper[GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY] = result;
 
     return this;
-  }
-
-  /**
-   * @description
-   * All the spies to use to have a working process
-   * @private
-   */
-  private _spy(): void {
-    // Useful to set the inputs
-    jest
-      .spyOn(core, `getInput`)
-      .mockImplementation(
-        (name: Readonly<string>): string =>
-          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as string
-      );
-    jest
-      .spyOn(core, `getBooleanInput`)
-      .mockImplementation(
-        (name: Readonly<string>): boolean =>
-          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as boolean
-      );
-    jest
-      .spyOn(core, `getMultilineInput`)
-      .mockImplementation(
-        (name: Readonly<string>): string[] =>
-          _.find(this._inputs, (_value, key: Readonly<string>): boolean => key === _.camelCase(name)) as string[]
-      );
-
-    // Useful for the calls to the GitHub API
-    jest.spyOn(context, `repo`, `get`).mockReturnValue({
-      owner: faker.random.word(),
-      repo: faker.random.word(),
-    });
-
-    // Mock the GitHub API fetch of issues
-    jest.spyOn(github, `getOctokit`).mockImplementation(
-      (): InstanceType<typeof GitHub> =>
-        createHydratedMock<InstanceType<typeof GitHub>>({
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          graphql: jest
-            .fn()
-            .mockImplementation(
-              (request: Readonly<string>, data: Readonly<Record<string, unknown>>): Promise<unknown> => {
-                if (!_.has(this._apiMapper, request)) {
-                  throw new Error(`Could not find in the API mapper the request "${request}"`);
-                }
-
-                return this._apiMapper[request](data);
-              }
-            ),
-        })
-    );
   }
 }

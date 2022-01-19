@@ -6,7 +6,7 @@ import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestRemoveStaleProcessor } from '@core/processing/pull-requests/pull-request-remove-stale-processor';
-import { PullRequestShouldCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-should-close-stale-processor';
+import { PullRequestShouldCloseProcessor } from '@core/processing/pull-requests/pull-request-should-close-processor';
 import { PullRequestStaleProcessor } from '@core/processing/pull-requests/pull-request-stale-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
@@ -94,8 +94,9 @@ export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullReques
   }
 
   public async processForClose$$(): Promise<void> {
-    const pullRequestShouldCloseStaleProcessor: PullRequestShouldCloseStaleProcessor =
-      new PullRequestShouldCloseStaleProcessor(this);
+    const pullRequestShouldCloseStaleProcessor: PullRequestShouldCloseProcessor = new PullRequestShouldCloseProcessor(
+      this
+    );
 
     if (pullRequestShouldCloseStaleProcessor.shouldClose()) {
       const pullRequestCloseStaleProcessor: PullRequestCloseStaleProcessor = new PullRequestCloseStaleProcessor(this);

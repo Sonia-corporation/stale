@@ -4,7 +4,7 @@ import { IssueIsStaleProcessor } from '@core/processing/issues/issue-is-stale-pr
 import { IssueLogger } from '@core/processing/issues/issue-logger';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssueRemoveStaleProcessor } from '@core/processing/issues/issue-remove-stale-processor';
-import { IssueShouldCloseStaleProcessor } from '@core/processing/issues/issue-should-close-stale-processor';
+import { IssueShouldCloseProcessor } from '@core/processing/issues/issue-should-close-processor';
 import { IssueStaleProcessor } from '@core/processing/issues/issue-stale-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.interface';
@@ -21,7 +21,7 @@ jest.mock(`@core/processing/issues/issue-ignore-processor`);
 jest.mock(`@core/processing/issues/issue-stale-processor`);
 jest.mock(`@core/processing/issues/issue-is-stale-processor`);
 jest.mock(`@core/processing/issues/issue-remove-stale-processor`);
-jest.mock(`@core/processing/issues/issue-should-close-stale-processor`);
+jest.mock(`@core/processing/issues/issue-should-close-processor`);
 jest.mock(`@core/processing/issues/issue-close-stale-processor`);
 
 describe(`IssueProcessor`, (): void => {
@@ -673,8 +673,8 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`processForClose$$()`, (): void => {
-      const mockedIssueShouldCloseStaleProcessor: MockedObjectDeep<typeof IssueShouldCloseStaleProcessor> = mocked(
-        IssueShouldCloseStaleProcessor,
+      const mockedIssueShouldCloseProcessor: MockedObjectDeep<typeof IssueShouldCloseProcessor> = mocked(
+        IssueShouldCloseProcessor,
         true
       );
       const mockedIssueCloseStaleProcessor: MockedObjectDeep<typeof IssueCloseStaleProcessor> = mocked(
@@ -687,7 +687,7 @@ describe(`IssueProcessor`, (): void => {
       let issuesStatisticsServiceIncreaseUnalteredIssuesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
-        mockedIssueShouldCloseStaleProcessor.mockClear();
+        mockedIssueShouldCloseProcessor.mockClear();
         mockedIssueCloseStaleProcessor.mockClear();
 
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
@@ -704,15 +704,15 @@ describe(`IssueProcessor`, (): void => {
 
         await issueProcessor.processForClose$$();
 
-        expect(mockedIssueShouldCloseStaleProcessor).toHaveBeenCalledTimes(1);
-        expect(mockedIssueShouldCloseStaleProcessor).toHaveBeenCalledWith(issueProcessor);
-        expect(mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mock.calls).toHaveLength(1);
-        expect(mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mock.calls[0]).toHaveLength(0);
+        expect(mockedIssueShouldCloseProcessor).toHaveBeenCalledTimes(1);
+        expect(mockedIssueShouldCloseProcessor).toHaveBeenCalledWith(issueProcessor);
+        expect(mockedIssueShouldCloseProcessor.prototype.shouldClose.mock.calls).toHaveLength(1);
+        expect(mockedIssueShouldCloseProcessor.prototype.shouldClose.mock.calls[0]).toHaveLength(0);
       });
 
       describe(`when the issue should not be closed`, (): void => {
         beforeEach((): void => {
-          mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(false);
+          mockedIssueShouldCloseProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(false);
         });
 
         it(`should not increase the close issues statistic`, async (): Promise<void> => {
@@ -745,7 +745,7 @@ describe(`IssueProcessor`, (): void => {
 
       describe(`when the issue should be closed`, (): void => {
         beforeEach((): void => {
-          mockedIssueShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(true);
+          mockedIssueShouldCloseProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(true);
         });
 
         it(`should close the issue`, async (): Promise<void> => {
