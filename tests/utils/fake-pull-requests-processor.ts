@@ -13,6 +13,7 @@ import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/g
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
+import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
@@ -98,6 +99,9 @@ export class FakePullRequestsProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_DELETE_REFERENCE_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_DRAFT_PULL_REQUEST_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_ISSUES_QUERY](): Promise<IGithubApiGetIssues> {
@@ -324,6 +328,34 @@ export class FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       pullRequestProcessing: false,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Enable the draft processing (draft instead of stale)
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public enableDraftProcessing(): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestToDraftInsteadOfStale: true,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Disable the draft processing (stale instead of draft)
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public disableDraftProcessing(): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestToDraftInsteadOfStale: false,
     });
 
     return this;

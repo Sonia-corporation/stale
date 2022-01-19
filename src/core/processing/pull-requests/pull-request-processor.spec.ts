@@ -1,5 +1,6 @@
 import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-close-stale-processor';
 import { PullRequestDeleteBranchProcessor } from '@core/processing/pull-requests/pull-request-delete-branch-processor';
+import { PullRequestDraftProcessor } from '@core/processing/pull-requests/pull-request-draft-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
@@ -25,6 +26,7 @@ jest.mock(`@core/processing/pull-requests/pull-request-remove-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-should-close-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-close-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-delete-branch-processor`);
+jest.mock(`@core/processing/pull-requests/pull-request-draft-processor`);
 
 describe(`PullRequestProcessor`, (): void => {
   let gitHubApiPullRequest: IGithubApiPullRequest;
@@ -437,6 +439,10 @@ describe(`PullRequestProcessor`, (): void => {
         PullRequestStaleProcessor,
         true
       );
+      const mockedPullRequestDraftProcessor: MockedObjectDeep<typeof PullRequestDraftProcessor> = mocked(
+        PullRequestDraftProcessor,
+        true
+      );
 
       let stopProcessingSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy: jest.SpyInstance;
@@ -444,6 +450,7 @@ describe(`PullRequestProcessor`, (): void => {
 
       beforeEach((): void => {
         mockedPullRequestStaleProcessor.mockClear();
+        mockedPullRequestDraftProcessor.mockClear();
 
         stopProcessingSpy = jest.spyOn(pullRequestProcessor, `stopProcessing$$`).mockImplementation();
         pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy = jest
@@ -488,11 +495,12 @@ describe(`PullRequestProcessor`, (): void => {
         });
 
         it(`should stop to process this pull request`, async (): Promise<void> => {
-          expect.assertions(3);
+          expect.assertions(4);
 
           await pullRequestProcessor.processForStale$$();
 
           expect(mockedPullRequestStaleProcessor.prototype.stale).not.toHaveBeenCalled();
+          expect(mockedPullRequestDraftProcessor.prototype.draft).not.toHaveBeenCalled();
           expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
           expect(stopProcessingSpy).toHaveBeenCalledWith();
         });
@@ -503,39 +511,107 @@ describe(`PullRequestProcessor`, (): void => {
           mockedPullRequestStaleProcessor.prototype.shouldStale.mockImplementation().mockReturnValue(true);
         });
 
-        it(`should stale the pull request`, async (): Promise<void> => {
-          expect.assertions(2);
+        describe(`when the processing should draft instead of stale`, (): void => {
+          beforeEach((): void => {
+            mockedPullRequestDraftProcessor.prototype.shouldDraftInsteadOfStale
+              .mockImplementation()
+              .mockReturnValue(true);
+          });
 
-          await pullRequestProcessor.processForStale$$();
+          it(`should draft the pull request`, async (): Promise<void> => {
+            expect.assertions(4);
 
-          expect(mockedPullRequestStaleProcessor.prototype.stale.mock.calls).toHaveLength(1);
-          expect(mockedPullRequestStaleProcessor.prototype.stale.mock.calls[0]).toHaveLength(0);
+            await pullRequestProcessor.processForStale$$();
+
+            expect(mockedPullRequestDraftProcessor).toHaveBeenCalledTimes(1);
+            expect(mockedPullRequestDraftProcessor).toHaveBeenCalledWith(pullRequestProcessor);
+            expect(mockedPullRequestDraftProcessor.prototype.draft.mock.calls).toHaveLength(1);
+            expect(mockedPullRequestDraftProcessor.prototype.draft.mock.calls[0]).toHaveLength(0);
+          });
+
+          it(`should not stale the pull request`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(mockedPullRequestStaleProcessor.prototype.stale).not.toHaveBeenCalled();
+          });
+
+          it(`should not increase the stale pull requests statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not increase the unaltered pull requests statistics`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should stop to process this pull request`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+            expect(stopProcessingSpy).toHaveBeenCalledWith();
+          });
         });
 
-        it(`should increase the stale pull requests statistic by 1`, async (): Promise<void> => {
-          expect.assertions(2);
+        describe(`when the processing should stale instead of draft`, (): void => {
+          beforeEach((): void => {
+            mockedPullRequestDraftProcessor.prototype.shouldDraftInsteadOfStale
+              .mockImplementation()
+              .mockReturnValue(false);
+          });
 
-          await pullRequestProcessor.processForStale$$();
+          it(`should not draft the pull request`, async (): Promise<void> => {
+            expect.assertions(1);
 
-          expect(pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy).toHaveBeenCalledTimes(1);
-          expect(pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy).toHaveBeenCalledWith();
-        });
+            await pullRequestProcessor.processForStale$$();
 
-        it(`should not increase the unaltered pull requests statistics`, async (): Promise<void> => {
-          expect.assertions(1);
+            expect(mockedPullRequestDraftProcessor.prototype.draft).not.toHaveBeenCalled();
+          });
 
-          await pullRequestProcessor.processForStale$$();
+          it(`should stale the pull request`, async (): Promise<void> => {
+            expect.assertions(2);
 
-          expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).not.toHaveBeenCalled();
-        });
+            await pullRequestProcessor.processForStale$$();
 
-        it(`should stop to process this pull request`, async (): Promise<void> => {
-          expect.assertions(2);
+            expect(mockedPullRequestStaleProcessor.prototype.stale.mock.calls).toHaveLength(1);
+            expect(mockedPullRequestStaleProcessor.prototype.stale.mock.calls[0]).toHaveLength(0);
+          });
 
-          await pullRequestProcessor.processForStale$$();
+          it(`should increase the stale pull requests statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
 
-          expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
-          expect(stopProcessingSpy).toHaveBeenCalledWith();
+            await pullRequestProcessor.processForStale$$();
+
+            expect(pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseStalePullRequestsCountSpy).toHaveBeenCalledWith();
+          });
+
+          it(`should not increase the unaltered pull requests statistics`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(pullRequestsStatisticsServiceIncreaseUnalteredPullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should stop to process this pull request`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestProcessor.processForStale$$();
+
+            expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+            expect(stopProcessingSpy).toHaveBeenCalledWith();
+          });
         });
       });
     });
