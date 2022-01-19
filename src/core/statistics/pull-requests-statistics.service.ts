@@ -11,7 +11,8 @@ type IStat =
   | 'Closed pull requests'
   | 'Deleted pull requests branches'
   | 'Added pull requests comments'
-  | 'Added pull requests labels';
+  | 'Added pull requests labels'
+  | 'Draft pull requests';
 
 export class PullRequestsStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: PullRequestsStatisticsService;
@@ -34,6 +35,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
   public deletedPullRequestsBranchesCount: number = 0;
   public addedPullRequestsCommentsCount: number = 0;
   public addedPullRequestsLabelsCount: number = 0;
+  public draftPullRequestsCount: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
   /**
@@ -52,6 +54,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     this.deletedPullRequestsBranchesCount = 0;
     this.addedPullRequestsCommentsCount = 0;
     this.addedPullRequestsLabelsCount = 0;
+    this.draftPullRequestsCount = 0;
 
     return this;
   }
@@ -146,6 +149,13 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
+  public increaseDraftPullRequestsCount(): PullRequestsStatisticsService {
+    this.draftPullRequestsCount++;
+    this._logIncreaseCount(`Draft pull requests count statistic increased by`, 1, this.draftPullRequestsCount);
+
+    return this;
+  }
+
   protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
       .set(`Processed pull requests`, this.processedPullRequestsCount)
@@ -157,6 +167,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Closed pull requests`, this.closedPullRequestsCount)
       .set(`Deleted pull requests branches`, this.deletedPullRequestsBranchesCount)
       .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount)
-      .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount);
+      .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount)
+      .set(`Draft pull requests`, this.draftPullRequestsCount);
   }
 }

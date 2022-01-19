@@ -29,4 +29,5 @@ export enum EInputs {
   PULL_REQUEST_STALE_COMMENT = `pull-request-stale-comment`,
   PULL_REQUEST_CLOSE_COMMENT = `pull-request-close-comment`,
   PULL_REQUEST_PROCESSING = `pull-request-processing`,
+  PULL_REQUEST_TO_DRAFT_INSTEAD_OF_STALE = `pull-request-to-draft-instead-of-stale`,
 }

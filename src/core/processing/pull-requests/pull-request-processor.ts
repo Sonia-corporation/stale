@@ -1,6 +1,7 @@
 import { AbstractProcessor } from '@core/processing/abstract-processor';
 import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-close-stale-processor';
 import { PullRequestDeleteBranchProcessor } from '@core/processing/pull-requests/pull-request-delete-branch-processor';
+import { PullRequestDraftProcessor } from '@core/processing/pull-requests/pull-request-draft-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
@@ -45,8 +46,15 @@ export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullReques
     const pullRequestStaleProcessor: PullRequestStaleProcessor = new PullRequestStaleProcessor(this);
 
     if (pullRequestStaleProcessor.shouldStale()) {
-      await pullRequestStaleProcessor.stale();
-      PullRequestsStatisticsService.getInstance().increaseStalePullRequestsCount();
+      const requestDraftProcessor: PullRequestDraftProcessor = new PullRequestDraftProcessor(this);
+
+      if (requestDraftProcessor.shouldDraftInsteadOfStale()) {
+        await requestDraftProcessor.draft();
+      } else {
+        await pullRequestStaleProcessor.stale();
+
+        PullRequestsStatisticsService.getInstance().increaseStalePullRequestsCount();
+      }
     } else {
       PullRequestsStatisticsService.getInstance().increaseUnalteredPullRequestsCount();
     }

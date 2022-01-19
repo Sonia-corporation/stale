@@ -57,6 +57,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestProcessing: core.getBooleanInput(EInputs.PULL_REQUEST_PROCESSING, { required: false }),
       pullRequestStaleComment: core.getInput(EInputs.PULL_REQUEST_STALE_COMMENT, { required: false }),
       pullRequestStaleLabel: core.getInput(EInputs.PULL_REQUEST_STALE_LABEL, { required: false }),
+      pullRequestToDraftInsteadOfStale: core.getBooleanInput(EInputs.PULL_REQUEST_TO_DRAFT_INSTEAD_OF_STALE, {
+        required: false,
+      }),
     };
 
     return this.inputs$$;

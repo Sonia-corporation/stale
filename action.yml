@@ -125,6 +125,10 @@ inputs:
     description: 'Allow to process the pull requests.'
     required: false
     default: 'true'
+  pull-request-to-draft-instead-of-stale:
+    description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

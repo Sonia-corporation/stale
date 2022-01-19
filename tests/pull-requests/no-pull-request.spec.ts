@@ -10,7 +10,7 @@ describe(`No pull request`, (): void => {
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(10);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
@@ -24,6 +24,7 @@ describe(`No pull request`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 });
