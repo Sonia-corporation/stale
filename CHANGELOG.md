@@ -1,5 +1,19 @@
 # Semantic Versioning Changelog
 
+# [1.29.0](https://github.com/Sonia-corporation/stale/compare/1.28.0...1.29.0) (2022-01-19)
+
+
+### :rocket: Features
+
+* **outputs:** add draft pull requests count output ([675faea](https://github.com/Sonia-corporation/stale/commit/675faeab130b299d095ba2690e3519cd8da37b40))
+  Add the `draft-pull-requests-count` output.
+Add a new statistic to count the number of pull requests converted to draft.
+* **draft:** add new input to convert a pull request to draft instead of stale ([1efadfb](https://github.com/Sonia-corporation/stale/commit/1efadfba8034cbf041ba830277791fe9c37c67fd)), closes [#275](https://github.com/Sonia-corporation/stale/issues/275)
+  The input `pull-request-to-draft-instead-of-stale` was added.
+When enabled, the processing will no longer stale.
+It will instead convert the pull request to a draft.
+No stale label added, no stale comment added nor extra labels added.
+
 # [1.28.0](https://github.com/Sonia-corporation/stale/compare/1.27.1...1.28.0) (2022-01-18)
 
 
