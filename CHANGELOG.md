@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.30.0](https://github.com/Sonia-corporation/stale/compare/1.29.0...1.30.0) (2022-01-19)
+
+
+### :rocket: Features
+
+* **labels:** add new input to add extra labels after closing an item ([f58a86b](https://github.com/Sonia-corporation/stale/commit/f58a86ba4b27a16961c6e85dc34616ec1fc7ca4b)), closes [#213](https://github.com/Sonia-corporation/stale/issues/213)
+  The input `issue-add-labels-after-close` and `pull-request-add-labels-after-close` were added.
+You can now define a list of extra labels to add when the processing close an item.
+
 # [1.29.0](https://github.com/Sonia-corporation/stale/compare/1.28.0...1.29.0) (2022-01-19)
 
 
