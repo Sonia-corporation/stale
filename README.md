@@ -85,6 +85,7 @@ All the inputs that are used both for issues and pull requests.
 | issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
 | issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                         |         |
 | issue-add-labels-after-stale      | A list of labels added when the processing stale the issue (multiline).                                                                           |         |
+| issue-add-labels-after-close      | A list of labels added when the processing close the issue (multiline).                                                                           |         |
 | issue-processing                  | Allow to process the issues.                                                                                                                      | `true`  |
 
 ## All the issues outputs
@@ -119,6 +120,7 @@ All the inputs that are used both for issues and pull requests.
 | pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
 | pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
 | pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                           |         |
+| pull-request-add-labels-after-close      | A list of labels added when the processing close the pull request (multiline).                                                                           |         |
 | pull-request-processing                  | Allow to process the pull requests.                                                                                                                      | `true`  |
 | pull-request-to-draft-instead-of-stale   | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                            | `false` |
 

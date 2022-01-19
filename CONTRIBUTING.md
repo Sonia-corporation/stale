@@ -142,6 +142,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
       - If it is old, close the issue
       - Check if the action should also add a comment (coming from the `issue-close-comment` input)
         - When the input value is not empty, add a comment
+      - Check if the action should also add extra labels (coming from the `issue-add-labels-after-close` input)
+        - When the input value is filled list, add the listed labels
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Check if the action should also add a comment (coming from the `issue-stale-comment` input)
@@ -170,6 +172,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
       - If it is old, close the pull request
       - Check if the action should also add a comment (coming from the `pull-request-close-comment` input)
         - When the input value is not empty, add a comment
+      - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-close` input)
+        - When the input value is filled list, add the listed labels
       - Check if the action should also delete the branch (coming from the `pull-request-delete-branch-after-close` input)
         - When the input value is true, delete the branch
 - Check if the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)

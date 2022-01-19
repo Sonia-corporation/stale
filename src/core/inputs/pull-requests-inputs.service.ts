@@ -24,6 +24,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
 
   public setInputs(): IPullRequestsInputs {
     this.inputs$$ = {
+      pullRequestAddLabelsAfterClose: core.getMultilineInput(EInputs.PULL_REQUEST_ADD_LABELS_AFTER_CLOSE, {
+        required: false,
+      }),
       pullRequestAddLabelsAfterStale: core.getMultilineInput(EInputs.PULL_REQUEST_ADD_LABELS_AFTER_STALE, {
         required: false,
       }),

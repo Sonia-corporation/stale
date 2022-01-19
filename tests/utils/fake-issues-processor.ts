@@ -331,6 +331,21 @@ export class FakeIssuesProcessor {
 
   /**
    * @description
+   * Define the labels to add on the issue when it is closed
+   * @param {ReadonlyArray<string>} labels The labels to add
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public setExtraCloseLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueAddLabelsAfterClose: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
    * This is the method which start the whole process
    * Call it when you are done with the arrange part
    * @returns {Promise<void>}
