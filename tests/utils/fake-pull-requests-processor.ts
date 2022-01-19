@@ -363,6 +363,21 @@ export class FakePullRequestsProcessor {
 
   /**
    * @description
+   * Define the labels to add on the pull request when it is closed
+   * @param {ReadonlyArray<string>} labels The labels to add
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public setExtraCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestAddLabelsAfterClose: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
    * This is the method which start the whole process
    * Call it when you are done with the arrange part
    * @returns {Promise<void>}

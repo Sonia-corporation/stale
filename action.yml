@@ -60,6 +60,10 @@ inputs:
     description: 'A list of labels added when the processing stale the issue (multiline).'
     required: false
     default: ''
+  issue-add-labels-after-close:
+    description: 'A list of labels added when the processing close the issue (multiline).'
+    required: false
+    default: ''
   issue-processing:
     description: 'Allow to process the issues.'
     required: false
@@ -119,6 +123,10 @@ inputs:
     default: 'false'
   pull-request-add-labels-after-stale:
     description: 'A list of labels added when the processing stale the pull request (multiline).'
+    required: false
+    default: ''
+  pull-request-add-labels-after-close:
+    description: 'A list of labels added when the processing close the pull request (multiline).'
     required: false
     default: ''
   pull-request-processing:
