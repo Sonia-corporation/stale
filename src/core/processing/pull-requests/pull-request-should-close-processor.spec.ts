@@ -1,14 +1,14 @@
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { PullRequestShouldCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-should-close-stale-processor';
+import { PullRequestShouldCloseProcessor } from '@core/processing/pull-requests/pull-request-should-close-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`PullRequestShouldCloseStaleProcessor`, (): void => {
+describe(`PullRequestShouldCloseProcessor`, (): void => {
   let pullRequestProcessor: PullRequestProcessor;
 
   beforeEach((): void => {
@@ -19,14 +19,14 @@ describe(`PullRequestShouldCloseStaleProcessor`, (): void => {
     it(`should save the given pull request processor`, (): void => {
       expect.assertions(1);
 
-      const result = new PullRequestShouldCloseStaleProcessor(pullRequestProcessor);
+      const result = new PullRequestShouldCloseProcessor(pullRequestProcessor);
 
       expect(result.processor).toStrictEqual(pullRequestProcessor);
     });
   });
 
   describe(`after creation`, (): void => {
-    let pullRequestShouldCloseStaleProcessor: PullRequestShouldCloseStaleProcessor;
+    let pullRequestShouldCloseStaleProcessor: PullRequestShouldCloseProcessor;
 
     beforeEach((): void => {
       pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
@@ -38,7 +38,7 @@ describe(`PullRequestShouldCloseStaleProcessor`, (): void => {
       let pullRequestProcessorGetUpdatedAtSpy: jest.SpyInstance;
 
       beforeEach((): void => {
-        pullRequestShouldCloseStaleProcessor = new PullRequestShouldCloseStaleProcessor(pullRequestProcessor);
+        pullRequestShouldCloseStaleProcessor = new PullRequestShouldCloseProcessor(pullRequestProcessor);
 
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestShouldCloseStaleProcessor.processor.logger, `info`)
