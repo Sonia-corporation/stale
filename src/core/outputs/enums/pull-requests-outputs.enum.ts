@@ -9,4 +9,5 @@ export enum EPullRequestsOutputs {
   DELETED_PULL_REQUESTS_BRANCHES_COUNT = `deleted-pull-requests-branches-count`,
   ADDED_PULL_REQUESTS_COMMENTS_COUNT = `added-pull-requests-comments-count`,
   ADDED_PULL_REQUESTS_LABELS_COUNT = `added-pull-requests-labels-count`,
+  DRAFT_PULL_REQUESTS_COUNT = `draft-pull-requests-count`,
 }

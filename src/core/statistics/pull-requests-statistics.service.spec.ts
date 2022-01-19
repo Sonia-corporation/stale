@@ -31,7 +31,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(10);
+      expect.assertions(11);
       service.processedPullRequestsCount = 1;
       service.ignoredPullRequestsCount = 1;
       service.unalteredPullRequestsCount = 1;
@@ -42,6 +42,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       service.deletedPullRequestsBranchesCount = 1;
       service.addedPullRequestsCommentsCount = 1;
       service.addedPullRequestsLabelsCount = 1;
+      service.draftPullRequestsCount = 1;
 
       service.initialize();
 
@@ -55,6 +56,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.deletedPullRequestsBranchesCount).toBe(0);
       expect(service.addedPullRequestsCommentsCount).toBe(0);
       expect(service.addedPullRequestsLabelsCount).toBe(0);
+      expect(service.draftPullRequestsCount).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -267,6 +269,25 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseDraftPullRequestsCount()`, (): void => {
+    it(`should increase the draft pull requests count`, (): void => {
+      expect.assertions(1);
+      service.draftPullRequestsCount = 0;
+
+      service.increaseDraftPullRequestsCount();
+
+      expect(service.draftPullRequestsCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseDraftPullRequestsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -299,6 +320,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 0;
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
+        service.draftPullRequestsCount = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -322,6 +344,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 0;
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
+        service.draftPullRequestsCount = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -350,14 +373,15 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 7;
         service.addedPullRequestsCommentsCount = 8;
         service.addedPullRequestsLabelsCount = 9;
+        service.draftPullRequestsCount = 10;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(9);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(10);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -408,9 +432,15 @@ describe(`PullRequestsStatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           9,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Added pull requests labels    `,
           `value-9`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          10,
+          `white-└──`,
+          `whiteBright-Draft pull requests           `,
+          `value-10`
         );
       });
     });

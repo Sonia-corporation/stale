@@ -136,6 +136,7 @@ All the inputs that are used both for issues and pull requests.
 | deleted-pull-requests-branches-count | The number of deleted pull requests branches closed.                               |
 | added-pull-requests-comments-count   | The number of added pull requests comments.                                        |
 | added-pull-requests-labels-count     | The number of added pull requests labels.                                          |
+| draft-pull-requests-count            | The number of pull requests converted to draft.                                    |
 
 ## Examples
 

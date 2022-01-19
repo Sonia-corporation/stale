@@ -22,7 +22,7 @@ describe(`Pull request to stale`, (): void => {
     });
 
     it(`should stale the pull request`, async (): Promise<void> => {
-      expect.assertions(10);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
@@ -36,6 +36,7 @@ describe(`Pull request to stale`, (): void => {
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
       expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
       expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 });

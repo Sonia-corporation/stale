@@ -58,5 +58,9 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
       EPullRequestsOutputs.ADDED_PULL_REQUESTS_LABELS_COUNT,
       PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount
     );
+    core.setOutput(
+      EPullRequestsOutputs.DRAFT_PULL_REQUESTS_COUNT,
+      PullRequestsStatisticsService.getInstance().draftPullRequestsCount
+    );
   }
 }

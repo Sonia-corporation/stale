@@ -23,7 +23,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should stale the pull request`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -37,6 +37,7 @@ describe(`Custom days before pull request stale`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
@@ -57,7 +58,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should not stale the pull request`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -71,6 +72,7 @@ describe(`Custom days before pull request stale`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
@@ -91,7 +93,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should not stale the pull request`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -105,6 +107,7 @@ describe(`Custom days before pull request stale`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
   });

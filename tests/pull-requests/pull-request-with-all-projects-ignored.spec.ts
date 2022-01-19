@@ -25,7 +25,7 @@ describe(`Pull request with all project cards ignored`, (): void => {
       });
 
       it(`should not ignore the pull request`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -39,6 +39,7 @@ describe(`Pull request with all project cards ignored`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
@@ -54,7 +55,7 @@ describe(`Pull request with all project cards ignored`, (): void => {
       });
 
       it(`should ignore the pull request`, async (): Promise<void> => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
@@ -68,6 +69,7 @@ describe(`Pull request with all project cards ignored`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
   });

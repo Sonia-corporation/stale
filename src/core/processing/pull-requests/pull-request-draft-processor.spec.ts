@@ -2,6 +2,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestDraftProcessor } from '@core/processing/pull-requests/pull-request-draft-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -44,6 +45,7 @@ describe(`PullRequestDraftProcessor`, (): void => {
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerNoticeSpy: jest.SpyInstance;
       let githubApiPullRequestsServiceDraftPullRequestSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
@@ -59,6 +61,9 @@ describe(`PullRequestDraftProcessor`, (): void => {
           .mockImplementation();
         githubApiPullRequestsServiceDraftPullRequestSpy = jest
           .spyOn(pullRequestDraftProcessor.githubApiPullRequestsService$$, `draftPullRequest`)
+          .mockImplementation();
+        pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseDraftPullRequestsCount`)
           .mockImplementation();
       });
 
@@ -93,6 +98,15 @@ describe(`PullRequestDraftProcessor`, (): void => {
           expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
           expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now a draft pull request`);
         });
+
+        it(`should increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await pullRequestDraftProcessor.draft();
+
+          expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledWith();
+        });
       });
 
       describe(`when the pull request was successfully converted to a draft`, (): void => {
@@ -112,6 +126,14 @@ describe(`PullRequestDraftProcessor`, (): void => {
           await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
 
           expect(processorLoggerNoticeSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
+
+          expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).not.toHaveBeenCalled();
         });
       });
     });

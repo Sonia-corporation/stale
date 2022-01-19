@@ -2,6 +2,7 @@ import { EInputs } from '@core/inputs/inputs.enum';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
@@ -25,6 +26,7 @@ export class PullRequestDraftProcessor extends AbstractProcessor<PullRequestProc
     await this.githubApiPullRequestsService$$.draftPullRequest(this.processor.item.id);
 
     this.processor.logger.notice(`The pull request is now a draft pull request`);
+    PullRequestsStatisticsService.getInstance().increaseDraftPullRequestsCount();
   }
 
   public shouldDraftInsteadOfStale(): boolean {
