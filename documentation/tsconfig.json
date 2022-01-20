@@ -12,10 +12,8 @@
       "documentation/node_modules/@types/"
     ],
     "baseUrl": ".",
-    "jsx": "react",
     "rootDir": ".",
-    "outDir": "lib",
-    "allowJs": true
+    "outDir": "lib"
   },
   "include": ["src", "sidebars.js", "babel.config.js", "docusaurus.config.js"],
   "exclude": ["**/__tests__/**/*", "src/client"]
