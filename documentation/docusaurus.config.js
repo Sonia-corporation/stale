@@ -5,11 +5,14 @@ const darkCodeTheme = require(`prism-react-renderer/themes/dracula`);
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   baseUrl: `/`,
+  baseUrlIssueBanner: true,
+  deploymentBranch: `gh-pages`,
   favicon: `img/favicon.ico`,
   i18n: {
     defaultLocale: `en`,
     locales: [`en`, `fr`],
   },
+  noIndex: false,
   onBrokenLinks: `throw`,
   onBrokenMarkdownLinks: `throw`,
   onDuplicateRoutes: `throw`,
@@ -21,14 +24,17 @@ const config = {
       ({
         blog: {
           blogDescription: `The blog containing the important updates and information to know about this GitHub stale action.`,
+          blogSidebarCount: 5,
+          blogSidebarTitle: `Recent posts`,
           blogTitle: `GitHub stale action blog`,
-          // Please change this to your repo.
           editUrl: `https://github.com/Sonia-corporation/stale/tree/develop/documentation/`,
+          path: `blog`,
+          postsPerPage: 10,
           showReadingTime: true,
+          sortPosts: `descending`,
         },
         docs: {
-          // Please change this to your repo.
-          editUrl: `https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/`,
+          editUrl: `https://github.com/Sonia-corporation/stale/tree/develop/documentation/`,
           sidebarPath: require.resolve(`./sidebars.js`),
         },
         theme: {
@@ -37,8 +43,8 @@ const config = {
       }),
     ],
   ],
-  projectName: `stale`,
-  tagline: `Dinosaurs are cool`,
+  projectName: `Stale`,
+  tagline: `A GitHub action to stale and close automatically your issues and pull requests.`,
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
