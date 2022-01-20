@@ -43,7 +43,7 @@
   "enabledManagers": ["npm", "github-actions"],
   "npm": {
     "enabled": true,
-    "fileMatch": ["package.json"]
+    "fileMatch": ["package.json", "documentation/package.json"]
   },
   "major": {
     "branchPrefix": "dependencies/major/",
