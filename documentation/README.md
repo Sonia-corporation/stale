@@ -23,3 +23,19 @@ $ npm run build
 ```
 
 This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+### I18n
+
+This website support English and French translations.  
+Once you changed something for the default version (English), you can create the French version (if you can, else ask for help!).
+
+You can test the French version by running `npm run start:french`.
+
+You must also run `npm run write-translations:french` to update the translation files and add your additional translations if needed.
+
+See also [the i18n documentation](https://docusaurus.io/docs/i18n/introduction) for further help.
+
+### Deployment
+
+You should not try to run `npm run deploy`.  
+This step is for the CI only!

@@ -16,7 +16,7 @@ const config = {
   onBrokenLinks: `throw`,
   onBrokenMarkdownLinks: `throw`,
   onDuplicateRoutes: `throw`,
-  organizationName: `Sonia-corporation`,
+  organizationName: `sonia-corporation`,
   presets: [
     [
       `classic`,
@@ -43,7 +43,7 @@ const config = {
       }),
     ],
   ],
-  projectName: `Stale`,
+  projectName: `stale`,
   tagline: `A GitHub action to stale and close automatically your issues and pull requests.`,
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
@@ -120,6 +120,7 @@ const config = {
       },
     }),
   title: `GitHub stale action`,
+  trailingSlash: false,
   url: `https://sonia-corporation.github.io`,
 };
 
