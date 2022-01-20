@@ -1,0 +1,22 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./lib/.tsbuildinfo",
+    "types": ["node"],
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/@types/",
+      "types",
+      "documentation/node_modules/@types",
+      "documentation/node_modules/@types/"
+    ],
+    "baseUrl": ".",
+    "jsx": "react",
+    "rootDir": ".",
+    "outDir": "lib",
+    "allowJs": true
+  },
+  "include": ["src", "sidebars.js", "babel.config.js", "docusaurus.config.js"],
+  "exclude": ["**/__tests__/**/*", "src/client"]
+}
