@@ -37,5 +37,4 @@ See also [the i18n documentation](https://docusaurus.io/docs/i18n/introduction) 
 
 ### Deployment
 
-You should not try to run `npm run deploy`.  
-This step is for the CI only!
+The deployment will be done by the CI when a change occur on the master branch.
