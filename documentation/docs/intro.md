@@ -6,13 +6,13 @@ sidebar_position: 1
 
 Let's discover **Docusaurus in less than 5 minutes**.
 
-## Getting Started
+## Getting Started {#getting-started}
 
 Get started by **creating a new site**.
 
 Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
 
-## Generate a new site
+## Generate a new site {#generate-a-new-site}
 
 Generate a new Docusaurus site using the **classic template**:
 
@@ -20,7 +20,7 @@ Generate a new Docusaurus site using the **classic template**:
 npm init docusaurus@latest my-website classic
 ```
 
-## Start your site
+## Start your site {#start-your-site}
 
 Run the development server:
 

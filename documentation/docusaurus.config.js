@@ -6,8 +6,13 @@ const darkCodeTheme = require(`prism-react-renderer/themes/dracula`);
 const config = {
   baseUrl: `/`,
   favicon: `img/favicon.ico`,
+  i18n: {
+    defaultLocale: `en`,
+    locales: [`en`, `fr`],
+  },
   onBrokenLinks: `throw`,
   onBrokenMarkdownLinks: `throw`,
+  onDuplicateRoutes: `throw`,
   organizationName: `Sonia-corporation`,
   presets: [
     [
@@ -15,8 +20,10 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         blog: {
+          blogDescription: `The blog containing the important updates and information to know about this GitHub stale action.`,
+          blogTitle: `GitHub stale action blog`,
           // Please change this to your repo.
-          editUrl: `https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/`,
+          editUrl: `https://github.com/Sonia-corporation/stale/tree/develop/documentation/`,
           showReadingTime: true,
         },
         docs: {
@@ -50,15 +57,15 @@ const config = {
           {
             items: [
               {
-                href: `https://discordapp.com/invite/docusaurus`,
-                label: `Discord`,
+                href: `https://github.com/Sonia-corporation/stale/issues/new/choose`,
+                label: `New issue`,
               },
               {
-                href: `https://twitter.com/docusaurus`,
-                label: `Twitter`,
+                href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
+                label: `Changelog`,
               },
             ],
-            title: `Community`,
+            title: `Useful links`,
           },
           {
             items: [
@@ -86,24 +93,28 @@ const config = {
           },
           { label: `Blog`, position: `left`, to: `/blog` },
           {
-            href: `https://github.com/facebook/docusaurus`,
+            position: `right`,
+            type: `localeDropdown`,
+          },
+          {
+            href: `https://github.com/Sonia-corporation/stale`,
             label: `GitHub`,
             position: `right`,
           },
         ],
         logo: {
-          alt: `My Site Logo`,
+          alt: `GitHub stale action`,
           src: `img/logo.svg`,
         },
-        title: `My Site`,
+        title: `GitHub stale action`,
       },
       prism: {
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme,
       },
     }),
-  title: `My Site`,
-  url: `https://your-docusaurus-test-site.com`,
+  title: `GitHub stale action`,
+  url: `https://sonia-corporation.github.io`,
 };
 
 module.exports = config;
