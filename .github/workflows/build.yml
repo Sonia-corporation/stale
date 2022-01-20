@@ -242,13 +242,18 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Build
         run: npm run build:dirty
         env:
@@ -273,18 +278,18 @@ jobs:
         with:
           node-version: 14.17.6
           cache: npm
-      - name: Cache node_modules
-        id: cache-node-modules
+      - name: Cache website node_modules
+        id: cache-documentation-node-modules
         uses: actions/cache@v2
         env:
-          cache-name: cache-node-modules
+          cache-name: cache-documentation-node-modules
         with:
-          path: node_modules
+          path: documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        if: steps.cache-documentation-node-modules.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         working-directory: documentation
