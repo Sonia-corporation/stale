@@ -325,3 +325,16 @@ jobs:
         run: |
           cd documentation
           npm run build
+      - name: Generate missing french translations
+        run: |
+          cd documentation
+          npm run write-translations:french
+      - name: Check for missing french translations
+        id: verify-changed-files
+        run: |
+          cd documentation
+          if [ "$(git diff --ignore-space-at-eol i18n/fr/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "fr i18n has changed. Run the npm script write-translations:french locally to generate the missing french translations, translate or ask for help and then push the changes."
+            exit 1
+          fi
