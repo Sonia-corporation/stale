@@ -54,14 +54,14 @@ To have in-depth documentation and examples, see the [documentation website](htt
 
 After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
-Removing the `stale` label manually will also do the trick.
+Removing the `stale` label manually will also do the trick.  
 If the `stale` label on the issue is still here for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
 
-### PRs
+### Pull requests
 
 After 30 days (coming from `pull-request-days-before-stale`) without any update on the pull request, add a label `stale` (coming from `pull-request-stale-label`) on the pull request to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
-Removing the `stale` label manually will also do the trick.
+Removing the `stale` label manually will also do the trick.  
 If the `stale` label on the pull request is still here for more than 10 days (coming from `pull-request-days-before-close`), the pull request will be closed.
 
 ## All the common inputs
