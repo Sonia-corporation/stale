@@ -14,5 +14,9 @@
   "sidebar.tutorialSidebar.category.Pull requests": {
     "message": "Pull requests",
     "description": "The label for category Pull requests in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Examples": {
+    "message": "Exemples",
+    "description": "The label for category Examples in sidebar tutorialSidebar"
   }
 }

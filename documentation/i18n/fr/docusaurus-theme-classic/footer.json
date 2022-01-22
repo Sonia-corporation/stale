@@ -31,16 +31,16 @@
     "message": "Copyright © 2022 Stale, Sonia Corporation. Built with Docusaurus.",
     "description": "The footer copyright"
   },
-  "link.item.label.Intro": {
-    "message": "Intro",
-    "description": "The label of footer link with label=Intro linking to /docs/introduction"
-  },
-  "link.item.label.Config": {
-    "message": "Config",
-    "description": "The label of footer link with label=Config linking to /docs/configuration"
-  },
   "link.item.label.Examples": {
     "message": "Exemples",
-    "description": "The label of footer link with label=Examples linking to /docs/examples"
+    "description": "The label of footer link with label=Examples linking to /docs/examples/issues-examples"
+  },
+  "link.item.label.Introduction": {
+    "message": "Introduction",
+    "description": "The label of footer link with label=Introduction linking to /docs/introduction"
+  },
+  "link.item.label.Getting started": {
+    "message": "Pour bien commencé",
+    "description": "The label of footer link with label=Getting started linking to /docs/getting-started/workflow-creation"
   }
 }

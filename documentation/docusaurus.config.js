@@ -54,16 +54,16 @@ const config = {
           {
             items: [
               {
-                label: `Intro`,
+                label: `Introduction`,
                 to: `/docs/introduction`,
               },
               {
-                label: `Config`,
-                to: `/docs/configuration`,
+                label: `Getting started`,
+                to: `/docs/getting-started/workflow-creation`,
               },
               {
                 label: `Examples`,
-                to: `/docs/examples`,
+                to: `/docs/examples/issues-examples`,
               },
             ],
             title: `Docs`,
