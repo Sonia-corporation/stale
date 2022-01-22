@@ -190,5 +190,29 @@
   "theme.TOCCollapsible.toggleButtonLabel": {
     "message": "Sur cette page",
     "description": "The label used by the button on the collapsible TOC component"
+  },
+  "Our goal is simple: reduce your pain while maintained a repository by providing as much features as necessary!": {
+    "message": "Notre objectif est simple : réduire la douleur de maintenant un repository en fournissant autant de fonctionnalités que nécessaire !",
+    "description": "Home page customizable description"
+  },
+  "This stale action contains a detailed documentation and a blog to help you get the best out of it!": {
+    "message": "Cette action stale contient une documentation détaillée et un blog pour vous aider à en tirer la meilleure partie !",
+    "description": "Home page well documented description"
+  },
+  "We are always here to help you get through the configuration and we are always keen to bring more features!": {
+    "message": "On est toujours là pour vous aider à configurer votre action et on est toujours chaud pour ajouter de nouvelles fonctionnalités !",
+    "description": "Home page maintained description"
+  },
+  "Introduction": {
+    "message": "Introduction",
+    "description": "Home page call to action button for introduction"
+  },
+  "Home": {
+    "message": "Accueil",
+    "description": "Home page title"
+  },
+  "GitHub stale action website": {
+    "message": "Site web de l'action GitHub stale",
+    "description": "Home page description"
   }
 }

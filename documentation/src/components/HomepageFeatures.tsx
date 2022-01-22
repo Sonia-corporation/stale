@@ -1,6 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './HomepageFeatures.module.css';
+import Translate from '@docusaurus/Translate';
 
 type FeatureItem = {
   title: string;
@@ -10,32 +11,29 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: 'Easy to Use',
-    image: '/img/undraw_docusaurus_mountain.svg',
+    title: 'Customizable',
+    image: '/img/gears.svg',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        <Translate description={'Home page customizable description'}>Our goal is simple: reduce your pain while maintained a repository by providing as much features as necessary!</Translate>
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
-    image: '/img/undraw_docusaurus_tree.svg',
+    title: 'Well documented',
+    image: '/img/web.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        <Translate description={'Home page well documented description'}>This stale action contains a detailed documentation and a blog to help you get the best out of it!</Translate>
       </>
     ),
   },
   {
-    title: 'Powered by React',
-    image: '/img/undraw_docusaurus_react.svg',
+    title: 'Maintained',
+    image: '/img/available-updates.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        <Translate description={'Home page maintained description'}>We are always here to help you get through the configuration and we are always keen to bring more features!</Translate>
       </>
     ),
   },
