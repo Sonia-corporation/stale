@@ -52,17 +52,17 @@ To have in-depth documentation and examples, see the [documentation website](htt
 
 ### Issues
 
-After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
+After 30 days (coming from [issue-days-before-stale](https://sonia-corporation.github.io/stale/docs/issues/issue-days-before-stale-option)) without any update on the issue, add a label `stale` (coming from [issue-stale-label](https://sonia-corporation.github.io/stale/docs/issues/issue-stale-label-option)) on the issue to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
 Removing the `stale` label manually will also do the trick.  
-If the `stale` label on the issue is still here for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
+If the `stale` label on the issue is still here for more than 10 days (coming from [issue-days-before-close](https://sonia-corporation.github.io/stale/docs/issues/issue-days-before-close-option)), the issue will be closed.
 
 ### Pull requests
 
-After 30 days (coming from `pull-request-days-before-stale`) without any update on the pull request, add a label `stale` (coming from `pull-request-stale-label`) on the pull request to indicate that it is stale.  
+After 30 days (coming from [pull-request-days-before-stale](https://sonia-corporation.github.io/stale/docs/pull-requests/pull-request-days-before-stale-option)) without any update on the pull request, add a label `stale` (coming from [pull-request-stale-label](https://sonia-corporation.github.io/stale/docs/pull-requests/pull-request-stale-label-option)) on the pull request to indicate that it is stale.  
 If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
 Removing the `stale` label manually will also do the trick.  
-If the `stale` label on the pull request is still here for more than 10 days (coming from `pull-request-days-before-close`), the pull request will be closed.
+If the `stale` label on the pull request is still here for more than 10 days (coming from [pull-request-days-before-close](https://sonia-corporation.github.io/stale/docs/pull-requests/pull-request-days-before-close-option)), the pull request will be closed.
 
 ## All the common inputs
 
