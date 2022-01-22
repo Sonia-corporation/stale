@@ -330,7 +330,7 @@ jobs:
           cd documentation
           npm run write-translations:french
       - name: Check for missing French translations
-        id: verify-changed-files
+        id: verify-website-french-changed-files
         run: |
           cd documentation
           if [ "$(git diff --ignore-space-at-eol i18n/fr/ | wc -l)" -gt "0" ]; then
@@ -343,7 +343,7 @@ jobs:
           cd documentation
           npm run write-heading-ids
       - name: Check for missing heading IDs
-        id: verify-changed-files
+        id: verify-documentation-changed-files
         run: |
           if [ "$(git diff --ignore-space-at-eol documentation/ | wc -l)" -gt "0" ]; then
             git diff
