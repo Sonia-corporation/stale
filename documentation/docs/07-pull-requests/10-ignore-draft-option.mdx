@@ -1,0 +1,30 @@
+---
+id: pull-request-ignore-draft-option
+title: Ignore pull request draft option
+tags:
+  - Pull requests
+  - Options
+---
+
+### Input {#input}
+
+Name: `pull-request-ignore-draft`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This option will let you ignore the processing of the pull requests which are in draft.  
+This can be useful when you use the draft feature to consider some pull requests as work in progress.  
+In such case, you may not wish to stale them.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-ignore-draft: true
+```

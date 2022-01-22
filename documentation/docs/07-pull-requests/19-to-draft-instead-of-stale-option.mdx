@@ -1,0 +1,35 @@
+---
+id: pull-request-to-draft-instead-of-stale-option
+title: Pull request to draft instead of stale option
+tags:
+  - Pull requests
+  - Options
+---
+
+### Input {#input}
+
+Name: `pull-request-to-draft-instead-of-stale`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This option will let you change how the processing handle the pull requests that should be normally stale to instead convert them to drafts.  
+This can be useful when you are sure that all your pull requests are useful and must be at some point merged.
+
+:::info
+
+When converting to draft, the options [stale comment](pull-request-stale-comment-option) and [add labels after stale](pull-request-add-labels-after-stale-option) will not be performed.
+
+:::
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-to-draft-instead-of-stale: true
+```
