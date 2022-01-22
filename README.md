@@ -68,10 +68,10 @@ If the `stale` label on the pull request is still here for more than 10 days (co
 
 All the inputs that are used both for issues and pull requests.
 
-| Input        | Description                                                                                                                              | Default               |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| github-token | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`.                 | `${{ github.token }}` |
-| dry-run      | A mode where any Data Manipulation Language will be skipped. Useful to debug safely and without risking messing up with your repository. | `false`               |
+| Input                                                                              | Description                                                                                                                              | Default               |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| [github-token](https://sonia-corporation.github.io/stale/docs/github-token-option) | A GitHub token used to perform the API calls to GitHub through `@actions/github`. Usually `${{ secrets.GITHUB_TOKEN }}`.                 | `${{ github.token }}` |
+| [dry-run](https://sonia-corporation.github.io/stale/docs/dry-run-option)           | A mode where any Data Manipulation Language will be skipped. Useful to debug safely and without risking messing up with your repository. | `false`               |
 
 ## All the issues inputs
 
