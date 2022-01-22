@@ -12,7 +12,7 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: 'Customizable',
-    image: '/img/gears.svg',
+    image: 'img/gears.svg',
     description: (
       <>
         <Translate description={'Home page customizable description'}>Our goal is simple: reduce your pain while maintained a repository by providing as much features as necessary!</Translate>
@@ -21,7 +21,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Well documented',
-    image: '/img/web.svg',
+    image: 'img/web.svg',
     description: (
       <>
         <Translate description={'Home page well documented description'}>This stale action contains a detailed documentation and a blog to help you get the best out of it!</Translate>
@@ -30,7 +30,7 @@ const FeatureList: FeatureItem[] = [
   },
   {
     title: 'Maintained',
-    image: '/img/available-updates.svg',
+    image: 'img/available-updates.svg',
     description: (
       <>
         <Translate description={'Home page maintained description'}>We are always here to help you get through the configuration and we are always keen to bring more features!</Translate>
