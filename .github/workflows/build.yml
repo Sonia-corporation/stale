@@ -325,16 +325,28 @@ jobs:
         run: |
           cd documentation
           npm run build
-      - name: Generate missing french translations
+      - name: Generate missing French translations
         run: |
           cd documentation
           npm run write-translations:french
-      - name: Check for missing french translations
+      - name: Check for missing French translations
         id: verify-changed-files
         run: |
           cd documentation
           if [ "$(git diff --ignore-space-at-eol i18n/fr/ | wc -l)" -gt "0" ]; then
             git diff
-            echo "fr i18n has changed. Run the npm script write-translations:french locally to generate the missing french translations, translate or ask for help and then push the changes."
+            echo "fr i18n has changed. Run the npm script write-translations:french locally to generate the missing French translations, translate or ask for help and then push the changes."
+            exit 1
+          fi
+      - name: Generate missing heading IDs
+        run: |
+          cd documentation
+          npm run write-heading-ids
+      - name: Check for missing heading IDs
+        id: verify-changed-files
+        run: |
+          if [ "$(git diff --ignore-space-at-eol documentation/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "documentation has changed. Run the npm script write-heading-ids locally to generate the missing heading IDs, and then push the changes."
             exit 1
           fi
