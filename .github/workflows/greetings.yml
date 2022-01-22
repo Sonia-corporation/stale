@@ -6,7 +6,7 @@ jobs:
   Greetings:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/first-interaction@v1
+      - uses: actions/first-interaction@bd33205aa5c96838e10fd65df0d01efd613677c1 # renovate: tag=v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: 'Please, use the [issue template](ISSUE_TEMPLATE.md) to help you, and us, fix this issue.'
