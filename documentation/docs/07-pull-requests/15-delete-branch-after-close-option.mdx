@@ -1,0 +1,29 @@
+---
+id: pull-request-delete-branch-after-close-option
+title: Delete pull request branch after close option
+tags:
+  - Pull requests
+  - Options
+---
+
+### Input {#input}
+
+Name: `pull-request-delete-branch-after-close`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This option will let you delete the branch associated to your pull requests when the processing close them.  
+This can be useful when you didn't enable the auto-deletion of branches and want to avoid having stale branches after some time.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-delete-branch-after-close: true
+```
