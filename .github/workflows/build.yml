@@ -25,30 +25,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Lint ts
         run: npm run lint:ts:ci
       - name: Lint other
@@ -57,30 +59,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Cache Jest
         id: cache-jest
         uses: actions/cache@v2
@@ -102,30 +106,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Cache Jest
         id: cache-jest
         uses: actions/cache@v2
@@ -149,30 +155,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Cache Jest
         id: cache-jest
         uses: actions/cache@v2
@@ -196,30 +204,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Cache Jest
         id: cache-jest
         uses: actions/cache@v2
@@ -243,30 +253,32 @@ jobs:
     needs: PreJob
     if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 12.22.x
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 12.22.9
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.22.9
+          cache: npm
       - name: Cache node_modules
         id: cache-node-modules
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
         with:
-          path: node_modules
+          path: |
+            node_modules
+            documentation/node_modules
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          npm ci
+          cd documentation
+          npm ci
       - name: Build
         run: npm run build:dirty
         env:
@@ -277,5 +289,64 @@ jobs:
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
             git diff
             echo "dist has changed. Run the npm script build locally to build the distribution and then push the changes."
+            exit 1
+          fi
+  Website:
+    needs: PreJob
+    if: ${{ needs.PreJob.outputs.SHOULD_SKIP != 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 14.17.6
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.17.6
+          cache: npm
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: |
+            node_modules
+            documentation/node_modules
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: |
+          npm ci
+          cd documentation
+          npm ci
+      - name: Build website
+        run: |
+          cd documentation
+          npm run build
+      - name: Generate missing French translations
+        run: |
+          cd documentation
+          npm run write-translations:french
+      - name: Check for missing French translations
+        id: verify-website-french-changed-files
+        run: |
+          cd documentation
+          if [ "$(git diff --ignore-space-at-eol i18n/fr/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "fr i18n has changed. Run the npm script write-translations:french locally to generate the missing French translations, translate or ask for help and then push the changes."
+            exit 1
+          fi
+      - name: Generate missing heading IDs
+        run: |
+          cd documentation
+          npm run write-heading-ids
+      - name: Check for missing heading IDs
+        id: verify-documentation-changed-files
+        run: |
+          if [ "$(git diff --ignore-space-at-eol documentation/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "documentation has changed. Run the npm script write-heading-ids locally to generate the missing heading IDs, and then push the changes."
             exit 1
           fi

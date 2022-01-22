@@ -1,0 +1,51 @@
+---
+id: introduction
+title: Introduction
+tags:
+  - Introduction
+---
+
+## Why? {#why}
+
+This project aim to provide a GitHub action to help the maintainers of GitHub repositories to tackle and manage their open issues and pull requests which are inactive.  
+The most basic example would be to automatically close inactive items after some days.  
+But this action provide way more options to customize how you wish to "flag" or manage an inactive item - we use the word **stale** to define this state.
+
+## How? {#how}
+
+This action will loop through your open issues and pull requests, try to ignore the processing of some of them based on your configuration and then will try to either stale them or close them when already stale.
+
+## Default configuration {#default-configuration}
+
+### Issues {#issues}
+
+After 30 days (coming from `issue-days-before-stale`) without any update on the issue, add a label `stale` (coming from `issue-stale-label`) on the issue to indicate that it is stale.  
+If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
+Removing the `stale` label manually will also do the trick.  
+If the `stale` label on the issue is still here for more than 10 days (coming from `issue-days-before-close`), the issue will be closed.
+
+### Pull requests {#pull-requests}
+
+After 30 days (coming from `pull-request-days-before-stale`) without any update on the pull request, add a label `stale` (coming from `pull-request-stale-label`) on the pull request to indicate that it is stale.  
+If an update occur after being stale, the `stale` label will be removed and the count will be reset back to 30 days.  
+Removing the `stale` label manually will also do the trick.  
+If the `stale` label on the pull request is still here for more than 10 days (coming from `pull-request-days-before-close`), the pull request will be closed.
+
+## Getting started {#getting-started}
+
+If you didn't yet configure the stale action, we suggest you to start by reading the [getting started documentation](getting-started/workflow-creation).
+
+## Issues {#issues-1}
+
+You can also directly refer to the [issues documentation](issues/all-issues-options).
+
+## Pull requests {#pull-requests-1}
+
+You can also directly refer to the [pull requests documentation](pull-requests/all-pull-requests-options).
+
+## Original idea {#original-idea}
+
+This is not the first and maybe not the last project that aim to solve this stale issue on GitHub.  
+This action was created to simply replace - at least in terms of features- the [action created by GitHub](https://github.com/actions/stale) to stale.  
+[Geoffrey 'C0ZEN' Testelin](https://github.com/C0ZEN) was originally one of the main contributor of this action, but due to different visions, he decided to go on his own to create this action instead.  
+Our goal is to provide as many features as people need to make sure they can reduce the complexity of managing those stale items impediments.

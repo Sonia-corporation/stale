@@ -6,6 +6,7 @@ Please check if your PR fulfils the following requirements:
 - [ ] Tests for the changes have been added/updated (for bugfix/feature)
 - [ ] Docs have been added/updated (for bugfix/feature)
 - [ ] Contributing implementation have been added/updated (for bugfix/feature)
+- [ ] Website documentation have been added/updated (for bugfix/feature)
 
 <!-- [Contributing implementation link](CONTRIBUTING.md#implementation) -->
 

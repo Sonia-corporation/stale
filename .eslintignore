@@ -7,3 +7,5 @@ dist-local-dev
 node_modules
 coverage
 reports
+documentation/.docusaurus
+documentation/build

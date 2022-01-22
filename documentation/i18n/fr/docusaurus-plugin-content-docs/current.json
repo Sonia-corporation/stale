@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "Suivant",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Getting started": {
+    "message": "Pour bien commencé",
+    "description": "The label for category Getting started in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Issues": {
+    "message": "Issues",
+    "description": "The label for category Issues in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Pull requests": {
+    "message": "Pull requests",
+    "description": "The label for category Pull requests in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Examples": {
+    "message": "Exemples",
+    "description": "The label for category Examples in sidebar tutorialSidebar"
+  }
+}

@@ -24,6 +24,7 @@ parserOptions:
   project:
     - ./tsconfig.app.json
     - ./tsconfig.spec.json
+    - ./documentation/tsconfig.json
 parser: '@typescript-eslint/parser'
 plugins:
   - '@typescript-eslint'
@@ -37,6 +38,7 @@ settings:
   import/extensions:
     - .js
     - .ts
+    - .tsx
   import/parsers:
     '@typescript-eslint/parser':
       - .ts
@@ -48,6 +50,7 @@ settings:
       project:
         - ./tsconfig.app.json
         - ./tsconfig.spec.json
+        - ./documentation/tsconfig.json
 rules:
   jest/prefer-comparison-matcher: error
   jest/prefer-equality-matcher: error
@@ -406,6 +409,7 @@ overrides:
       import/no-commonjs: off
   - files:
       - '*.ts'
+      - '*.tsx'
     rules:
       '@typescript-eslint/explicit-function-return-type':
         - error
@@ -415,6 +419,7 @@ overrides:
       '@typescript-eslint/no-var-requires': error
   - files:
       - '*.spec.ts'
+      - '*.spec.tsx'
     extends:
       - 'plugin:jest/style'
       - 'plugin:jest/all'

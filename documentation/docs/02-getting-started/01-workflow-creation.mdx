@@ -1,0 +1,68 @@
+---
+id: workflow-creation
+title: Workflow creation
+tags:
+  - Getting started
+  - Workflow configuration
+---
+
+The first step to start with this stale action is to create your GitHub workflow.
+
+## Create the workflow file {#create-the-workflow-file}
+
+On your repository, create a new workflow inside the _.github/workflows_ folder.  
+For example: _stale.yml_.
+
+```
+.
+└── .github
+    └── workflows
+        └── stale.yml
+```
+
+## Create the default stale action {#create-the-default-stale-action}
+
+Now you can create the stale action with the [default configuration](../introduction#default-configuration).
+
+```yml title=".github/workflows/stale.yml"
+name: Stale
+jobs:
+  Stale:
+    runs-on: ubuntu-latest
+    name: Run stale
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v2
+      - name: Stale
+        id: stale
+        # We suggest replacing "latest" with the latest major tag like "sonia-corporation/stale@1"
+        # This will avoid in the future a risk to break your workflow when a new major (breaking change) occur or worst, by altering your items in a way that doesn't suit you
+        uses: sonia-corporation/stale@latest
+```
+
+:::caution
+
+Make sure to acknowledge the comment regarding the `latest` tag, this is for our own good 😉
+
+:::
+
+## Configure how to trigger your workflow {#configure-how-to-trigger-your-workflow}
+
+From the [previous step configuration](#create-the-default-stale-action), your workflow will work but will never be triggered.  
+You must define how/when you wish to run the stale action.
+
+For most repositories, running the action on daily basis and allowing it also to be [run manually](https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/) is a good choice.
+
+```yml {2-8} title=".github/workflows/stale.yml"
+name: Stale
+on:
+  # Allow to run it manually on GitHub (a button will be visible)
+  # See https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+  workflow_dispatch:
+  # Schedule a cron job to be run each day at noon
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  # ...
+```

@@ -33,6 +33,7 @@ plugins:
       - '.cache-jest/'
       - 'coverage/'
       - 'node_modules/'
+      - 'documentation//'
       - '.eslintcache'
       - '!src/**/*.ts'
       - '!src/**/*.js'
@@ -49,3 +50,4 @@ exclude_patterns:
   - '**/__mocks__/'
   - 'dist/'
   - 'tests/'
+  - 'documentation/'
