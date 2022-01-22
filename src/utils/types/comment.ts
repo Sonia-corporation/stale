@@ -1,1 +1,0 @@
-export type IComment = string;

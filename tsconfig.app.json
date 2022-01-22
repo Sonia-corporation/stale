@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../out-tsc/app",
-    "types": ["node"]
-  },
-  "include": ["src", "scripts"],
-  "exclude": ["**.*.spec.ts", "jest", "**/__mocks__"]
-}

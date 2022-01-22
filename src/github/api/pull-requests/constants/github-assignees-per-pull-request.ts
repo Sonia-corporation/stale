@@ -1,1 +1,0 @@
-export const GITHUB_ASSIGNEES_PER_PULL_REQUEST = 20;

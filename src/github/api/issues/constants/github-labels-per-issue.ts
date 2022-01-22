@@ -1,1 +1,0 @@
-export const GITHUB_LABELS_PER_ISSUE = 20;

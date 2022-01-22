@@ -1,1 +1,0 @@
-export const GITHUB_PULL_REQUESTS_PER_PAGE = 20;

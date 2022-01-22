@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[846],{2245:function(t){t.exports=JSON.parse('{"name":"Introduction","permalink":"/fr/docs/tags/introduction","docs":[{"id":"introduction","title":"Introduction","description":"Why?","permalink":"/fr/docs/introduction"}],"allTagsPath":"/fr/docs/tags"}')}}]);

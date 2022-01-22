@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title>GitHub stale action Blog</title>
+        <link>https://sonia-corporation.github.io/blog</link>
+        <description>GitHub stale action Blog</description>
+        <lastBuildDate>Sat, 22 Jan 2022 14:23:47 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[Welcome!]]></title>
+            <link>https://sonia-corporation.github.io/blog/welcome</link>
+            <guid>welcome</guid>
+            <pubDate>Sat, 22 Jan 2022 14:23:47 GMT</pubDate>
+            <description><![CDATA[Welcome to the very first version of the Website!]]></description>
+            <content:encoded><![CDATA[<p>Happy to announce that this is the very first version of this website!</p><h2>Why even bother? {#why-even-bother}</h2><p>We really think that handling a huge number of issues on a repository is time-consuming, a real grunt task in a way.<br/>
+<!-- -->We hope that by adding this website, you will have access to even further help to let you customize your stale action at your convenience.<br/>
+<!-- -->The configuration can be complex when you have strong requirements, but it&#x27;s OK!</p><h2>Share your work! {#share-your-work}</h2><p>By letting the community know your configuration, it can help to clarify what kind of scenarios to expect from this action.<br/>
+<!-- -->Do not hesitate to <a href="https://github.com/Sonia-corporation/stale/issues/new/choose">open a new blog article suggestion</a>.</p>]]></content:encoded>
+        </item>
+    </channel>
+</rss>
