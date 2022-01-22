@@ -1,5 +1,7 @@
 # Semantic Versioning Changelog
 
+# [1.31.0](https://github.com/Sonia-corporation/stale/compare/1.30.0...1.31.0) (2022-01-22)
+
 # [1.30.0](https://github.com/Sonia-corporation/stale/compare/1.29.0...1.30.0) (2022-01-19)
 
 
