@@ -1,0 +1,35 @@
+---
+id: issues-examples
+title: Issues configuration examples
+tags:
+  - Issues
+  - Examples
+---
+
+## Stale all issues with comments except if somebody is assigned {#stale-all-issues-with-comments-except-if-somebody-is-assigned}
+
+The label `ìnactive` will be added on all issues without any activity during the last 45 days, except if someone is assigned to it or if this is either a frozen bug, a bug that need help or a confirmed bug.  
+A comment will also be added to warn the people about this.  
+If there is still no activity after two weeks, the issue will be closed and the `closed-due-to-inactivity` label will be added.
+
+```yml
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-stale-label: inactive
+  issue-ignore-any-labels: |
+    frozen
+    need help
+    bug-confirmed
+  issue-ignore-all-assignees: true
+  issue-days-before-stale: 45
+  issue-stale-comment: |
+    This issue is inactive since 45 days!
+
+    If there is no activity, it will be closed in two weeks.
+  issue-days-before-close: 14
+  issue-add-labels-after-close: |
+    closed-due-to-inactivity
+```

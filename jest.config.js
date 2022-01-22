@@ -23,7 +23,7 @@ module.exports = {
   collectCoverage: false,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: [`**.ts`, `!tests/utils/**`],
+  collectCoverageFrom: [`src/**`, `tests/**`, `!tests/utils/**`],
 
   // The directory where Jest should output its coverage files
   coverageDirectory: `coverage`,
@@ -78,7 +78,7 @@ module.exports = {
   // modulePathIgnorePatterns: [],
 
   // An array of file extensions your modules use
-  moduleFileExtensions: [`js`, `ts`],
+  moduleFileExtensions: [`js`, `ts`, `tsx`],
 
   // A map from regular expressions to module names that allow to stub out resources with a single module
   moduleNameMapper: {
@@ -157,7 +157,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [`**/*.spec.ts`],
+  testMatch: [`**/*.spec.ts`, `**/*.spec.tsx`, `**/*.spec.js`],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

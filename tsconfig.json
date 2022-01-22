@@ -39,6 +39,7 @@
       "@github/*": ["src/github/*"],
       "@utils/*": ["src/utils/*"],
       "@tests/*": ["tests/*"]
-    }
+    },
+    "jsx": "react"
   }
 }

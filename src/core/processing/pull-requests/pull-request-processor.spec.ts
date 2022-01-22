@@ -6,7 +6,7 @@ import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestRemoveStaleProcessor } from '@core/processing/pull-requests/pull-request-remove-stale-processor';
-import { PullRequestShouldCloseStaleProcessor } from '@core/processing/pull-requests/pull-request-should-close-stale-processor';
+import { PullRequestShouldCloseProcessor } from '@core/processing/pull-requests/pull-request-should-close-processor';
 import { PullRequestStaleProcessor } from '@core/processing/pull-requests/pull-request-stale-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
@@ -23,7 +23,7 @@ jest.mock(`@core/processing/pull-requests/pull-request-ignore-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-is-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-remove-stale-processor`);
-jest.mock(`@core/processing/pull-requests/pull-request-should-close-stale-processor`);
+jest.mock(`@core/processing/pull-requests/pull-request-should-close-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-close-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-delete-branch-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-draft-processor`);
@@ -757,8 +757,10 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`processForClose$$()`, (): void => {
-      const mockedPullRequestShouldCloseStaleProcessor: MockedObjectDeep<typeof PullRequestShouldCloseStaleProcessor> =
-        mocked(PullRequestShouldCloseStaleProcessor, true);
+      const mockedPullRequestShouldCloseProcessor: MockedObjectDeep<typeof PullRequestShouldCloseProcessor> = mocked(
+        PullRequestShouldCloseProcessor,
+        true
+      );
       const mockedPullRequestCloseStaleProcessor: MockedObjectDeep<typeof PullRequestCloseStaleProcessor> = mocked(
         PullRequestCloseStaleProcessor,
         true
@@ -770,7 +772,7 @@ describe(`PullRequestProcessor`, (): void => {
       let processToDeleteBranch$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
-        mockedPullRequestShouldCloseStaleProcessor.mockClear();
+        mockedPullRequestShouldCloseProcessor.mockClear();
         mockedPullRequestCloseStaleProcessor.mockClear();
 
         stopProcessingSpy = jest.spyOn(pullRequestProcessor, `stopProcessing$$`).mockImplementation();
@@ -788,15 +790,15 @@ describe(`PullRequestProcessor`, (): void => {
 
         await pullRequestProcessor.processForClose$$();
 
-        expect(mockedPullRequestShouldCloseStaleProcessor).toHaveBeenCalledTimes(1);
-        expect(mockedPullRequestShouldCloseStaleProcessor).toHaveBeenCalledWith(pullRequestProcessor);
-        expect(mockedPullRequestShouldCloseStaleProcessor.prototype.shouldClose.mock.calls).toHaveLength(1);
-        expect(mockedPullRequestShouldCloseStaleProcessor.prototype.shouldClose.mock.calls[0]).toHaveLength(0);
+        expect(mockedPullRequestShouldCloseProcessor).toHaveBeenCalledTimes(1);
+        expect(mockedPullRequestShouldCloseProcessor).toHaveBeenCalledWith(pullRequestProcessor);
+        expect(mockedPullRequestShouldCloseProcessor.prototype.shouldClose.mock.calls).toHaveLength(1);
+        expect(mockedPullRequestShouldCloseProcessor.prototype.shouldClose.mock.calls[0]).toHaveLength(0);
       });
 
       describe(`when the pull request should not be closed`, (): void => {
         beforeEach((): void => {
-          mockedPullRequestShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(false);
+          mockedPullRequestShouldCloseProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(false);
         });
 
         it(`should not increase the close pull requests statistic`, async (): Promise<void> => {
@@ -837,7 +839,7 @@ describe(`PullRequestProcessor`, (): void => {
 
       describe(`when the pull request should be closed`, (): void => {
         beforeEach((): void => {
-          mockedPullRequestShouldCloseStaleProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(true);
+          mockedPullRequestShouldCloseProcessor.prototype.shouldClose.mockImplementation().mockReturnValue(true);
         });
 
         it(`should close the pull request`, async (): Promise<void> => {

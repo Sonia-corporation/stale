@@ -1,0 +1,45 @@
+---
+id: workflow-testing
+title: Workflow testing
+tags:
+  - Getting started
+  - Workflow testing
+---
+
+## Test the workflow {#test-the-workflow}
+
+At this point, you shall have a working stale action.  
+Before going further into the customization, you may want to try it first.
+
+:::tip
+
+Use the [dry-run](../dry-run-option) mode to avoid altering your repository yet.
+
+:::
+
+```yml {5-6} title=".github/workflows/stale.yml"
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  dry-run: true
+```
+
+:::tip
+
+You can now check the logs, and especially the statistics at the end.  
+You will have a better idea over what to expect when a real run without the [dry-run](../dry-run-option) mode occur.
+
+:::
+
+## Customize the behaviour {#customize-the-behaviour}
+
+If the action was successful, you may wish now to configure it at your convenience.  
+Follow the [next page](../all-options) to have access to all the options.
+
+:::info
+
+The stale processing can be completely different between issues and pull requests.
+
+:::

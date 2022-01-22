@@ -12,6 +12,9 @@ test:
   - src/**/*.spec.ts
   - src/**/*.spec.js
   - tests/**
+  - documentation/**/*.spec.ts
+  - documentation/**/*.spec.tsx
+  - documentation/**/*.spec.js
 
 CI:
   - .github/workflows/**
@@ -21,3 +24,6 @@ CI:
   - .github/semantic.yml
   - .codeclimate.yml
   - .renovaterc.json
+
+website:
+  - documentation

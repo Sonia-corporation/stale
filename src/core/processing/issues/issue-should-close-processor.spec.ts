@@ -1,14 +1,14 @@
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IssueShouldCloseStaleProcessor } from '@core/processing/issues/issue-should-close-stale-processor';
+import { IssueShouldCloseProcessor } from '@core/processing/issues/issue-should-close-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 
-describe(`IssueShouldCloseStaleProcessor`, (): void => {
+describe(`IssueShouldCloseProcessor`, (): void => {
   let issueProcessor: IssueProcessor;
 
   beforeEach((): void => {
@@ -19,14 +19,14 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
     it(`should save the given issue processor`, (): void => {
       expect.assertions(1);
 
-      const result = new IssueShouldCloseStaleProcessor(issueProcessor);
+      const result = new IssueShouldCloseProcessor(issueProcessor);
 
       expect(result.processor).toStrictEqual(issueProcessor);
     });
   });
 
   describe(`after creation`, (): void => {
-    let issueShouldCloseStaleProcessor: IssueShouldCloseStaleProcessor;
+    let issueShouldCloseStaleProcessor: IssueShouldCloseProcessor;
 
     beforeEach((): void => {
       issueProcessor = createHydratedMock<IssueProcessor>();
@@ -38,7 +38,7 @@ describe(`IssueShouldCloseStaleProcessor`, (): void => {
       let issueProcessorGetUpdatedAtSpy: jest.SpyInstance;
 
       beforeEach((): void => {
-        issueShouldCloseStaleProcessor = new IssueShouldCloseStaleProcessor(issueProcessor);
+        issueShouldCloseStaleProcessor = new IssueShouldCloseProcessor(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueShouldCloseStaleProcessor.processor.logger, `info`)

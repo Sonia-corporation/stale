@@ -11,3 +11,6 @@ comment:
   branches:
     - 'master'
     - 'develop'
+ignore:
+  - documentation
+  - dist
