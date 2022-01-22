@@ -1,0 +1,31 @@
+---
+id: pull-request-ignore-any-assignees-option
+title: Ignore any pull request assignees option
+tags:
+  - Pull requests
+  - Options
+---
+
+### Input {#input}
+
+Name: `pull-request-ignore-any-assignees`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This option will let you ignore the processing of the pull requests which have at least one of the assignee from this list.  
+This can be useful when you use assignees to assign the pull requests to some members of your repository which will for sure close or at least process the pull requests very soon.
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-ignore-any-assignees: |
+    C0ZEN
+    maintainers
+```

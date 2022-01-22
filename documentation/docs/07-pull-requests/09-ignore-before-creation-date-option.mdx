@@ -1,0 +1,30 @@
+---
+id: pull-request-ignore-before-creation-date-option
+title: Ignore pull request before creation date option
+tags:
+  - Pull requests
+  - Options
+---
+
+### Input {#input}
+
+Name: `pull-request-ignore-before-creation-date`  
+Type: `string`  
+Default value: `''`
+
+### Description {#description}
+
+This option will let you ignore the processing of the pull requests which were created before this date.  
+This can be useful when you are configuring this action for the first time, and you wish to keep it safe!  
+Let the processing handle the newest pull requests first to see if your configuration seems good!
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-ignore-before-creation-date: 2020-04
+```
