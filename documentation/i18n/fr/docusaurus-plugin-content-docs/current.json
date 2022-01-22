@@ -3,12 +3,16 @@
     "message": "Suivant",
     "description": "The label for version current"
   },
-  "sidebar.tutorialSidebar.category.Tutorial - Basics": {
-    "message": "Tutorial - Basics",
-    "description": "The label for category Tutorial - Basics in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.Getting started": {
+    "message": "Pour bien commencé",
+    "description": "The label for category Getting started in sidebar tutorialSidebar"
   },
-  "sidebar.tutorialSidebar.category.Tutorial - Extras": {
-    "message": "Tutorial - Extras",
-    "description": "The label for category Tutorial - Extras in sidebar tutorialSidebar"
+  "sidebar.tutorialSidebar.category.Issues": {
+    "message": "Issues",
+    "description": "The label for category Issues in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Pull requests": {
+    "message": "Pull requests",
+    "description": "The label for category Pull requests in sidebar tutorialSidebar"
   }
 }

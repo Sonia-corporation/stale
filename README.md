@@ -75,22 +75,22 @@ All the inputs that are used both for issues and pull requests.
 
 ## All the issues inputs
 
-| Input                             | Description                                                                                                                                       | Default |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| issue-stale-label                 | The label that will be added to the issue when it is stale.                                                                                       | `stale` |
-| issue-ignore-all-labels           | Allow to ignore the processing of issues that contains any labels.                                                                                | `false` |
-| issue-ignore-any-labels           | Allow to ignore the processing of issues that contains one of those labels (multiline).                                                           |         |
-| issue-ignore-all-assignees        | Allow to ignore the processing of issues that contains any assignees.                                                                             | `false` |
-| issue-ignore-any-assignees        | Allow to ignore the processing of issues that contains one of those assignees (multiline).                                                        |         |
-| issue-ignore-all-project-cards    | Allow to ignore the processing of issues that contains any project cards.                                                                         | `false` |
-| issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
-| issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                        | `30`    |
-| issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                         |         |
-| issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                   | `10`    |
-| issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                         |         |
-| issue-add-labels-after-stale      | A list of labels added when the processing stale the issue (multiline).                                                                           |         |
-| issue-add-labels-after-close      | A list of labels added when the processing close the issue (multiline).                                                                           |         |
-| issue-processing                  | Allow to process the issues.                                                                                                                      | `true`  |
+| Input                             | Description                                                                                                                                     | Default |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| issue-stale-label                 | The label that will be added to the issue when it is stale.                                                                                     | `stale` |
+| issue-ignore-all-labels           | Allow to ignore the processing of issues that contains any labels.                                                                              | `false` |
+| issue-ignore-any-labels           | Allow to ignore the processing of issues that contains one of those labels (multiline).                                                         |         |
+| issue-ignore-all-assignees        | Allow to ignore the processing of issues that contains any assignees.                                                                           | `false` |
+| issue-ignore-any-assignees        | Allow to ignore the processing of issues that contains one of those assignees (multiline).                                                      |         |
+| issue-ignore-all-project-cards    | Allow to ignore the processing of issues that contains any project cards.                                                                       | `false` |
+| issue-ignore-before-creation-date | Allow to ignore the processing of issues that were created before this date ([ISO 8601](https://moment.github.io/luxon/#/parsing?id=iso-8601)). |         |
+| issue-days-before-stale           | The number of days until the issue is considered as stale.                                                                                      | `30`    |
+| issue-stale-comment               | The comment that will be sent once the issue is stale (keep empty to not send a comment).                                                       |         |
+| issue-days-before-close           | The number of days until a stale issue is considered as closed.                                                                                 | `10`    |
+| issue-close-comment               | The comment that will be sent once the issue is close (keep empty to not send a comment).                                                       |         |
+| issue-add-labels-after-stale      | A list of labels added when the processing stale the issue (multiline).                                                                         |         |
+| issue-add-labels-after-close      | A list of labels added when the processing close the issue (multiline).                                                                         |         |
+| issue-processing                  | Allow to process the issues.                                                                                                                    | `true`  |
 
 ## All the issues outputs
 
@@ -108,25 +108,25 @@ All the inputs that are used both for issues and pull requests.
 
 ## All the pull requests inputs
 
-| Input                                    | Description                                                                                                                                              | Default |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| pull-request-stale-label                 | The label that will be added to the pull request when it is stale.                                                                                       | `stale` |
-| pull-request-ignore-all-labels           | Allow to ignore the processing of pull requests that contains any labels.                                                                                | `false` |
-| pull-request-ignore-any-labels           | Allow to ignore the processing of pull requests that contains one of those labels (multiline).                                                           |         |
-| pull-request-ignore-all-assignees        | Allow to ignore the processing of pull requests that contains any assignees.                                                                             | `false` |
-| pull-request-ignore-any-assignees        | Allow to ignore the processing of pull requests that contains one of those assignees (multiline).                                                        |         |
-| pull-request-ignore-all-project-cards    | Allow to ignore the processing of pull requests that contains any project cards.                                                                         | `false` |
-| pull-request-ignore-before-creation-date | Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601). |         |
-| pull-request-ignore-draft                | Allow to ignore the processing of pull requests that are drafts.                                                                                         | `false` |
-| pull-request-days-before-stale           | The number of days until the pull request is considered as stale.                                                                                        | `30`    |
-| pull-request-stale-comment               | The comment that will be sent once the pull request is stale (keep empty to not send a comment).                                                         |         |
-| pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                   | `10`    |
-| pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                         |         |
-| pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                            | `false` |
-| pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                           |         |
-| pull-request-add-labels-after-close      | A list of labels added when the processing close the pull request (multiline).                                                                           |         |
-| pull-request-processing                  | Allow to process the pull requests.                                                                                                                      | `true`  |
-| pull-request-to-draft-instead-of-stale   | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                            | `false` |
+| Input                                    | Description                                                                                                                                            | Default |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| pull-request-stale-label                 | The label that will be added to the pull request when it is stale.                                                                                     | `stale` |
+| pull-request-ignore-all-labels           | Allow to ignore the processing of pull requests that contains any labels.                                                                              | `false` |
+| pull-request-ignore-any-labels           | Allow to ignore the processing of pull requests that contains one of those labels (multiline).                                                         |         |
+| pull-request-ignore-all-assignees        | Allow to ignore the processing of pull requests that contains any assignees.                                                                           | `false` |
+| pull-request-ignore-any-assignees        | Allow to ignore the processing of pull requests that contains one of those assignees (multiline).                                                      |         |
+| pull-request-ignore-all-project-cards    | Allow to ignore the processing of pull requests that contains any project cards.                                                                       | `false` |
+| pull-request-ignore-before-creation-date | Allow to ignore the processing of pull requests that were created before this date ([ISO 8601](https://moment.github.io/luxon/#/parsing?id=iso-8601)). |         |
+| pull-request-ignore-draft                | Allow to ignore the processing of pull requests that are drafts.                                                                                       | `false` |
+| pull-request-days-before-stale           | The number of days until the pull request is considered as stale.                                                                                      | `30`    |
+| pull-request-stale-comment               | The comment that will be sent once the pull request is stale (keep empty to not send a comment).                                                       |         |
+| pull-request-days-before-close           | The number of days until a stale pull request is considered as closed.                                                                                 | `10`    |
+| pull-request-close-comment               | The comment that will be sent once the pull request is close (keep empty to not send a comment).                                                       |         |
+| pull-request-delete-branch-after-close   | Delete the branch when the processing close the pull request.                                                                                          | `false` |
+| pull-request-add-labels-after-stale      | A list of labels added when the processing stale the pull request (multiline).                                                                         |         |
+| pull-request-add-labels-after-close      | A list of labels added when the processing close the pull request (multiline).                                                                         |         |
+| pull-request-processing                  | Allow to process the pull requests.                                                                                                                    | `true`  |
+| pull-request-to-draft-instead-of-stale   | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                          | `false` |
 
 ## All the pull requests outputs
 
