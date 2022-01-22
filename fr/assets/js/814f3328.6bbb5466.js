@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[535],{5641:function(e){e.exports=JSON.parse('{"title":"Articles r\xe9cents","items":[{"title":"Bienvenue !","permalink":"/stale/fr/blog/bienvenue"}]}')}}]);
