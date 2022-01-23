@@ -16,7 +16,7 @@
     "typecheck": "tsc"
   },
   "engines": {
-    "node": "14.17.6",
+    "node": "14.18.3",
     "npm": "7.24.2"
   },
   "dependencies": {
