@@ -175,10 +175,10 @@ jobs:
           issue-ignore-all-labels: false
           issue-stale-label: stale
           issue-ignore-any-labels: |
-            frozen
-            help wanted
-            dependency-fix
-            dependencies
+            frozen :ice_cube:
+            help wanted :sos:
+            dependency-fix :wrench:
+            dependencies :package:
           issue-days-before-stale: 30
           issue-days-before-close: 10
           issue-ignore-before-creation-date: 2020-04
@@ -220,10 +220,10 @@ jobs:
           pull-request-ignore-all-labels: false
           pull-request-stale-label: stale
           pull-request-ignore-any-labels: |
-            frozen
-            help wanted
-            dependency-fix
-            dependencies
+            frozen :ice_cube:
+            help wanted :sos:
+            dependency-fix :wrench:
+            dependencies :package:
           pull-request-days-before-stale: 30
           pull-request-days-before-close: 10
           pull-request-ignore-before-creation-date: 2020-04

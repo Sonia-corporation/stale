@@ -29,7 +29,7 @@
   "separateMultipleMajor": true,
   "separateMinorPatch": true,
   "branchPrefix": "dependencies/",
-  "labels": ["dependencies"],
+  "labels": ["dependencies :package:"],
   "rebaseWhen": "behind-base-branch",
   "baseBranches": ["develop"],
   "prCreation": "immediate",

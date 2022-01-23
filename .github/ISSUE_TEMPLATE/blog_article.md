@@ -2,7 +2,7 @@
 name: Blog post
 about: Provide a new blog article
 title: '[BLOG] '
-labels: 'blog-request'
+labels: 'blog-request :newspaper:'
 assignees: 'C0ZEN'
 ---
 

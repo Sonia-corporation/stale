@@ -141,7 +141,7 @@ jobs:
           title: 'chore(develop): merge master into develop due to new version ${{ steps.latest-tag.outputs.tag }}'
           branch: feature/merge-master-into-develop
           assignees: C0ZEN
-          labels: auto-merge
+          labels: 'auto-merge :ok:'
           commit-message: 'chore(develop): merge master into develop'
           body: |
             :tada: This PR was generated after the creation of the version ${{ steps.latest-tag.outputs.tag }} :tada:

@@ -2,7 +2,7 @@
 name: Documentation request
 about: Suggest an improvement for either the local documentation on GitHub or the website documentation
 title: '[DOCS] '
-labels: 'docs-request'
+labels: 'docs-request :books:'
 assignees: ''
 ---
 

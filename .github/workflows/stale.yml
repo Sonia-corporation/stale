@@ -18,16 +18,16 @@ jobs:
           issue-days-before-stale: 30
           issue-days-before-close: 10
           issue-ignore-any-labels: |
-            frozen
-            help wanted
-            dependency-fix
-            dependencies
+            frozen :ice_cube:
+            help wanted :sos:
+            dependency-fix :wrench:
+            dependencies :package:
           issue-ignore-any-assignees: |
             C0ZEN
           issue-stale-comment: |
-            [~frozen]: https://img.shields.io/badge/-frozen-D6FFFA.svg
+            [~frozen :ice_cube:]: https://img.shields.io/badge/-frozen-D6FFFA.svg
             [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
-            [~dependencies]: https://img.shields.io/badge/-dependencies-1e3799.svg
+            [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
             [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
 
             :warning: **Warning!** :warning:
@@ -35,24 +35,24 @@ jobs:
             In 10 days, this issue will be closed if there is no more activity during this period. :grimacing:
 
             If you want to avoid this stale state you could add one of these labels:
-            - [![label: frozen][~frozen]](https://github.com/Sonia-corporation/stale/labels/frozen)
-            - [![label: dependency-fix][~dependency-fix]](https://github.com/Sonia-corporation/stale/labels/dependency-fix)
-            - [![label: dependencies][~dependencies]](https://github.com/Sonia-corporation/stale/labels/dependencies)
-            - [![label: help wanted][~help-wanted]](https://github.com/Sonia-corporation/stale/labels/help%20wanted)
+            - [![label: frozen :ice_cube:][~frozen :ice_cube:]](https://github.com/Sonia-corporation/stale/labels/frozen%20%3Aice_cube%3A)
+            - [![label: dependency-fix :wrench:][~dependency-fix :wrench:]](https://github.com/Sonia-corporation/stale/labels/dependency-fix%20%3Awrench%3A)
+            - [![label: dependencies :package:][~dependencies :package:]](https://github.com/Sonia-corporation/stale/labels/dependencies%20%3Apackage%3A)
+            - [![label: help wanted :sos:][~help wanted :sos:]](https://github.com/Sonia-corporation/stale/labels/help%20wanted%20%3Asos%3A)
           issue-close-comment: |
             :warning: **Warning!** :warning:
             This issue was closed due to a lack of activity for 10 days after it was stale. :worried:
           pull-request-days-before-stale: 30
           pull-request-days-before-close: 10
           pull-request-ignore-any-labels: |
-            frozen
-            dependencies
+            frozen :ice_cube:
+            dependencies :package:
           pull-request-ignore-any-assignees: |
             C0ZEN
           pull-request-stale-comment: |
-            [~frozen]: https://img.shields.io/badge/-frozen-D6FFFA.svg
-            [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
-            [~dependencies]: https://img.shields.io/badge/-dependencies-1e3799.svg
+            [~frozen :ice_cube:]: https://img.shields.io/badge/-frozen-D6FFFA.svg
+            [~dependency-fix :wrench:]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
+            [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
             [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
 
             :warning: **Warning!** :warning:
@@ -60,8 +60,8 @@ jobs:
             In 10 days, this pull request will be closed if there is no more activity during this period. :grimacing:
 
             If you want to avoid this stale state you could add one of these labels:
-            - [![label: frozen][~frozen]](https://github.com/Sonia-corporation/stale/labels/frozen)
-            - [![label: dependencies][~dependencies]](https://github.com/Sonia-corporation/stale/labels/dependencies)
+            - [![label: frozen :ice_cube:][~frozen :ice_cube:]](https://github.com/Sonia-corporation/stale/labels/frozen%20%3Aice_cube%3A)
+            - [![label: dependencies :package:][~dependencies :package:]](https://github.com/Sonia-corporation/stale/labels/dependencies%20%3Apackage%3A)
           pull-request-close-comment: |
             :warning: **Warning!** :warning:
             This pull request was closed due to a lack of activity for 10 days after it was stale. :worried:
