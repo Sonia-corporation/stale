@@ -72,7 +72,8 @@
     [
       "@semantic-release/github",
       {
-        "labels": ["semantic-release :package:"]
+        "labels": ["semantic-release :package:"],
+        "releasedLabels": ["released :package:"]
       }
     ]
   ],
