@@ -26,4 +26,4 @@
   - .renovaterc.json
 
 'website :computer:':
-  - documentation
+  - documentation/**
