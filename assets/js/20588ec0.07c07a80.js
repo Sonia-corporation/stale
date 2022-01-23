@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[3609],{1934:function(t){t.exports=JSON.parse('{"name":"Tips","permalink":"/stale/docs/tags/tips","docs":[{"id":"statistics","title":"Statistics","description":"Know your workflow with the help of statistics","permalink":"/stale/docs/statistics"}],"allTagsPath":"/stale/docs/tags"}')}}]);
