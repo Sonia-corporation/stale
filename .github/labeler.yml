@@ -1,4 +1,4 @@
-documentation:
+'documentation :books:':
   - .all-contributorsrc
   - CHANGELOG.md
   - CODE_OF_CONDUCT.md
@@ -8,7 +8,7 @@ documentation:
   - PULL_REQUEST_TEMPLATE.md
   - README.md
 
-test:
+'test :test_tube:':
   - src/**/*.spec.ts
   - src/**/*.spec.js
   - tests/**
@@ -16,7 +16,7 @@ test:
   - documentation/**/*.spec.tsx
   - documentation/**/*.spec.js
 
-CI:
+'CI :robot:':
   - .github/workflows/**
   - .github/config.yml
   - .github/issue_label_bot.yaml
@@ -25,5 +25,5 @@ CI:
   - .codeclimate.yml
   - .renovaterc.json
 
-website:
-  - documentation
+'website :computer:':
+  - documentation/**

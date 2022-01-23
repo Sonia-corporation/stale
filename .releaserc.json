@@ -43,7 +43,10 @@
         "linkReferences": true,
         "includeDetails": true,
         "commit": "commit",
-        "issue": "issues"
+        "issue": "issues",
+        "presetConfig": {
+          "types": ["feat", "fix", "perf", "docs", "revert"]
+        }
       }
     ],
     [

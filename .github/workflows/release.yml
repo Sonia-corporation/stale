@@ -11,7 +11,7 @@ jobs:
       CURRENT_TAG: ${{ steps.save-current-tag.outputs.CURRENT_TAG }}
     steps:
       - name: Checkout develop
-        uses: actions/checkout@v2
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
         with:
           ref: develop
       - name: Reset branch
@@ -20,7 +20,7 @@ jobs:
           git reset --hard master
       - name: Get current tag
         id: current-tag
-        uses: WyriHaximus/github-action-get-previous-tag@v1.1.0
+        uses: WyriHaximus/github-action-get-previous-tag@8a0e045f02c0a3a04e1452df58b90fc7e555e950 # renovate: tag=v1.1.0
         with:
           fallback: 1.0.0
         env:
@@ -33,15 +33,15 @@ jobs:
     needs: [CurrentTag]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
       - name: Use Node.js 12.22.9
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
           node-version: 12.22.9
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@v2
+        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # renovate: tag=v2
         env:
           cache-name: cache-node-modules
         with:
@@ -70,14 +70,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: [CurrentTag, Release]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
           node-version: 14.17.6
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@v2
+        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # renovate: tag=v2
         env:
           cache-name: cache-node-modules
         with:
@@ -98,7 +98,7 @@ jobs:
           cd documentation
           npm run build
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305 # renovate: tag=v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./documentation/build
@@ -113,7 +113,7 @@ jobs:
     needs: [CurrentTag, Release]
     steps:
       - name: Checkout develop
-        uses: actions/checkout@v2
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
         with:
           ref: develop
       - name: Reset branch
@@ -122,7 +122,7 @@ jobs:
           git reset --hard master
       - name: Get latest tag
         id: latest-tag
-        uses: WyriHaximus/github-action-get-previous-tag@v1.1.0
+        uses: WyriHaximus/github-action-get-previous-tag@8a0e045f02c0a3a04e1452df58b90fc7e555e950 # renovate: tag=v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Show current tag
@@ -135,13 +135,13 @@ jobs:
         run: echo 'The current tag is not the same after the release. A new tag has been created'
       - name: Create PR from master to develop
         if: needs.CurrentTag.outputs.CURRENT_TAG != steps.latest-tag.outputs.tag
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@dcd5fd746d53dd8de555c0f10bca6c35628be47a # renovate: tag=v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'chore(develop): merge master into develop due to new version ${{ steps.latest-tag.outputs.tag }}'
           branch: feature/merge-master-into-develop
           assignees: C0ZEN
-          labels: auto-merge
+          labels: 'auto-merge :ok:'
           commit-message: 'chore(develop): merge master into develop'
           body: |
             :tada: This PR was generated after the creation of the version ${{ steps.latest-tag.outputs.tag }} :tada:

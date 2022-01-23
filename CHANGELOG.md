@@ -2,6 +2,12 @@
 
 # [1.31.0](https://github.com/Sonia-corporation/stale/compare/1.30.0...1.31.0) (2022-01-22)
 
+
+### :books: Documentation
+
+* **website:** add explicit docs for every pull requests inputs ([566376d](https://github.com/Sonia-corporation/stale/commit/566376dd181f77e50a81c5c273a723031c583181))
+* **website:** add explicit docs for every issues inputs ([12af4f5](https://github.com/Sonia-corporation/stale/commit/12af4f53cb7fc03341304a6375790f6f05aa6525))
+
 # [1.30.0](https://github.com/Sonia-corporation/stale/compare/1.29.0...1.30.0) (2022-01-19)
 
 

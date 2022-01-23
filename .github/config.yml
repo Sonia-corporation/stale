@@ -1,4 +1,4 @@
 helpr:
-  opened: 'opened-pull-request'
-  merged: 'merged-pull-request'
-  rejected: 'rejected-pull-request'
+  opened: 'opened-pull-request :link:'
+  merged: 'merged-pull-request :package:'
+  rejected: 'rejected-pull-request :stop_sign:'
