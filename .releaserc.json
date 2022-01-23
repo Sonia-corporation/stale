@@ -69,7 +69,12 @@
         "message": "build(release): new version ${nextRelease.version}"
       }
     ],
-    "@semantic-release/github"
+    [
+      "@semantic-release/github",
+      {
+        "labels": ["semantic-release :package:"]
+      }
+    ]
   ],
   "dryRun": false,
   "ci": true,
