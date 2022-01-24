@@ -1,5 +1,19 @@
 # Semantic Versioning Changelog
 
+# [1.33.0](https://github.com/Sonia-corporation/stale/compare/1.32.0...1.33.0) (2022-01-24)
+
+
+### :bug: Bug Fixes
+
+* **draft:** only convert to draft when the dry-run is disabled ([67cc535](https://github.com/Sonia-corporation/stale/commit/67cc535beca61bf80bfc7ca4e5ced1d3006abc97)), closes [#346](https://github.com/Sonia-corporation/stale/issues/346)
+
+
+### :rocket: Features
+
+* **statistics:** always count the statistics even in dry-run ([cbc41eb](https://github.com/Sonia-corporation/stale/commit/cbc41ebf616ebd19379f47d00c5a74ff95c0e5d7)), closes [#323](https://github.com/Sonia-corporation/stale/issues/323)
+  This will come particuly useful to know what is to be expected from the dry-run.
+Newcomers can really take advantage of this feature now.
+
 # [1.32.0](https://github.com/Sonia-corporation/stale/compare/1.31.0...1.32.0) (2022-01-23)
 
 
