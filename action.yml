@@ -1,4 +1,4 @@
-name: 'Stale and close'
+name: 'Process stale issues and PRs'
 description: 'A GitHub action to stale and close automatically your issues and pull requests.'
 author: 'C0ZEN'
 inputs:
@@ -137,6 +137,52 @@ inputs:
     description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
     required: false
     default: 'false'
+outputs:
+  # Issues outputs
+  processed-issues-count:
+    description: 'The number of issues processed.'
+  ignored-issues-count:
+    description: 'The number of issues ignored.'
+  unaltered-issues-count:
+    description: 'The number of issues unaltered (either not good to stale or already stale).'
+  stale-issues-count:
+    description: 'The number of issues stale.'
+  already-stale-issues-count:
+    description: 'The number of issues processed which were already stale.'
+  remove-stale-issues-count:
+    description: 'The number of issues from where the stale state was removed.'
+  close-issues-count:
+    description: 'The number of issues closed.'
+  added-issues-comments-count:
+    description: 'The number of added issues comments.'
+  added-issues-labels-count:
+    description: 'The number of added issues labels.'
+  # Pull requests outputs
+  processed-pull-requests-count:
+    description: 'The number of pull requests processed.'
+  ignored-pull-requests-count:
+    description: 'The number of pull requests ignored.'
+  unaltered-pull-requests-count:
+    description: 'The number of pull requests unaltered (either not good to stale or already stale).'
+  stale-pull-requests-count:
+    description: 'The number of pull requests stale.'
+  already-stale-pull-requests-count:
+    description: 'The number of pull requests processed which were already stale.'
+  remove-stale-pull-requests-count:
+    description: 'The number of pull requests from where the stale state was removed.'
+  close-pull-requests-count:
+    description: 'The number of pull requests closed.'
+  deleted-pull-requests-branches-count:
+    description: 'The number of deleted pull requests branches closed.'
+  added-pull-requests-comments-count:
+    description: 'The number of added pull requests comments.'
+  added-pull-requests-labels-count:
+    description: 'The number of added pull requests labels.'
+  draft-pull-requests-count:
+    description: 'The number of pull requests converted to draft.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
+branding:
+  icon: 'activity'
+  color: 'purple'
