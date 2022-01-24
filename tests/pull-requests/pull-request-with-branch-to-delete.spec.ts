@@ -74,7 +74,7 @@ describe(`Pull request with branch to delete`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });

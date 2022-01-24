@@ -34,7 +34,7 @@ export abstract class AbstractCommentsProcessor<
       await this._addComment(this._getItemId(), staleComment);
     }
 
-    this._increaseAddedCommentsCount();
+    this._increaseAddedCommentsCountStatistic();
     this.processor.logger.notice(`Stale comment added`);
   }
 
@@ -58,7 +58,7 @@ export abstract class AbstractCommentsProcessor<
       await this._addComment(this._getItemId(), closeComment);
     }
 
-    this._increaseAddedCommentsCount();
+    this._increaseAddedCommentsCountStatistic();
     this.processor.logger.notice(`Close comment added`);
   }
 
@@ -70,5 +70,5 @@ export abstract class AbstractCommentsProcessor<
 
   protected abstract _getStaleComment(): IComment | '';
 
-  protected abstract _increaseAddedCommentsCount(): void;
+  protected abstract _increaseAddedCommentsCountStatistic(): void;
 }

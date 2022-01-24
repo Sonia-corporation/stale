@@ -31,7 +31,7 @@ export class IssueCommentsProcessor extends AbstractCommentsProcessor<IssueProce
     return this.processor.item.id;
   }
 
-  protected _increaseAddedCommentsCount(): void {
+  protected _increaseAddedCommentsCountStatistic(): void {
     IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
   }
 

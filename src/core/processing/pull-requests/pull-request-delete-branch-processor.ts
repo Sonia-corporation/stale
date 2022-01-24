@@ -1,5 +1,6 @@
 import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
@@ -45,8 +46,9 @@ export class PullRequestDeleteBranchProcessor extends AbstractProcessor<PullRequ
       `Deleting the branch`,
       LoggerService.value(`${this.processor.item.headRef.name}${LoggerFormatService.whiteBright(`...`)}`)
     );
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
-    if (!CommonInputsService.getInstance().getInputs().dryRun) {
+    if (!commonInputs.dryRun) {
       await this.githubApiPullRequestReferencesService$$.deleteReference(this.processor.item.headRef.id);
 
       this.processor.logger.notice(
@@ -54,9 +56,10 @@ export class PullRequestDeleteBranchProcessor extends AbstractProcessor<PullRequ
         LoggerService.value(this.processor.item.headRef.name),
         LoggerFormatService.whiteBright(`was deleted`)
       );
-      PullRequestsStatisticsService.getInstance().increaseDeletedPullRequestsBranchesCount();
     } else {
       this.processor.logger.info(`The pull request branch was not deleted due to the dry-run mode`);
     }
+
+    PullRequestsStatisticsService.getInstance().increaseDeletedPullRequestsBranchesCount();
   }
 }

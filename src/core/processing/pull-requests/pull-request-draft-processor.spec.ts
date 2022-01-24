@@ -1,3 +1,5 @@
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestDraftProcessor } from '@core/processing/pull-requests/pull-request-draft-processor';
@@ -46,6 +48,7 @@ describe(`PullRequestDraftProcessor`, (): void => {
       let processorLoggerNoticeSpy: jest.SpyInstance;
       let githubApiPullRequestsServiceDraftPullRequestSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy: jest.SpyInstance;
+      let commonInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
@@ -65,6 +68,11 @@ describe(`PullRequestDraftProcessor`, (): void => {
         pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseDraftPullRequestsCount`)
           .mockImplementation();
+        commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<ICommonInputs>({
+            dryRun: false,
+          })
+        );
       });
 
       it(`should log about converting the pull request to draft`, async (): Promise<void> => {
@@ -76,27 +84,113 @@ describe(`PullRequestDraftProcessor`, (): void => {
         expect(processorLoggerInfoSpy).toHaveBeenCalledWith(`Converting this pull request to draft...`);
       });
 
-      it(`should convert this pull request to a draft`, async (): Promise<void> => {
+      it(`should get the common inputs`, async (): Promise<void> => {
         expect.assertions(2);
 
         await pullRequestDraftProcessor.draft();
 
-        expect(githubApiPullRequestsServiceDraftPullRequestSpy).toHaveBeenCalledTimes(1);
-        expect(githubApiPullRequestsServiceDraftPullRequestSpy).toHaveBeenCalledWith(`dummy-id`);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
       });
 
-      describe(`when the pull request failed to be converted to a draft`, (): void => {
+      describe(`when the dry-run mode is disabled`, (): void => {
         beforeEach((): void => {
-          githubApiPullRequestsServiceDraftPullRequestSpy.mockResolvedValue(undefined);
+          commonInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<ICommonInputs>({
+              dryRun: false,
+            })
+          );
         });
 
-        it(`should log about successfully converting the pull request to a draft`, async (): Promise<void> => {
+        it(`should convert this pull request to a draft`, async (): Promise<void> => {
           expect.assertions(2);
 
           await pullRequestDraftProcessor.draft();
 
-          expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now a draft pull request`);
+          expect(githubApiPullRequestsServiceDraftPullRequestSpy).toHaveBeenCalledTimes(1);
+          expect(githubApiPullRequestsServiceDraftPullRequestSpy).toHaveBeenCalledWith(`dummy-id`);
+        });
+
+        describe(`when the pull request was successfully converted to a draft`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestsServiceDraftPullRequestSpy.mockResolvedValue(undefined);
+          });
+
+          it(`should log about successfully converting the pull request to a draft`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestDraftProcessor.draft();
+
+            expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
+            expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now a draft pull request`);
+          });
+
+          it(`should increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestDraftProcessor.draft();
+
+            expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledWith();
+          });
+        });
+
+        describe(`when the pull request failed to be converted to a draft`, (): void => {
+          beforeEach((): void => {
+            githubApiPullRequestsServiceDraftPullRequestSpy.mockRejectedValue(new Error(`draft error`));
+          });
+
+          it(`should throw an error`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
+          });
+
+          it(`should not log about successfully converting the pull request to a draft`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
+
+            expect(processorLoggerNoticeSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
+
+            expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+        });
+      });
+
+      describe(`when the dry-run mode is enabled`, (): void => {
+        beforeEach((): void => {
+          commonInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<ICommonInputs>({
+              dryRun: true,
+            })
+          );
+        });
+
+        it(`should not convert this pull request to a draft`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await pullRequestDraftProcessor.draft();
+
+          expect(githubApiPullRequestsServiceDraftPullRequestSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should log about not converting the pull request to a draft due to the dry-run mode`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await pullRequestDraftProcessor.draft();
+
+          expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The pull request could not be converted to draft due to the dry-run mode`
+          );
         });
 
         it(`should increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
@@ -106,34 +200,6 @@ describe(`PullRequestDraftProcessor`, (): void => {
 
           expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).toHaveBeenCalledWith();
-        });
-      });
-
-      describe(`when the pull request was successfully converted to a draft`, (): void => {
-        beforeEach((): void => {
-          githubApiPullRequestsServiceDraftPullRequestSpy.mockRejectedValue(new Error(`draft error`));
-        });
-
-        it(`should throw an error`, async (): Promise<void> => {
-          expect.assertions(1);
-
-          await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
-        });
-
-        it(`should not log about successfully converting the pull request to a draft`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
-
-          expect(processorLoggerNoticeSpy).not.toHaveBeenCalled();
-        });
-
-        it(`should not increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
-
-          expect(pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy).not.toHaveBeenCalled();
         });
       });
     });
