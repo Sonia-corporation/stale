@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/fr/blog</id>
     <title>GitHub stale action Blog</title>
-    <updated>2022-01-24T20:25:27.819Z</updated>
+    <updated>2022-01-24T22:02:06.072Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/fr/blog"/>
     <subtitle>GitHub stale action Blog</subtitle>
@@ -11,7 +11,7 @@
         <title type="html"><![CDATA[Bienvenue !]]></title>
         <id>bienvenue</id>
         <link href="https://sonia-corporation.github.io/stale/fr/blog/bienvenue"/>
-        <updated>2022-01-24T20:25:27.819Z</updated>
+        <updated>2022-01-24T22:02:06.072Z</updated>
         <summary type="html"><![CDATA[Bienvenue sur la toute première version de ce site web !]]></summary>
         <content type="html"><![CDATA[<p>Nous sommes heureux de vous annoncer que c&#x27;est la première version de ce site web !</p><h2>Pourquoi tant de peine ?</h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c&#x27;est vraiment un travail de peon.<br/>
 <!-- -->Nous espérons qu&#x27;en créant ce site web, vous aurez accès à encore plus d&#x27;aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br/>
