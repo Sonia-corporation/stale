@@ -52,6 +52,8 @@ export abstract class AbstractExtraLabelsProcessor<
         `The extra label${labelsToAdd.length > 1 ? `s were` : ` was`} not added due to the dry-run mode`
       );
     }
+
+    this._increaseAddedLabelsCountStatistic(labels.length);
   }
 
   private _fetchLabels(labelsName: ReadonlyArray<string>): Promise<IGithubApiLabel[]> {
@@ -89,4 +91,6 @@ export abstract class AbstractExtraLabelsProcessor<
   protected abstract _getExtraLabelsName(): string[];
 
   protected abstract _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void>;
+
+  protected abstract _increaseAddedLabelsCountStatistic(count: Readonly<number>): void;
 }

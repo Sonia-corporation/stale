@@ -129,7 +129,7 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
         });
 
         it(`should continue the process`, async (): Promise<void> => {
-          expect.assertions(4);
+          expect.assertions(3);
 
           await pullRequestDeleteBranchProcessor.delete();
 
@@ -140,8 +140,15 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
             `input-pull-request-delete-branch-after-close`,
             `whiteBright-is disabled. Continuing...`
           );
-          expect(pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy).not.toHaveBeenCalled();
           expect(githubApiPullRequestReferencesServiceDeleteReferenceSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the deleted pull requests statistic count by 1`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await pullRequestDeleteBranchProcessor.delete();
+
+          expect(pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -206,7 +213,7 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
             );
           });
 
-          it(`should increase the statistic about the deleted branches`, async (): Promise<void> => {
+          it(`should increase the deleted pull requests statistic count by 1`, async (): Promise<void> => {
             expect.assertions(2);
 
             await pullRequestDeleteBranchProcessor.delete();
@@ -238,12 +245,13 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
             );
           });
 
-          it(`should not increase the statistic about the deleted branches`, async (): Promise<void> => {
-            expect.assertions(1);
+          it(`should increase the deleted pull requests statistic count by 1`, async (): Promise<void> => {
+            expect.assertions(2);
 
             await pullRequestDeleteBranchProcessor.delete();
 
-            expect(pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy).not.toHaveBeenCalled();
+            expect(pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy).toHaveBeenCalledWith();
           });
         });
       });

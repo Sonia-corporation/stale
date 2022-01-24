@@ -49,7 +49,9 @@ export class IssueCloseStaleProcessor extends AbstractCloseStaleProcessor<IssueP
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiIssueLabelsService$$.addLabels(targetId, labelsId);
+  }
 
-    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(labelsId.length);
+  protected _increaseAddedLabelsCountStatistic(count: Readonly<number>): void {
+    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(count);
   }
 }

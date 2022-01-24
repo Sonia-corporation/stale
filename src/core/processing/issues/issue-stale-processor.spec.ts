@@ -280,7 +280,7 @@ describe(`IssueStaleProcessor`, (): void => {
             await issueStaleProcessor.stale();
 
             expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
@@ -328,12 +328,13 @@ describe(`IssueStaleProcessor`, (): void => {
             expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
           });
 
-          it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
-            expect.assertions(1);
+          it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
 
             await issueStaleProcessor.stale();
 
-            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
@@ -695,12 +696,13 @@ describe(`IssueStaleProcessor`, (): void => {
               expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
 
-            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
-              expect.assertions(1);
+            it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
+              expect.assertions(2);
 
               await issueStaleProcessor.processToAddExtraLabels$$();
 
-              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
             });
           });
 
@@ -900,12 +902,13 @@ describe(`IssueStaleProcessor`, (): void => {
               expect(githubApiIssueLabelsServiceAddLabelsSpy).not.toHaveBeenCalled();
             });
 
-            it(`should not increase the number of added labels count statistic`, async (): Promise<void> => {
-              expect.assertions(1);
+            it(`should increase the number of added labels count statistic by 2`, async (): Promise<void> => {
+              expect.assertions(2);
 
               await issueStaleProcessor.processToAddExtraLabels$$();
 
-              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(2);
             });
           });
 

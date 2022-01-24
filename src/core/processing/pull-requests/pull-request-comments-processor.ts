@@ -31,7 +31,7 @@ export class PullRequestCommentsProcessor extends AbstractCommentsProcessor<Pull
     return this.processor.item.id;
   }
 
-  protected _increaseAddedCommentsCount(): void {
+  protected _increaseAddedCommentsCountStatistic(): void {
     PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsCommentsCount();
   }
 

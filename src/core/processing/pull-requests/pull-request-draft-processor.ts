@@ -1,4 +1,6 @@
+import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
+import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
@@ -22,10 +24,16 @@ export class PullRequestDraftProcessor extends AbstractProcessor<PullRequestProc
 
   public async draft(): Promise<void> {
     this.processor.logger.info(`Converting this pull request to draft...`);
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
 
-    await this.githubApiPullRequestsService$$.draftPullRequest(this.processor.item.id);
+    if (!commonInputs.dryRun) {
+      await this.githubApiPullRequestsService$$.draftPullRequest(this.processor.item.id);
 
-    this.processor.logger.notice(`The pull request is now a draft pull request`);
+      this.processor.logger.notice(`The pull request is now a draft pull request`);
+    } else {
+      this.processor.logger.info(`The pull request could not be converted to draft due to the dry-run mode`);
+    }
+
     PullRequestsStatisticsService.getInstance().increaseDraftPullRequestsCount();
   }
 
