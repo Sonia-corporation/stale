@@ -56,6 +56,8 @@ jobs:
           labels: 'auto-merge :ok:'
           commit-message: 'chore(master): merge develop into master'
           body: |
-            :tada: This PR was generated after pushing into develop with the label "merge-into-master :crown:" :tada:
+            [~merge-into-master :crown:]: https://img.shields.io/badge/-merge into master-303952.svg
 
-            Your **github-actions** bot :rocket:
+            :tada: This PR was generated after pushing into develop with the label [![label: merge-into-master :crown:][~merge-into-master :crown:]](https://github.com/Sonia-corporation/stale/labels/merge-into-master%20%3Acrown%3A) :tada:
+
+            Your **41898282+github-actions[bot]@users.noreply.github.com** bot :rocket:
