@@ -49,7 +49,9 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiPullRequestLabelsService$$.addLabels(targetId, labelsId);
+  }
 
-    PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsLabelsCount(labelsId.length);
+  protected _increaseAddedLabelsCountStatistic(count: Readonly<number>): void {
+    PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsLabelsCount(count);
   }
 }

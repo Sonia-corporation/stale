@@ -40,8 +40,6 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
 
   protected async _addLabel(targetId: Readonly<IUuid>, labelId: Readonly<IUuid>): Promise<void> {
     await this.githubApiIssueLabelsService$$.addLabel(targetId, labelId);
-
-    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount();
   }
 
   protected _processStaleComment(): Promise<void> {
@@ -60,7 +58,9 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiIssueLabelsService$$.addLabels(targetId, labelsId);
+  }
 
-    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(labelsId.length);
+  protected _increaseAddedLabelsCountStatistic(count: Readonly<number> = 1): void {
+    IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(count);
   }
 }

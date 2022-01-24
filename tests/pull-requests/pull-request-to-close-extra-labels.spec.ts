@@ -276,7 +276,7 @@ describe(`Pull request to close extra labels`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(3);
         expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });

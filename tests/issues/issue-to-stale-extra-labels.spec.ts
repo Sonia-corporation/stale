@@ -142,7 +142,7 @@ describe(`Issue to stale extra labels`, (): void => {
         expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
         expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(0);
         expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(1);
-        expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(4);
       });
     });
   });

@@ -149,7 +149,7 @@ describe(`Pull request to stale extra labels`, (): void => {
         expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
         expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
-        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(4);
         expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
