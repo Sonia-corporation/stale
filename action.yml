@@ -1,4 +1,4 @@
-name: 'Stale and close'
+name: 'Process stale issues and PRs'
 description: 'A GitHub action to stale and close automatically your issues and pull requests.'
 author: 'C0ZEN'
 inputs:
