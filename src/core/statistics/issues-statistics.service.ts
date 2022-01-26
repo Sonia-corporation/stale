@@ -11,7 +11,8 @@ type IStat =
   | 'Closed issues'
   | 'Added issues comments'
   | 'Added issues labels'
-  | 'Called API issues queries';
+  | 'Called API issues queries'
+  | 'Called API issues mutations';
 
 export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: IssuesStatisticsService;
@@ -34,6 +35,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   public addedIssuesCommentsCount: number = 0;
   public addedIssuesLabelsCount: number = 0;
   public calledApiIssuesQueriesCount: number = 0;
+  public calledApiIssuesMutationsCount: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
 
   /**
@@ -52,6 +54,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     this.addedIssuesCommentsCount = 0;
     this.addedIssuesLabelsCount = 0;
     this.calledApiIssuesQueriesCount = 0;
+    this.calledApiIssuesMutationsCount = 0;
 
     return this;
   }
@@ -130,6 +133,17 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
+  public increaseCalledApiIssuesMutationsCount(): IssuesStatisticsService {
+    this.calledApiIssuesMutationsCount++;
+    this._logIncreaseCount(
+      `Called API issues mutations count statistic increased by`,
+      1,
+      this.calledApiIssuesMutationsCount
+    );
+
+    return this;
+  }
+
   protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
       .set(`Processed issues`, this.processedIssuesCount)
@@ -141,6 +155,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
       .set(`Closed issues`, this.closedIssuesCount)
       .set(`Added issues comments`, this.addedIssuesCommentsCount)
       .set(`Added issues labels`, this.addedIssuesLabelsCount)
-      .set(`Called API issues queries`, this.calledApiIssuesQueriesCount);
+      .set(`Called API issues queries`, this.calledApiIssuesQueriesCount)
+      .set(`Called API issues mutations`, this.calledApiIssuesMutationsCount);
   }
 }

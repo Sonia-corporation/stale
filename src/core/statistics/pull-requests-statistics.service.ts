@@ -13,7 +13,8 @@ type IStat =
   | 'Added pull requests comments'
   | 'Added pull requests labels'
   | 'Draft pull requests'
-  | 'Called API pull requests queries';
+  | 'Called API pull requests queries'
+  | 'Called API pull requests mutations';
 
 export class PullRequestsStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: PullRequestsStatisticsService;
@@ -38,6 +39,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
   public addedPullRequestsLabelsCount: number = 0;
   public draftPullRequestsCount: number = 0;
   public calledApiPullRequestsQueriesCount: number = 0;
+  public calledApiPullRequestsMutationsCount: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
   /**
@@ -58,6 +60,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     this.addedPullRequestsLabelsCount = 0;
     this.draftPullRequestsCount = 0;
     this.calledApiPullRequestsQueriesCount = 0;
+    this.calledApiPullRequestsMutationsCount = 0;
 
     return this;
   }
@@ -170,6 +173,17 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
+  public increaseCalledApiPullRequestsMutationsCount(): PullRequestsStatisticsService {
+    this.calledApiPullRequestsMutationsCount++;
+    this._logIncreaseCount(
+      `Called API pull requests mutations count statistic increased by`,
+      1,
+      this.calledApiPullRequestsMutationsCount
+    );
+
+    return this;
+  }
+
   protected _getAllStatisticsMap(): Map<IStat, number> {
     return new Map<IStat, number>()
       .set(`Processed pull requests`, this.processedPullRequestsCount)
@@ -183,6 +197,7 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount)
       .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount)
       .set(`Draft pull requests`, this.draftPullRequestsCount)
-      .set(`Called API pull requests queries`, this.calledApiPullRequestsQueriesCount);
+      .set(`Called API pull requests queries`, this.calledApiPullRequestsQueriesCount)
+      .set(`Called API pull requests mutations`, this.calledApiPullRequestsMutationsCount);
   }
 }

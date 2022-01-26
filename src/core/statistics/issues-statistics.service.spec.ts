@@ -31,7 +31,7 @@ describe(`IssuesStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(10);
+      expect.assertions(11);
       service.processedIssuesCount = 1;
       service.ignoredIssuesCount = 1;
       service.unalteredIssuesCount = 1;
@@ -42,6 +42,7 @@ describe(`IssuesStatisticsService`, (): void => {
       service.addedIssuesCommentsCount = 1;
       service.addedIssuesLabelsCount = 1;
       service.calledApiIssuesQueriesCount = 1;
+      service.calledApiIssuesMutationsCount = 1;
 
       service.initialize();
 
@@ -55,6 +56,7 @@ describe(`IssuesStatisticsService`, (): void => {
       expect(service.addedIssuesCommentsCount).toBe(0);
       expect(service.addedIssuesLabelsCount).toBe(0);
       expect(service.calledApiIssuesQueriesCount).toBe(0);
+      expect(service.calledApiIssuesMutationsCount).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -267,6 +269,25 @@ describe(`IssuesStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseCalledApiIssuesMutationsCount()`, (): void => {
+    it(`should increase the called API issues mutations count`, (): void => {
+      expect.assertions(1);
+      service.calledApiIssuesMutationsCount = 0;
+
+      service.increaseCalledApiIssuesMutationsCount();
+
+      expect(service.calledApiIssuesMutationsCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiIssuesMutationsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -299,6 +320,7 @@ describe(`IssuesStatisticsService`, (): void => {
         service.addedIssuesCommentsCount = 0;
         service.addedIssuesLabelsCount = 0;
         service.calledApiIssuesQueriesCount = 0;
+        service.calledApiIssuesMutationsCount = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -322,6 +344,7 @@ describe(`IssuesStatisticsService`, (): void => {
         service.addedIssuesCommentsCount = 0;
         service.addedIssuesLabelsCount = 0;
         service.calledApiIssuesQueriesCount = 0;
+        service.calledApiIssuesMutationsCount = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -346,67 +369,74 @@ describe(`IssuesStatisticsService`, (): void => {
         service.addedIssuesCommentsCount = 7;
         service.addedIssuesLabelsCount = 8;
         service.calledApiIssuesQueriesCount = 9;
+        service.calledApiIssuesMutationsCount = 10;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(10);
+        expect.assertions(11);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(9);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(10);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
-          `whiteBright-Processed issues         `,
+          `whiteBright-Processed issues           `,
           `value-1`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
-          `whiteBright-Ignored issues           `,
+          `whiteBright-Ignored issues             `,
           `value-2`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
-          `whiteBright-Stale issues             `,
+          `whiteBright-Stale issues               `,
           `value-3`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           4,
           `white-├──`,
-          `whiteBright-Already stale issues     `,
+          `whiteBright-Already stale issues       `,
           `value-4`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
           `white-├──`,
-          `whiteBright-Remove stale issues      `,
+          `whiteBright-Remove stale issues        `,
           `value-5`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           6,
           `white-├──`,
-          `whiteBright-Closed issues            `,
+          `whiteBright-Closed issues              `,
           `value-6`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           7,
           `white-├──`,
-          `whiteBright-Added issues comments    `,
+          `whiteBright-Added issues comments      `,
           `value-7`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
           `white-├──`,
-          `whiteBright-Added issues labels      `,
+          `whiteBright-Added issues labels        `,
           `value-8`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           9,
-          `white-└──`,
-          `whiteBright-Called API issues queries`,
+          `white-├──`,
+          `whiteBright-Called API issues queries  `,
           `value-9`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          10,
+          `white-└──`,
+          `whiteBright-Called API issues mutations`,
+          `value-10`
         );
       });
     });
