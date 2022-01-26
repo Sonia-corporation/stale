@@ -31,7 +31,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(11);
+      expect.assertions(12);
       service.processedPullRequestsCount = 1;
       service.ignoredPullRequestsCount = 1;
       service.unalteredPullRequestsCount = 1;
@@ -43,6 +43,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       service.addedPullRequestsCommentsCount = 1;
       service.addedPullRequestsLabelsCount = 1;
       service.draftPullRequestsCount = 1;
+      service.calledApiPullRequestsQueriesCount = 1;
 
       service.initialize();
 
@@ -57,6 +58,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.addedPullRequestsCommentsCount).toBe(0);
       expect(service.addedPullRequestsLabelsCount).toBe(0);
       expect(service.draftPullRequestsCount).toBe(0);
+      expect(service.calledApiPullRequestsQueriesCount).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -288,6 +290,25 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseCalledApiPullRequestsQueriesCount()`, (): void => {
+    it(`should increase the called API pull requests queries count`, (): void => {
+      expect.assertions(1);
+      service.calledApiPullRequestsQueriesCount = 0;
+
+      service.increaseCalledApiPullRequestsQueriesCount();
+
+      expect(service.calledApiPullRequestsQueriesCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiPullRequestsQueriesCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -321,6 +342,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -345,6 +367,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -374,73 +397,80 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 8;
         service.addedPullRequestsLabelsCount = 9;
         service.draftPullRequestsCount = 10;
+        service.calledApiPullRequestsQueriesCount = 11;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(10);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
-          `whiteBright-Processed pull requests       `,
+          `whiteBright-Processed pull requests         `,
           `value-1`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
-          `whiteBright-Ignored pull requests         `,
+          `whiteBright-Ignored pull requests           `,
           `value-2`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
-          `whiteBright-Stale pull requests           `,
+          `whiteBright-Stale pull requests             `,
           `value-3`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           4,
           `white-├──`,
-          `whiteBright-Already stale pull requests   `,
+          `whiteBright-Already stale pull requests     `,
           `value-4`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
           `white-├──`,
-          `whiteBright-Remove stale pull requests    `,
+          `whiteBright-Remove stale pull requests      `,
           `value-5`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           6,
           `white-├──`,
-          `whiteBright-Closed pull requests          `,
+          `whiteBright-Closed pull requests            `,
           `value-6`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           7,
           `white-├──`,
-          `whiteBright-Deleted pull requests branches`,
+          `whiteBright-Deleted pull requests branches  `,
           `value-7`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
           `white-├──`,
-          `whiteBright-Added pull requests comments  `,
+          `whiteBright-Added pull requests comments    `,
           `value-8`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           9,
           `white-├──`,
-          `whiteBright-Added pull requests labels    `,
+          `whiteBright-Added pull requests labels      `,
           `value-9`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           10,
-          `white-└──`,
-          `whiteBright-Draft pull requests           `,
+          `white-├──`,
+          `whiteBright-Draft pull requests             `,
           `value-10`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          11,
+          `white-└──`,
+          `whiteBright-Called API pull requests queries`,
+          `value-11`
         );
       });
     });
