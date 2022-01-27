@@ -1,4 +1,5 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
@@ -48,6 +49,7 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
@@ -64,6 +66,9 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsQueriesCount`)
+          .mockImplementation();
       });
 
       it(`should fetch the labels with the given name or description`, async (): Promise<void> => {
@@ -92,6 +97,16 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       describe(`when the labels failed to be fetched`, (): void => {
         beforeEach((): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should not increase the statistic regarding the API pull requests queries calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).not.toHaveBeenCalled();
         });
 
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
@@ -150,6 +165,17 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               `value-${labelName}`
             );
           });
+
+          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+              new Error(`Could not find a single label matching ${labelName}`)
+            );
+
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
+          });
         });
 
         describe(`when one label matching the search one was found`, (): void => {
@@ -182,6 +208,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               `value-${labelName}`
             );
             expect(result).toStrictEqual(githubApiGetLabels);
+          });
+
+          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
 
@@ -233,6 +268,17 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               );
               expect(result).toStrictEqual(githubApiGetLabels);
             });
+
+            it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+
+              expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(
+                1
+              );
+              expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
+            });
           });
         });
       });
@@ -246,6 +292,7 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerDebugSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
@@ -263,6 +310,9 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsQueriesCount`)
+          .mockImplementation();
       });
 
       it(`should fetch the label with the given name`, async (): Promise<void> => {
@@ -306,6 +356,16 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${labelName}`
           );
         });
+
+        it(`should not increase the statistic regarding the API pull requests queries calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label was successfully fetched`, (): void => {
@@ -344,6 +404,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             );
             expect(result).toBeNull();
           });
+
+          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await githubApiPullRequestLabelsService.fetchLabelByName(labelName);
+
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
+          });
         });
 
         describe(`when the label was found`, (): void => {
@@ -376,6 +445,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               name: labelName,
             });
           });
+
+          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await githubApiPullRequestLabelsService.fetchLabelByName(labelName);
+
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
+          });
         });
       });
     });
@@ -388,6 +466,7 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -401,6 +480,9 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
+          .mockImplementation();
       });
 
       it(`should add the label on the pull request`, async (): Promise<void> => {
@@ -446,6 +528,16 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestLabelsService.addLabel(pullRequestId, labelId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label was successfully added`, (): void => {
@@ -467,6 +559,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestLabelsService.addLabel(pullRequestId, labelId);
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
+        });
       });
     });
 
@@ -478,6 +579,7 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -491,6 +593,9 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
+          .mockImplementation();
       });
 
       it(`should add the labels on the pull request`, async (): Promise<void> => {
@@ -536,6 +641,16 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestLabelsService.addLabels(pullRequestId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the labels were successfully added`, (): void => {
@@ -557,6 +672,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestLabelsService.addLabels(pullRequestId, labelsId);
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
+        });
       });
     });
 
@@ -568,6 +692,7 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -581,6 +706,9 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
+          .mockImplementation();
       });
 
       it(`should remove the label on the pull request`, async (): Promise<void> => {
@@ -626,6 +754,16 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestLabelsService.removeLabel(pullRequestId, labelId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label was successfully removed`, (): void => {
@@ -646,6 +784,15 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             `green-removed from the pull request`,
             `value-${pullRequestId}`
           );
+        });
+
+        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestLabelsService.removeLabel(pullRequestId, labelId);
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
         });
       });
     });

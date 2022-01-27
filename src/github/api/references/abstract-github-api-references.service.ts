@@ -26,6 +26,7 @@ export abstract class AbstractGithubApiReferencesService<
         id: referenceId,
       })
       .then((): void => {
+        this._increaseCalledApiMutationsCount();
         this.processor.logger.info(
           LoggerFormatService.green(`Reference`),
           LoggerService.value(referenceId),
@@ -42,4 +43,6 @@ export abstract class AbstractGithubApiReferencesService<
         throw error;
       });
   }
+
+  protected abstract _increaseCalledApiMutationsCount(): void;
 }

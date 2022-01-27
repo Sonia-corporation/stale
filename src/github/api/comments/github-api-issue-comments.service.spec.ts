@@ -1,4 +1,5 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -42,6 +43,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -55,6 +57,9 @@ describe(`GithubApiIssueCommentsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
+        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
+          .mockImplementation();
       });
 
       it(`should add the comment on the issue`, async (): Promise<void> => {
@@ -100,6 +105,16 @@ describe(`GithubApiIssueCommentsService`, (): void => {
             `value-${issueId}`
           );
         });
+
+        it(`should not increase the statistic regarding the API issues mutations`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the comment was successfully added`, (): void => {
@@ -120,6 +135,15 @@ describe(`GithubApiIssueCommentsService`, (): void => {
             `green-added to the issue`,
             `value-${issueId}`
           );
+        });
+
+        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiIssueCommentsService.addComment(issueId, comment);
+
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
         });
       });
     });
