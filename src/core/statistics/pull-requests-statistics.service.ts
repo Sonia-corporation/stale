@@ -13,6 +13,7 @@ type IStat =
   | 'Added pull requests comments'
   | 'Added pull requests labels'
   | 'Draft pull requests'
+  | 'Called API pull requests'
   | 'Called API pull requests queries'
   | 'Called API pull requests mutations';
 
@@ -184,8 +185,8 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
-  protected _getAllStatisticsMap(): Map<IStat, number> {
-    return new Map<IStat, number>()
+  protected _getAllStatisticsMap(): Map<IStat, Map<IStat, number> | number> {
+    return new Map<IStat, Map<IStat, number> | number>()
       .set(`Processed pull requests`, this.processedPullRequestsCount)
       .set(`Ignored pull requests`, this.ignoredPullRequestsCount)
       .set(`Unaltered pull requests`, this.unalteredPullRequestsCount)
@@ -197,7 +198,11 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount)
       .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount)
       .set(`Draft pull requests`, this.draftPullRequestsCount)
-      .set(`Called API pull requests queries`, this.calledApiPullRequestsQueriesCount)
-      .set(`Called API pull requests mutations`, this.calledApiPullRequestsMutationsCount);
+      .set(
+        `Called API pull requests`,
+        new Map<IStat, number>()
+          .set(`Called API pull requests queries`, this.calledApiPullRequestsQueriesCount)
+          .set(`Called API pull requests mutations`, this.calledApiPullRequestsMutationsCount)
+      );
   }
 }

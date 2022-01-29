@@ -373,68 +373,74 @@ describe(`IssuesStatisticsService`, (): void => {
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(10);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
-          `whiteBright-Processed issues           `,
+          `whiteBright-Processed issues     `,
           `value-1`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
-          `whiteBright-Ignored issues             `,
+          `whiteBright-Ignored issues       `,
           `value-2`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
-          `whiteBright-Stale issues               `,
+          `whiteBright-Stale issues         `,
           `value-3`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           4,
           `white-├──`,
-          `whiteBright-Already stale issues       `,
+          `whiteBright-Already stale issues `,
           `value-4`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           5,
           `white-├──`,
-          `whiteBright-Remove stale issues        `,
+          `whiteBright-Remove stale issues  `,
           `value-5`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           6,
           `white-├──`,
-          `whiteBright-Closed issues              `,
+          `whiteBright-Closed issues        `,
           `value-6`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           7,
           `white-├──`,
-          `whiteBright-Added issues comments      `,
+          `whiteBright-Added issues comments`,
           `value-7`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
           `white-├──`,
-          `whiteBright-Added issues labels        `,
+          `whiteBright-Added issues labels  `,
           `value-8`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           9,
-          `white-├──`,
+          `white-└──`,
+          `whiteBright-Called API issues    `,
+          `value-19`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          10,
+          `white-    ├──`,
           `whiteBright-Called API issues queries  `,
           `value-9`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          10,
-          `white-└──`,
+          11,
+          `white-    └──`,
           `whiteBright-Called API issues mutations`,
           `value-10`
         );

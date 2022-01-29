@@ -11,6 +11,7 @@ type IStat =
   | 'Closed issues'
   | 'Added issues comments'
   | 'Added issues labels'
+  | 'Called API issues'
   | 'Called API issues queries'
   | 'Called API issues mutations';
 
@@ -144,8 +145,8 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
-  protected _getAllStatisticsMap(): Map<IStat, number> {
-    return new Map<IStat, number>()
+  protected _getAllStatisticsMap(): Map<IStat, Map<IStat, number> | number> {
+    return new Map<IStat, Map<IStat, number> | number>()
       .set(`Processed issues`, this.processedIssuesCount)
       .set(`Ignored issues`, this.ignoredIssuesCount)
       .set(`Unaltered issues`, this.unalteredIssuesCount)
@@ -155,7 +156,11 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
       .set(`Closed issues`, this.closedIssuesCount)
       .set(`Added issues comments`, this.addedIssuesCommentsCount)
       .set(`Added issues labels`, this.addedIssuesLabelsCount)
-      .set(`Called API issues queries`, this.calledApiIssuesQueriesCount)
-      .set(`Called API issues mutations`, this.calledApiIssuesMutationsCount);
+      .set(
+        `Called API issues`,
+        new Map<IStat, number>()
+          .set(`Called API issues queries`, this.calledApiIssuesQueriesCount)
+          .set(`Called API issues mutations`, this.calledApiIssuesMutationsCount)
+      );
   }
 }
