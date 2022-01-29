@@ -19,6 +19,7 @@ jobs:
           issue-days-before-close: 10
           issue-ignore-any-labels: |
             frozen :ice_cube:
+            waiting :hourglass:
             help wanted :sos:
             dependency-fix :wrench:
             dependencies :package:
@@ -26,6 +27,7 @@ jobs:
             C0ZEN
           issue-stale-comment: |
             [~frozen :ice_cube:]: https://img.shields.io/badge/-frozen-D6FFFA.svg
+            [~waiting :hourglass:]: https://img.shields.io/badge/-waiting-F5CD79.svg
             [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
             [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
             [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
@@ -36,6 +38,7 @@ jobs:
 
             If you want to avoid this stale state you could add one of these labels:
             - [![label: frozen :ice_cube:][~frozen :ice_cube:]](https://github.com/Sonia-corporation/stale/labels/frozen%20%3Aice_cube%3A)
+            - [![label: waiting :hourglass:][~waiting :hourglass:]](https://github.com/Sonia-corporation/stale/labels/waiting%20%3Ahourglass%3A)
             - [![label: dependency-fix :wrench:][~dependency-fix :wrench:]](https://github.com/Sonia-corporation/stale/labels/dependency-fix%20%3Awrench%3A)
             - [![label: dependencies :package:][~dependencies :package:]](https://github.com/Sonia-corporation/stale/labels/dependencies%20%3Apackage%3A)
             - [![label: help wanted :sos:][~help wanted :sos:]](https://github.com/Sonia-corporation/stale/labels/help%20wanted%20%3Asos%3A)
@@ -46,11 +49,15 @@ jobs:
           pull-request-days-before-close: 10
           pull-request-ignore-any-labels: |
             frozen :ice_cube:
+            waiting :hourglass:
+            help wanted :sos:
+            dependency-fix :wrench:
             dependencies :package:
           pull-request-ignore-any-assignees: |
             C0ZEN
           pull-request-stale-comment: |
             [~frozen :ice_cube:]: https://img.shields.io/badge/-frozen-D6FFFA.svg
+            [~waiting :hourglass:]: https://img.shields.io/badge/-waiting-F5CD79.svg
             [~dependency-fix :wrench:]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
             [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
             [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
@@ -61,7 +68,10 @@ jobs:
 
             If you want to avoid this stale state you could add one of these labels:
             - [![label: frozen :ice_cube:][~frozen :ice_cube:]](https://github.com/Sonia-corporation/stale/labels/frozen%20%3Aice_cube%3A)
+            - [![label: waiting :hourglass:][~waiting :hourglass:]](https://github.com/Sonia-corporation/stale/labels/waiting%20%3Ahourglass%3A)
+            - [![label: dependency-fix :wrench:][~dependency-fix :wrench:]](https://github.com/Sonia-corporation/stale/labels/dependency-fix%20%3Awrench%3A)
             - [![label: dependencies :package:][~dependencies :package:]](https://github.com/Sonia-corporation/stale/labels/dependencies%20%3Apackage%3A)
+            - [![label: help wanted :sos:][~help wanted :sos:]](https://github.com/Sonia-corporation/stale/labels/help%20wanted%20%3Asos%3A)
           pull-request-close-comment: |
             :warning: **Warning!** :warning:
             This pull request was closed due to a lack of activity for 10 days after it was stale. :worried:
