@@ -62,7 +62,7 @@ describe(`Pull request stale not updated`, (): void => {
       pullRequestSut.expect({
         addedPullRequestsCommentsCount: 1,
         alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 1,
+        calledApiPullRequestsMutationsCount: 2,
         calledApiPullRequestsQueriesCount: 2,
         closedPullRequestsCount: 1,
         processedPullRequestsCount: 1,

@@ -33,7 +33,7 @@ describe(`Pull request to draft`, (): void => {
         pullRequestSut.expect({
           addedPullRequestsCommentsCount: 1,
           addedPullRequestsLabelsCount: 1,
-          calledApiPullRequestsMutationsCount: 1,
+          calledApiPullRequestsMutationsCount: 2,
           calledApiPullRequestsQueriesCount: 2,
           processedPullRequestsCount: 1,
           stalePullRequestsCount: 1,

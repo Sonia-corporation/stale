@@ -89,7 +89,7 @@ describe(`Pull request with branch to delete`, (): void => {
         pullRequestSut.expect({
           addedPullRequestsCommentsCount: 1,
           alreadyStalePullRequestsCount: 1,
-          calledApiPullRequestsMutationsCount: 2,
+          calledApiPullRequestsMutationsCount: 3,
           calledApiPullRequestsQueriesCount: 2,
           closedPullRequestsCount: 1,
           deletedPullRequestsBranchesCount: 1,
@@ -155,7 +155,7 @@ describe(`Pull request with branch to delete`, (): void => {
       pullRequestSut.expect({
         addedPullRequestsCommentsCount: 1,
         alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 1,
+        calledApiPullRequestsMutationsCount: 2,
         calledApiPullRequestsQueriesCount: 2,
         closedPullRequestsCount: 1,
         processedPullRequestsCount: 1,

@@ -1,5 +1,5 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { AbstractGithubApiCommentsService } from '@github/api/comments/abstract-github-api-comments.service';
 
 export class GithubApiPullRequestCommentsService extends AbstractGithubApiCommentsService<PullRequestProcessor> {
@@ -8,6 +8,6 @@ export class GithubApiPullRequestCommentsService extends AbstractGithubApiCommen
   }
 
   protected _increaseCalledApiMutationsCount(): void {
-    IssuesStatisticsService.getInstance().increaseCalledApiIssuesMutationsCount();
+    PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsMutationsCount();
   }
 }
