@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/fr/blog</id>
     <title>GitHub stale action Blog</title>
-    <updated>2022-01-29T23:07:08.651Z</updated>
+    <updated>2022-01-29T23:14:31.546Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/fr/blog"/>
     <subtitle>GitHub stale action Blog</subtitle>
@@ -11,19 +11,15 @@
         <title type="html"><![CDATA[Bienvenue !]]></title>
         <id>bienvenue</id>
         <link href="https://sonia-corporation.github.io/stale/fr/blog/bienvenue"/>
-        <updated>2022-01-29T23:07:08.651Z</updated>
+        <updated>2022-01-29T23:14:31.546Z</updated>
         <summary type="html"><![CDATA[Bienvenue sur la toute première version de ce site web !]]></summary>
-        <content type="html"><![CDATA[<p>Nous sommes heureux de vous annoncer que c'est la première version de ce site web !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="pourquoi-tant-de-peine-">Pourquoi tant de peine ?<a class="hash-link" href="#pourquoi-tant-de-peine-" title="Lien direct vers le titre">​</a></h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c'est vraiment un travail de peon.<br>
-<!-- -->Nous espérons qu'en créant ce site web, vous aurez accès à encore plus d'aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br>
-<!-- -->La configuration peut parfois être complexe quand vous avez des besoins précis, mais c'est tout à fait OK !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="partage-ton-travail-">Partage ton travail !<a class="hash-link" href="#partage-ton-travail-" title="Lien direct vers le titre">​</a></h2><p>En partageant avec la communauté votre configuration, vous pouvez aider d'autres personnes à concevoir des scénarios avec l'aide de cette action.<br>
-<!-- -->N'hésitez pas à <a href="https://github.com/Sonia-corporation/stale/issues/new/choose" target="_blank" rel="noopener noreferrer">ouvrir un ticket</a> pour partager un nouvel article sur ce blog.</p>]]></content>
+        <content type="html"><![CDATA[<p>Nous sommes heureux de vous annoncer que c&#x27;est la première version de ce site web !</p><h2>Pourquoi tant de peine ?</h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c&#x27;est vraiment un travail de peon.<br/>
+<!-- -->Nous espérons qu&#x27;en créant ce site web, vous aurez accès à encore plus d&#x27;aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br/>
+<!-- -->La configuration peut parfois être complexe quand vous avez des besoins précis, mais c&#x27;est tout à fait OK !</p><h2>Partage ton travail !</h2><p>En partageant avec la communauté votre configuration, vous pouvez aider d&#x27;autres personnes à concevoir des scénarios avec l&#x27;aide de cette action.<br/>
+<!-- -->N&#x27;hésitez pas à <a href="https://github.com/Sonia-corporation/stale/issues/new/choose">ouvrir un ticket</a> pour partager un nouvel article sur ce blog.</p>]]></content>
         <author>
             <name>Geoffrey "C0ZEN" Testelin</name>
             <uri>https://github.com/C0ZEN</uri>
         </author>
-        <category label="stale" term="stale"/>
-        <category label="site web" term="site web"/>
-        <category label="documentation" term="documentation"/>
-        <category label="première version" term="première version"/>
     </entry>
 </feed>

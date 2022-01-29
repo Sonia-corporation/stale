@@ -4,23 +4,19 @@
         <title>GitHub stale action Blog</title>
         <link>https://sonia-corporation.github.io/stale/fr/blog</link>
         <description>GitHub stale action Blog</description>
-        <lastBuildDate>Sat, 29 Jan 2022 23:07:08 GMT</lastBuildDate>
+        <lastBuildDate>Sat, 29 Jan 2022 23:14:31 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
             <title><![CDATA[Bienvenue !]]></title>
             <link>https://sonia-corporation.github.io/stale/fr/blog/bienvenue</link>
             <guid>bienvenue</guid>
-            <pubDate>Sat, 29 Jan 2022 23:07:08 GMT</pubDate>
+            <pubDate>Sat, 29 Jan 2022 23:14:31 GMT</pubDate>
             <description><![CDATA[Bienvenue sur la toute première version de ce site web !]]></description>
-            <content:encoded><![CDATA[<p>Nous sommes heureux de vous annoncer que c'est la première version de ce site web !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="pourquoi-tant-de-peine-">Pourquoi tant de peine ?<a class="hash-link" href="#pourquoi-tant-de-peine-" title="Lien direct vers le titre">​</a></h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c'est vraiment un travail de peon.<br>
-<!-- -->Nous espérons qu'en créant ce site web, vous aurez accès à encore plus d'aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br>
-<!-- -->La configuration peut parfois être complexe quand vous avez des besoins précis, mais c'est tout à fait OK !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="partage-ton-travail-">Partage ton travail !<a class="hash-link" href="#partage-ton-travail-" title="Lien direct vers le titre">​</a></h2><p>En partageant avec la communauté votre configuration, vous pouvez aider d'autres personnes à concevoir des scénarios avec l'aide de cette action.<br>
-<!-- -->N'hésitez pas à <a href="https://github.com/Sonia-corporation/stale/issues/new/choose" target="_blank" rel="noopener noreferrer">ouvrir un ticket</a> pour partager un nouvel article sur ce blog.</p>]]></content:encoded>
-            <category>stale</category>
-            <category>site web</category>
-            <category>documentation</category>
-            <category>première version</category>
+            <content:encoded><![CDATA[<p>Nous sommes heureux de vous annoncer que c&#x27;est la première version de ce site web !</p><h2>Pourquoi tant de peine ?</h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c&#x27;est vraiment un travail de peon.<br/>
+<!-- -->Nous espérons qu&#x27;en créant ce site web, vous aurez accès à encore plus d&#x27;aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br/>
+<!-- -->La configuration peut parfois être complexe quand vous avez des besoins précis, mais c&#x27;est tout à fait OK !</p><h2>Partage ton travail !</h2><p>En partageant avec la communauté votre configuration, vous pouvez aider d&#x27;autres personnes à concevoir des scénarios avec l&#x27;aide de cette action.<br/>
+<!-- -->N&#x27;hésitez pas à <a href="https://github.com/Sonia-corporation/stale/issues/new/choose">ouvrir un ticket</a> pour partager un nouvel article sur ce blog.</p>]]></content:encoded>
         </item>
     </channel>
 </rss>
