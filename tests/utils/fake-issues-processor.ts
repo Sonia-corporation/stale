@@ -378,23 +378,23 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
    * Only fill the count higher than 0 to simplify
    * @param {Readonly<Partial<IIssuesStatistics>>} statistics The statistics count to expect
    */
-  public expect(statistics: Readonly<Partial<IIssuesStatistics>>): void {
-    expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(statistics.processedIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(statistics.ignoredIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(statistics.unalteredIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(statistics.staleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(statistics.alreadyStaleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(statistics.removeStaleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(statistics.closedIssuesCount ?? 0);
+  public expect(statistics: Readonly<Partial<IIssuesStatistics>> = {}): void {
     expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(
       statistics.addedIssuesCommentsCount ?? 0
     );
     expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(statistics.addedIssuesLabelsCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount).toBe(
-      statistics.calledApiIssuesQueriesCount ?? 0
-    );
+    expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(statistics.alreadyStaleIssuesCount ?? 0);
     expect(IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount).toBe(
       statistics.calledApiIssuesMutationsCount ?? 0
     );
+    expect(IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount).toBe(
+      statistics.calledApiIssuesQueriesCount ?? 0
+    );
+    expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(statistics.closedIssuesCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(statistics.ignoredIssuesCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(statistics.processedIssuesCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(statistics.removeStaleIssuesCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(statistics.staleIssuesCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(statistics.unalteredIssuesCount ?? 0);
   }
 }

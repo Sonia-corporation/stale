@@ -27,19 +27,19 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return PullRequestsStatisticsService._instance;
   }
 
-  public processedPullRequestsCount: number = 0;
-  public ignoredPullRequestsCount: number = 0;
-  public unalteredPullRequestsCount: number = 0;
-  public stalePullRequestsCount: number = 0;
-  public alreadyStalePullRequestsCount: number = 0;
-  public removeStalePullRequestsCount: number = 0;
-  public closedPullRequestsCount: number = 0;
-  public deletedPullRequestsBranchesCount: number = 0;
   public addedPullRequestsCommentsCount: number = 0;
   public addedPullRequestsLabelsCount: number = 0;
-  public draftPullRequestsCount: number = 0;
-  public calledApiPullRequestsQueriesCount: number = 0;
+  public alreadyStalePullRequestsCount: number = 0;
   public calledApiPullRequestsMutationsCount: number = 0;
+  public calledApiPullRequestsQueriesCount: number = 0;
+  public closedPullRequestsCount: number = 0;
+  public deletedPullRequestsBranchesCount: number = 0;
+  public draftPullRequestsCount: number = 0;
+  public ignoredPullRequestsCount: number = 0;
+  public processedPullRequestsCount: number = 0;
+  public removeStalePullRequestsCount: number = 0;
+  public stalePullRequestsCount: number = 0;
+  public unalteredPullRequestsCount: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
   /**
@@ -48,19 +48,19 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
    * @returns {PullRequestsStatisticsService} The service
    */
   public initialize(): PullRequestsStatisticsService {
-    this.processedPullRequestsCount = 0;
-    this.ignoredPullRequestsCount = 0;
-    this.unalteredPullRequestsCount = 0;
-    this.stalePullRequestsCount = 0;
-    this.alreadyStalePullRequestsCount = 0;
-    this.removeStalePullRequestsCount = 0;
-    this.closedPullRequestsCount = 0;
-    this.deletedPullRequestsBranchesCount = 0;
     this.addedPullRequestsCommentsCount = 0;
     this.addedPullRequestsLabelsCount = 0;
-    this.draftPullRequestsCount = 0;
-    this.calledApiPullRequestsQueriesCount = 0;
+    this.alreadyStalePullRequestsCount = 0;
     this.calledApiPullRequestsMutationsCount = 0;
+    this.calledApiPullRequestsQueriesCount = 0;
+    this.closedPullRequestsCount = 0;
+    this.deletedPullRequestsBranchesCount = 0;
+    this.draftPullRequestsCount = 0;
+    this.ignoredPullRequestsCount = 0;
+    this.processedPullRequestsCount = 0;
+    this.removeStalePullRequestsCount = 0;
+    this.stalePullRequestsCount = 0;
+    this.unalteredPullRequestsCount = 0;
 
     return this;
   }

@@ -411,44 +411,44 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * @param {Readonly<Partial<IPullRequestsStatistics>>} statistics The statistics count to expect
    */
   public expect(statistics: Readonly<Partial<IPullRequestsStatistics>>): void {
-    expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(
-      statistics.processedPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(
-      statistics.ignoredPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(
-      statistics.unalteredPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(
-      statistics.stalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(
-      statistics.alreadyStalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(
-      statistics.removeStalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(
-      statistics.closedPullRequestsCount ?? 0
-    );
     expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(
       statistics.addedPullRequestsCommentsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(
-      statistics.deletedPullRequestsBranchesCount ?? 0
     );
     expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(
       statistics.addedPullRequestsLabelsCount ?? 0
     );
-    expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(
-      statistics.draftPullRequestsCount ?? 0
+    expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(
+      statistics.alreadyStalePullRequestsCount ?? 0
     );
     expect(PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount).toBe(
       statistics.calledApiPullRequestsMutationsCount ?? 0
     );
     expect(PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount).toBe(
       statistics.calledApiPullRequestsQueriesCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(
+      statistics.closedPullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(
+      statistics.deletedPullRequestsBranchesCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(
+      statistics.draftPullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(
+      statistics.ignoredPullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(
+      statistics.processedPullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(
+      statistics.removeStalePullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(
+      statistics.stalePullRequestsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(
+      statistics.unalteredPullRequestsCount ?? 0
     );
   }
 }

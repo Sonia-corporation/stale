@@ -25,17 +25,17 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return IssuesStatisticsService._instance;
   }
 
-  public processedIssuesCount: number = 0;
-  public ignoredIssuesCount: number = 0;
-  public unalteredIssuesCount: number = 0;
-  public staleIssuesCount: number = 0;
-  public alreadyStaleIssuesCount: number = 0;
-  public removeStaleIssuesCount: number = 0;
-  public closedIssuesCount: number = 0;
   public addedIssuesCommentsCount: number = 0;
   public addedIssuesLabelsCount: number = 0;
-  public calledApiIssuesQueriesCount: number = 0;
+  public alreadyStaleIssuesCount: number = 0;
   public calledApiIssuesMutationsCount: number = 0;
+  public calledApiIssuesQueriesCount: number = 0;
+  public closedIssuesCount: number = 0;
+  public ignoredIssuesCount: number = 0;
+  public processedIssuesCount: number = 0;
+  public removeStaleIssuesCount: number = 0;
+  public staleIssuesCount: number = 0;
+  public unalteredIssuesCount: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
 
   /**
@@ -44,17 +44,17 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
    * @returns {IssuesStatisticsService} The service
    */
   public initialize(): IssuesStatisticsService {
-    this.processedIssuesCount = 0;
-    this.ignoredIssuesCount = 0;
-    this.unalteredIssuesCount = 0;
-    this.staleIssuesCount = 0;
-    this.alreadyStaleIssuesCount = 0;
-    this.removeStaleIssuesCount = 0;
-    this.closedIssuesCount = 0;
     this.addedIssuesCommentsCount = 0;
     this.addedIssuesLabelsCount = 0;
-    this.calledApiIssuesQueriesCount = 0;
+    this.alreadyStaleIssuesCount = 0;
     this.calledApiIssuesMutationsCount = 0;
+    this.calledApiIssuesQueriesCount = 0;
+    this.closedIssuesCount = 0;
+    this.ignoredIssuesCount = 0;
+    this.processedIssuesCount = 0;
+    this.removeStaleIssuesCount = 0;
+    this.staleIssuesCount = 0;
+    this.unalteredIssuesCount = 0;
 
     return this;
   }
