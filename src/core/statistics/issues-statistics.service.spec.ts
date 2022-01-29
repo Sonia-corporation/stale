@@ -1,5 +1,6 @@
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -26,6 +27,21 @@ describe(`IssuesStatisticsService`, (): void => {
       const result = IssuesStatisticsService.getInstance();
 
       expect(result).toStrictEqual(service);
+    });
+  });
+
+  describe(`get calledApiIssuesCount`, (): void => {
+    beforeEach((): void => {
+      service.calledApiIssuesQueriesCount = faker.datatype.number();
+      service.calledApiIssuesMutationsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the called API issues mutations and queries`, (): void => {
+      expect.assertions(1);
+
+      const result = service.calledApiIssuesCount;
+
+      expect(result).toBe(service.calledApiIssuesQueriesCount + service.calledApiIssuesMutationsCount);
     });
   });
 

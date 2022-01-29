@@ -43,6 +43,10 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
   public unalteredPullRequestsCount: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
 
+  public get calledApiPullRequestsCount(): number {
+    return this.calledApiPullRequestsQueriesCount + this.calledApiPullRequestsMutationsCount;
+  }
+
   /**
    * @description
    * Only used for the tests to reset the state

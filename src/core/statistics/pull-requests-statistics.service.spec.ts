@@ -1,5 +1,6 @@
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -26,6 +27,21 @@ describe(`PullRequestsStatisticsService`, (): void => {
       const result = PullRequestsStatisticsService.getInstance();
 
       expect(result).toStrictEqual(service);
+    });
+  });
+
+  describe(`get calledApiPullRequestsCount`, (): void => {
+    beforeEach((): void => {
+      service.calledApiPullRequestsQueriesCount = faker.datatype.number();
+      service.calledApiPullRequestsMutationsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the called API pull requests mutations and queries`, (): void => {
+      expect.assertions(1);
+
+      const result = service.calledApiPullRequestsCount;
+
+      expect(result).toBe(service.calledApiPullRequestsQueriesCount + service.calledApiPullRequestsMutationsCount);
     });
   });
 
