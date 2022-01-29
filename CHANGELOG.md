@@ -1,5 +1,29 @@
 # Semantic Versioning Changelog
 
+# [1.34.0](https://github.com/Sonia-corporation/stale/compare/1.33.1...1.34.0) (2022-01-29)
+
+
+### :bug: Bug Fixes
+
+* **deps:** update docusaurus monorepo to v2.0.0-beta.15 (patch) ([#358](https://github.com/Sonia-corporation/stale/issues/358)) ([5bfd537](https://github.com/Sonia-corporation/stale/commit/5bfd537ce39437b0e833ebff60ed7013c8bae109))
+  Co-authored-by: Renovate Bot <bot@renovateapp.com>
+Co-authored-by: TESTELIN Geoffrey <geoffrey.testelin@gmail.com>
+
+
+### :rocket: Features
+
+* **outputs:** add 6 new outputs to expose the api calls ([7d85f17](https://github.com/Sonia-corporation/stale/commit/7d85f17505514e84f48cbb5cc8d018f08f2e2cb9))
+  Add `called-api-issues-count`
+Add `called-api-issues-queries-count`
+Add `called-api-issues-mutations-count`
+Add `called-api-pull-requests-count`
+Add `called-api-pull-requests-queries-count`
+Add `called-api-pull-requests-mutations-count`
+* **stats:** add statistics about mutations and queries from the API ([3ddd3ca](https://github.com/Sonia-corporation/stale/commit/3ddd3cab61a3fc685437049df4b2ccc8e0ec9eea))
+* **website:** change the color palette ([6d483e5](https://github.com/Sonia-corporation/stale/commit/6d483e504e248d9f461b72b6a49548085dfb29b5))
+* **logs:** display the total of stats for mutations and queries API calls ([86261dd](https://github.com/Sonia-corporation/stale/commit/86261dd190539908105deb5297322f53c62cd6a4))
+  Created a nested view
+
 ## [1.33.1](https://github.com/Sonia-corporation/stale/compare/1.33.0...1.33.1) (2022-01-24)
 
 
