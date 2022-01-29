@@ -1,5 +1,4 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
@@ -55,8 +54,6 @@ export class GithubApiPullRequestsService {
           );
         }
 
-        PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsQueriesCount();
-
         return response;
       })
       .catch((error: Readonly<Error>): never => {
@@ -83,7 +80,6 @@ export class GithubApiPullRequestsService {
         pullRequestId,
       })
       .then((): void => {
-        PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsMutationsCount();
         this.pullRequestProcessor.logger.info(
           LoggerFormatService.green(`Pull request`),
           LoggerService.value(pullRequestId),
@@ -109,7 +105,6 @@ export class GithubApiPullRequestsService {
         pullRequestId,
       })
       .then((): void => {
-        PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsMutationsCount();
         this.pullRequestProcessor.logger.info(
           LoggerFormatService.green(`Pull request`),
           LoggerService.value(pullRequestId),

@@ -1,5 +1,4 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
@@ -49,7 +48,6 @@ describe(`GithubApiIssuesService`, (): void => {
     let loggerServiceNoticeSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
-    let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
@@ -62,9 +60,6 @@ describe(`GithubApiIssuesService`, (): void => {
         // @ts-ignore
         graphql: graphqlMock,
       });
-      issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy = jest
-        .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesQueriesCount`)
-        .mockImplementation();
       jest.spyOn(context, `repo`, `get`).mockReturnValue({
         owner: `dummy-owner`,
         repo: `dummy-repo`,
@@ -104,14 +99,6 @@ describe(`GithubApiIssuesService`, (): void => {
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the issues`);
-      });
-
-      it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
-        expect.assertions(2);
-
-        await expect(GithubApiIssuesService.fetchIssues()).rejects.toThrow(new Error(`graphql error`));
-
-        expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -286,15 +273,6 @@ describe(`GithubApiIssuesService`, (): void => {
         });
       });
 
-      it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-        expect.assertions(2);
-
-        await GithubApiIssuesService.fetchIssues();
-
-        expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-        expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-      });
-
       it(`should return the issues`, async (): Promise<void> => {
         expect.assertions(1);
 
@@ -333,7 +311,6 @@ describe(`GithubApiIssuesService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -346,9 +323,6 @@ describe(`GithubApiIssuesService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should close the issue`, async (): Promise<void> => {
@@ -374,14 +348,6 @@ describe(`GithubApiIssuesService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
-        });
-
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
@@ -395,15 +361,6 @@ describe(`GithubApiIssuesService`, (): void => {
       describe(`when the issue was successfully closed`, (): void => {
         beforeEach((): void => {
           graphqlMock.mockResolvedValue({});
-        });
-
-        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiIssuesService.closeIssue(issueId);
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should log about the success of the closing`, async (): Promise<void> => {

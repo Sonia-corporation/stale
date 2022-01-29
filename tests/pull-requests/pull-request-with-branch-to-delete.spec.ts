@@ -1,3 +1,4 @@
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
@@ -61,18 +62,21 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
-        pullRequestSut.expect({
-          addedPullRequestsCommentsCount: 1,
-          alreadyStalePullRequestsCount: 1,
-          calledApiPullRequestsQueriesCount: 2,
-          closedPullRequestsCount: 1,
-          deletedPullRequestsBranchesCount: 1,
-          processedPullRequestsCount: 1,
-        });
+        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
 
@@ -82,19 +86,21 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request and delete the related branch`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
-        pullRequestSut.expect({
-          addedPullRequestsCommentsCount: 1,
-          alreadyStalePullRequestsCount: 1,
-          calledApiPullRequestsMutationsCount: 3,
-          calledApiPullRequestsQueriesCount: 2,
-          closedPullRequestsCount: 1,
-          deletedPullRequestsBranchesCount: 1,
-          processedPullRequestsCount: 1,
-        });
+        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
   });
@@ -148,18 +154,21 @@ describe(`Pull request with branch to delete`, (): void => {
     });
 
     it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 2,
-        calledApiPullRequestsQueriesCount: 2,
-        closedPullRequestsCount: 1,
-        processedPullRequestsCount: 1,
-      });
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 });

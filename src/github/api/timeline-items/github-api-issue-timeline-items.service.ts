@@ -1,5 +1,4 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { AbstractGithubApiTimelineItemsService } from '@github/api/timeline-items/abstract-github-api-timeline-items.service';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
@@ -34,8 +33,6 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
           response: Readonly<IGithubApiTimelineItemsIssueLabeledEvents>
         ): IGithubApiTimelineItemsIssueLabeledEvents | never => {
           const { filteredCount, pageCount } = response.repository.issue.timelineItems;
-
-          IssuesStatisticsService.getInstance().increaseCalledApiIssuesQueriesCount();
 
           if (pageCount === 0) {
             this.processor.logger.error(

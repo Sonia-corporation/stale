@@ -1,8 +1,6 @@
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
-import { IPullRequestsStatistics } from '@core/statistics/types/pull-requests-statistics';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
@@ -402,53 +400,5 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
     this._apiMapper[GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY] = result;
 
     return this;
-  }
-
-  /**
-   * @description
-   * Shortcut to expect specific statistics values
-   * Only fill the count higher than 0 to simplify
-   * @param {Readonly<Partial<IPullRequestsStatistics>>} statistics The statistics count to expect
-   */
-  public expect(statistics: Readonly<Partial<IPullRequestsStatistics>> = {}): void {
-    expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(
-      statistics.addedPullRequestsCommentsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(
-      statistics.addedPullRequestsLabelsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(
-      statistics.alreadyStalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount).toBe(
-      statistics.calledApiPullRequestsMutationsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount).toBe(
-      statistics.calledApiPullRequestsQueriesCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(
-      statistics.closedPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(
-      statistics.deletedPullRequestsBranchesCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(
-      statistics.draftPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(
-      statistics.ignoredPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(
-      statistics.processedPullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(
-      statistics.removeStalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(
-      statistics.stalePullRequestsCount ?? 0
-    );
-    expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(
-      statistics.unalteredPullRequestsCount ?? 0
-    );
   }
 }

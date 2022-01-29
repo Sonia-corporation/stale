@@ -1,5 +1,4 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiPullRequestNumber } from '@github/api/pull-requests/github-api-pull-request-number';
 import { AbstractGithubApiTimelineItemsService } from '@github/api/timeline-items/abstract-github-api-timeline-items.service';
 import { GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-pull-request-labeled-event-query';
@@ -37,8 +36,6 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
           response: Readonly<IGithubApiTimelineItemsPullRequestLabeledEvents>
         ): IGithubApiTimelineItemsPullRequestLabeledEvents | never => {
           const { filteredCount, pageCount } = response.repository.pullRequest.timelineItems;
-
-          PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsQueriesCount();
 
           if (pageCount === 0) {
             this.processor.logger.error(

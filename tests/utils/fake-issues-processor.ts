@@ -1,8 +1,6 @@
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
-import { IIssuesStatistics } from '@core/statistics/types/issues-statistics';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
@@ -370,31 +368,5 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
     this._apiMapper[GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY] = result;
 
     return this;
-  }
-
-  /**
-   * @description
-   * Shortcut to expect specific statistics values
-   * Only fill the count higher than 0 to simplify
-   * @param {Readonly<Partial<IIssuesStatistics>>} statistics The statistics count to expect
-   */
-  public expect(statistics: Readonly<Partial<IIssuesStatistics>> = {}): void {
-    expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(
-      statistics.addedIssuesCommentsCount ?? 0
-    );
-    expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(statistics.addedIssuesLabelsCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(statistics.alreadyStaleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount).toBe(
-      statistics.calledApiIssuesMutationsCount ?? 0
-    );
-    expect(IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount).toBe(
-      statistics.calledApiIssuesQueriesCount ?? 0
-    );
-    expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(statistics.closedIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(statistics.ignoredIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(statistics.processedIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(statistics.removeStaleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(statistics.staleIssuesCount ?? 0);
-    expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(statistics.unalteredIssuesCount ?? 0);
   }
 }

@@ -1,3 +1,4 @@
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import faker from 'faker';
@@ -55,17 +56,19 @@ describe(`Issue stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the issue`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(9);
 
       await issueSut.process();
 
-      issueSut.expect({
-        alreadyStaleIssuesCount: 1,
-        calledApiIssuesMutationsCount: 1,
-        calledApiIssuesQueriesCount: 3,
-        processedIssuesCount: 1,
-        removeStaleIssuesCount: 1,
-      });
+      expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(1);
+      expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(0);
+      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
     });
   });
 });
