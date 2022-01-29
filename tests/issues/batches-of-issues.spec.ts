@@ -1,5 +1,8 @@
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
+import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
+import { DateTime } from 'luxon';
+import { createHydratedMock } from 'ts-auto-mock';
 
 /**
  * Perfect to test the pagination
@@ -13,19 +16,147 @@ describe(`Batch of issues`, (): void => {
     });
 
     it(`should not process the issues`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(11);
 
       await issueSut.process();
 
-      expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(22);
-      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(22);
-      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
+      issueSut.expect({
+        calledApiIssuesQueriesCount: 2,
+        ignoredIssuesCount: 22,
+        processedIssuesCount: 22,
+      });
+    });
+  });
+
+  describe(`when more than 20 issues are stale and should be closed (two batches)`, (): void => {
+    beforeEach((): void => {
+      issueSut = new FakeIssuesProcessor({
+        issueDaysBeforeClose: 30,
+        issueStaleLabel: `stale`,
+      })
+        .addIssues(22, {
+          labels: {
+            nodes: [
+              createHydratedMock<IGithubApiLabel>({
+                name: `stale`, // Already stale
+              }),
+            ],
+            totalCount: 1,
+          },
+          locked: false,
+          updatedAt: DateTime.utc(2021).toISO({
+            includeOffset: false,
+          }), // No update since last stale
+        })
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
+            Promise.resolve(
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                repository: {
+                  issue: {
+                    timelineItems: {
+                      filteredCount: 1,
+                      nodes: [
+                        {
+                          createdAt: DateTime.utc(2021).toISO({
+                            includeOffset: false,
+                          }), // Last stale
+                          label: createHydratedMock<IGithubApiLabel>({
+                            name: `stale`,
+                          }),
+                        },
+                      ],
+                      pageCount: 1,
+                    },
+                  },
+                },
+              })
+            )
+        );
+    });
+
+    it(`should not remove the stale state on the issues`, async (): Promise<void> => {
+      expect.assertions(11);
+
+      await issueSut.process();
+
+      issueSut.expect({
+        addedIssuesCommentsCount: 22,
+        alreadyStaleIssuesCount: 22,
+        calledApiIssuesMutationsCount: 44, // 22 comments + 22 close
+        calledApiIssuesQueriesCount: 24, // 2 batch loaded + 22 loaded labels events
+        closedIssuesCount: 22,
+        processedIssuesCount: 22,
+      });
+    });
+  });
+
+  describe(`when more than 20 issues are stale and should stay stale (two batches)`, (): void => {
+    beforeEach((): void => {
+      issueSut = new FakeIssuesProcessor({
+        issueDaysBeforeClose: 30,
+        issueStaleLabel: `stale`,
+      })
+        .addIssues(22, {
+          labels: {
+            nodes: [
+              createHydratedMock<IGithubApiLabel>({
+                name: `stale`, // Already stale
+              }),
+            ],
+            totalCount: 1,
+          },
+          locked: false,
+          updatedAt: DateTime.now()
+            .minus({
+              day: 21,
+            })
+            .toISO({
+              includeOffset: false,
+            }), // No update since last stale
+        })
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
+            Promise.resolve(
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
+                repository: {
+                  issue: {
+                    timelineItems: {
+                      filteredCount: 1,
+                      nodes: [
+                        {
+                          createdAt: DateTime.now()
+                            .minus({
+                              day: 20,
+                            })
+                            .toISO({
+                              includeOffset: false,
+                            }), // Last stale
+                          label: createHydratedMock<IGithubApiLabel>({
+                            name: `stale`,
+                          }),
+                        },
+                      ],
+                      pageCount: 1,
+                    },
+                  },
+                },
+              })
+            )
+        );
+    });
+
+    it(`should not remove the stale state on the issues`, async (): Promise<void> => {
+      expect.assertions(11);
+
+      await issueSut.process();
+
+      issueSut.expect({
+        alreadyStaleIssuesCount: 22,
+        calledApiIssuesQueriesCount: 24, // 2 batch loaded + 22 loaded labels events
+        processedIssuesCount: 22,
+        unalteredIssuesCount: 22,
+      });
     });
   });
 });

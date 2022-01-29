@@ -1,4 +1,3 @@
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
@@ -57,19 +56,18 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and add a close comment`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(11);
 
       await issueSut.process();
 
-      expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
+      issueSut.expect({
+        addedIssuesCommentsCount: 1,
+        alreadyStaleIssuesCount: 1,
+        calledApiIssuesMutationsCount: 2,
+        calledApiIssuesQueriesCount: 2,
+        closedIssuesCount: 1,
+        processedIssuesCount: 1,
+      });
     });
   });
 
@@ -122,19 +120,17 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and not add a close comment`, async (): Promise<void> => {
-      expect.assertions(9);
+      expect.assertions(11);
 
       await issueSut.process();
 
-      expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(1);
-      expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(0);
-      expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
+      issueSut.expect({
+        alreadyStaleIssuesCount: 1,
+        calledApiIssuesMutationsCount: 1,
+        calledApiIssuesQueriesCount: 2,
+        closedIssuesCount: 1,
+        processedIssuesCount: 1,
+      });
     });
   });
 });

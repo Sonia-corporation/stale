@@ -29,6 +29,7 @@ export abstract class AbstractGithubApiCommentsService<
         id: targetId,
       })
       .then((): void => {
+        this._increaseCalledApiMutationsCount();
         this.processor.logger.info(
           LoggerFormatService.green(`Comment`),
           LoggerService.value(comment),
@@ -47,4 +48,6 @@ export abstract class AbstractGithubApiCommentsService<
         throw error;
       });
   }
+
+  protected abstract _increaseCalledApiMutationsCount(): void;
 }

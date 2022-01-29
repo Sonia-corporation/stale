@@ -1,4 +1,3 @@
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import faker from 'faker';
@@ -56,21 +55,17 @@ describe(`Pull request stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the pull request`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(13);
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(1);
-      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
+      pullRequestSut.expect({
+        alreadyStalePullRequestsCount: 1,
+        calledApiPullRequestsMutationsCount: 1,
+        calledApiPullRequestsQueriesCount: 3,
+        processedPullRequestsCount: 1,
+        removeStalePullRequestsCount: 1,
+      });
     });
   });
 });

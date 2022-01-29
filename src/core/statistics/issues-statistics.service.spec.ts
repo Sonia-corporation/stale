@@ -1,5 +1,6 @@
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -29,9 +30,24 @@ describe(`IssuesStatisticsService`, (): void => {
     });
   });
 
+  describe(`get calledApiIssuesCount`, (): void => {
+    beforeEach((): void => {
+      service.calledApiIssuesQueriesCount = faker.datatype.number();
+      service.calledApiIssuesMutationsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the called API issues mutations and queries`, (): void => {
+      expect.assertions(1);
+
+      const result = service.calledApiIssuesCount;
+
+      expect(result).toBe(service.calledApiIssuesQueriesCount + service.calledApiIssuesMutationsCount);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(9);
+      expect.assertions(11);
       service.processedIssuesCount = 1;
       service.ignoredIssuesCount = 1;
       service.unalteredIssuesCount = 1;
@@ -41,6 +57,8 @@ describe(`IssuesStatisticsService`, (): void => {
       service.closedIssuesCount = 1;
       service.addedIssuesCommentsCount = 1;
       service.addedIssuesLabelsCount = 1;
+      service.calledApiIssuesQueriesCount = 1;
+      service.calledApiIssuesMutationsCount = 1;
 
       service.initialize();
 
@@ -53,6 +71,8 @@ describe(`IssuesStatisticsService`, (): void => {
       expect(service.closedIssuesCount).toBe(0);
       expect(service.addedIssuesCommentsCount).toBe(0);
       expect(service.addedIssuesLabelsCount).toBe(0);
+      expect(service.calledApiIssuesQueriesCount).toBe(0);
+      expect(service.calledApiIssuesMutationsCount).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -246,6 +266,44 @@ describe(`IssuesStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseCalledApiIssuesQueriesCount()`, (): void => {
+    it(`should increase the called API issues queries count`, (): void => {
+      expect.assertions(1);
+      service.calledApiIssuesQueriesCount = 0;
+
+      service.increaseCalledApiIssuesQueriesCount();
+
+      expect(service.calledApiIssuesQueriesCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiIssuesQueriesCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
+  describe(`increaseCalledApiIssuesMutationsCount()`, (): void => {
+    it(`should increase the called API issues mutations count`, (): void => {
+      expect.assertions(1);
+      service.calledApiIssuesMutationsCount = 0;
+
+      service.increaseCalledApiIssuesMutationsCount();
+
+      expect(service.calledApiIssuesMutationsCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiIssuesMutationsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -277,6 +335,8 @@ describe(`IssuesStatisticsService`, (): void => {
         service.closedIssuesCount = 0;
         service.addedIssuesCommentsCount = 0;
         service.addedIssuesLabelsCount = 0;
+        service.calledApiIssuesQueriesCount = 0;
+        service.calledApiIssuesMutationsCount = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -299,6 +359,8 @@ describe(`IssuesStatisticsService`, (): void => {
         service.closedIssuesCount = 0;
         service.addedIssuesCommentsCount = 0;
         service.addedIssuesLabelsCount = 0;
+        service.calledApiIssuesQueriesCount = 0;
+        service.calledApiIssuesMutationsCount = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -322,14 +384,16 @@ describe(`IssuesStatisticsService`, (): void => {
         service.closedIssuesCount = 6;
         service.addedIssuesCommentsCount = 7;
         service.addedIssuesLabelsCount = 8;
+        service.calledApiIssuesQueriesCount = 9;
+        service.calledApiIssuesMutationsCount = 10;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(9);
+        expect.assertions(12);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(11);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -374,9 +438,27 @@ describe(`IssuesStatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Added issues labels  `,
           `value-8`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          9,
+          `white-└──`,
+          `whiteBright-Called API issues    `,
+          `value-19`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          10,
+          `white-    ├──`,
+          `whiteBright-Called API issues queries  `,
+          `value-9`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          11,
+          `white-    └──`,
+          `whiteBright-Called API issues mutations`,
+          `value-10`
         );
       });
     });

@@ -157,6 +157,12 @@ outputs:
     description: 'The number of added issues comments.'
   added-issues-labels-count:
     description: 'The number of added issues labels.'
+  called-api-issues-count:
+    description: 'The number of GitHub API calls performed for the issues.'
+  called-api-issues-queries-count:
+    description: 'The number of GitHub API queries calls performed for the issues.'
+  called-api-issues-mutations-count:
+    description: 'The number of GitHub API mutations calls performed for the issues.'
   # Pull requests outputs
   processed-pull-requests-count:
     description: 'The number of pull requests processed.'
@@ -180,6 +186,12 @@ outputs:
     description: 'The number of added pull requests labels.'
   draft-pull-requests-count:
     description: 'The number of pull requests converted to draft.'
+  called-api-pull-requests-count:
+    description: 'The number of GitHub API calls performed for the pull requests.'
+  called-api-pull-requests-queries-count:
+    description: 'The number of GitHub API queries calls performed for the pull requests.'
+  called-api-pull-requests-mutations-count:
+    description: 'The number of GitHub API mutations calls performed for the pull requests.'
 runs:
   using: 'node12'
   main: 'dist/index.js'
