@@ -10,7 +10,4 @@ export enum EPullRequestsOutputs {
   ADDED_PULL_REQUESTS_COMMENTS_COUNT = `added-pull-requests-comments-count`,
   ADDED_PULL_REQUESTS_LABELS_COUNT = `added-pull-requests-labels-count`,
   DRAFT_PULL_REQUESTS_COUNT = `draft-pull-requests-count`,
-  CALLED_API_PULL_REQUESTS_COUNT = `called-api-pull-requests-count`,
-  CALLED_API_PULL_REQUESTS_QUERIES_COUNT = `called-api-pull-requests-queries-count`,
-  CALLED_API_PULL_REQUESTS_MUTATIONS_COUNT = `called-api-pull-requests-mutations-count`,
 }

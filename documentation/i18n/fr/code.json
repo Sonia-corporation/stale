@@ -214,9 +214,5 @@
   "GitHub stale action website": {
     "message": "Site web de l'action GitHub stale",
     "description": "Home page description"
-  },
-  "theme.tags.tagsPageTitle": {
-    "message": "Tags",
-    "description": "The title of the tag list page"
   }
 }

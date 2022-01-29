@@ -62,17 +62,5 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
       EPullRequestsOutputs.DRAFT_PULL_REQUESTS_COUNT,
       PullRequestsStatisticsService.getInstance().draftPullRequestsCount
     );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_QUERIES_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_MUTATIONS_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount
-    );
   }
 }

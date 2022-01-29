@@ -1,5 +1,4 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
@@ -49,7 +48,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
@@ -66,9 +64,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesQueriesCount`)
-          .mockImplementation();
       });
 
       it(`should fetch the labels with the given name or description`, async (): Promise<void> => {
@@ -111,16 +106,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `Failed to fetch the labels matching`,
             `value-${labelName}`
           );
-        });
-
-        it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -165,17 +150,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               `value-${labelName}`
             );
           });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(3);
-
-            await expect(githubApiIssueLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
-              new Error(`Could not find a single label matching ${labelName}`)
-            );
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
         });
 
         describe(`when one label matching the search one was found`, (): void => {
@@ -208,15 +182,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               `value-${labelName}`
             );
             expect(result).toStrictEqual(githubApiGetLabels);
-          });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelsByName(labelName);
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
 
@@ -268,15 +233,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               );
               expect(result).toStrictEqual(githubApiGetLabels);
             });
-
-            it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-              expect.assertions(2);
-
-              await githubApiIssueLabelsService.fetchLabelsByName(labelName);
-
-              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-            });
           });
         });
       });
@@ -290,7 +246,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let issueProcessorLoggerDebugSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
@@ -308,9 +263,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesQueriesCount`)
-          .mockImplementation();
       });
 
       it(`should fetch the label with the given name`, async (): Promise<void> => {
@@ -351,16 +303,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
         });
-
-        it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
-        });
       });
 
       describe(`when the label was successfully fetched`, (): void => {
@@ -397,15 +339,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledWith(`Are you sure it exists in your repository?`);
             expect(result).toBeNull();
           });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
         });
 
         describe(`when the label was found`, (): void => {
@@ -438,15 +371,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               name: labelName,
             });
           });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
         });
       });
     });
@@ -459,7 +383,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -473,9 +396,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should add the label on the issue`, async (): Promise<void> => {
@@ -521,16 +441,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `value-${issueId}`
           );
         });
-
-        it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueLabelsService.addLabel(issueId, labelId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
-        });
       });
 
       describe(`when the label was successfully added`, (): void => {
@@ -552,15 +462,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `value-${issueId}`
           );
         });
-
-        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiIssueLabelsService.addLabel(issueId, labelId);
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
-        });
       });
     });
 
@@ -572,7 +473,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -586,9 +486,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should add the labels on the issue`, async (): Promise<void> => {
@@ -634,16 +531,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `value-${issueId}`
           );
         });
-
-        it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueLabelsService.addLabels(issueId, labelsId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
-        });
       });
 
       describe(`when the labels were successfully added`, (): void => {
@@ -665,15 +552,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `value-${issueId}`
           );
         });
-
-        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiIssueLabelsService.addLabels(issueId, labelsId);
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
-        });
       });
     });
 
@@ -685,7 +563,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -699,9 +576,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should remove the label on the issue`, async (): Promise<void> => {
@@ -747,16 +621,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `value-${issueId}`
           );
         });
-
-        it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueLabelsService.removeLabel(issueId, labelId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
-        });
       });
 
       describe(`when the label was successfully removed`, (): void => {
@@ -777,15 +641,6 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             `green-removed from the issue`,
             `value-${issueId}`
           );
-        });
-
-        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiIssueLabelsService.removeLabel(issueId, labelId);
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
         });
       });
     });

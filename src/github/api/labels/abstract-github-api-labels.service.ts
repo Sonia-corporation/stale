@@ -45,8 +45,6 @@ export abstract class AbstractGithubApiLabelsService<
       .then((response: Readonly<IGithubApiGetLabels>): IGithubApiGetLabels | never => {
         const { totalCount } = response.repository.labels;
 
-        this._increaseCalledApiQueriesCount();
-
         if (totalCount === 0) {
           this.processor.logger.error(`Could not find a single label matching`, LoggerService.value(labelName));
           throw new Error(`Could not find a single label matching ${labelName}`);
@@ -80,8 +78,6 @@ export abstract class AbstractGithubApiLabelsService<
         repository: context.repo.repo,
       })
       .then((response: Readonly<IGithubApiGetLabel>): IGithubApiLabel | null => {
-        this._increaseCalledApiQueriesCount();
-
         if (!response.repository.label) {
           this.processor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
           this.processor.logger.debug(`Are you sure it exists in your repository?`);
@@ -112,7 +108,6 @@ export abstract class AbstractGithubApiLabelsService<
         labelId,
       })
       .then((): void => {
-        this._increaseCalledApiMutationsCount();
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
@@ -146,7 +141,6 @@ export abstract class AbstractGithubApiLabelsService<
         labelsId,
       })
       .then((): void => {
-        this._increaseCalledApiMutationsCount();
         this.processor.logger.info(
           LoggerFormatService.green(`Labels`),
           LoggerService.value(labelsId),
@@ -180,7 +174,6 @@ export abstract class AbstractGithubApiLabelsService<
         labelId,
       })
       .then((): void => {
-        this._increaseCalledApiMutationsCount();
         this.processor.logger.info(
           LoggerFormatService.green(`Label`),
           LoggerService.value(labelId),
@@ -199,8 +192,4 @@ export abstract class AbstractGithubApiLabelsService<
         throw error;
       });
   }
-
-  protected abstract _increaseCalledApiQueriesCount(): void;
-
-  protected abstract _increaseCalledApiMutationsCount(): void;
 }

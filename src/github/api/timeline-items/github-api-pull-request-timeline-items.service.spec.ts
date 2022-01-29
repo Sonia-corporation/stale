@@ -1,5 +1,4 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IGithubApiPullRequestNumber } from '@github/api/pull-requests/github-api-pull-request-number';
 import { GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-pull-request-labeled-event-query';
 import { GithubApiPullRequestTimelineItemsService } from '@github/api/timeline-items/github-api-pull-request-timeline-items.service';
@@ -44,7 +43,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestNumber = faker.datatype.number();
@@ -61,9 +59,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
-        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy = jest
-          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsQueriesCount`)
-          .mockImplementation();
       });
 
       it(`should fetch the added labels events with the given pull request number`, async (): Promise<void> => {
@@ -106,16 +101,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
             `Failed to fetch the added labels events on the pull request`,
             `value-${pullRequestNumber}`
           );
-        });
-
-        it(`should not increase the statistic regarding the API pull requests queries calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(
-            githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(pullRequestNumber)
-          ).rejects.toThrow(new Error(`graphql error`));
-
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -166,19 +151,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
               `value-${pullRequestNumber}`
             );
           });
-
-          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(3);
-
-            await expect(
-              githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(pullRequestNumber)
-            ).rejects.toThrow(
-              new Error(`Could not find a single added label event for the pull request ${pullRequestNumber}`)
-            );
-
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
-          });
         });
 
         describe(`when a reasonable amount of added labels events matching the search were found`, (): void => {
@@ -207,15 +179,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
             );
 
             expect(result).toStrictEqual(githubApiTimelineItemsPullRequestLabeledEvents);
-          });
-
-          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(pullRequestNumber);
-
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
 
@@ -257,17 +220,6 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
               `Failed to fetch the added labels events on the pull request`,
               `value-${pullRequestNumber}`
             );
-          });
-
-          it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(3);
-
-            await expect(
-              githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(pullRequestNumber)
-            ).rejects.toThrow(new Error(`Reached the maximum number of added label events supported for now`));
-
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
       });

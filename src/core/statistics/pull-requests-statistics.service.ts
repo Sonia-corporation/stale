@@ -12,10 +12,7 @@ type IStat =
   | 'Deleted pull requests branches'
   | 'Added pull requests comments'
   | 'Added pull requests labels'
-  | 'Draft pull requests'
-  | 'Called API pull requests'
-  | 'Called API pull requests queries'
-  | 'Called API pull requests mutations';
+  | 'Draft pull requests';
 
 export class PullRequestsStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: PullRequestsStatisticsService;
@@ -28,24 +25,18 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return PullRequestsStatisticsService._instance;
   }
 
-  public addedPullRequestsCommentsCount: number = 0;
-  public addedPullRequestsLabelsCount: number = 0;
+  public processedPullRequestsCount: number = 0;
+  public ignoredPullRequestsCount: number = 0;
+  public unalteredPullRequestsCount: number = 0;
+  public stalePullRequestsCount: number = 0;
   public alreadyStalePullRequestsCount: number = 0;
-  public calledApiPullRequestsMutationsCount: number = 0;
-  public calledApiPullRequestsQueriesCount: number = 0;
+  public removeStalePullRequestsCount: number = 0;
   public closedPullRequestsCount: number = 0;
   public deletedPullRequestsBranchesCount: number = 0;
+  public addedPullRequestsCommentsCount: number = 0;
+  public addedPullRequestsLabelsCount: number = 0;
   public draftPullRequestsCount: number = 0;
-  public ignoredPullRequestsCount: number = 0;
-  public processedPullRequestsCount: number = 0;
-  public removeStalePullRequestsCount: number = 0;
-  public stalePullRequestsCount: number = 0;
-  public unalteredPullRequestsCount: number = 0;
   protected readonly _statisticsName: 'pull requests' = `pull requests`;
-
-  public get calledApiPullRequestsCount(): number {
-    return this.calledApiPullRequestsQueriesCount + this.calledApiPullRequestsMutationsCount;
-  }
 
   /**
    * @description
@@ -53,19 +44,17 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
    * @returns {PullRequestsStatisticsService} The service
    */
   public initialize(): PullRequestsStatisticsService {
-    this.addedPullRequestsCommentsCount = 0;
-    this.addedPullRequestsLabelsCount = 0;
+    this.processedPullRequestsCount = 0;
+    this.ignoredPullRequestsCount = 0;
+    this.unalteredPullRequestsCount = 0;
+    this.stalePullRequestsCount = 0;
     this.alreadyStalePullRequestsCount = 0;
-    this.calledApiPullRequestsMutationsCount = 0;
-    this.calledApiPullRequestsQueriesCount = 0;
+    this.removeStalePullRequestsCount = 0;
     this.closedPullRequestsCount = 0;
     this.deletedPullRequestsBranchesCount = 0;
+    this.addedPullRequestsCommentsCount = 0;
+    this.addedPullRequestsLabelsCount = 0;
     this.draftPullRequestsCount = 0;
-    this.ignoredPullRequestsCount = 0;
-    this.processedPullRequestsCount = 0;
-    this.removeStalePullRequestsCount = 0;
-    this.stalePullRequestsCount = 0;
-    this.unalteredPullRequestsCount = 0;
 
     return this;
   }
@@ -167,30 +156,8 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
     return this;
   }
 
-  public increaseCalledApiPullRequestsQueriesCount(): PullRequestsStatisticsService {
-    this.calledApiPullRequestsQueriesCount++;
-    this._logIncreaseCount(
-      `Called API pull requests queries count statistic increased by`,
-      1,
-      this.calledApiPullRequestsQueriesCount
-    );
-
-    return this;
-  }
-
-  public increaseCalledApiPullRequestsMutationsCount(): PullRequestsStatisticsService {
-    this.calledApiPullRequestsMutationsCount++;
-    this._logIncreaseCount(
-      `Called API pull requests mutations count statistic increased by`,
-      1,
-      this.calledApiPullRequestsMutationsCount
-    );
-
-    return this;
-  }
-
-  protected _getAllStatisticsMap(): Map<IStat, Map<IStat, number> | number> {
-    return new Map<IStat, Map<IStat, number> | number>()
+  protected _getAllStatisticsMap(): Map<IStat, number> {
+    return new Map<IStat, number>()
       .set(`Processed pull requests`, this.processedPullRequestsCount)
       .set(`Ignored pull requests`, this.ignoredPullRequestsCount)
       .set(`Unaltered pull requests`, this.unalteredPullRequestsCount)
@@ -201,12 +168,6 @@ export class PullRequestsStatisticsService extends AbstractStatisticsService<ISt
       .set(`Deleted pull requests branches`, this.deletedPullRequestsBranchesCount)
       .set(`Added pull requests comments`, this.addedPullRequestsCommentsCount)
       .set(`Added pull requests labels`, this.addedPullRequestsLabelsCount)
-      .set(`Draft pull requests`, this.draftPullRequestsCount)
-      .set(
-        `Called API pull requests`,
-        new Map<IStat, number>()
-          .set(`Called API pull requests queries`, this.calledApiPullRequestsQueriesCount)
-          .set(`Called API pull requests mutations`, this.calledApiPullRequestsMutationsCount)
-      );
+      .set(`Draft pull requests`, this.draftPullRequestsCount);
   }
 }

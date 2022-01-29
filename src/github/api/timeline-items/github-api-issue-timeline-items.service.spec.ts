@@ -1,5 +1,4 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/github-api-issue-timeline-items.service';
@@ -44,7 +43,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueNumber = faker.datatype.number();
@@ -61,9 +59,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
           owner: `dummy-owner`,
           repo: `dummy-repo`,
         });
-        issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy = jest
-          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesQueriesCount`)
-          .mockImplementation();
       });
 
       it(`should fetch the added labels events with the given issue number`, async (): Promise<void> => {
@@ -106,16 +101,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             `Failed to fetch the added labels events on the issue`,
             `value-${issueNumber}`
           );
-        });
-
-        it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
         });
       });
 
@@ -162,17 +147,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
               `value-${issueNumber}`
             );
           });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(3);
-
-            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
-              new Error(`Could not find a single added label event for the issue ${issueNumber}`)
-            );
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
         });
 
         describe(`when a reasonable amount of added labels events matching the search were found`, (): void => {
@@ -198,15 +172,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             const result = await githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber);
 
             expect(result).toStrictEqual(githubApiTimelineItemsIssueLabeledEvents);
-          });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber);
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
 
@@ -247,17 +212,6 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
               `Failed to fetch the added labels events on the issue`,
               `value-${issueNumber}`
             );
-          });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(3);
-
-            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
-              new Error(`Reached the maximum number of added label events supported for now`)
-            );
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
           });
         });
       });

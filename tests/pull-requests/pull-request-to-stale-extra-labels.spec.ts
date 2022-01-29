@@ -1,3 +1,4 @@
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import { DateTime } from 'luxon';
 
@@ -22,18 +23,21 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 1,
-        calledApiPullRequestsMutationsCount: 2,
-        calledApiPullRequestsQueriesCount: 2,
-        processedPullRequestsCount: 1,
-        stalePullRequestsCount: 1,
-      });
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 
@@ -55,18 +59,21 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 2,
-        calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 3,
-        processedPullRequestsCount: 1,
-        stalePullRequestsCount: 1,
-      });
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(2);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 
@@ -88,18 +95,21 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(11);
 
       await pullRequestSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 4,
-        calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 5,
-        processedPullRequestsCount: 1,
-        stalePullRequestsCount: 1,
-      });
+      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(4);
+      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
     });
   });
 
@@ -126,17 +136,21 @@ describe(`Pull request to stale extra labels`, (): void => {
       });
 
       it(`should stale the pull request and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(11);
 
         await pullRequestSut.process();
 
-        pullRequestSut.expect({
-          addedPullRequestsCommentsCount: 1,
-          addedPullRequestsLabelsCount: 4,
-          calledApiPullRequestsQueriesCount: 5,
-          processedPullRequestsCount: 1,
-          stalePullRequestsCount: 1,
-        });
+        expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(1);
+        expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(4);
+        expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
       });
     });
   });

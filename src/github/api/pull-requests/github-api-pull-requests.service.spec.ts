@@ -1,5 +1,4 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
@@ -50,7 +49,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
     let loggerServiceNoticeSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
-    let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
@@ -67,9 +65,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
         owner: `dummy-owner`,
         repo: `dummy-repo`,
       });
-      pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy = jest
-        .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsQueriesCount`)
-        .mockImplementation();
     });
 
     it(`should fetch the open pull requests (20 per page) per update date from oldest first`, async (): Promise<void> => {
@@ -105,14 +100,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the pull requests`);
-      });
-
-      it(`should not increase the statistic regarding the API pull requests queries calls`, async (): Promise<void> => {
-        expect.assertions(2);
-
-        await expect(GithubApiPullRequestsService.fetchPullRequests()).rejects.toThrow(new Error(`graphql error`));
-
-        expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -295,15 +282,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
         });
       });
 
-      it(`should increase the statistic regarding the API pull requests queries calls by 1`, async (): Promise<void> => {
-        expect.assertions(2);
-
-        await GithubApiPullRequestsService.fetchPullRequests();
-
-        expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
-        expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
-      });
-
       it(`should return the pull requests`, async (): Promise<void> => {
         expect.assertions(1);
 
@@ -342,7 +320,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -355,9 +332,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should close the pull request`, async (): Promise<void> => {
@@ -385,16 +359,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
-        });
-
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
@@ -413,15 +377,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
       describe(`when the pull request was successfully closed`, (): void => {
         beforeEach((): void => {
           graphqlMock.mockResolvedValue({});
-        });
-
-        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiPullRequestsService.closePullRequest(pullRequestId);
-
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should log about the success of the closing`, async (): Promise<void> => {
@@ -447,7 +402,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
-      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -460,9 +414,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
-        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
-          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
-          .mockImplementation();
       });
 
       it(`should convert the pull request to draft`, async (): Promise<void> => {
@@ -491,16 +442,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
-        });
-
         it(`should log about the error and rethrow it`, async (): Promise<void> => {
           expect.assertions(3);
 
@@ -519,15 +460,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
       describe(`when the pull request was successfully converted to a draft`, (): void => {
         beforeEach((): void => {
           graphqlMock.mockResolvedValue({});
-        });
-
-        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
-          expect.assertions(2);
-
-          await githubApiPullRequestsService.draftPullRequest(pullRequestId);
-
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
-          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
         });
 
         it(`should log about the success of the conversion to draft`, async (): Promise<void> => {

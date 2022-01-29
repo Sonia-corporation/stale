@@ -1,3 +1,4 @@
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -24,15 +25,19 @@ describe(`Issue with all project cards ignored`, (): void => {
       });
 
       it(`should not ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(9);
 
         await issueSut.process();
 
-        issueSut.expect({
-          calledApiIssuesQueriesCount: 1,
-          processedIssuesCount: 1,
-          unalteredIssuesCount: 1,
-        });
+        expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
+        expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(1);
+        expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
       });
     });
 
@@ -48,15 +53,19 @@ describe(`Issue with all project cards ignored`, (): void => {
       });
 
       it(`should ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(9);
 
         await issueSut.process();
 
-        issueSut.expect({
-          calledApiIssuesQueriesCount: 1,
-          ignoredIssuesCount: 1,
-          processedIssuesCount: 1,
-        });
+        expect(IssuesStatisticsService.getInstance().processedIssuesCount).toBe(1);
+        expect(IssuesStatisticsService.getInstance().ignoredIssuesCount).toBe(1);
+        expect(IssuesStatisticsService.getInstance().unalteredIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().staleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().removeStaleIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().closedIssuesCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().addedIssuesCommentsCount).toBe(0);
+        expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(0);
       });
     });
   });

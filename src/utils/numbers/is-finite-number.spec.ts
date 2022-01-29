@@ -17,7 +17,6 @@ describe(`isFiniteNumber()`, (): void => {
     ${`0`}       | ${false}
     ${`1`}       | ${false}
     ${`888`}     | ${false}
-    ${new Map()} | ${false}
   `(`when the given value is "$value"`, ({ value, isFinite }: IMatrix): void => {
     it(`should return ${isFinite}`, (): void => {
       expect.assertions(1);
@@ -31,5 +30,5 @@ describe(`isFiniteNumber()`, (): void => {
 
 interface IMatrix {
   isFinite: boolean;
-  value: unknown;
+  value: string | number | null | undefined;
 }
