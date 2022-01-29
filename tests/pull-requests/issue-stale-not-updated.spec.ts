@@ -4,13 +4,13 @@ import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-proce
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Pull request stale not updated`, (): void => {
+describe(`Issue stale not updated`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when a pull request is stale and was not recently updated`, (): void => {
+  describe(`when a issue is stale and was not recently updated`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestDaysBeforeStale: 30,
+        pullRequestDaysBeforeClose: 30,
         pullRequestStaleLabel: `stale`,
       })
         .addPullRequest({
@@ -54,7 +54,7 @@ describe(`Pull request stale not updated`, (): void => {
         );
     });
 
-    it(`should not remove the stale state on the pull request`, async (): Promise<void> => {
+    it(`should close the issue`, async (): Promise<void> => {
       expect.assertions(13);
 
       await pullRequestSut.process();

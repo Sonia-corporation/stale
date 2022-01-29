@@ -10,7 +10,7 @@ describe(`Issue stale not updated`, (): void => {
   describe(`when an issue is stale and was not recently updated`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueDaysBeforeStale: 30,
+        issueDaysBeforeClose: 30,
         issueStaleLabel: `stale`,
       })
         .addIssue({
@@ -54,7 +54,7 @@ describe(`Issue stale not updated`, (): void => {
         );
     });
 
-    it(`should not remove the stale state on the issue`, async (): Promise<void> => {
+    it(`should close the issue`, async (): Promise<void> => {
       expect.assertions(11);
 
       await issueSut.process();
