@@ -10,7 +10,10 @@ type IStat =
   | 'Unaltered issues'
   | 'Closed issues'
   | 'Added issues comments'
-  | 'Added issues labels';
+  | 'Added issues labels'
+  | 'Called API issues'
+  | 'Called API issues queries'
+  | 'Called API issues mutations';
 
 export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   private static _instance: IssuesStatisticsService;
@@ -23,16 +26,22 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return IssuesStatisticsService._instance;
   }
 
-  public processedIssuesCount: number = 0;
-  public ignoredIssuesCount: number = 0;
-  public unalteredIssuesCount: number = 0;
-  public staleIssuesCount: number = 0;
-  public alreadyStaleIssuesCount: number = 0;
-  public removeStaleIssuesCount: number = 0;
-  public closedIssuesCount: number = 0;
   public addedIssuesCommentsCount: number = 0;
   public addedIssuesLabelsCount: number = 0;
+  public alreadyStaleIssuesCount: number = 0;
+  public calledApiIssuesMutationsCount: number = 0;
+  public calledApiIssuesQueriesCount: number = 0;
+  public closedIssuesCount: number = 0;
+  public ignoredIssuesCount: number = 0;
+  public processedIssuesCount: number = 0;
+  public removeStaleIssuesCount: number = 0;
+  public staleIssuesCount: number = 0;
+  public unalteredIssuesCount: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
+
+  public get calledApiIssuesCount(): number {
+    return this.calledApiIssuesQueriesCount + this.calledApiIssuesMutationsCount;
+  }
 
   /**
    * @description
@@ -40,15 +49,17 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
    * @returns {IssuesStatisticsService} The service
    */
   public initialize(): IssuesStatisticsService {
-    this.processedIssuesCount = 0;
-    this.ignoredIssuesCount = 0;
-    this.unalteredIssuesCount = 0;
-    this.staleIssuesCount = 0;
-    this.alreadyStaleIssuesCount = 0;
-    this.removeStaleIssuesCount = 0;
-    this.closedIssuesCount = 0;
     this.addedIssuesCommentsCount = 0;
     this.addedIssuesLabelsCount = 0;
+    this.alreadyStaleIssuesCount = 0;
+    this.calledApiIssuesMutationsCount = 0;
+    this.calledApiIssuesQueriesCount = 0;
+    this.closedIssuesCount = 0;
+    this.ignoredIssuesCount = 0;
+    this.processedIssuesCount = 0;
+    this.removeStaleIssuesCount = 0;
+    this.staleIssuesCount = 0;
+    this.unalteredIssuesCount = 0;
 
     return this;
   }
@@ -116,8 +127,30 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
-  protected _getAllStatisticsMap(): Map<IStat, number> {
-    return new Map<IStat, number>()
+  public increaseCalledApiIssuesQueriesCount(): IssuesStatisticsService {
+    this.calledApiIssuesQueriesCount++;
+    this._logIncreaseCount(
+      `Called API issues queries count statistic increased by`,
+      1,
+      this.calledApiIssuesQueriesCount
+    );
+
+    return this;
+  }
+
+  public increaseCalledApiIssuesMutationsCount(): IssuesStatisticsService {
+    this.calledApiIssuesMutationsCount++;
+    this._logIncreaseCount(
+      `Called API issues mutations count statistic increased by`,
+      1,
+      this.calledApiIssuesMutationsCount
+    );
+
+    return this;
+  }
+
+  protected _getAllStatisticsMap(): Map<IStat, Map<IStat, number> | number> {
+    return new Map<IStat, Map<IStat, number> | number>()
       .set(`Processed issues`, this.processedIssuesCount)
       .set(`Ignored issues`, this.ignoredIssuesCount)
       .set(`Unaltered issues`, this.unalteredIssuesCount)
@@ -126,6 +159,12 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
       .set(`Remove stale issues`, this.removeStaleIssuesCount)
       .set(`Closed issues`, this.closedIssuesCount)
       .set(`Added issues comments`, this.addedIssuesCommentsCount)
-      .set(`Added issues labels`, this.addedIssuesLabelsCount);
+      .set(`Added issues labels`, this.addedIssuesLabelsCount)
+      .set(
+        `Called API issues`,
+        new Map<IStat, number>()
+          .set(`Called API issues queries`, this.calledApiIssuesQueriesCount)
+          .set(`Called API issues mutations`, this.calledApiIssuesMutationsCount)
+      );
   }
 }

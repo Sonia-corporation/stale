@@ -1,4 +1,5 @@
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GithubApiPullRequestCommentsService } from '@github/api/comments/github-api-pull-request-comments.service';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -42,6 +43,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -55,6 +57,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
           // @ts-ignore
           graphql: graphqlMock,
         });
+        pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy = jest
+          .spyOn(PullRequestsStatisticsService.getInstance(), `increaseCalledApiPullRequestsMutationsCount`)
+          .mockImplementation();
       });
 
       it(`should add the comment on the pull request`, async (): Promise<void> => {
@@ -100,6 +105,16 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
             `value-${pullRequestId}`
           );
         });
+
+        it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the comment was successfully added`, (): void => {
@@ -120,6 +135,15 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
             `green-added to the pull request`,
             `value-${pullRequestId}`
           );
+        });
+
+        it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment);
+
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
         });
       });
     });
