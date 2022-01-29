@@ -410,7 +410,7 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * Only fill the count higher than 0 to simplify
    * @param {Readonly<Partial<IPullRequestsStatistics>>} statistics The statistics count to expect
    */
-  public expect(statistics: Readonly<Partial<IPullRequestsStatistics>>): void {
+  public expect(statistics: Readonly<Partial<IPullRequestsStatistics>> = {}): void {
     expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(
       statistics.addedPullRequestsCommentsCount ?? 0
     );
