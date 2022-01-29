@@ -1,4 +1,5 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
+import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ASSIGNEES_PER_ISSUE } from '@github/api/issues/constants/github-assignees-per-issue';
@@ -53,6 +54,8 @@ export class GithubApiIssuesService {
           );
         }
 
+        IssuesStatisticsService.getInstance().increaseCalledApiIssuesQueriesCount();
+
         return response;
       })
       .catch((error: Readonly<Error>): never => {
@@ -79,6 +82,7 @@ export class GithubApiIssuesService {
         issueId,
       })
       .then((): void => {
+        IssuesStatisticsService.getInstance().increaseCalledApiIssuesMutationsCount();
         this.issueProcessor.logger.info(
           LoggerFormatService.green(`Issue`),
           LoggerService.value(issueId),

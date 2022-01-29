@@ -39,5 +39,14 @@ export class IssuesOutputsService extends AbstractOutputsService {
       EIssuesOutputs.ADDED_ISSUES_LABELS_COUNT,
       IssuesStatisticsService.getInstance().addedIssuesLabelsCount
     );
+    core.setOutput(EIssuesOutputs.CALLED_API_ISSUES_COUNT, IssuesStatisticsService.getInstance().calledApiIssuesCount);
+    core.setOutput(
+      EIssuesOutputs.CALLED_API_ISSUES_QUERIES_COUNT,
+      IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount
+    );
+    core.setOutput(
+      EIssuesOutputs.CALLED_API_ISSUES_MUTATIONS_COUNT,
+      IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount
+    );
   }
 }

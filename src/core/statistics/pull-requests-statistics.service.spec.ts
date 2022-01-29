@@ -1,5 +1,6 @@
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { LoggerService } from '@utils/loggers/logger.service';
+import faker from 'faker';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -29,9 +30,24 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`get calledApiPullRequestsCount`, (): void => {
+    beforeEach((): void => {
+      service.calledApiPullRequestsQueriesCount = faker.datatype.number();
+      service.calledApiPullRequestsMutationsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the called API pull requests mutations and queries`, (): void => {
+      expect.assertions(1);
+
+      const result = service.calledApiPullRequestsCount;
+
+      expect(result).toBe(service.calledApiPullRequestsQueriesCount + service.calledApiPullRequestsMutationsCount);
+    });
+  });
+
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(11);
+      expect.assertions(13);
       service.processedPullRequestsCount = 1;
       service.ignoredPullRequestsCount = 1;
       service.unalteredPullRequestsCount = 1;
@@ -43,6 +59,8 @@ describe(`PullRequestsStatisticsService`, (): void => {
       service.addedPullRequestsCommentsCount = 1;
       service.addedPullRequestsLabelsCount = 1;
       service.draftPullRequestsCount = 1;
+      service.calledApiPullRequestsQueriesCount = 1;
+      service.calledApiPullRequestsMutationsCount = 1;
 
       service.initialize();
 
@@ -57,6 +75,8 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.addedPullRequestsCommentsCount).toBe(0);
       expect(service.addedPullRequestsLabelsCount).toBe(0);
       expect(service.draftPullRequestsCount).toBe(0);
+      expect(service.calledApiPullRequestsQueriesCount).toBe(0);
+      expect(service.calledApiPullRequestsMutationsCount).toBe(0);
     });
 
     it(`should return the service`, (): void => {
@@ -288,6 +308,44 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`increaseCalledApiPullRequestsQueriesCount()`, (): void => {
+    it(`should increase the called API pull requests queries count`, (): void => {
+      expect.assertions(1);
+      service.calledApiPullRequestsQueriesCount = 0;
+
+      service.increaseCalledApiPullRequestsQueriesCount();
+
+      expect(service.calledApiPullRequestsQueriesCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiPullRequestsQueriesCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
+  describe(`increaseCalledApiPullRequestsMutationsCount()`, (): void => {
+    it(`should increase the called API pull requests mutations count`, (): void => {
+      expect.assertions(1);
+      service.calledApiPullRequestsMutationsCount = 0;
+
+      service.increaseCalledApiPullRequestsMutationsCount();
+
+      expect(service.calledApiPullRequestsMutationsCount).toBe(1);
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseCalledApiPullRequestsMutationsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
   describe(`logsAllStatistics()`, (): void => {
     let loggerServiceStartGroupSpy: jest.SpyInstance;
     let loggerServiceEndGroupSpy: jest.SpyInstance;
@@ -321,6 +379,8 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 0;
+        service.calledApiPullRequestsMutationsCount = 0;
       });
 
       it(`should not log the statistics`, (): void => {
@@ -345,6 +405,8 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 0;
+        service.calledApiPullRequestsMutationsCount = 0;
       });
 
       it(`should log the statistic`, (): void => {
@@ -374,14 +436,16 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.addedPullRequestsCommentsCount = 8;
         service.addedPullRequestsLabelsCount = 9;
         service.draftPullRequestsCount = 10;
+        service.calledApiPullRequestsQueriesCount = 11;
+        service.calledApiPullRequestsMutationsCount = 12;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(11);
+        expect.assertions(14);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(10);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -438,9 +502,27 @@ describe(`PullRequestsStatisticsService`, (): void => {
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           10,
-          `white-└──`,
+          `white-├──`,
           `whiteBright-Draft pull requests           `,
           `value-10`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          11,
+          `white-└──`,
+          `whiteBright-Called API pull requests      `,
+          `value-23`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          12,
+          `white-    ├──`,
+          `whiteBright-Called API pull requests queries  `,
+          `value-11`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          13,
+          `white-    └──`,
+          `whiteBright-Called API pull requests mutations`,
+          `value-12`
         );
       });
     });

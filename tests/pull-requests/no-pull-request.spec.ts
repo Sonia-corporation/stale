@@ -1,4 +1,3 @@
-import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 
 describe(`No pull request`, (): void => {
@@ -10,21 +9,13 @@ describe(`No pull request`, (): void => {
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(13);
 
       await pullRequestSut.process();
 
-      expect(PullRequestsStatisticsService.getInstance().processedPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().stalePullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().closedPullRequestsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(0);
-      expect(PullRequestsStatisticsService.getInstance().draftPullRequestsCount).toBe(0);
+      pullRequestSut.expect({
+        calledApiPullRequestsQueriesCount: 1,
+      });
     });
   });
 });
