@@ -1,9 +1,9 @@
 ---
-id: issue-stale-label-option
-title: Stale issue label option
+id: issue-stale-label-input
+title: Stale issue label input
 tags:
   - Issues
-  - Options
+  - Inputs
 ---
 
 ### Input {#input}
@@ -14,13 +14,13 @@ Default value: `stale`
 
 ### Description {#description}
 
-This option will let you define the label (by name) that will be added to your issues when they are considered as stale.
+This input will let you define the label (by name) that will be added to your issues when they are considered as stale.
 
-If the label is added to an issue (based on the [days before stale option](issue-days-before-stale-option)), the next time the issue is processed, the workflow will process it as a candidate for un-stale.  
+If the label is added to an issue (based on the [days before stale input](issue-days-before-stale-input)), the next time the issue is processed, the workflow will process it as a candidate for un-stale.  
 If the issue was updated after the addition of the label, the issue will be un-stale, and the label will be removed.
 
 Once the un-stale processing is done, if the issue is still stale, the workflow will then process it as a candidate for closing.  
-If the issue is stale for too long (based on the [days before close option](issue-days-before-close-option)), the issue will be closed.
+If the issue is stale for too long (based on the [days before close input](issue-days-before-close-input)), the issue will be closed.
 
 :::caution
 
