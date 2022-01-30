@@ -94,20 +94,20 @@ All the inputs that are used both for issues and pull requests.
 
 ## All the issues outputs
 
-| Output                            | Description                                                                 |
-| --------------------------------- | --------------------------------------------------------------------------- |
-| processed-issues-count            | The number of issues processed.                                             |
-| ignored-issues-count              | The number of issues ignored.                                               |
-| unaltered-issues-count            | The number of issues unaltered (either not good to stale or already stale). |
-| stale-issues-count                | The number of issues stale.                                                 |
-| already-stale-issues-count        | The number of issues processed which were already stale.                    |
-| remove-stale-issues-count         | The number of issues from where the stale state was removed.                |
-| close-issues-count                | The number of issues closed.                                                |
-| added-issues-comments-count       | The number of added issues comments.                                        |
-| added-issues-labels-count         | The number of added issues labels.                                          |
-| called-api-issues-count           | The number of GitHub API calls performed for the issues.                    |
-| called-api-issues-queries-count   | The number of GitHub API queries calls performed for the issues.            |
-| called-api-issues-mutations-count | The number of GitHub API mutations calls performed for the issues.          |
+| Output                                                                                                                                      | Description                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| [processed-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/processed-issues-count-output)                       | The number of issues processed.                                             |
+| [ignored-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/ignored-issues-count-output)                           | The number of issues ignored.                                               |
+| [unaltered-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/unaltered-issues-count-output)                       | The number of issues unaltered (either not good to stale or already stale). |
+| [stale-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/stale-issues-count-output)                               | The number of issues stale.                                                 |
+| [already-stale-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/already-stale-issues-count-output)               | The number of issues processed which were already stale.                    |
+| [remove-stale-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/remove-stale-issues-count-output)                 | The number of issues from where the stale state was removed.                |
+| [close-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/close-issues-count-output)                               | The number of issues closed.                                                |
+| [added-issues-comments-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/added-issues-comments-count-output)             | The number of added issues comments.                                        |
+| [added-issues-labels-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/added-issues-labels-count-output)                 | The number of added issues labels.                                          |
+| [called-api-issues-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/called-api-issues-count-output)                     | The number of GitHub API calls performed for the issues.                    |
+| [called-api-issues-queries-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/called-api-issues-queries-count-output)     | The number of GitHub API queries calls performed for the issues.            |
+| [called-api-issues-mutations-count](https://sonia-corporation.github.io/stale/docs/issues/outputs/called-api-issues-mutations-count-output) | The number of GitHub API mutations calls performed for the issues.          |
 
 ## All the pull requests inputs
 
@@ -133,22 +133,22 @@ All the inputs that are used both for issues and pull requests.
 
 ## All the pull requests outputs
 
-| Output                                   | Description                                                                        |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| processed-pull-requests-count            | The number of pull requests processed.                                             |
-| ignored-pull-requests-count              | The number of pull requests ignored.                                               |
-| unaltered-pull-requests-count            | The number of pull requests unaltered (either not good to stale or already stale). |
-| stale-pull-requests-count                | The number of pull requests stale.                                                 |
-| already-stale-pull-requests-count        | The number of pull requests processed which were already stale.                    |
-| remove-stale-pull-requests-count         | The number of pull requests from where the stale state was removed.                |
-| close-pull-requests-count                | The number of pull requests closed.                                                |
-| deleted-pull-requests-branches-count     | The number of deleted pull requests branches closed.                               |
-| added-pull-requests-comments-count       | The number of added pull requests comments.                                        |
-| added-pull-requests-labels-count         | The number of added pull requests labels.                                          |
-| draft-pull-requests-count                | The number of pull requests converted to draft.                                    |
-| called-api-pull-requests-count           | The number of GitHub API calls performed for the pull requests.                    |
-| called-api-pull-requests-queries-count   | The number of GitHub API queries calls performed for the pull requests.            |
-| called-api-pull-requests-mutations-count | The number of GitHub API mutations calls performed for the pull requests.          |
+| Output                                                                                                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [processed-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/processed-pull-requests-count-output)                       | The number of pull requests processed.                                             |
+| [ignored-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/ignored-pull-requests-count-output)                           | The number of pull requests ignored.                                               |
+| [unaltered-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/unaltered-pull-requests-count-output)                       | The number of pull requests unaltered (either not good to stale or already stale). |
+| [stale-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/stale-pull-requests-count-output)                               | The number of pull requests stale.                                                 |
+| [already-stale-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/already-stale-pull-requests-count-output)               | The number of pull requests processed which were already stale.                    |
+| [remove-stale-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/remove-stale-pull-requests-count-output)                 | The number of pull requests from where the stale state was removed.                |
+| [close-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/close-pull-requests-count-output)                               | The number of pull requests closed.                                                |
+| [deleted-pull-requests-branches-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/deleted-pull-requests-branches-count-output)         | The number of deleted pull requests branches closed.                               |
+| [added-pull-requests-comments-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/added-pull-requests-comments-count-output)             | The number of added pull requests comments.                                        |
+| [added-pull-requests-labels-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/added-pull-requests-labels-count-output)                 | The number of added pull requests labels.                                          |
+| [draft-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/draft-pull-requests-count-output)                               | The number of pull requests converted to draft.                                    |
+| [called-api-pull-requests-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/called-api-pull-requests-count-output)                     | The number of GitHub API calls performed for the pull requests.                    |
+| [called-api-pull-requests-queries-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/called-api-pull-requests-queries-count-output)     | The number of GitHub API queries calls performed for the pull requests.            |
+| [called-api-pull-requests-mutations-count](https://sonia-corporation.github.io/stale/docs/pull-requests/outputs/called-api-pull-requests-mutations-count-output) | The number of GitHub API mutations calls performed for the pull requests.          |
 
 ## Examples
 

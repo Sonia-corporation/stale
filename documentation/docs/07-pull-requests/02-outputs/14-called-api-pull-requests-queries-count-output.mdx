@@ -1,0 +1,28 @@
+---
+id: called-api-pull-requests-queries-count-output
+title: Called api pull requests queries count output
+tags:
+  - Pull requests
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `called-api-pull-requests-queries-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of GitHub API queries calls performed for the pull requests.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.called-api-pull-requests-queries-count }}"
+```

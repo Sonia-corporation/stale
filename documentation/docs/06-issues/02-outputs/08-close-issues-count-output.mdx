@@ -1,0 +1,28 @@
+---
+id: close-issues-count-output
+title: Close issues count output
+tags:
+  - Issues
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `close-issues-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of issues closed.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.close-issues-count }}"
+```
