@@ -4,14 +4,14 @@
         <title>GitHub stale action Blog</title>
         <link>https://sonia-corporation.github.io/stale/blog</link>
         <description>GitHub stale action Blog</description>
-        <lastBuildDate>Sat, 29 Jan 2022 23:16:29 GMT</lastBuildDate>
+        <lastBuildDate>Mon, 31 Jan 2022 23:48:03 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <item>
             <title><![CDATA[Welcome!]]></title>
             <link>https://sonia-corporation.github.io/stale/blog/welcome</link>
             <guid>welcome</guid>
-            <pubDate>Sat, 29 Jan 2022 23:16:29 GMT</pubDate>
+            <pubDate>Mon, 31 Jan 2022 23:48:03 GMT</pubDate>
             <description><![CDATA[Welcome to the very first version of the Website!]]></description>
             <content:encoded><![CDATA[<p>Happy to announce that this is the very first version of this website!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="why-even-bother">Why even bother?<a class="hash-link" href="#why-even-bother" title="Direct link to heading">​</a></h2><p>We really think that handling a huge number of issues on a repository is time-consuming, a real grunt task in a way.<br>
 <!-- -->We hope that by adding this website, you will have access to even further help to let you customize your stale action at your convenience.<br>
