@@ -18,5 +18,13 @@
   "sidebar.tutorialSidebar.category.Examples": {
     "message": "Exemples",
     "description": "The label for category Examples in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Inputs": {
+    "message": "Inputs",
+    "description": "The label for category Inputs in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Outputs": {
+    "message": "Outputs",
+    "description": "The label for category Outputs in sidebar tutorialSidebar"
   }
 }
