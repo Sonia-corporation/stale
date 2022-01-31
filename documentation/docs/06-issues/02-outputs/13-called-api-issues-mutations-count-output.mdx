@@ -1,0 +1,28 @@
+---
+id: called-api-issues-mutations-count-output
+title: Called api issues mutations count output
+tags:
+  - Issues
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `called-api-issues-mutations-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of GitHub API mutations calls performed for the issues.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.called-api-issues-mutations-count }}"
+```

@@ -1,0 +1,28 @@
+---
+id: added-issues-comments-count-output
+title: Added issues comments count output
+tags:
+  - Issues
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `added-issues-comments-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of added issues comments.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.added-issues-comments-count }}"
+```

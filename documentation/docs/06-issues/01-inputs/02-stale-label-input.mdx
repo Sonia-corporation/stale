@@ -1,0 +1,41 @@
+---
+id: issue-stale-label-input
+title: Stale issue label input
+tags:
+  - Issues
+  - Inputs
+---
+
+### Input {#input}
+
+Name: `issue-stale-label`  
+Type: `string`  
+Default value: `stale`
+
+### Description {#description}
+
+This input will let you define the label (by name) that will be added to your issues when they are considered as stale.
+
+If the label is added to an issue (based on the [days before stale input](issue-days-before-stale-input)), the next time the issue is processed, the workflow will process it as a candidate for un-stale.  
+If the issue was updated after the addition of the label, the issue will be un-stale, and the label will be removed.
+
+Once the un-stale processing is done, if the issue is still stale, the workflow will then process it as a candidate for closing.  
+If the issue is stale for too long (based on the [days before close input](issue-days-before-close-input)), the issue will be closed.
+
+:::caution
+
+The label must be a real label, existing inside your repository list of labels (_github.com/your-organization/your-repository/labels_).  
+If not, the GitHub API will throw an error.
+
+:::
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-stale-label: stale-label
+```

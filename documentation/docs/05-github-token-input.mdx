@@ -1,0 +1,29 @@
+---
+id: github-token-input
+title: GitHub token input
+tags:
+  - Common
+  - Inputs
+---
+
+### Input {#input}
+
+Name: `github-token`  
+Type: `string`  
+Default value: `${{ github.token }}`
+
+### Description {#description}
+
+This input will let you define what GitHub token to use to perform the calls to the GitHub API.  
+You can also read the [Automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) to have more information.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  github-token: ${{ env.GITHUB_TOKEN }}
+```

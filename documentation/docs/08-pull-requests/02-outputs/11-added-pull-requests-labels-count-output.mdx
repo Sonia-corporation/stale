@@ -1,0 +1,28 @@
+---
+id: added-pull-requests-labels-count-output
+title: Added pull requests labels count output
+tags:
+  - Pull requests
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `added-pull-requests-labels-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of added pull requests labels.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.added-pull-requests-labels-count }}"
+```
