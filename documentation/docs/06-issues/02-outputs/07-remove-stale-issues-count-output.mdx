@@ -1,0 +1,28 @@
+---
+id: remove-stale-issues-count-output
+title: Remove stale issues count output
+tags:
+  - Issues
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `remove-stale-issues-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of issues from where the stale state was removed.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.remove-stale-issues-count }}"
+```

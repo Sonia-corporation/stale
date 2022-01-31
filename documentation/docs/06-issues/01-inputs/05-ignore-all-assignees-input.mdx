@@ -1,0 +1,32 @@
+---
+id: issue-ignore-all-assignees-input
+title: Ignore all issue assignees input
+tags:
+  - Issues
+  - Inputs
+---
+
+### Input {#input}
+
+Name: `issue-ignore-all-assignees`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This input will let you ignore the processing of the issues which have at least one assignee.  
+This can be useful when you use assignees to assign the issues to the members of your repository which will for sure close or at least process the issues very soon.
+
+However, if you are not certain that every assignee will handle for sure the processing of the issues, this input may not suit you.  
+You may prefer to use instead the [ignore any assignees input](issue-ignore-any-assignees-input) to list only some specific assignees or not use this input at all.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-ignore-all-assignees: true
+```

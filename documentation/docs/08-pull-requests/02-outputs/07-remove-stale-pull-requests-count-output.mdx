@@ -1,0 +1,28 @@
+---
+id: remove-stale-pull-requests-count-output
+title: Remove stale pull requests count output
+tags:
+  - Pull requests
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `remove-stale-pull-requests-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of pull requests from where the stale state was removed.
+
+### Example {#example}
+
+```yml {6}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.remove-stale-pull-requests-count }}"
+```
