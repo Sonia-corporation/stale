@@ -1,6 +1,6 @@
 ---
-id: processed-issues-count-output
-title: Processed issues count output
+id: draft-pull-requests-count-output
+title: Draft pull requests count output
 tags:
   - Pull requests
   - Outputs
@@ -8,7 +8,7 @@ tags:
 
 ### Output {#output}
 
-Name: `processed-issues-count`  
+Name: `draft-pull-requests-count`  
 Type: `number`
 
 ### Description {#description}
@@ -24,5 +24,5 @@ steps:
     id: stale
     uses: sonia-corporation/stale@latest
   - name: Count
-    run: echo "${{ steps.Stale.outputs.processed-issues-count }}"
+    run: echo "${{ steps.Stale.outputs.draft-pull-requests-count }}"
 ```

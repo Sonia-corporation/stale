@@ -1,6 +1,6 @@
 ---
-id: draft-pull-requests-count-output
-title: Draft pull requests count output
+id: added-pull-requests-labels-count-output
+title: Added pull requests labels count output
 tags:
   - Pull requests
   - Outputs
@@ -8,7 +8,7 @@ tags:
 
 ### Output {#output}
 
-Name: `draft-pull-requests-count`  
+Name: `added-pull-requests-labels-count`  
 Type: `number`
 
 ### Description {#description}
@@ -24,5 +24,5 @@ steps:
     id: stale
     uses: sonia-corporation/stale@latest
   - name: Count
-    run: echo "${{ steps.Stale.outputs.draft-pull-requests-count }}"
+    run: echo "${{ steps.Stale.outputs.added-pull-requests-labels-count }}"
 ```
