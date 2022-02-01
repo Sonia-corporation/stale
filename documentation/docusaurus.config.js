@@ -1,5 +1,4 @@
 // @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
 const lightCodeTheme = require(`prism-react-renderer/themes/github`);
 const darkCodeTheme = require(`prism-react-renderer/themes/dracula`);
 /** @type {import('@docusaurus/types').Config} */
@@ -48,6 +47,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      algolia: {
+        apiKey: `2b0b5f5c53eb7c8e61d84c350ca9af70`,
+        appId: `2SFOQ67X82`,
+        contextualSearch: true,
+        indexName: `github-stale-action`,
+      },
       footer: {
         copyright: `Copyright © ${new Date().getFullYear()} Stale, Sonia Corporation. Built with Docusaurus.`,
         links: [
