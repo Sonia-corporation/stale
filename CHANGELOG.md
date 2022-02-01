@@ -1,5 +1,13 @@
 # Semantic Versioning Changelog
 
+# [1.36.0](https://github.com/Sonia-corporation/stale/compare/1.35.0...1.36.0) (2022-02-01)
+
+
+### :books: Documentation
+
+* **website:** add a search bar ([f32c9dc](https://github.com/Sonia-corporation/stale/commit/f32c9dcd89837a9fb49c5c72fcddb6cc2a04c3b4)), closes [#325](https://github.com/Sonia-corporation/stale/issues/325)
+  Provided by Algolia
+
 # [1.35.0](https://github.com/Sonia-corporation/stale/compare/1.34.0...1.35.0) (2022-01-31)
 
 
