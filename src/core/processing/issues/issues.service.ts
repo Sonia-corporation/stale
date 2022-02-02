@@ -47,6 +47,18 @@ export class IssuesService extends AbstractProcessingService<IGithubApiGetIssues
     return true;
   }
 
+  public hasReachedQueriesLimit$$(): boolean {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    // If the option is above or equal to 0
+    // Negative number is equivalent of disabling this feature
+    if (issuesInputs.issueLimitApiQueriesCount >= 0) {
+      return IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount > issuesInputs.issueLimitApiQueriesCount;
+    }
+
+    return false;
+  }
+
   protected _increaseProcessedItemsCount(): void {
     IssuesStatisticsService.getInstance().increaseProcessedIssuesCount();
   }

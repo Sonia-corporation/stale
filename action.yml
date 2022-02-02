@@ -68,6 +68,10 @@ inputs:
     description: 'Allow to process the issues.'
     required: false
     default: 'true'
+  issue-limit-api-queries-count:
+    description: 'Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).'
+    required: false
+    default: '-1'
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
