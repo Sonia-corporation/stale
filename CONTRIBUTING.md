@@ -128,6 +128,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
 
 - Check if the issues processing is enabled and stop the processing if this is the case (coming from the `issue-processing` input)
 - Fetch all the open issues per batch of 20, sorted by update date from the oldest first
+- Check if the issue can be processed
+  - If the issues API queries calls performed are below the limit (coming from the `issue-limit-api-queries-count`), stop the processing
 - Check if the issue is locked and stop the processing if this is the case
 - Check if the issue has a label (except the stale one) and stop the processing if this is the case (coming from the `issue-ignore-all-labels` input)
 - Check if the issue has any of the ignored labels and stop the processing if this is the case (coming from the `issue-ignore-any-labels` input)
@@ -157,6 +159,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
 
 - Check if the pull requests processing is enabled and stop the processing if this is the case (coming from the `pull-request-processing` input)
 - Fetch all the open pull requests per batch of 20, sorted by update date from the oldest first
+- Check if the pull request can be processed
+  - If the pull requests API queries calls performed are below the limit (coming from the `pull-request-limit-api-queries-count`), stop the processing
 - Check if the pull request is locked and stop the processing if this is the case
 - Check if the pull request has a label (except the stale one) and stop the processing if this is the case (coming from the `pull-request-ignore-all-labels` input)
 - Check if the pull request has any of the ignored labels and stop the processing if this is the case (coming from the `pull-request-ignore-any-labels` input)
