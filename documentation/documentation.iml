@@ -8,5 +8,12 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="lodash" level="project" />
+    <orderEntry type="library" name="luxon" level="project" />
+    <orderEntry type="library" name="terminal-link" level="project" />
+    <orderEntry type="library" name="ts-auto-mock" level="project" />
+    <orderEntry type="library" name="types" level="project" />
+    <orderEntry type="library" name="actions" level="project" />
+    <orderEntry type="library" name="jest" level="project" />
   </component>
 </module>

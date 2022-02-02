@@ -11,11 +11,9 @@ tags:
 At this point, you shall have a working stale action.  
 Before going further into the customization, you may want to try it first.
 
-:::tip
+### Test it with the dry-run mode {#test-it-with-the-dry-run-mode}
 
 Use the [dry-run](../dry-run-input) mode to avoid altering your repository yet.
-
-:::
 
 ```yml {5-6} title=".github/workflows/stale.yml"
 # ...
@@ -32,6 +30,20 @@ You can now check the logs, and especially the [statistics](../statistics) at th
 You will have a better idea over what to expect when a real run without the [dry-run](../dry-run-input) mode occur.
 
 :::
+
+### Test it with a limited amount of API calls {#test-it-with-a-limited-amount-of-api-calls}
+
+If you still wish to play it safe, you can configure a limit of API queries calls for your [issues](../issues/inputs/issue-limit-api-queries-count-input) and [pull requests](../pull-requests/inputs/pull-request-limit-api-queries-count-input) to alter your repository on a reduced scope.
+
+```yml {5-7} title=".github/workflows/stale.yml"
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-limit-api-queries-count: 30
+  pull-request-limit-api-queries-count: 30
+```
 
 ## Customize the behaviour {#customize-the-behaviour}
 

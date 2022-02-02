@@ -117,6 +117,7 @@ describe(`IssuesService`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let processBatchSpy: jest.SpyInstance;
     let issuesStatisticsServiceIncreaseProcessedIssuesCountSpy: jest.SpyInstance;
+    let canProcessSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       mockedIssueProcessor.mockClear();
@@ -136,6 +137,7 @@ describe(`IssuesService`, (): void => {
       issuesStatisticsServiceIncreaseProcessedIssuesCountSpy = jest
         .spyOn(IssuesStatisticsService.getInstance(), `increaseProcessedIssuesCount`)
         .mockImplementation();
+      canProcessSpy = jest.spyOn(service, `canProcess$$`).mockImplementation();
     });
 
     it(`should log about the fetch of this batch of issues`, async (): Promise<void> => {
@@ -200,26 +202,54 @@ describe(`IssuesService`, (): void => {
         );
       });
 
-      it(`should increase the counter of processed issues statistic by 1`, async (): Promise<void> => {
-        expect.assertions(2);
+      describe(`when the issues can be processed`, (): void => {
+        beforeEach((): void => {
+          canProcessSpy.mockReturnValue(true);
+        });
 
-        await service.processBatch();
+        it(`should process the issue`, async (): Promise<void> => {
+          expect.assertions(6);
 
-        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(1);
-        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+          await service.processBatch();
+
+          expect(mockedIssueProcessor).toHaveBeenCalledTimes(1);
+          expect(mockedIssueProcessor).toHaveBeenCalledWith(gitHubApiIssue, mockedIssueLogger.mock.instances[0]);
+          expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(1);
+          expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
+          expect(mockedIssueLogger).toHaveBeenCalledTimes(1);
+          expect(mockedIssueLogger).toHaveBeenCalledWith(8);
+        });
+
+        it(`should increase the counter of processed issues' statistic by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+        });
       });
 
-      it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(6);
+      describe(`when the issues cannot be processed`, (): void => {
+        beforeEach((): void => {
+          canProcessSpy.mockReturnValue(false);
+        });
 
-        await service.processBatch();
+        it(`should not process the issue`, async (): Promise<void> => {
+          expect.assertions(1);
 
-        expect(mockedIssueProcessor).toHaveBeenCalledTimes(1);
-        expect(mockedIssueProcessor).toHaveBeenCalledWith(gitHubApiIssue, mockedIssueLogger.mock.instances[0]);
-        expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(1);
-        expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
-        expect(mockedIssueLogger).toHaveBeenCalledTimes(1);
-        expect(mockedIssueLogger).toHaveBeenCalledWith(8);
+          await service.processBatch();
+
+          expect(mockedIssueProcessor.prototype.process).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the counter of processed issues statistic`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -267,29 +297,57 @@ describe(`IssuesService`, (): void => {
         );
       });
 
-      it(`should increase the counter of processed issues statistic by 2`, async (): Promise<void> => {
-        expect.assertions(2);
+      describe(`when the issues can be processed`, (): void => {
+        beforeEach((): void => {
+          canProcessSpy.mockReturnValue(true);
+        });
 
-        await service.processBatch();
+        it(`should process the two issues`, async (): Promise<void> => {
+          expect.assertions(9);
 
-        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(2);
-        expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+          await service.processBatch();
+
+          expect(mockedIssueProcessor).toHaveBeenCalledTimes(2);
+          expect(mockedIssueProcessor).toHaveBeenNthCalledWith(1, gitHubApiIssue1, mockedIssueLogger.mock.instances[0]);
+          expect(mockedIssueProcessor).toHaveBeenNthCalledWith(2, gitHubApiIssue2, mockedIssueLogger.mock.instances[1]);
+          expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(2);
+          expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
+          expect(mockedIssueProcessor.prototype.process.mock.calls[1]).toHaveLength(0);
+          expect(mockedIssueLogger).toHaveBeenCalledTimes(2);
+          expect(mockedIssueLogger).toHaveBeenNthCalledWith(1, 1);
+          expect(mockedIssueLogger).toHaveBeenNthCalledWith(2, 2);
+        });
+
+        it(`should increase the counter of processed issues' statistic by 2`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledTimes(2);
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).toHaveBeenCalledWith();
+        });
       });
 
-      it(`should process the two issues`, async (): Promise<void> => {
-        expect.assertions(9);
+      describe(`when the issues cannot be processed`, (): void => {
+        beforeEach((): void => {
+          canProcessSpy.mockReturnValue(false);
+        });
 
-        await service.processBatch();
+        it(`should not process the issues`, async (): Promise<void> => {
+          expect.assertions(1);
 
-        expect(mockedIssueProcessor).toHaveBeenCalledTimes(2);
-        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(1, gitHubApiIssue1, mockedIssueLogger.mock.instances[0]);
-        expect(mockedIssueProcessor).toHaveBeenNthCalledWith(2, gitHubApiIssue2, mockedIssueLogger.mock.instances[1]);
-        expect(mockedIssueProcessor.prototype.process.mock.calls).toHaveLength(2);
-        expect(mockedIssueProcessor.prototype.process.mock.calls[0]).toHaveLength(0);
-        expect(mockedIssueProcessor.prototype.process.mock.calls[1]).toHaveLength(0);
-        expect(mockedIssueLogger).toHaveBeenCalledTimes(2);
-        expect(mockedIssueLogger).toHaveBeenNthCalledWith(1, 1);
-        expect(mockedIssueLogger).toHaveBeenNthCalledWith(2, 2);
+          await service.processBatch();
+
+          expect(mockedIssueProcessor.prototype.process).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the counter of processed issues statistic`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(issuesStatisticsServiceIncreaseProcessedIssuesCountSpy).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -307,98 +365,197 @@ describe(`IssuesService`, (): void => {
       );
     });
 
-    describe(`when this batch does not contains more issues to process`, (): void => {
-      let gitHubApiIssue1: IGithubApiIssue;
-      let gitHubApiIssue2: IGithubApiIssue;
-      let githubApiIssues: IGithubApiGetIssues;
-
+    describe(`when the issues of this batch have been all processed as expected`, (): void => {
       beforeEach((): void => {
-        mockedIssueLogger.mockClear();
-        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
-        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
-        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
-          repository: {
-            issues: {
-              nodes: [gitHubApiIssue1, gitHubApiIssue2],
-              pageInfo: {
-                endCursor: undefined,
-                hasNextPage: false,
-              },
-            },
-          },
-        });
-
-        githubApiIssuesServiceFetchIssuesSpy.mockResolvedValue(githubApiIssues);
+        canProcessSpy.mockReturnValue(true);
       });
 
-      it(`should log about the success of the process of all the issues`, async (): Promise<void> => {
-        expect.assertions(2);
+      describe(`when this batch does not contain more issues to process`, (): void => {
+        let gitHubApiIssue1: IGithubApiIssue;
+        let gitHubApiIssue2: IGithubApiIssue;
+        let githubApiIssues: IGithubApiGetIssues;
 
-        await service.processBatch();
+        beforeEach((): void => {
+          mockedIssueLogger.mockClear();
+          gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+          gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
+            repository: {
+              issues: {
+                nodes: [gitHubApiIssue1, gitHubApiIssue2],
+                pageInfo: {
+                  endCursor: undefined,
+                  hasNextPage: false,
+                },
+              },
+            },
+          });
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          4,
-          `green-All the issues batches`,
-          `white-(value-1white-)`,
-          `green-were processed`
-        );
+          githubApiIssuesServiceFetchIssuesSpy.mockResolvedValue(githubApiIssues);
+        });
+
+        it(`should log about the success of the process of all the issues`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            4,
+            `green-All the issues batches`,
+            `white-(value-1white-)`,
+            `green-were processed`
+          );
+        });
+      });
+
+      describe(`when this batch contains more issues to process`, (): void => {
+        let gitHubApiIssue1: IGithubApiIssue;
+        let gitHubApiIssue2: IGithubApiIssue;
+        let githubApiIssues: IGithubApiGetIssues;
+
+        beforeEach((): void => {
+          gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+          gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
+            repository: {
+              issues: {
+                nodes: [gitHubApiIssue1, gitHubApiIssue2],
+                pageInfo: {
+                  endCursor: `dummy-end-cursor`,
+                  hasNextPage: true,
+                },
+              },
+            },
+          });
+
+          githubApiIssuesServiceFetchIssuesSpy
+            .mockResolvedValue(
+              createHydratedMock<IGithubApiGetIssues>({
+                repository: {
+                  issues: {
+                    nodes: [],
+                    pageInfo: {
+                      endCursor: undefined,
+                      hasNextPage: false,
+                    },
+                  },
+                },
+              })
+            )
+            .mockResolvedValueOnce(githubApiIssues);
+        });
+
+        it(`should log about the need of creating a new batch to process the next issues`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Continuing with the next batch of issues`);
+        });
+
+        it(`should process the next batch of issues`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(processBatchSpy).toHaveBeenCalledTimes(2);
+          expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
+        });
       });
     });
 
-    describe(`when this batch contains more issues to process`, (): void => {
-      let gitHubApiIssue1: IGithubApiIssue;
-      let gitHubApiIssue2: IGithubApiIssue;
-      let githubApiIssues: IGithubApiGetIssues;
-
+    describe(`when the issues of this batch were not all processed due to limits`, (): void => {
       beforeEach((): void => {
-        gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
-        gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
-        githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
-          repository: {
-            issues: {
-              nodes: [gitHubApiIssue1, gitHubApiIssue2],
-              pageInfo: {
-                endCursor: `dummy-end-cursor`,
-                hasNextPage: true,
-              },
-            },
-          },
-        });
+        canProcessSpy.mockReturnValue(false);
+      });
 
-        githubApiIssuesServiceFetchIssuesSpy
-          .mockResolvedValue(
-            createHydratedMock<IGithubApiGetIssues>({
-              repository: {
-                issues: {
-                  nodes: [],
-                  pageInfo: {
-                    endCursor: undefined,
-                    hasNextPage: false,
-                  },
+      describe(`when this batch does not contain more issues to process`, (): void => {
+        let gitHubApiIssue1: IGithubApiIssue;
+        let gitHubApiIssue2: IGithubApiIssue;
+        let githubApiIssues: IGithubApiGetIssues;
+
+        beforeEach((): void => {
+          mockedIssueLogger.mockClear();
+          gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+          gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
+            repository: {
+              issues: {
+                nodes: [gitHubApiIssue1, gitHubApiIssue2],
+                pageInfo: {
+                  endCursor: undefined,
+                  hasNextPage: false,
                 },
               },
-            })
-          )
-          .mockResolvedValueOnce(githubApiIssues);
+            },
+          });
+
+          githubApiIssuesServiceFetchIssuesSpy.mockResolvedValue(githubApiIssues);
+        });
+
+        it(`should log about stopping the processing sooner than expected`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            4,
+            `Stopping the processing of batches sooner than expected to respect the limits`
+          );
+        });
       });
 
-      it(`should log about the need of creating a new batch to process the next issues`, async (): Promise<void> => {
-        expect.assertions(2);
+      describe(`when this batch contains more issues to process`, (): void => {
+        let gitHubApiIssue1: IGithubApiIssue;
+        let gitHubApiIssue2: IGithubApiIssue;
+        let githubApiIssues: IGithubApiGetIssues;
 
-        await service.processBatch();
+        beforeEach((): void => {
+          gitHubApiIssue1 = createHydratedMock<IGithubApiIssue>();
+          gitHubApiIssue2 = createHydratedMock<IGithubApiIssue>();
+          githubApiIssues = createHydratedMock<IGithubApiGetIssues>({
+            repository: {
+              issues: {
+                nodes: [gitHubApiIssue1, gitHubApiIssue2],
+                pageInfo: {
+                  endCursor: `dummy-end-cursor`,
+                  hasNextPage: true,
+                },
+              },
+            },
+          });
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Continuing with the next batch of issues`);
-      });
+          githubApiIssuesServiceFetchIssuesSpy
+            .mockResolvedValue(
+              createHydratedMock<IGithubApiGetIssues>({
+                repository: {
+                  issues: {
+                    nodes: [],
+                    pageInfo: {
+                      endCursor: undefined,
+                      hasNextPage: false,
+                    },
+                  },
+                },
+              })
+            )
+            .mockResolvedValueOnce(githubApiIssues);
+        });
 
-      it(`should process the next batch of issues`, async (): Promise<void> => {
-        expect.assertions(2);
+        it(`should log about stopping the processing sooner than expected`, async (): Promise<void> => {
+          expect.assertions(2);
 
-        await service.processBatch();
+          await service.processBatch();
 
-        expect(processBatchSpy).toHaveBeenCalledTimes(2);
-        expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            4,
+            `Stopping the processing of batches sooner than expected to respect the limits`
+          );
+        });
       });
     });
   });
@@ -482,6 +639,275 @@ describe(`IssuesService`, (): void => {
         const result = service.isProcessingEnabled$$();
 
         expect(result).toBeTrue();
+      });
+    });
+  });
+
+  describe(`canProcess$$()`, (): void => {
+    let itemNumber: number;
+
+    let loggerServiceInfoSpy: jest.SpyInstance;
+    let hasReachedQueriesLimitSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      itemNumber = 666;
+
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      hasReachedQueriesLimitSpy = jest.spyOn(service, `hasReachedQueriesLimit$$`).mockImplementation();
+    });
+
+    it(`should log about checking if the next issue can be processed`, (): void => {
+      expect.assertions(2);
+
+      service.canProcess$$(itemNumber);
+
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+        1,
+        `Checking if the issue`,
+        `value-#666`,
+        `whiteBright-can be processed...`
+      );
+    });
+
+    describe(`when the issues API queries calls count has been reached`, (): void => {
+      beforeEach((): void => {
+        hasReachedQueriesLimitSpy.mockReturnValue(true);
+      });
+
+      it(`should log about reaching the limit of issues API queries calls count`, (): void => {
+        expect.assertions(2);
+
+        service.canProcess$$(itemNumber);
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `The limit of issues API queries calls count has been reached. Stopping the processing of issues`
+        );
+      });
+
+      it(`should return false`, (): void => {
+        expect.assertions(1);
+
+        const result = service.canProcess$$(itemNumber);
+
+        expect(result).toBeFalse();
+      });
+    });
+
+    describe(`when the issues API queries calls count has not been reached yet`, (): void => {
+      beforeEach((): void => {
+        hasReachedQueriesLimitSpy.mockReturnValue(false);
+      });
+
+      it(`should log about not reaching the limit of issues API queries calls`, (): void => {
+        expect.assertions(2);
+
+        service.canProcess$$(itemNumber);
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `The limit of API queries calls count is not reached yet, continuing...`
+        );
+      });
+
+      it(`should log about allowing to process the next issue`, (): void => {
+        expect.assertions(2);
+
+        service.canProcess$$(itemNumber);
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          3,
+          `The issue`,
+          `value-#666`,
+          `whiteBright-can be processed`
+        );
+      });
+
+      it(`should return true`, (): void => {
+        expect.assertions(1);
+
+        const result = service.canProcess$$(itemNumber);
+
+        expect(result).toBeTrue();
+      });
+    });
+  });
+
+  describe(`hasReachedQueriesLimit$$()`, (): void => {
+    let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      issuesInputsServiceGetInputsSpy = jest
+        .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+        .mockReturnValue(createHydratedMock<IIssuesInputs>());
+    });
+
+    it(`should get the issues inputs`, (): void => {
+      expect.assertions(2);
+
+      service.hasReachedQueriesLimit$$();
+
+      expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+      expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+    });
+
+    describe(`when the "issueLimitApiQueriesCount" input is set to -1`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiQueriesCount: -1,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues queries yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues query`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 1;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 2 called API issues queries`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 2;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`when the "issueLimitApiQueriesCount" input is set to 0`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiQueriesCount: 0,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues queries yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues query`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 1;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when there is 2 called API issues queries`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 2;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+    });
+
+    describe(`when the "issueLimitApiQueriesCount" input is set to 1`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiQueriesCount: 1,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues queries yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues query`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 1;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 2 called API issues queries`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 2;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeTrue();
+        });
       });
     });
   });
