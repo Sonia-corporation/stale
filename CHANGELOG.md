@@ -1,5 +1,17 @@
 # Semantic Versioning Changelog
 
+# [1.37.0](https://github.com/Sonia-corporation/stale/compare/1.36.0...1.37.0) (2022-02-02)
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-limit-api-queries-count` ([db5effb](https://github.com/Sonia-corporation/stale/commit/db5effb74d732af800108c6634639cbae6ec9336)), closes [#254](https://github.com/Sonia-corporation/stale/issues/254)
+  Before processing each issue, the workflow will check if the input is enabled.
+If this is the case, the processing may stop if the statistics for queries are higher than the limit.
+* **prs:** add new input `pull-request-limit-api-queries-count` ([ee9a293](https://github.com/Sonia-corporation/stale/commit/ee9a29366bf0ef6a3cd0dce7f84b08a4987e1d7a)), closes [#254](https://github.com/Sonia-corporation/stale/issues/254)
+  Before processing each pull request, the workflow will check if the input is enabled.
+If this is the case, the processing may stop if the statistics for queries are higher than the limit.
+
 # [1.36.0](https://github.com/Sonia-corporation/stale/compare/1.35.0...1.36.0) (2022-02-01)
 
 
