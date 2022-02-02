@@ -47,6 +47,21 @@ export class PullRequestsService extends AbstractProcessingService<IGithubApiGet
     return true;
   }
 
+  public hasReachedQueriesLimit$$(): boolean {
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    // If the option is above or equal to 0
+    // Negative number is equivalent of disabling this feature
+    if (pullRequestsInputs.pullRequestLimitApiQueriesCount >= 0) {
+      return (
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount >
+        pullRequestsInputs.pullRequestLimitApiQueriesCount
+      );
+    }
+
+    return false;
+  }
+
   protected _increaseProcessedItemsCount(): void {
     PullRequestsStatisticsService.getInstance().increaseProcessedPullRequestsCount();
   }

@@ -91,6 +91,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-add-labels-after-stale](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-add-labels-after-stale-input)           | A list of labels added when the processing stale the issue (multiline).                                                                         |         |
 | [issue-add-labels-after-close](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-add-labels-after-close-input)           | A list of labels added when the processing close the issue (multiline).                                                                         |         |
 | [issue-processing](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-processing-input)                                   | Allow to process the issues.                                                                                                                    | `true`  |
+| [issue-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-limit-api-queries-count)               | Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).                                           | `-1`    |
 
 ## All the issues outputs
 
@@ -130,6 +131,7 @@ All the inputs that are used both for issues and pull requests.
 | [pull-request-add-labels-after-close](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-add-labels-after-close-input)           | A list of labels added when the processing close the pull request (multiline).                                                                         |         |
 | [pull-request-processing](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-processing-input)                                   | Allow to process the pull requests.                                                                                                                    | `true`  |
 | [pull-request-to-draft-instead-of-stale](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-to-draft-instead-of-stale-input)     | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                          | `false` |
+| [pull-request-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-limit-api-queries-count)               | Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).                                           | `-1`    |
 
 ## All the pull requests outputs
 
@@ -152,97 +154,7 @@ All the inputs that are used both for issues and pull requests.
 
 ## Examples
 
-### All issues inputs example
-
-```yml
-name: Stale
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 12 * * *'
-jobs:
-  Stale:
-    runs-on: ubuntu-latest
-    name: Run stale
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-      - name: Stale
-        id: stale
-        uses: sonia-corporation/stale@1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          dry-run: false
-          issue-ignore-all-assignees: false
-          issue-ignore-any-assignees: |
-            marco
-            polo
-          issue-ignore-all-labels: false
-          issue-stale-label: stale
-          issue-ignore-any-labels: |
-            frozen :ice_cube:
-            help wanted :sos:
-            dependency-fix :wrench:
-            dependencies :package:
-          issue-days-before-stale: 30
-          issue-days-before-close: 10
-          issue-ignore-before-creation-date: 2020-04
-          issue-stale-comment: |
-            This issue is now stale!
-          issue-close-comment: |
-            This issue is now closed!
-          issue-ignore-all-project-cards: false
-          issue-add-labels-after-stale: |
-            wake up!
-```
-
-### All pull requests inputs example
-
-```yml
-name: Stale
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 12 * * *'
-jobs:
-  Stale:
-    runs-on: ubuntu-latest
-    name: Run stale
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v2
-      - name: Stale
-        id: stale
-        uses: sonia-corporation/stale@1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          dry-run: false
-          pull-request-ignore-all-assignees: false
-          pull-request-ignore-any-assignees: |
-            marco
-            polo
-          pull-request-ignore-all-labels: false
-          pull-request-stale-label: stale
-          pull-request-ignore-any-labels: |
-            frozen :ice_cube:
-            help wanted :sos:
-            dependency-fix :wrench:
-            dependencies :package:
-          pull-request-days-before-stale: 30
-          pull-request-days-before-close: 10
-          pull-request-ignore-before-creation-date: 2020-04
-          pull-request-stale-comment: |
-            This pull request is now stale!
-          pull-request-close-comment: |
-            This pull request is now closed!
-          pull-request-ignore-all-project-cards: false
-          pull-request-ignore-draft: false
-          pull-request-delete-branch-after-close: false
-          pull-request-add-labels-after-stale: |
-            wake up!
-```
+Checkout the [documentation](https://sonia-corporation.github.io/stale/docs/introduction) to have some examples.
 
 ## Debug the action
 

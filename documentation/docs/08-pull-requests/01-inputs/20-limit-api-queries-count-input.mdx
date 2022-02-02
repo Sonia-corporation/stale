@@ -1,0 +1,31 @@
+---
+id: pull-request-limit-api-queries-count-input
+title: Pull request limit api queries count input
+tags:
+  - Pull requests
+  - Inputs
+---
+
+### Input {#input}
+
+Name: `pull-request-limit-api-queries-count`  
+Type: `number`  
+Default value: `-1`
+
+### Description {#description}
+
+This input will let you define a limit count of pull requests API queries calls performed during the processing.  
+If the limit is reached, the ongoing processed pull request will finish it's processing then all other pull requests will be ignored.  
+This can be useful when you want to play it safe with this action.  
+This can be also very useful if you have a lot of pull requests to process, and you want to limit the quotas of your associated [GitHub token](../../github-token-input).
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-limit-api-queries-count: false
+```

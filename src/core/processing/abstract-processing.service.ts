@@ -54,6 +54,8 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
 
     const items: TItems | never = await this._getItems(fromPageId);
     const itemsCount: number = this._getPagination(items).nodes.length;
+    let processedItemsCount: number = 0;
+    let shouldBeProcess: boolean = true;
 
     LoggerService.info(
       `Found`,
@@ -63,11 +65,20 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
     );
 
     for (const item of this._getPagination(items).nodes) {
+      shouldBeProcess = this.canProcess$$(item.number);
+
+      // Stop the processing here in the current batch
+      if (!shouldBeProcess) {
+        break;
+      }
+
       // Note: we do not wish to have a blazing fast action
       // The goal is to process a single item at a time
+      // Hence the "await" ; )
       // eslint-disable-next-line no-await-in-loop
       await this._process(item);
 
+      processedItemsCount++;
       this._increaseProcessedItemsCount();
     }
 
@@ -77,19 +88,62 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       LoggerFormatService.green(`processed`)
     );
 
-    if (this._getPagination(items).pageInfo.hasNextPage) {
-      LoggerService.info(`Continuing with the next batch of ${_.toLower(this._itemType)}s`);
-
-      await this.processBatch(++batch, this._getPagination(items).pageInfo.endCursor);
+    if (!shouldBeProcess) {
+      LoggerService.info(`Stopping the processing of batches sooner than expected to respect the limits`);
     } else {
-      LoggerService.info(
-        LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s batches`),
-        LoggerFormatService.white(`(${LoggerService.value(batch)}${LoggerFormatService.white(`)`)}`),
-        LoggerFormatService.green(`were processed`)
-      );
+      if (this._getPagination(items).pageInfo.hasNextPage) {
+        LoggerService.info(`Continuing with the next batch of ${_.toLower(this._itemType)}s`);
+
+        await this.processBatch(++batch, this._getPagination(items).pageInfo.endCursor);
+      } else {
+        LoggerService.info(
+          LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s batches`),
+          LoggerFormatService.white(`(${LoggerService.value(batch)}${LoggerFormatService.white(`)`)}`),
+          LoggerFormatService.green(`were processed`)
+        );
+      }
     }
 
-    return this._getPagination(items).totalCount;
+    return processedItemsCount;
+  }
+
+  /**
+   * @description
+   * Check if the item can be processed before starting the processing
+   * Based on the limit of API queries calls count
+   * @param {Readonly<number>} itemNumber The number of the item to process
+   * @returns {boolean} Return true if the item can be processed
+   * @private
+   */
+  public canProcess$$(itemNumber: Readonly<number>): boolean {
+    LoggerService.info(
+      `Checking if the ${_.toLower(this._itemType)}`,
+      LoggerService.value(`#${itemNumber}`),
+      LoggerFormatService.whiteBright(`can be processed...`)
+    );
+
+    const hasReachedQueriesLimit: boolean = this.hasReachedQueriesLimit$$();
+
+    if (hasReachedQueriesLimit) {
+      // @todo add the reached count
+      LoggerService.info(
+        `The limit of ${_.toLower(
+          this._itemType
+        )}s API queries calls count has been reached. Stopping the processing of ${_.toLower(this._itemType)}s`
+      );
+
+      return false;
+    }
+
+    // @todo add the reached count versus reached count total
+    LoggerService.info(`The limit of API queries calls count is not reached yet, continuing...`);
+    LoggerService.info(
+      `The ${_.toLower(this._itemType)}`,
+      LoggerService.value(`#${itemNumber}`),
+      LoggerFormatService.whiteBright(`can be processed`)
+    );
+
+    return true;
   }
 
   /**
@@ -111,7 +165,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
   /**
    * @description
    * Allow to check if the items are issues or pull requests
-   *  @todo find a better way to check that with pure typings
+   * @todo find a better way to check that with pure typings
    * @param {IGithubApiGetIssues | IGithubApiGetPullRequests} _items The items to check
    * @returns {boolean} Return true when the items are issues
    * @private
@@ -119,6 +173,13 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
   private _isIssueItems(_items: IGithubApiGetIssues | IGithubApiGetPullRequests): _items is IGithubApiGetIssues {
     return this._itemType === `issue`;
   }
+
+  /**
+   * @description
+   * Check if the limit of API queries calls count is reached
+   * @returns {boolean} Return true when the limit of API queries calls count is reached
+   */
+  public abstract hasReachedQueriesLimit$$(): boolean;
 
   /**
    * @description
