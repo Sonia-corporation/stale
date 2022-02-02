@@ -35,13 +35,14 @@ You will have a better idea over what to expect when a real run without the [dry
 
 If you still wish to play it safe, you can configure a limit of API queries calls for your [issues](../issues/inputs/issue-limit-api-queries-count-input) and [pull requests](../pull-requests/inputs/pull-request-limit-api-queries-count-input) to alter your repository on a reduced scope.
 
-```yml {5-6} title=".github/workflows/stale.yml"
+```yml {5-7} title=".github/workflows/stale.yml"
 # ...
 name: Stale
 id: stale
 uses: sonia-corporation/stale@latest
 with:
   issue-limit-api-queries-count: 30
+  pull-request-limit-api-queries-count: 30
 ```
 
 ## Customize the behaviour {#customize-the-behaviour}
