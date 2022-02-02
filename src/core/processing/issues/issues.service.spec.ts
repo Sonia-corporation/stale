@@ -644,10 +644,14 @@ describe(`IssuesService`, (): void => {
   });
 
   describe(`canProcess$$()`, (): void => {
+    let itemNumber: number;
+
     let loggerServiceInfoSpy: jest.SpyInstance;
     let hasReachedQueriesLimitSpy: jest.SpyInstance;
 
     beforeEach((): void => {
+      itemNumber = 666;
+
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       hasReachedQueriesLimitSpy = jest.spyOn(service, `hasReachedQueriesLimit$$`).mockImplementation();
     });
@@ -655,10 +659,15 @@ describe(`IssuesService`, (): void => {
     it(`should log about checking if the next issue can be processed`, (): void => {
       expect.assertions(2);
 
-      service.canProcess$$();
+      service.canProcess$$(itemNumber);
 
       expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(1, `Checking if the next issue can be processed...`);
+      expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+        1,
+        `Checking if the issue`,
+        `value-#666`,
+        `whiteBright-can be processed...`
+      );
     });
 
     describe(`when the issues API queries calls count has been reached`, (): void => {
@@ -669,7 +678,7 @@ describe(`IssuesService`, (): void => {
       it(`should log about reaching the limit of issues API queries calls count`, (): void => {
         expect.assertions(2);
 
-        service.canProcess$$();
+        service.canProcess$$(itemNumber);
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -681,7 +690,7 @@ describe(`IssuesService`, (): void => {
       it(`should return false`, (): void => {
         expect.assertions(1);
 
-        const result = service.canProcess$$();
+        const result = service.canProcess$$(itemNumber);
 
         expect(result).toBeFalse();
       });
@@ -695,7 +704,7 @@ describe(`IssuesService`, (): void => {
       it(`should log about not reaching the limit of issues API queries calls`, (): void => {
         expect.assertions(2);
 
-        service.canProcess$$();
+        service.canProcess$$(itemNumber);
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
@@ -707,16 +716,21 @@ describe(`IssuesService`, (): void => {
       it(`should log about allowing to process the next issue`, (): void => {
         expect.assertions(2);
 
-        service.canProcess$$();
+        service.canProcess$$(itemNumber);
 
         expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(3, `The next issue can be processed`);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          3,
+          `The issue`,
+          `value-#666`,
+          `whiteBright-can be processed`
+        );
       });
 
       it(`should return true`, (): void => {
         expect.assertions(1);
 
-        const result = service.canProcess$$();
+        const result = service.canProcess$$(itemNumber);
 
         expect(result).toBeTrue();
       });

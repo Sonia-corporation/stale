@@ -141,6 +141,10 @@ inputs:
     description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
     required: false
     default: 'false'
+  pull-request-limit-api-queries-count:
+    description: 'Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).'
+    required: false
+    default: '-1'
 outputs:
   # Issues outputs
   processed-issues-count:

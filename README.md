@@ -131,6 +131,7 @@ All the inputs that are used both for issues and pull requests.
 | [pull-request-add-labels-after-close](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-add-labels-after-close-input)           | A list of labels added when the processing close the pull request (multiline).                                                                         |         |
 | [pull-request-processing](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-processing-input)                                   | Allow to process the pull requests.                                                                                                                    | `true`  |
 | [pull-request-to-draft-instead-of-stale](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-to-draft-instead-of-stale-input)     | Convert the pull request to a draft pull request instead of handling it as a stale candidate.                                                          | `false` |
+| [pull-request-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-limit-api-queries-count)               | Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).                                           | `-1`    |
 
 ## All the pull requests outputs
 
