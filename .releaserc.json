@@ -16,7 +16,17 @@
           },
           {
             "type": "perf",
-            "release": "patch"
+            "release": "minor"
+          },
+          {
+            "type": "docs",
+            "release": "patch",
+            "scope": "fix"
+          },
+          {
+            "type": "docs",
+            "release": "typo",
+            "scope": "fix"
           },
           {
             "type": "docs",
