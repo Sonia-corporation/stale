@@ -13,6 +13,8 @@ const CONTEXT = `generate-changelog`;
 async function initialize() {
   LOGGER.debug(CONTEXT, CHALK.text(`Generating the documentation changelog...`));
 
+  navigateToRoot();
+
   const originalChangelog = await loadOriginalChangelog();
   const documentationChangelog = await loadDocumentationChangelog();
 
@@ -29,7 +31,7 @@ async function initialize() {
 async function loadOriginalChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the original changelog...`));
 
-  const changelog = await FS.readFile(`../../CHANGELOG.md`, `utf-8`);
+  const changelog = await FS.readFile(`CHANGELOG.md`, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Original changelog loaded`));
 
@@ -44,7 +46,7 @@ async function loadOriginalChangelog() {
 async function loadDocumentationChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the documentation changelog...`));
 
-  const changelog = await FS.readFile(`../docs/11-changelog.md`, `utf-8`);
+  const changelog = await FS.readFile(`documentation/docs/11-changelog.md`, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog loaded`));
 
@@ -60,7 +62,7 @@ async function loadDocumentationChangelog() {
 async function updateDocumentationChangelog(content) {
   LOGGER.debug(CONTEXT, CHALK.text(`Updating the documentation changelog...`));
 
-  await FS.writeFile(`../docs/11-changelog.md`, content);
+  await FS.writeFile(`documentation/docs/11-changelog.md`, content);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog updated`));
 }
@@ -133,6 +135,24 @@ function replaceTitle(content) {
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog title replaced to "Changelog"`));
 
   return newContent;
+}
+
+/**
+ *
+ */
+function navigateToRoot() {
+  LOGGER.debug(CONTEXT, CHALK.text(`Navigating to the root directory...`));
+  LOGGER.debug(CONTEXT, CHALK.text(`The current directory is: ${process.cwd()}`));
+
+  if (process.cwd().endsWith(`documentation\\scripts`)) {
+    process.chdir(`../..`);
+    LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
+  } else if (process.cwd().endsWith(`\\documentation`)) {
+    process.chdir(`..`);
+    LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
+  }
+
+  LOGGER.success(CONTEXT, CHALK.text(`Root directory navigation done`));
 }
 
 initialize().catch((error) => {
