@@ -57,6 +57,12 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestIgnoreDraft: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_DRAFT, {
         required: false,
       }),
+      pullRequestLimitApiMutationsCount: CoreInputsService.getNumberInput$$(
+        EInputs.PULL_REQUEST_LIMIT_API_MUTATIONS_COUNT,
+        {
+          required: false,
+        }
+      ),
       pullRequestLimitApiQueriesCount: CoreInputsService.getNumberInput$$(
         EInputs.PULL_REQUEST_LIMIT_API_QUERIES_COUNT,
         {

@@ -34,5 +34,6 @@ export enum EInputs {
   PULL_REQUEST_CLOSE_COMMENT = `pull-request-close-comment`,
   PULL_REQUEST_PROCESSING = `pull-request-processing`,
   PULL_REQUEST_TO_DRAFT_INSTEAD_OF_STALE = `pull-request-to-draft-instead-of-stale`,
+  PULL_REQUEST_LIMIT_API_MUTATIONS_COUNT = `pull-request-limit-api-mutations-count`,
   PULL_REQUEST_LIMIT_API_QUERIES_COUNT = `pull-request-limit-api-queries-count`,
 }

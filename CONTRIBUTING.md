@@ -162,6 +162,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Fetch all the open pull requests per batch of 20, sorted by update date from the oldest first
 - Check if the pull request can be processed
   - If the pull requests API queries calls performed are below the limit (coming from the `pull-request-limit-api-queries-count`), stop the processing
+  - If the pull requests API mutations calls performed are below the limit (coming from the `pull-request-limit-api-mutations-count`), stop the processing
 - Check if the pull request is locked and stop the processing if this is the case
 - Check if the pull request has a label (except the stale one) and stop the processing if this is the case (coming from the `pull-request-ignore-all-labels` input)
 - Check if the pull request has any of the ignored labels and stop the processing if this is the case (coming from the `pull-request-ignore-any-labels` input)

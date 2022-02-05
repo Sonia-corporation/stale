@@ -33,6 +33,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
   pullRequestIgnoreBeforeCreationDate: ``,
   pullRequestIgnoreDraft: false,
+  pullRequestLimitApiMutationsCount: -1,
   pullRequestLimitApiQueriesCount: -1,
   pullRequestProcessing: true,
   pullRequestStaleComment: `stale-comment`,
