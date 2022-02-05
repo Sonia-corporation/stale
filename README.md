@@ -92,6 +92,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-add-labels-after-close](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-add-labels-after-close-input)           | A list of labels added when the processing close the issue (multiline).                                                                         |         |
 | [issue-processing](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-processing-input)                                   | Allow to process the issues.                                                                                                                    | `true`  |
 | [issue-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-limit-api-queries-count)               | Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).                                           | `-1`    |
+| [issue-limit-api-mutations-count](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-limit-api-mutations-count)           | Limit the quantity of API mutations calls performed during the processing of issues (-1 for unlimited).                                         | `-1`    |
 
 ## All the issues outputs
 

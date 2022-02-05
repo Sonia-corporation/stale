@@ -1,6 +1,6 @@
 ---
-id: issue-limit-api-queries-count-input
-title: Issue limit api queries count input
+id: issue-limit-api-mutations-count-input
+title: Issue limit api mutations count input
 tags:
   - Issues
   - Inputs
@@ -8,13 +8,13 @@ tags:
 
 ### Input {#input}
 
-Name: `issue-limit-api-queries-count`  
+Name: `issue-limit-api-mutations-count`  
 Type: `number`  
 Default value: `-1`
 
 ### Description {#description}
 
-This input will let you define a limit count of issues API queries (read) calls performed during the processing.  
+This input will let you define a limit count of issues API mutations (add, edit, delete) calls performed during the processing.  
 If the limit is reached, the ongoing processed issue will finish it's processing then all other issues will be ignored.  
 This can be useful when you want to play it safe with this action.  
 This can be also very useful if you have a lot of issues to process, and you want to limit the quotas of your associated [GitHub token](../../github-token-input).
@@ -27,5 +27,5 @@ name: Stale
 id: stale
 uses: sonia-corporation/stale@latest
 with:
-  issue-limit-api-queries-count: false
+  issue-limit-api-mutations-count: false
 ```
