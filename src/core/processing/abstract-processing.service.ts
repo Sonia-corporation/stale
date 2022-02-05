@@ -111,6 +111,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
    * @description
    * Check if the item can be processed before starting the processing
    * Based on the limit of API queries calls count
+   * Based on the limit of API mutations calls count
    * @param {Readonly<number>} itemNumber The number of the item to process
    * @returns {boolean} Return true if the item can be processed
    * @private
@@ -137,6 +138,23 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
 
     // @todo add the reached count versus reached count total
     LoggerService.info(`The limit of API queries calls count is not reached yet, continuing...`);
+
+    const hasReachedMutationsLimit: boolean = this.hasReachedMutationsLimit$$();
+
+    if (hasReachedMutationsLimit) {
+      // @todo add the reached count
+      LoggerService.info(
+        `The limit of ${_.toLower(
+          this._itemType
+        )}s API mutations calls count has been reached. Stopping the processing of ${_.toLower(this._itemType)}s`
+      );
+
+      return false;
+    }
+
+    // @todo add the reached count versus reached count total
+    LoggerService.info(`The limit of API mutations calls count is not reached yet, continuing...`);
+
     LoggerService.info(
       `The ${_.toLower(this._itemType)}`,
       LoggerService.value(`#${itemNumber}`),
@@ -180,6 +198,13 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
    * @returns {boolean} Return true when the limit of API queries calls count is reached
    */
   public abstract hasReachedQueriesLimit$$(): boolean;
+
+  /**
+   * @description
+   * Check if the limit of API mutations calls count is reached
+   * @returns {boolean} Return true when the limit of API mutations calls count is reached
+   */
+  public abstract hasReachedMutationsLimit$$(): boolean;
 
   /**
    * @description

@@ -648,12 +648,14 @@ describe(`IssuesService`, (): void => {
 
     let loggerServiceInfoSpy: jest.SpyInstance;
     let hasReachedQueriesLimitSpy: jest.SpyInstance;
+    let hasReachedMutationsLimitSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       itemNumber = 666;
 
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       hasReachedQueriesLimitSpy = jest.spyOn(service, `hasReachedQueriesLimit$$`).mockImplementation();
+      hasReachedMutationsLimitSpy = jest.spyOn(service, `hasReachedMutationsLimit$$`).mockImplementation();
     });
 
     it(`should log about checking if the next issue can be processed`, (): void => {
@@ -661,7 +663,7 @@ describe(`IssuesService`, (): void => {
 
       service.canProcess$$(itemNumber);
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
         1,
         `Checking if the issue`,
@@ -706,33 +708,77 @@ describe(`IssuesService`, (): void => {
 
         service.canProcess$$(itemNumber);
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `The limit of API queries calls count is not reached yet, continuing...`
         );
       });
 
-      it(`should log about allowing to process the next issue`, (): void => {
-        expect.assertions(2);
+      describe(`when the issues API mutations calls count has been reached`, (): void => {
+        beforeEach((): void => {
+          hasReachedMutationsLimitSpy.mockReturnValue(true);
+        });
 
-        service.canProcess$$(itemNumber);
+        it(`should log about reaching the limit of issues API mutations calls count`, (): void => {
+          expect.assertions(2);
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          3,
-          `The issue`,
-          `value-#666`,
-          `whiteBright-can be processed`
-        );
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The limit of issues API mutations calls count has been reached. Stopping the processing of issues`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.canProcess$$(itemNumber);
+
+          expect(result).toBeFalse();
+        });
       });
 
-      it(`should return true`, (): void => {
-        expect.assertions(1);
+      describe(`when the issues API mutations calls count has not been reached yet`, (): void => {
+        beforeEach((): void => {
+          hasReachedMutationsLimitSpy.mockReturnValue(false);
+        });
 
-        const result = service.canProcess$$(itemNumber);
+        it(`should log about not reaching the limit of issues API mutations calls`, (): void => {
+          expect.assertions(2);
 
-        expect(result).toBeTrue();
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The limit of API mutations calls count is not reached yet, continuing...`
+          );
+        });
+
+        it(`should log about allowing to process the next issue`, (): void => {
+          expect.assertions(2);
+
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            4,
+            `The issue`,
+            `value-#666`,
+            `whiteBright-can be processed`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.canProcess$$(itemNumber);
+
+          expect(result).toBeTrue();
+        });
       });
     });
   });
@@ -905,6 +951,181 @@ describe(`IssuesService`, (): void => {
           expect.assertions(1);
 
           const result = service.hasReachedQueriesLimit$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+    });
+  });
+
+  describe(`hasReachedMutationsLimit$$()`, (): void => {
+    let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      issuesInputsServiceGetInputsSpy = jest
+        .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+        .mockReturnValue(createHydratedMock<IIssuesInputs>());
+    });
+
+    it(`should get the issues inputs`, (): void => {
+      expect.assertions(2);
+
+      service.hasReachedMutationsLimit$$();
+
+      expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+      expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+    });
+
+    describe(`when the "issueLimitApiMutationsCount" input is set to -1`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiMutationsCount: -1,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues mutations yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues mutation`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 1;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 2 called API issues mutations`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 2;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`when the "issueLimitApiMutationsCount" input is set to 0`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiMutationsCount: 0,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues mutations yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues mutation`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 1;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when there is 2 called API issues mutations`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 2;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+    });
+
+    describe(`when the "issueLimitApiMutationsCount" input is set to 1`, (): void => {
+      beforeEach((): void => {
+        issuesInputsServiceGetInputsSpy.mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueLimitApiMutationsCount: 1,
+          })
+        );
+      });
+
+      describe(`when there is no called API issues mutations yet`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 0;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 1 called API issues mutation`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 1;
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when there is 2 called API issues mutations`, (): void => {
+        beforeEach((): void => {
+          IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 2;
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.hasReachedMutationsLimit$$();
 
           expect(result).toBeTrue();
         });

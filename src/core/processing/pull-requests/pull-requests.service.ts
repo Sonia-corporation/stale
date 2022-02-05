@@ -62,6 +62,11 @@ export class PullRequestsService extends AbstractProcessingService<IGithubApiGet
     return false;
   }
 
+  public hasReachedMutationsLimit$$(): boolean {
+    // @todo code it later
+    return false;
+  }
+
   protected _increaseProcessedItemsCount(): void {
     PullRequestsStatisticsService.getInstance().increaseProcessedPullRequestsCount();
   }
