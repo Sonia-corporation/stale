@@ -2,6 +2,8 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Build
+env:
+  CODECOV_VERSION: 'v0.1.15'
 on:
   push:
     branches:
@@ -148,6 +150,7 @@ jobs:
         uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          version: ${{ env.CODECOV_VERSION }}
           fail_ci_if_error: true
           flags: integration-issues
           name: Stale
@@ -197,6 +200,7 @@ jobs:
         uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          version: ${{ env.CODECOV_VERSION }}
           fail_ci_if_error: true
           flags: integration-pull-requests
           name: Stale
@@ -246,6 +250,7 @@ jobs:
         uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          version: ${{ env.CODECOV_VERSION }}
           fail_ci_if_error: true
           flags: unit
           name: Stale
