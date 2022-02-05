@@ -16,6 +16,7 @@ export enum EInputs {
   ISSUE_CLOSE_COMMENT = `issue-close-comment`,
   ISSUE_PROCESSING = `issue-processing`,
   ISSUE_LIMIT_API_QUERIES_COUNT = `issue-limit-api-queries-count`,
+  ISSUE_LIMIT_API_MUTATIONS_COUNT = `issue-limit-api-mutations-count`,
   PULL_REQUEST_DAYS_BEFORE_CLOSE = `pull-request-days-before-close`,
   PULL_REQUEST_DAYS_BEFORE_STALE = `pull-request-days-before-stale`,
   PULL_REQUEST_IGNORE_ALL_ASSIGNEES = `pull-request-ignore-all-assignees`,

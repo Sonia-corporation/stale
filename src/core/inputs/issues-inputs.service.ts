@@ -35,6 +35,9 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
       issueIgnoreAnyAssignees: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_ASSIGNEES, { required: false }),
       issueIgnoreAnyLabels: core.getMultilineInput(EInputs.ISSUE_IGNORE_ANY_LABELS, { required: false }),
       issueIgnoreBeforeCreationDate: core.getInput(EInputs.ISSUE_IGNORE_BEFORE_CREATION_DATE, { required: false }),
+      issueLimitApiMutationsCount: CoreInputsService.getNumberInput$$(EInputs.ISSUE_LIMIT_API_MUTATIONS_COUNT, {
+        required: false,
+      }),
       issueLimitApiQueriesCount: CoreInputsService.getNumberInput$$(EInputs.ISSUE_LIMIT_API_QUERIES_COUNT, {
         required: false,
       }),

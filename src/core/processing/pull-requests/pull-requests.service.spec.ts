@@ -675,7 +675,7 @@ describe(`PullRequestsService`, (): void => {
 
       service.canProcess$$(itemNumber);
 
-      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+      expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
       expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
         1,
         `Checking if the pull request`,
@@ -720,7 +720,7 @@ describe(`PullRequestsService`, (): void => {
 
         service.canProcess$$(itemNumber);
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `The limit of API queries calls count is not reached yet, continuing...`
@@ -732,9 +732,9 @@ describe(`PullRequestsService`, (): void => {
 
         service.canProcess$$(itemNumber);
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          3,
+          4,
           `The pull request`,
           `value-#666`,
           `whiteBright-can be processed`
