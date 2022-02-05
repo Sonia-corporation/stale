@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+# [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
+
+
+### :books: Documentation
+
+* **fix:** fix wrong configuration examples ([98ca681](https://github.com/Sonia-corporation/stale/commit/98ca681065bd39762b32b6db35c7fe6aec9f3550))
+
 # [1.39.0](https://github.com/Sonia-corporation/stale/compare/1.38.0...1.39.0) (2022-02-05)
 
 
