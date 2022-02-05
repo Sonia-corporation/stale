@@ -662,12 +662,14 @@ describe(`PullRequestsService`, (): void => {
 
     let loggerServiceInfoSpy: jest.SpyInstance;
     let hasReachedQueriesLimitSpy: jest.SpyInstance;
+    let hasReachedMutationsLimitSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       itemNumber = 666;
 
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       hasReachedQueriesLimitSpy = jest.spyOn(service, `hasReachedQueriesLimit$$`).mockImplementation();
+      hasReachedMutationsLimitSpy = jest.spyOn(service, `hasReachedMutationsLimit$$`).mockImplementation();
     });
 
     it(`should log about checking if the next pull request can be processed`, (): void => {
@@ -727,26 +729,70 @@ describe(`PullRequestsService`, (): void => {
         );
       });
 
-      it(`should log about allowing to process the next pull request`, (): void => {
-        expect.assertions(2);
+      describe(`when the pull requests API mutations calls count has been reached`, (): void => {
+        beforeEach((): void => {
+          hasReachedMutationsLimitSpy.mockReturnValue(true);
+        });
 
-        service.canProcess$$(itemNumber);
+        it(`should log about reaching the limit of pull requests API mutations calls count`, (): void => {
+          expect.assertions(2);
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          4,
-          `The pull request`,
-          `value-#666`,
-          `whiteBright-can be processed`
-        );
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(3);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The limit of pull requests API mutations calls count has been reached. Stopping the processing of pull requests`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = service.canProcess$$(itemNumber);
+
+          expect(result).toBeFalse();
+        });
       });
 
-      it(`should return true`, (): void => {
-        expect.assertions(1);
+      describe(`when the pull requests API mutations calls count has not been reached yet`, (): void => {
+        beforeEach((): void => {
+          hasReachedMutationsLimitSpy.mockReturnValue(false);
+        });
 
-        const result = service.canProcess$$(itemNumber);
+        it(`should log about not reaching the limit of pull requests API mutations calls`, (): void => {
+          expect.assertions(2);
 
-        expect(result).toBeTrue();
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            3,
+            `The limit of API mutations calls count is not reached yet, continuing...`
+          );
+        });
+
+        it(`should log about allowing to process the next pull request`, (): void => {
+          expect.assertions(2);
+
+          service.canProcess$$(itemNumber);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(4);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+            4,
+            `The pull request`,
+            `value-#666`,
+            `whiteBright-can be processed`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = service.canProcess$$(itemNumber);
+
+          expect(result).toBeTrue();
+        });
       });
     });
   });

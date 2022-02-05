@@ -149,6 +149,10 @@ inputs:
     description: 'Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).'
     required: false
     default: '-1'
+  pull-request-limit-api-mutations-count:
+    description: 'Limit the quantity of API mutations calls performed during the processing of pull requests (-1 for unlimited).'
+    required: false
+    default: '-1'
 outputs:
   # Issues outputs
   processed-issues-count:

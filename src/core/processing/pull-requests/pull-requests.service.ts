@@ -63,7 +63,17 @@ export class PullRequestsService extends AbstractProcessingService<IGithubApiGet
   }
 
   public hasReachedMutationsLimit$$(): boolean {
-    // @todo code it later
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    // If the option is above or equal to 0
+    // Negative number is equivalent of disabling this feature
+    if (pullRequestsInputs.pullRequestLimitApiMutationsCount >= 0) {
+      return (
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount >
+        pullRequestsInputs.pullRequestLimitApiMutationsCount
+      );
+    }
+
     return false;
   }
 
