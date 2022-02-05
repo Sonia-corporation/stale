@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.39.0](https://github.com/Sonia-corporation/stale/compare/1.38.0...1.39.0) (2022-02-05)
+
+
+### :rocket: Features
+
+* **prs:** add new input `pull-request-limit-api-mutations-count` ([5559871](https://github.com/Sonia-corporation/stale/commit/5559871a1003996b8d6799e935ab559e7ee372cb)), closes [#389](https://github.com/Sonia-corporation/stale/issues/389)
+  Before processing each pull request, the workflow will check if the input is enabled.
+If this is the case, the processing may stop if the statistics for mutations are higher than the limit.
+
 # [1.38.0](https://github.com/Sonia-corporation/stale/compare/1.37.0...1.38.0) (2022-02-05)
 
 
