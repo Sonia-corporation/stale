@@ -1,4 +1,4 @@
-# Semantic Versioning Changelog
+# Sonia stale action
 
 # [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
 

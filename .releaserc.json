@@ -63,7 +63,7 @@
       "@semantic-release/changelog",
       {
         "changelogFile": "CHANGELOG.md",
-        "changelogTitle": "# Semantic Versioning Changelog"
+        "changelogTitle": "# Sonia stale action"
       }
     ],
     [
