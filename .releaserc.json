@@ -30,7 +30,8 @@
           },
           {
             "type": "docs",
-            "release": "minor"
+            "release": "minor",
+            "scope": "!(fix|typo)"
           }
         ],
         "parserOpts": {
