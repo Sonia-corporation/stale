@@ -55,9 +55,11 @@ jobs:
           assignees: C0ZEN
           labels: 'auto-merge :ok:'
           commit-message: 'chore(master): merge develop into master'
+          committer: ${{ secrets.GIT_COMMITTER_NAME }} <${{ secrets.GIT_COMMITTER_EMAIL }}>
+          author: ${{ secrets.GIT_AUTHOR_NAME }} <${{ secrets.GIT_AUTHOR_EMAIL }}>
           body: |
             [~merge-into-master :crown:]: https://img.shields.io/badge/-merge%20into%20master-303952.svg
 
             :tada: This PR was generated after pushing into develop with the label [![label: merge-into-master :crown:][~merge-into-master :crown:]](https://github.com/Sonia-corporation/stale/labels/merge-into-master%20%3Acrown%3A) :tada:
 
-            Your **github-actions** bot :rocket:
+            Your **Sonia** bot :rocket:
