@@ -143,6 +143,8 @@ jobs:
           assignees: C0ZEN
           labels: 'auto-merge :ok:'
           commit-message: 'chore(develop): merge master into develop'
+          committer: ${{ secrets.GIT_COMMITTER_NAME }} <${{ secrets.GIT_COMMITTER_EMAIL }}>
+          author: ${{ secrets.GIT_AUTHOR_NAME }} <${{ secrets.GIT_AUTHOR_EMAIL }}>
           body: |
             :tada: This PR was generated after the creation of the version ${{ steps.latest-tag.outputs.tag }} :tada:
 
