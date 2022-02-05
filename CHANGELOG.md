@@ -1,5 +1,14 @@
 # Semantic Versioning Changelog
 
+# [1.38.0](https://github.com/Sonia-corporation/stale/compare/1.37.0...1.38.0) (2022-02-05)
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-limit-api-mutations-count` ([14b034a](https://github.com/Sonia-corporation/stale/commit/14b034a428de778d59a6c868b1b9553f39dec3e2)), closes [#376](https://github.com/Sonia-corporation/stale/issues/376)
+  Before processing each issue, the workflow will check if the input is enabled.
+If this is the case, the processing may stop if the statistics for mutations are higher than the limit.
+
 # [1.37.0](https://github.com/Sonia-corporation/stale/compare/1.36.0...1.37.0) (2022-02-02)
 
 
