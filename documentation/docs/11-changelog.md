@@ -7,9 +7,15 @@ tags:
 
 # Changelog
 
-# [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
+# [1.41.0](https://github.com/Sonia-corporation/stale/compare/1.40.0...1.41.0) (2022-02-06)
 
 ### :books: Documentation {#books-documentation}
+
+- **website:** add a changelog page inside the docs ([5cdf738](https://github.com/Sonia-corporation/stale/commit/5cdf7381581014361e2109529d60b533d5e120c8)), closes [#385](https://github.com/Sonia-corporation/stale/issues/385)
+
+# [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
+
+### :books: Documentation {#books-documentation-1}
 
 - **fix:** fix wrong configuration examples ([98ca681](https://github.com/Sonia-corporation/stale/commit/98ca681065bd39762b32b6db35c7fe6aec9f3550))
 
@@ -42,14 +48,14 @@ tags:
 
 # [1.36.0](https://github.com/Sonia-corporation/stale/compare/1.35.0...1.36.0) (2022-02-01)
 
-### :books: Documentation {#books-documentation-1}
+### :books: Documentation {#books-documentation-2}
 
 - **website:** add a search bar ([f32c9dc](https://github.com/Sonia-corporation/stale/commit/f32c9dcd89837a9fb49c5c72fcddb6cc2a04c3b4)), closes [#325](https://github.com/Sonia-corporation/stale/issues/325)
   Provided by Algolia
 
 # [1.35.0](https://github.com/Sonia-corporation/stale/compare/1.34.0...1.35.0) (2022-01-31)
 
-### :books: Documentation {#books-documentation-2}
+### :books: Documentation {#books-documentation-3}
 
 - **website:** add new pages to list the outputs ([54f33b0](https://github.com/Sonia-corporation/stale/commit/54f33b0cea6594753532dc76fb95de707163c425))
 - **website:** put the issues and prs inputs into an inputs folder ([c338ab7](https://github.com/Sonia-corporation/stale/commit/c338ab732c666cf82ed789a9053949d7f8509aac))
@@ -97,7 +103,7 @@ tags:
 
 # [1.32.0](https://github.com/Sonia-corporation/stale/compare/1.31.0...1.32.0) (2022-01-23)
 
-### :books: Documentation {#books-documentation-3}
+### :books: Documentation {#books-documentation-4}
 
 - **website:** add a new page to explain how the statistics can be helpful ([ae85a4f](https://github.com/Sonia-corporation/stale/commit/ae85a4f7eb3d899b7fd5c3f633fb2481b2379605)), closes [#331](https://github.com/Sonia-corporation/stale/issues/331)
 - **website:** change some references of inputs to link to the website ([11f2e62](https://github.com/Sonia-corporation/stale/commit/11f2e62deffea25dd7abe2f0a493d60475286e29))
@@ -110,7 +116,7 @@ tags:
 
 # [1.31.0](https://github.com/Sonia-corporation/stale/compare/1.30.0...1.31.0) (2022-01-22)
 
-### :books: Documentation {#books-documentation-4}
+### :books: Documentation {#books-documentation-5}
 
 - **website:** add explicit docs for every pull requests inputs ([566376d](https://github.com/Sonia-corporation/stale/commit/566376dd181f77e50a81c5c273a723031c583181))
 - **website:** add explicit docs for every issues inputs ([12af4f5](https://github.com/Sonia-corporation/stale/commit/12af4f53cb7fc03341304a6375790f6f05aa6525))
