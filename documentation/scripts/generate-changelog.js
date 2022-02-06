@@ -3,6 +3,7 @@ const FS = require(`fs-extra`);
 const LOGGER = require(`./logger`);
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _ = require(`lodash`);
+const { getDirectoryName } = require(`./get-directory-name`);
 const CONTEXT = `generate-changelog`;
 
 /**
@@ -144,10 +145,10 @@ function navigateToRoot() {
   LOGGER.debug(CONTEXT, CHALK.text(`Navigating to the root directory...`));
   LOGGER.debug(CONTEXT, CHALK.text(`The current directory is: ${process.cwd()}`));
 
-  if (process.cwd().endsWith(`documentation\\scripts`)) {
+  if (getDirectoryName(process.cwd()) === `scripts`) {
     process.chdir(`../..`);
     LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
-  } else if (process.cwd().endsWith(`\\documentation`)) {
+  } else if (getDirectoryName(process.cwd()) === `documentation`) {
     process.chdir(`..`);
     LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
   }
