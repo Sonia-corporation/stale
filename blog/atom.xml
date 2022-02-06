@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/blog</id>
     <title>GitHub stale action Blog</title>
-    <updated>2022-02-06T21:11:39.688Z</updated>
+    <updated>2022-02-06T21:25:18.395Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/blog"/>
     <subtitle>GitHub stale action Blog</subtitle>
@@ -11,7 +11,7 @@
         <title type="html"><![CDATA[Welcome!]]></title>
         <id>welcome</id>
         <link href="https://sonia-corporation.github.io/stale/blog/welcome"/>
-        <updated>2022-02-06T21:11:39.688Z</updated>
+        <updated>2022-02-06T21:25:18.395Z</updated>
         <summary type="html"><![CDATA[Welcome to the very first version of the Website!]]></summary>
         <content type="html"><![CDATA[<p>Happy to announce that this is the very first version of this website!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="why-even-bother">Why even bother?<a class="hash-link" href="#why-even-bother" title="Direct link to heading">​</a></h2><p>We really think that handling a huge number of issues on a repository is time-consuming, a real grunt task in a way.<br>
 <!-- -->We hope that by adding this website, you will have access to even further help to let you customize your stale action at your convenience.<br>
