@@ -1,6 +1,8 @@
 ---
 id: changelog
 title: Changelog
+description: |
+  The list of all the new features, documentation improvements, performances improvements and bug fixes.
 tags:
   - Changelog
 ---
