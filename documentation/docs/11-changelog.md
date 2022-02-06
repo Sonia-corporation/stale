@@ -9,13 +9,13 @@ tags:
 
 # [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
 
-### :books: Documentation
+### :books: Documentation {#books-documentation}
 
 - **fix:** fix wrong configuration examples ([98ca681](https://github.com/Sonia-corporation/stale/commit/98ca681065bd39762b32b6db35c7fe6aec9f3550))
 
 # [1.39.0](https://github.com/Sonia-corporation/stale/compare/1.38.0...1.39.0) (2022-02-05)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features}
 
 - **prs:** add new input `pull-request-limit-api-mutations-count` ([5559871](https://github.com/Sonia-corporation/stale/commit/5559871a1003996b8d6799e935ab559e7ee372cb)), closes [#389](https://github.com/Sonia-corporation/stale/issues/389)
   Before processing each pull request, the workflow will check if the input is enabled.
@@ -23,7 +23,7 @@ tags:
 
 # [1.38.0](https://github.com/Sonia-corporation/stale/compare/1.37.0...1.38.0) (2022-02-05)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-1}
 
 - **issues:** add new input `issue-limit-api-mutations-count` ([14b034a](https://github.com/Sonia-corporation/stale/commit/14b034a428de778d59a6c868b1b9553f39dec3e2)), closes [#376](https://github.com/Sonia-corporation/stale/issues/376)
   Before processing each issue, the workflow will check if the input is enabled.
@@ -31,7 +31,7 @@ tags:
 
 # [1.37.0](https://github.com/Sonia-corporation/stale/compare/1.36.0...1.37.0) (2022-02-02)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-2}
 
 - **issues:** add new input `issue-limit-api-queries-count` ([db5effb](https://github.com/Sonia-corporation/stale/commit/db5effb74d732af800108c6634639cbae6ec9336)), closes [#254](https://github.com/Sonia-corporation/stale/issues/254)
   Before processing each issue, the workflow will check if the input is enabled.
@@ -42,14 +42,14 @@ tags:
 
 # [1.36.0](https://github.com/Sonia-corporation/stale/compare/1.35.0...1.36.0) (2022-02-01)
 
-### :books: Documentation
+### :books: Documentation {#books-documentation-1}
 
 - **website:** add a search bar ([f32c9dc](https://github.com/Sonia-corporation/stale/commit/f32c9dcd89837a9fb49c5c72fcddb6cc2a04c3b4)), closes [#325](https://github.com/Sonia-corporation/stale/issues/325)
   Provided by Algolia
 
 # [1.35.0](https://github.com/Sonia-corporation/stale/compare/1.34.0...1.35.0) (2022-01-31)
 
-### :books: Documentation
+### :books: Documentation {#books-documentation-2}
 
 - **website:** add new pages to list the outputs ([54f33b0](https://github.com/Sonia-corporation/stale/commit/54f33b0cea6594753532dc76fb95de707163c425))
 - **website:** put the issues and prs inputs into an inputs folder ([c338ab7](https://github.com/Sonia-corporation/stale/commit/c338ab732c666cf82ed789a9053949d7f8509aac))
@@ -57,13 +57,13 @@ tags:
 
 # [1.34.0](https://github.com/Sonia-corporation/stale/compare/1.33.1...1.34.0) (2022-01-29)
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes}
 
 - **deps:** update docusaurus monorepo to v2.0.0-beta.15 (patch) ([#358](https://github.com/Sonia-corporation/stale/issues/358)) ([5bfd537](https://github.com/Sonia-corporation/stale/commit/5bfd537ce39437b0e833ebff60ed7013c8bae109))
   Co-authored-by: Renovate Bot <bot@renovateapp.com>
   Co-authored-by: TESTELIN Geoffrey <geoffrey.testelin@gmail.com>
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-3}
 
 - **outputs:** add 6 new outputs to expose the api calls ([7d85f17](https://github.com/Sonia-corporation/stale/commit/7d85f17505514e84f48cbb5cc8d018f08f2e2cb9))
   Add `called-api-issues-count`
@@ -77,19 +77,19 @@ tags:
 - **logs:** display the total of stats for mutations and queries API calls ([86261dd](https://github.com/Sonia-corporation/stale/commit/86261dd190539908105deb5297322f53c62cd6a4))
   Created a nested view
 
-## [1.33.1](https://github.com/Sonia-corporation/stale/compare/1.33.0...1.33.1) (2022-01-24)
+## [1.33.1](https://github.com/Sonia-corporation/stale/compare/1.33.0...1.33.1) (2022-01-24) {#1331-2022-01-24}
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-1}
 
 - **outputs:** expose the outputs as expected ([10e9657](https://github.com/Sonia-corporation/stale/commit/10e965716d3791ca98d8e3907bcea478cc42bf99)), closes [#351](https://github.com/Sonia-corporation/stale/issues/351)
 
 # [1.33.0](https://github.com/Sonia-corporation/stale/compare/1.32.0...1.33.0) (2022-01-24)
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-2}
 
 - **draft:** only convert to draft when the dry-run is disabled ([67cc535](https://github.com/Sonia-corporation/stale/commit/67cc535beca61bf80bfc7ca4e5ced1d3006abc97)), closes [#346](https://github.com/Sonia-corporation/stale/issues/346)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-4}
 
 - **statistics:** always count the statistics even in dry-run ([cbc41eb](https://github.com/Sonia-corporation/stale/commit/cbc41ebf616ebd19379f47d00c5a74ff95c0e5d7)), closes [#323](https://github.com/Sonia-corporation/stale/issues/323)
   This will come particuly useful to know what is to be expected from the dry-run.
@@ -97,27 +97,27 @@ tags:
 
 # [1.32.0](https://github.com/Sonia-corporation/stale/compare/1.31.0...1.32.0) (2022-01-23)
 
-### :books: Documentation
+### :books: Documentation {#books-documentation-3}
 
 - **website:** add a new page to explain how the statistics can be helpful ([ae85a4f](https://github.com/Sonia-corporation/stale/commit/ae85a4f7eb3d899b7fd5c3f633fb2481b2379605)), closes [#331](https://github.com/Sonia-corporation/stale/issues/331)
 - **website:** change some references of inputs to link to the website ([11f2e62](https://github.com/Sonia-corporation/stale/commit/11f2e62deffea25dd7abe2f0a493d60475286e29))
   Also apply the changes in the readme
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-3}
 
 - **deps:** update dependency @mdx-js/react to v1.6.22 ([c624394](https://github.com/Sonia-corporation/stale/commit/c6243941e201e0d2fa4f1c462dd57030150efde0))
 - **deps:** update react monorepo to v17.0.2 ([ad3fc8f](https://github.com/Sonia-corporation/stale/commit/ad3fc8f22103d6f37373f6a295481a19c34a402c))
 
 # [1.31.0](https://github.com/Sonia-corporation/stale/compare/1.30.0...1.31.0) (2022-01-22)
 
-### :books: Documentation
+### :books: Documentation {#books-documentation-4}
 
 - **website:** add explicit docs for every pull requests inputs ([566376d](https://github.com/Sonia-corporation/stale/commit/566376dd181f77e50a81c5c273a723031c583181))
 - **website:** add explicit docs for every issues inputs ([12af4f5](https://github.com/Sonia-corporation/stale/commit/12af4f53cb7fc03341304a6375790f6f05aa6525))
 
 # [1.30.0](https://github.com/Sonia-corporation/stale/compare/1.29.0...1.30.0) (2022-01-19)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-5}
 
 - **labels:** add new input to add extra labels after closing an item ([f58a86b](https://github.com/Sonia-corporation/stale/commit/f58a86ba4b27a16961c6e85dc34616ec1fc7ca4b)), closes [#213](https://github.com/Sonia-corporation/stale/issues/213)
   The input `issue-add-labels-after-close` and `pull-request-add-labels-after-close` were added.
@@ -125,7 +125,7 @@ tags:
 
 # [1.29.0](https://github.com/Sonia-corporation/stale/compare/1.28.0...1.29.0) (2022-01-19)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-6}
 
 - **outputs:** add draft pull requests count output ([675faea](https://github.com/Sonia-corporation/stale/commit/675faeab130b299d095ba2690e3519cd8da37b40))
   Add the `draft-pull-requests-count` output.
@@ -138,16 +138,16 @@ tags:
 
 # [1.28.0](https://github.com/Sonia-corporation/stale/compare/1.27.1...1.28.0) (2022-01-18)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-7}
 
 - **processing:** add new input to enable or disable the processing ([b57eac0](https://github.com/Sonia-corporation/stale/commit/b57eac07802080d49ce925ffdec34fc1fb23049c)), closes [#277](https://github.com/Sonia-corporation/stale/issues/277)
   Add the `issue-processing` and `pull-request-processing` inputs.
   When enabled, the processing occurs as expected.
   When disabled, the processing will be skipped.
 
-## [1.27.1](https://github.com/Sonia-corporation/stale/compare/1.27.0...1.27.1) (2022-01-12)
+## [1.27.1](https://github.com/Sonia-corporation/stale/compare/1.27.0...1.27.1) (2022-01-12) {#1271-2022-01-12}
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-4}
 
 - **stale:** add in last the stale label to avoid removing the stale the next run ([cb7257d](https://github.com/Sonia-corporation/stale/commit/cb7257daf0d10d778ed05f36f31c2c62fa6fc2a8))
   add the stale comment and the extra labels before adding the stale label
@@ -156,7 +156,7 @@ tags:
 
 # [1.27.0](https://github.com/Sonia-corporation/stale/compare/1.26.0...1.27.0) (2022-01-10)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-8}
 
 - **logs:** add a log when a statistic is increased ([3885885](https://github.com/Sonia-corporation/stale/commit/388588543dd76c0dfc273ba4bd8cfb8c6cd232c7))
   Showing by how many the count was increased and also showing the new total count
@@ -169,16 +169,16 @@ tags:
 
 # [1.26.0](https://github.com/Sonia-corporation/stale/compare/1.25.1...1.26.0) (2022-01-02)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-9}
 
 - **logs:** add counts in the batches and processed items logs ([2022cf0](https://github.com/Sonia-corporation/stale/commit/2022cf0e93c88f0105b8ac2f91cb17e1b9172320))
 - **pull-request:** add new input `pull-request-delete-branch-after-close` ([cc53931](https://github.com/Sonia-corporation/stale/commit/cc53931ad5625307f86e8a048c12b483d7f2af99))
   When a pull request is closed by the processing, if the option is enabled and the dry-run is disabled, the related branch will be removed
   A new output was also added to track the number of deleted pull request branches
 
-## [1.25.1](https://github.com/Sonia-corporation/stale/compare/1.25.0...1.25.1) (2022-01-01)
+## [1.25.1](https://github.com/Sonia-corporation/stale/compare/1.25.0...1.25.1) (2022-01-01) {#1251-2022-01-01}
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-5}
 
 - **processing:** fix an issue with infinite batches processing ([218f164](https://github.com/Sonia-corporation/stale/commit/218f1641633388297bc4302bec4ad71048e89848))
   if the number of issues or pull requests to process was higher than 20, the processing was ending up in a infinity loop
@@ -187,18 +187,18 @@ tags:
 
 # [1.25.0](https://github.com/Sonia-corporation/stale/compare/1.24.0...1.25.0) (2022-01-01)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-10}
 
 - **pull-request:** add new input `pull-request-ignore-draft` ([639e9ba](https://github.com/Sonia-corporation/stale/commit/639e9ba357d41de615e0423f31ac3ecf72e98dcf))
   a pull request in draft can now be ignored from the processing
 
-### :zap: Performance Improvements
+### :zap: Performance Improvements {#zap-performance-improvements}
 
 - fix jest performances issues when running locally ([cb4a833](https://github.com/Sonia-corporation/stale/commit/cb4a833196ff07022e3f0f34d840a0e8039f85c0))
 
 # [1.24.0](https://github.com/Sonia-corporation/stale/compare/1.23.0...1.24.0) (2021-12-16)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-11}
 
 - **pr:** add new inputs to support pull requests processing ([ab8f8a0](https://github.com/Sonia-corporation/stale/commit/ab8f8a090db6210c18314c4707bdbb294ce46042))
   this is the same implementation than the issues inputs
@@ -206,59 +206,59 @@ tags:
 
 # [1.23.0](https://github.com/Sonia-corporation/stale/compare/1.22.0...1.23.0) (2021-12-11)
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-6}
 
 - **deps:** update dependency luxon to v2.2.0 ([03b420a](https://github.com/Sonia-corporation/stale/commit/03b420a8d0f4a9a8f5f8843a9ca744208f71ae46))
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-12}
 
 - **issue:** add new input "issue-ignore-all-project-cards" ([91193f2](https://github.com/Sonia-corporation/stale/commit/91193f25428423e92ce6b87c231d8d99c9512597))
 
 # [1.22.0](https://github.com/Sonia-corporation/stale/compare/1.21.0...1.22.0) (2021-12-07)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-13}
 
 - **debug:** add more logs to debug in case a label does not exist in your repo ([0c00efb](https://github.com/Sonia-corporation/stale/commit/0c00efbe379f6f50124bc7e91efc726c4e73abf1))
 
 # [1.21.0](https://github.com/Sonia-corporation/stale/compare/1.20.0...1.21.0) (2021-12-06)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-14}
 
 - **issue:** add new input issue-close-comment to comment on close ([a026020](https://github.com/Sonia-corporation/stale/commit/a0260200e2149a1be591f2ee7b1e97a6e6089115))
 
 # [1.20.0](https://github.com/Sonia-corporation/stale/compare/1.19.0...1.20.0) (2021-12-05)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-15}
 
 - **issue:** add new input issue-stale-comment to comment on stale ([1a4abcd](https://github.com/Sonia-corporation/stale/commit/1a4abcde462e3b35254b18dedf20a820ab584783))
 
 # [1.19.0](https://github.com/Sonia-corporation/stale/compare/1.18.0...1.19.0) (2021-12-05)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-16}
 
 - **issue:** add new option to ignore some assignees ([6876cfd](https://github.com/Sonia-corporation/stale/commit/6876cfd121e9a8eb7d1972977b43f969c097362c))
 
 # [1.18.0](https://github.com/Sonia-corporation/stale/compare/1.17.0...1.18.0) (2021-11-22)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-17}
 
 - **issue:** add new input to ignore the process base on the creation date ([10b4b64](https://github.com/Sonia-corporation/stale/commit/10b4b6449cb728352b3b1430ac37ece82fa3e986))
 
 # [1.17.0](https://github.com/Sonia-corporation/stale/compare/1.16.0...1.17.0) (2021-11-21)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-18}
 
 - **issue:** add new input to ignore issues with assignees ([a1c168b](https://github.com/Sonia-corporation/stale/commit/a1c168b46bb3fe871f91d77a725363857315cf7e))
 
 # [1.16.0](https://github.com/Sonia-corporation/stale/compare/1.15.0...1.16.0) (2021-11-20)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-19}
 
 - **issue:** avoid closing issues on dry-run mode ([b93d952](https://github.com/Sonia-corporation/stale/commit/b93d952686506ad23a3c0daac1cbeae364eda69a))
 
 # [1.15.0](https://github.com/Sonia-corporation/stale/compare/1.14.0...1.15.0) (2021-11-20)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-20}
 
 - **outputs:** add closed issues count output ([aeeb72e](https://github.com/Sonia-corporation/stale/commit/aeeb72eec75a67bb0ee1dfec36c63174d1983bb2))
 - **stats:** add stats about the number of closed issues ([de3d98c](https://github.com/Sonia-corporation/stale/commit/de3d98c7d8fea7b4ded4a2b8c12437a3b36518bd))
@@ -266,38 +266,38 @@ tags:
 
 # [1.14.0](https://github.com/Sonia-corporation/stale/compare/1.13.0...1.14.0) (2021-11-20)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-21}
 
 - **issue:** add new input to ignore the process when a label is on an issue ([9c118dc](https://github.com/Sonia-corporation/stale/commit/9c118dc14cc113d2d044285d09517e22d051d9bb))
 
 # [1.13.0](https://github.com/Sonia-corporation/stale/compare/1.12.0...1.13.0) (2021-11-18)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-22}
 
 - **label:** use a better search to find the stale label to avoid mismatch ([73148bd](https://github.com/Sonia-corporation/stale/commit/73148bdee19a2faa69e555e7d6071ccdb98530e8))
 
 # [1.12.0](https://github.com/Sonia-corporation/stale/compare/1.11.0...1.12.0) (2021-11-15)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-23}
 
 - **outputs:** add some outputs to this action ([6c8390f](https://github.com/Sonia-corporation/stale/commit/6c8390fe3b5fceb9e4094d10a87b3c7b2bcdfaec))
 
 # [1.11.0](https://github.com/Sonia-corporation/stale/compare/1.10.0...1.11.0) (2021-11-15)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-24}
 
 - **stats:** add a statistics regarding the unaltered issues ([acca942](https://github.com/Sonia-corporation/stale/commit/acca9429dc3538d9daca48481a2458a678ae2cd6))
 - **issue:** use the most recent added stale label event for the check ([36e21fd](https://github.com/Sonia-corporation/stale/commit/36e21fd718938168fbfbef1023eb7972760af0da))
 
 # [1.10.0](https://github.com/Sonia-corporation/stale/compare/1.9.0...1.10.0) (2021-11-14)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-25}
 
 - **logs:** add statistics in the logs ([90fbb7a](https://github.com/Sonia-corporation/stale/commit/90fbb7aa86f381d6152f264e0796cd1cbb453671))
 
 # [1.9.0](https://github.com/Sonia-corporation/stale/compare/1.8.0...1.9.0) (2021-11-14)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-26}
 
 - **logs:** display the api services logs with the issue prefix ([6b35fe8](https://github.com/Sonia-corporation/stale/commit/6b35fe8e7a84ed9a64745b7b4657cf843ce0efd0))
 - **logs:** improve the issue logger to always add the issue id as a prefix ([b6390da](https://github.com/Sonia-corporation/stale/commit/b6390da9d3dcd924ee92d3df780f595312234c72))
@@ -308,31 +308,31 @@ tags:
 
 # [1.8.0](https://github.com/Sonia-corporation/stale/compare/1.7.0...1.8.0) (2021-11-13)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-27}
 
 - **issue:** add new input issue-days-before-close to customize the number of days before closing a stale issue ([ed43be6](https://github.com/Sonia-corporation/stale/commit/ed43be60c281f1e23081f4d46633b4375144a02d))
 
 # [1.7.0](https://github.com/Sonia-corporation/stale/compare/1.6.1...1.7.0) (2021-11-13)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-28}
 
 - **issue:** add a new input "issue-days-before-stale" to choose when to stale ([2e92099](https://github.com/Sonia-corporation/stale/commit/2e92099f52fa4e0c90772913b43adca9ed24fcf5))
 
-## [1.6.1](https://github.com/Sonia-corporation/stale/compare/1.6.0...1.6.1) (2021-11-13)
+## [1.6.1](https://github.com/Sonia-corporation/stale/compare/1.6.0...1.6.1) (2021-11-13) {#161-2021-11-13}
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-7}
 
 - **dry-run:** ignore the stale label addition in dry-run mode ([8fe45d2](https://github.com/Sonia-corporation/stale/commit/8fe45d291f6b2eb9ad9d5a295df2000f64b6d682))
 
 # [1.6.0](https://github.com/Sonia-corporation/stale/compare/1.5.0...1.6.0) (2021-11-12)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-29}
 
 - **issue:** add new input issue-ignore-any-labels to ignore the processing of issues with specific labels ([1c4307d](https://github.com/Sonia-corporation/stale/commit/1c4307d433ce98cd978693821b96d0bd421f78a0))
 
 # [1.5.0](https://github.com/Sonia-corporation/stale/compare/1.4.0...1.5.0) (2021-11-12)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-30}
 
 - **labels:** add a new feature to add a label to an issue ([f93639d](https://github.com/Sonia-corporation/stale/commit/f93639d81d4c7d5b8b54d4be9e62f5fd69c33196))
 - **labels:** add a new feature to get a label from the repository ([06eb94e](https://github.com/Sonia-corporation/stale/commit/06eb94ef48adabea10aca1849e4d4cb7a587d012))
@@ -343,7 +343,7 @@ tags:
 
 # [1.4.0](https://github.com/Sonia-corporation/stale/compare/1.3.0...1.4.0) (2021-11-09)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-31}
 
 - **logs:** add a log when the process start ([ec78887](https://github.com/Sonia-corporation/stale/commit/ec78887de476e7fb93a59a7accd5d52f5b9904fb))
 - **issues:** add pagination ([4c1395b](https://github.com/Sonia-corporation/stale/commit/4c1395b1bb469740047d3fada26643359d5a43b8))
@@ -351,32 +351,32 @@ tags:
 
 # [1.3.0](https://github.com/Sonia-corporation/stale/compare/1.2.0...1.3.0) (2021-11-07)
 
-### :bug: Bug Fixes
+### :bug: Bug Fixes {#bug-bug-fixes-8}
 
 - **issue:** display the issue link in purple ([a8f4687](https://github.com/Sonia-corporation/stale/commit/a8f4687ed016117b8a8c2902e6f2d2584d1aad06))
 - **log:** display the proper end of tree symbol when logging the inputs ([0b53d66](https://github.com/Sonia-corporation/stale/commit/0b53d66576d032bf8ea9dd0ce99e5a3cc1b2c768))
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-32}
 
 - **issue:** skip if locked ([05325a1](https://github.com/Sonia-corporation/stale/commit/05325a196632580f8b8adcae1bf455478a7e1103))
 
 # [1.2.0](https://github.com/Sonia-corporation/stale/compare/1.1.0...1.2.0) (2021-11-07)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-33}
 
 - **logs:** add more logs to track the processing ([80afa14](https://github.com/Sonia-corporation/stale/commit/80afa14a5168b099e4e0db78284938f0d5ca08cb))
 - **dry-run:** add new input dry-run and remove the required github-token ([71ad840](https://github.com/Sonia-corporation/stale/commit/71ad84010b317981c0deb3d7953be4b93060a0b6))
 
 # [1.1.0](https://github.com/Sonia-corporation/stale/compare/1.0.0...1.1.0) (2021-11-06)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-34}
 
 - **issues:** fetch the issues to process and log the id ([9c79555](https://github.com/Sonia-corporation/stale/commit/9c79555879f840bbd080315a75d8914acf15ee8b))
 - **issues:** log on error while fetching the issues ([495425f](https://github.com/Sonia-corporation/stale/commit/495425f94128b2c4445ae3533a688c2f919bfe9d))
 
 # [1.0.0](https://github.com/Sonia-corporation/stale/compare/...1.0.0) (2021-11-06)
 
-### :rocket: Features
+### :rocket: Features {#rocket-features-35}
 
 - **error:** catch and stop the action in case of errors ([b1a8b23](https://github.com/Sonia-corporation/stale/commit/b1a8b23ba908ed77a013ea0eef6d43df5280d500))
 - **error:** catch and stop the action in case of errors ([96d5b41](https://github.com/Sonia-corporation/stale/commit/96d5b4182c99296e1c133fe4966576f2de1fe134))

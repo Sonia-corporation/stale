@@ -28,6 +28,14 @@ async function initialize() {
   });
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog linted`));
 
+  navigateToDocumentation();
+
+  LOGGER.debug(CONTEXT, CHALK.text(`Writing headers for the documentation changelog...`));
+  execSync(`npm run write-heading-ids:changelog`, {
+    stdio: `inherit`,
+  });
+  LOGGER.success(CONTEXT, CHALK.text(`Headers writing for the documentation changelog done`));
+
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog generated`));
 }
 
@@ -161,6 +169,19 @@ function navigateToRoot() {
   }
 
   LOGGER.success(CONTEXT, CHALK.text(`Root directory navigation done`));
+}
+
+/**
+ *
+ */
+function navigateToDocumentation() {
+  LOGGER.debug(CONTEXT, CHALK.text(`Navigating to the documentation directory...`));
+  LOGGER.debug(CONTEXT, CHALK.text(`The current directory is: ${process.cwd()}`));
+
+  process.chdir(`documentation`);
+  LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
+
+  LOGGER.success(CONTEXT, CHALK.text(`Documentation directory navigation done`));
 }
 
 initialize().catch((error) => {
