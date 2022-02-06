@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[5791],{3104:function(e){e.exports=JSON.parse('{"name":"Changelog","permalink":"/stale/fr/docs/tags/changelog","docs":[{"id":"changelog","title":"Changelog","description":"Documentation","permalink":"/stale/fr/docs/changelog"}],"allTagsPath":"/stale/fr/docs/tags"}')}}]);

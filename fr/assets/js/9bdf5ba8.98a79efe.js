@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[413],{7667:function(t){t.exports=JSON.parse('{"name":"Introduction","permalink":"/stale/fr/docs/tags/introduction","docs":[{"id":"introduction","title":"Introduction","description":"Why?","permalink":"/stale/fr/docs/introduction"}],"allTagsPath":"/stale/fr/docs/tags"}')}}]);
