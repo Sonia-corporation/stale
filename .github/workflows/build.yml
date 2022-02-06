@@ -4,6 +4,7 @@
 name: Build
 env:
   CODECOV_VERSION: 'v0.1.15'
+  NODE_VERSION: '14.17.6'
 on:
   push:
     branches:
@@ -30,10 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -64,10 +65,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -111,10 +112,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -161,10 +162,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -211,10 +212,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -261,10 +262,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 12.22.9
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 12.22.9
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
@@ -303,10 +304,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
-      - name: Use Node.js 14.17.6
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
-          node-version: 14.17.6
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
