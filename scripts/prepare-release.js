@@ -10,12 +10,6 @@ execSync(`npm run generate-changelog`, {
   stdio: `inherit`,
 });
 
-navigateToRoot();
-
-execSync(`npm run lint:other`, {
-  stdio: `inherit`,
-});
-
 /**
  *
  */
@@ -32,17 +26,4 @@ function navigateToDocumentation() {
   }
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation directory navigation done`));
-}
-
-/**
- *
- */
-function navigateToRoot() {
-  LOGGER.debug(CONTEXT, CHALK.text(`Navigating to the root directory...`));
-  LOGGER.debug(CONTEXT, CHALK.text(`The current directory is: ${process.cwd()}`));
-
-  process.chdir(`..`);
-  LOGGER.debug(CONTEXT, CHALK.text(`The new directory is: ${process.cwd()}`));
-
-  LOGGER.success(CONTEXT, CHALK.text(`Root directory navigation done`));
 }

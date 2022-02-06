@@ -5,6 +5,7 @@ const LOGGER = require(`./logger`);
 const _ = require(`lodash`);
 const { getDirectoryName } = require(`./get-directory-name`);
 const CONTEXT = `generate-changelog`;
+const { execSync } = require(`child_process`);
 
 /**
  * @description
@@ -20,6 +21,12 @@ async function initialize() {
   const documentationChangelog = await loadDocumentationChangelog();
 
   await mergeOriginalIntoDocumentationChangelog(originalChangelog, documentationChangelog);
+
+  LOGGER.debug(CONTEXT, CHALK.text(`Linting the documentation changelog...`));
+  execSync(`npm run lint:other:this -- documentation/docs/11-changelog.md`, {
+    stdio: `inherit`,
+  });
+  LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog linted`));
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog generated`));
 }

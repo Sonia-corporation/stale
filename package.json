@@ -74,6 +74,7 @@
     "lint:ts:ci": "eslint --quiet **/*.{js,ts}",
     "lint:ts:hook": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet",
     "lint:other": "prettier --write --ignore-unknown **/*.{md,json,yml,html}",
+    "lint:other:this": "prettier --write --ignore-unknown",
     "lint:other:ci": "prettier --check --ignore-unknown **/*.{md,json,yml,html}",
     "lint:other:hook": "prettier --write --ignore-unknown --loglevel warn",
     "lint:all": "npm run concurrently -- \"npm:lint:ts\" \"npm:lint:other\"",
