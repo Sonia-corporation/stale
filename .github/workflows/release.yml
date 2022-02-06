@@ -154,4 +154,4 @@ jobs:
             - [npm package (@latest dist-tag)](https://www.npmjs.com/package/@sonia-corporation/stale/v/${{ steps.latest-tag.outputs.tag }})
             - [GitHub release](https://github.com/Sonia-corporation/stale/releases/tag/${{ steps.latest-tag.outputs.tag }})
 
-            Your **Sonia** bot :rocket:
+            Your **@Sonia-corporation-bot** :rocket:
