@@ -63,7 +63,7 @@
       "@semantic-release/changelog",
       {
         "changelogFile": "CHANGELOG.md",
-        "changelogTitle": "# Semantic Versioning Changelog"
+        "changelogTitle": "# Sonia stale action"
       }
     ],
     [
@@ -75,7 +75,7 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["package.json", "package-lock.json", "CHANGELOG.md"],
+        "assets": ["package.json", "package-lock.json", "CHANGELOG.md", "documentation/docs/11-changelog.md"],
         "message": "build(release): new version ${nextRelease.version}"
       }
     ],

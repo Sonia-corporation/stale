@@ -330,6 +330,15 @@ jobs:
         run: |
           cd documentation
           npm run build
+      - name: Check for missing build files
+        id: verify-website-build-changed-files
+        run: |
+          cd documentation
+          if [ "$(git diff --ignore-space-at-eol docs/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "docs has changed. Run the npm script build locally to generate the missing build files; and then push the changes."
+            exit 1
+          fi
       - name: Generate missing French translations
         run: |
           cd documentation
