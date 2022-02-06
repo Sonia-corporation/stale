@@ -15,6 +15,6 @@
     "rootDir": ".",
     "outDir": "lib"
   },
-  "include": ["src", "sidebars.js", "babel.config.js", "docusaurus.config.js"],
+  "include": ["src", "sidebars.js", "babel.config.js", "docusaurus.config.js", "scripts"],
   "exclude": ["**/__tests__/**/*", "src/client"]
 }
