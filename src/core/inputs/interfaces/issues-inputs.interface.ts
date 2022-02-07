@@ -16,6 +16,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueIgnoreBeforeCreationDate: IIso8601Date | '';
   readonly issueLimitApiMutationsCount: number;
   readonly issueLimitApiQueriesCount: number;
+  readonly issueOnlyAnyProjectCards: string[];
   readonly issueProcessing: boolean;
   readonly issueStaleComment: IComment | '';
   readonly issueStaleLabel: string;

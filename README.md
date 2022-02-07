@@ -93,6 +93,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-processing](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-processing-input)                                   | Allow to process the issues.                                                                                                                    | `true`  |
 | [issue-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-limit-api-queries-count-input)         | Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).                                           | `-1`    |
 | [issue-limit-api-mutations-count](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-limit-api-mutations-count-input)     | Limit the quantity of API mutations calls performed during the processing of issues (-1 for unlimited).                                         | `-1`    |
+| [issue-only-any-project-cards](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-only-any-project-cards-input)           | Only allow the processing of issues that contains one of those project cards (multiline).                                                       |         |
 
 ## All the issues outputs
 

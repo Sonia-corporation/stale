@@ -292,6 +292,11 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     return false;
   }
 
+  public shouldIgnoreDueToAnyWhiteListedProjectCard$$(): boolean {
+    // @todo implement in [#416](https://github.com/Sonia-corporation/stale/issues/416)
+    return false;
+  }
+
   private _isDraft(): boolean {
     return this.processor.item.isDraft;
   }

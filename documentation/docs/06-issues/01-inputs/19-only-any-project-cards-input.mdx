@@ -1,0 +1,34 @@
+---
+id: issue-only-any-project-cards-input
+title: Issue only any project cards input
+description: |
+  All the information you need to know about the issue only any project cards input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+---
+
+### Input {#input}
+
+Name: `issue-only-any-project-cards`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This input will let you process only the issues that are linked to a project card which is white-listed with this input.  
+This can be useful when you use the project cards for triage.
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-only-any-project-cards: |
+    project-x
+    project-y
+```
