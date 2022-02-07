@@ -33,7 +33,7 @@
   },
   "link.item.label.Examples": {
     "message": "Exemples",
-    "description": "The label of footer link with label=Examples linking to /docs/examples/issues-examples"
+    "description": "The label of footer link with label=Examples linking to /docs/examples/stale-with-comments-except-if-assigned-example"
   },
   "link.item.label.Introduction": {
     "message": "Introduction",
