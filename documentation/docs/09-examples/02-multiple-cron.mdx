@@ -1,0 +1,50 @@
+---
+id: multiple-cron-example
+title: Multiple cron jobs
+description: |
+  Example to process only the issues that belongs to specific projects.
+  They will not be process at the same rate due to the different workflows.
+tags:
+  - Issues
+  - Projects
+  - Examples
+  - Cron
+---
+
+## Stale sooner based on the project {#stale-sooner-based-on-the-project}
+
+### Description {#description}
+
+The issues belonging to the project X will be stale after only 20 days.  
+The issues belonging to the project Y will be stale after 50 days.  
+All the other issues will be ignored from the processing.
+
+### Example {#example}
+
+```yml title=".github/workflows/stale-project-x.yml"
+name: Stale project X
+on:
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  name: Stale
+  id: stale
+  uses: sonia-corporation/stale@latest
+  with:
+    issue-only-any-project-cards: project-x
+    issue-days-before-stale: 20
+```
+
+```yml title=".github/workflows/stale-project-y.yml"
+name: Stale project Y
+on:
+  schedule:
+    - cron: '0 12 * * *'
+jobs:
+  name: Stale
+  id: stale
+  uses: sonia-corporation/stale@latest
+  with:
+    issue-only-any-project-cards: project-y
+    issue-days-before-stale: 50
+```
