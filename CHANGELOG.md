@@ -1,5 +1,24 @@
 # Sonia stale action
 
+# [1.42.0](https://github.com/Sonia-corporation/stale/compare/1.41.0...1.42.0) (2022-02-08)
+
+
+### :books: Documentation
+
+* **examples:** add a multiple-cron jobs example ([d57bc19](https://github.com/Sonia-corporation/stale/commit/d57bc196ee7839e2b6ddb843c7677023437c569c))
+* **website:** add more tags to existing docs pages ([4c92a80](https://github.com/Sonia-corporation/stale/commit/4c92a8047925923fb452c64070070b93cb432f6b))
+* **readme:** fix broken links to inputs inside the readme ([2252af8](https://github.com/Sonia-corporation/stale/commit/2252af8fa2cb8b4280f5c48fa7adb0731bd97823))
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-only-any-project-cards` ([8650e12](https://github.com/Sonia-corporation/stale/commit/8650e12be11a74a8027e8dfcb51e3024f867c26f)), closes [#312](https://github.com/Sonia-corporation/stale/issues/312) [#412](https://github.com/Sonia-corporation/stale/issues/412)
+  This new input allow to only process issues belonging to specific projects.
+You can link your issues to a project card.
+Pass as a multi-line input the names of your projects.
+When this input is set, all issues without a project card will not be processed.
+Note: this is the first input of this genre, but may not be the last based on people needs!
+
 # [1.41.0](https://github.com/Sonia-corporation/stale/compare/1.40.0...1.41.0) (2022-02-06)
 
 
