@@ -9,7 +9,7 @@ import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
-import _, { isEmpty } from 'lodash';
+import _ from 'lodash';
 import { DateTime } from 'luxon';
 
 /**
@@ -261,7 +261,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (isEmpty(issuesInputs.issueOnlyAnyProjectCards)) {
+    if (_.isEmpty(issuesInputs.issueOnlyAnyProjectCards)) {
       this.processor.logger.info(
         `The input`,
         LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS),
