@@ -4,6 +4,8 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { AbstractIgnoreProcessor } from '@core/processing/abstract-ignore-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
@@ -205,6 +207,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
     }
 
     this.processor.logger.info(`Not containing an ignored label. Continuing...`);
@@ -247,6 +250,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED);
     }
 
     this.processor.logger.info(`Not containing an ignored assignee. Continuing...`);
@@ -319,6 +323,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED);
     }
 
     this.processor.logger.info(

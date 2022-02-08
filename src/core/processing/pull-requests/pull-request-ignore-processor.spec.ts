@@ -4,6 +4,8 @@ import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -1159,6 +1161,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredLabels$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -1171,6 +1174,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
@@ -1288,9 +1292,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerWarningSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
-          it(`should log a warning about finding too much labels on this pull request since the pagination is not handled`, (): void => {
+          it(`should log a warning about finding too many labels on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
@@ -1300,6 +1305,17 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
               `Found`,
               `value-21`,
               `whiteBright-labels attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should log a warning annotation about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED
             );
           });
         });
@@ -1323,14 +1339,23 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerWarningSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
-          it(`should not log a warning about finding too much labels on this pull request since the pagination is not handled`, (): void => {
+          it(`should not log a warning about finding too many labels on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
 
             expect(pullRequestProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not log a warning annotation about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
+
+            expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
           });
         });
 
@@ -1347,6 +1372,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredAssignees$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -1359,6 +1385,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         pullRequestProcessorLoggerWarningSpy = jest
           .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
@@ -1476,9 +1503,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerWarningSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
-          it(`should log a warning about finding too much assignees on this pull request since the pagination is not handled`, (): void => {
+          it(`should log a warning about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
@@ -1488,6 +1516,17 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
               `Found`,
               `value-21`,
               `whiteBright-assignees attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should log a warning annotation about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED
             );
           });
         });
@@ -1511,14 +1550,23 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorLoggerWarningSpy = jest
               .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
-          it(`should not log a warning about finding too much assignees on this pull request since the pagination is not handled`, (): void => {
+          it(`should not log a warning about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
 
             expect(pullRequestProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not log a warning annotation about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
           });
         });
 
