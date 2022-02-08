@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[943],{4640:function(e){e.exports=JSON.parse('{"name":"Changelog","permalink":"/stale/docs/tags/changelog","docs":[{"id":"changelog","title":"Changelog","description":"Documentation","permalink":"/stale/docs/changelog"}],"allTagsPath":"/stale/docs/tags"}')}}]);
