@@ -32,6 +32,9 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
             totalCount
             nodes {
               id
+              project {
+                name
+              }
             }
           }
           headRef {
