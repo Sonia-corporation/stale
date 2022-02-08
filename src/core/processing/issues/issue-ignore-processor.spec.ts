@@ -1226,7 +1226,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             );
           });
 
-          it(`should log a warning annotation about finding too many labels on this issue since the pagination is not handled`, (): void => {
+          it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             issueIgnoreProcessor.hasAnyIgnoredLabels$$();
@@ -1268,7 +1268,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
           });
 
-          it(`should not log a warning annotation about finding too many labels on this issue since the pagination is not handled`, (): void => {
+          it(`should not annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             issueIgnoreProcessor.hasAnyIgnoredLabels$$();
@@ -1429,7 +1429,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             );
           });
 
-          it(`should log a warning annotation about finding too many assignees on this issue since the pagination is not handled`, (): void => {
+          it(`should annotate about finding too many assignees on this issue since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
@@ -1471,7 +1471,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
           });
 
-          it(`should not log a warning annotation about finding too many assignees on this issue since the pagination is not handled`, (): void => {
+          it(`should not annotate about finding too many assignees on this issue since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
@@ -1740,7 +1740,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
               );
             });
 
-            it(`should log a warning annotation about finding too many labels on this issue since the pagination is not handled`, (): void => {
+            it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
               expect.assertions(2);
 
               issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();

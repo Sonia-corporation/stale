@@ -8,6 +8,8 @@ import { PullRequestStaleProcessor } from '@core/processing/pull-requests/pull-r
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestLabelsService } from '@github/api/labels/github-api-pull-request-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -124,6 +126,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseAddedPullRequestsLabelsCountSpy: jest.SpyInstance;
@@ -169,6 +172,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
         pullRequestProcessorLoggerErrorSpy = jest
           .spyOn(pullRequestStaleProcessor.processor.logger, `error`)
           .mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         pullRequestCommentsProcessorProcessStaleCommentSpy = jest
           .spyOn(pullRequestStaleProcessor.pullRequestCommentsProcessor$$, `processStaleComment`)
           .mockImplementation();
@@ -214,7 +218,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
           githubApiPullRequestLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
         });
 
-        it(`should log and throw an error`, async (): Promise<void> => {
+        it(`should log an error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
@@ -225,6 +229,25 @@ describe(`PullRequestStaleProcessor`, (): void => {
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label`,
             `value-${pullRequestStaleLabel}`
+          );
+        });
+
+        it(`should annotate`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL);
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(pullRequestStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
           );
         });
 

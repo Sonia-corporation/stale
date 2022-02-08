@@ -7,6 +7,9 @@ import { PullRequestRemoveStaleProcessor } from '@core/processing/pull-requests/
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsPullRequestLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-event.interface';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { DateTime } from 'luxon';
@@ -44,6 +47,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
@@ -68,6 +72,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           );
         pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       });
 
       it(`should fetch all the labels added events on this pull request`, async (): Promise<void> => {
@@ -109,7 +114,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           );
         });
 
-        it(`should throw an error`, async (): Promise<void> => {
+        it(`should log the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(pullRequestRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
@@ -119,6 +124,25 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label in the added labels events`
+          );
+        });
+
+        it(`should annotate the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(pullRequestRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
+            new Error(`Could not find the stale label in the added labels events`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(pullRequestRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
+            new Error(`Could not find the stale label in the added labels events`)
           );
         });
       });
@@ -578,6 +602,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestStaleLabel = faker.random.word();
@@ -621,6 +646,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
         pullRequestProcessorLoggerErrorSpy = jest
           .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `error`)
           .mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -657,7 +683,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           githubApiPullRequestLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
         });
 
-        it(`should log and throw an error`, async (): Promise<void> => {
+        it(`should log an error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(pullRequestRemoveStaleProcessor.removeStale()).rejects.toThrow(
@@ -668,6 +694,27 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label`,
             `value-${pullRequestStaleLabel}`
+          );
+        });
+
+        it(`should annotate`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(pullRequestRemoveStaleProcessor.removeStale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
+            EAnnotationErrorPullRequest.NOT_FOUND_STALE_LABEL_EVENT
+          );
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(pullRequestRemoveStaleProcessor.removeStale()).rejects.toThrow(
+            `Could not find the stale label ${pullRequestStaleLabel}`
           );
         });
       });

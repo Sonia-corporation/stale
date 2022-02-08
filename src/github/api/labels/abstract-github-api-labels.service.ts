@@ -10,6 +10,8 @@ import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -49,6 +51,8 @@ export abstract class AbstractGithubApiLabelsService<
 
         if (totalCount === 0) {
           this.processor.logger.error(`Could not find a single label matching`, LoggerService.value(labelName));
+          AnnotationsService.error(EAnnotationError.FAILED_FINDING_LABELS_MATCHING_SEARCH);
+
           throw new Error(`Could not find a single label matching ${labelName}`);
         }
 
@@ -61,6 +65,7 @@ export abstract class AbstractGithubApiLabelsService<
       })
       .catch((error: Readonly<Error>): never => {
         this.processor.logger.error(`Failed to fetch the labels matching`, LoggerService.value(labelName));
+        AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH);
 
         throw error;
       });
@@ -84,6 +89,7 @@ export abstract class AbstractGithubApiLabelsService<
 
         if (!response.repository.label) {
           this.processor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
+          AnnotationsService.error(EAnnotationError.COULD_NOT_FETCH_LABEL);
           this.processor.logger.debug(`Are you sure it exists in your repository?`);
         }
 
@@ -93,6 +99,7 @@ export abstract class AbstractGithubApiLabelsService<
       })
       .catch((error: Readonly<Error>): never => {
         this.processor.logger.error(`Failed to fetch the label`, LoggerService.value(labelName));
+        AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABEL);
 
         throw error;
       });
@@ -127,6 +134,7 @@ export abstract class AbstractGithubApiLabelsService<
           LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
+        AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABEL);
 
         throw error;
       });
@@ -161,6 +169,7 @@ export abstract class AbstractGithubApiLabelsService<
           LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
+        AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABELS);
 
         throw error;
       });
@@ -195,6 +204,7 @@ export abstract class AbstractGithubApiLabelsService<
           LoggerFormatService.red(`from the ${this.type}`),
           LoggerService.value(targetId)
         );
+        AnnotationsService.error(EAnnotationError.FAILED_REMOVING_LABEL);
 
         throw error;
       });

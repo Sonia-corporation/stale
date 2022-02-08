@@ -1308,7 +1308,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             );
           });
 
-          it(`should log a warning annotation about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+          it(`should annotate about finding too many labels on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
@@ -1350,7 +1350,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             expect(pullRequestProcessorLoggerWarningSpy).not.toHaveBeenCalled();
           });
 
-          it(`should not log a warning annotation about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+          it(`should not annotate about finding too many labels on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredLabels$$();
@@ -1519,7 +1519,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             );
           });
 
-          it(`should log a warning annotation about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+          it(`should annotate about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(2);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
@@ -1561,7 +1561,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             expect(pullRequestProcessorLoggerWarningSpy).not.toHaveBeenCalled();
           });
 
-          it(`should not log a warning annotation about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+          it(`should not annotate about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
             expect.assertions(1);
 
             pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();

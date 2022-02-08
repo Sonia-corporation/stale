@@ -5,6 +5,8 @@ import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
@@ -46,6 +48,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
     let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
+    let annotationsServiceErrorSpy: jest.SpyInstance;
     let loggerServiceNoticeSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
@@ -56,6 +59,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
+      annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
@@ -97,13 +101,28 @@ describe(`GithubApiIssuesService`, (): void => {
         graphqlMock.mockRejectedValue(new Error(`graphql error`));
       });
 
-      it(`should log about the error and rethrow it`, async (): Promise<void> => {
+      it(`should log about the error`, async (): Promise<void> => {
         expect.assertions(3);
 
         await expect(GithubApiIssuesService.fetchIssues()).rejects.toThrow(new Error(`graphql error`));
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the issues`);
+      });
+
+      it(`should annotate about the error`, async (): Promise<void> => {
+        expect.assertions(3);
+
+        await expect(GithubApiIssuesService.fetchIssues()).rejects.toThrow(new Error(`graphql error`));
+
+        expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+        expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES);
+      });
+
+      it(`should rethrow`, async (): Promise<void> => {
+        expect.assertions(1);
+
+        await expect(GithubApiIssuesService.fetchIssues()).rejects.toThrow(new Error(`graphql error`));
       });
 
       it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
@@ -332,6 +351,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
@@ -342,6 +362,7 @@ describe(`GithubApiIssuesService`, (): void => {
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -382,13 +403,28 @@ describe(`GithubApiIssuesService`, (): void => {
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
 
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to close the issue`, `value-${issueId}`);
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_CLOSE);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
         });
       });
 

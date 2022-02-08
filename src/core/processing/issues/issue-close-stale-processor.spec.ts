@@ -9,6 +9,8 @@ import { IssuesStatisticsService } from '@core/statistics/issues-statistics.serv
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -206,6 +208,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let processorLoggerNoticeSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
@@ -224,6 +227,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
         processorLoggerInfoSpy = jest.spyOn(issueCloseStaleProcessor.processor.logger, `info`).mockImplementation();
         processorLoggerErrorSpy = jest.spyOn(issueCloseStaleProcessor.processor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         processorLoggerNoticeSpy = jest.spyOn(issueCloseStaleProcessor.processor.logger, `notice`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>(<Partial<IIssuesInputs>>{
@@ -348,6 +352,17 @@ describe(`IssueCloseStaleProcessor`, (): void => {
 
             expect(processorLoggerErrorSpy).toHaveBeenCalledTimes(1);
             expect(processorLoggerErrorSpy).toHaveBeenCalledWith(`Could not find the label`, `value-extra-label`);
+          });
+
+          it(`should annotate about the missing label error and throw an error`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(issueCloseStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL);
           });
 
           it(`should not add the extra label on the issue`, async (): Promise<void> => {
@@ -542,6 +557,18 @@ describe(`IssueCloseStaleProcessor`, (): void => {
               `Could not find the label`,
               `value-extra-label-2`
             );
+          });
+
+          it(`should annotate about the missing label errors and throw an error`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await expect(issueCloseStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL);
           });
 
           it(`should not add the extra labels on the issue`, async (): Promise<void> => {

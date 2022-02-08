@@ -1,6 +1,8 @@
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IInput } from '@core/inputs/types/input';
 import { IInputs } from '@core/inputs/types/inputs';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { isFiniteNumber } from '@utils/numbers/is-finite-number';
@@ -39,6 +41,7 @@ export class CoreInputsService {
         LoggerFormatService.white(`->`),
         LoggerService.value(inputValue)
       );
+      AnnotationsService.error(EAnnotationError.WRONG_INPUT_VALUE);
 
       throw new Error(`Wrong value given to the input number ${input}`);
     }

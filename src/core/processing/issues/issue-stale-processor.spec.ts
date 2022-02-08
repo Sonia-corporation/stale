@@ -8,6 +8,8 @@ import { IssueStaleProcessor } from '@core/processing/issues/issue-stale-process
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { MOCK_DATE_FORMAT } from '@utils/loggers/mock-date-format';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -120,6 +122,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy: jest.SpyInstance;
@@ -157,6 +160,7 @@ describe(`IssueStaleProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest.spyOn(issueStaleProcessor.processor.logger, `info`).mockImplementation();
         issueProcessorLoggerNoticeSpy = jest.spyOn(issueStaleProcessor.processor.logger, `notice`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueStaleProcessor.processor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         issueCommentsProcessorProcessStaleCommentSpy = jest
           .spyOn(issueStaleProcessor.issueCommentsProcessor$$, `processStaleComment`)
           .mockImplementation();
@@ -194,7 +198,7 @@ describe(`IssueStaleProcessor`, (): void => {
           githubApiIssueLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
         });
 
-        it(`should log and throw an error`, async (): Promise<void> => {
+        it(`should log an error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(issueStaleProcessor.stale()).rejects.toThrow(
@@ -205,6 +209,25 @@ describe(`IssueStaleProcessor`, (): void => {
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label`,
             `value-${issueStaleLabel}`
+          );
+        });
+
+        it(`should annotate`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL);
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
           );
         });
 
@@ -470,6 +493,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let processorLoggerNoticeSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
@@ -488,6 +512,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
         processorLoggerInfoSpy = jest.spyOn(issueStaleProcessor.processor.logger, `info`).mockImplementation();
         processorLoggerErrorSpy = jest.spyOn(issueStaleProcessor.processor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         processorLoggerNoticeSpy = jest.spyOn(issueStaleProcessor.processor.logger, `notice`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>(<Partial<IIssuesInputs>>{
@@ -612,6 +637,17 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(processorLoggerErrorSpy).toHaveBeenCalledTimes(1);
             expect(processorLoggerErrorSpy).toHaveBeenCalledWith(`Could not find the label`, `value-extra-label`);
+          });
+
+          it(`should annotate about the missing label error and throw an error`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(issueStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL);
           });
 
           it(`should not add the extra label on the issue`, async (): Promise<void> => {
@@ -806,6 +842,18 @@ describe(`IssueStaleProcessor`, (): void => {
               `Could not find the label`,
               `value-extra-label-2`
             );
+          });
+
+          it(`should annotate about the missing label errors and throw an error`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await expect(issueStaleProcessor.processToAddExtraLabels$$()).rejects.toThrow(
+              new Error(`Could not find the label extra-label-1`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL);
           });
 
           it(`should not add the extra labels on the issue`, async (): Promise<void> => {

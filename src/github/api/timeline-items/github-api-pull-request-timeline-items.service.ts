@@ -5,6 +5,8 @@ import { AbstractGithubApiTimelineItemsService } from '@github/api/timeline-item
 import { GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-pull-request-labeled-event-query';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
@@ -45,6 +47,7 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
               `Could not find a single added label event for the pull request`,
               LoggerService.value(pullRequestNumber)
             );
+            AnnotationsService.error(EAnnotationErrorPullRequest.NO_LABEL_EVENT_FOUND);
             throw new Error(`Could not find a single added label event for the pull request ${pullRequestNumber}`);
           }
 
@@ -52,6 +55,9 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
           if (filteredCount > pageCount) {
             this.processor.logger.error(
               `Reached the maximum number of added label events supported for now. The pagination support is not yet implemented!`
+            );
+            AnnotationsService.error(
+              EAnnotationErrorPullRequest.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
             );
             throw new Error(`Reached the maximum number of added label events supported for now`);
           }
@@ -70,6 +76,7 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
           `Failed to fetch the added labels events on the pull request`,
           LoggerService.value(pullRequestNumber)
         );
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS);
 
         throw error;
       });

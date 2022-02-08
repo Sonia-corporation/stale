@@ -8,6 +8,8 @@ import { GITHUB_LABELS_PER_ISSUE } from '@github/api/issues/constants/github-lab
 import { GITHUB_PROJECT_CARDS_PER_ISSUE } from '@github/api/issues/constants/github-project-cards-per-issue';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -60,6 +62,7 @@ export class GithubApiIssuesService {
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(`Failed to fetch the issues`);
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES);
 
         throw error;
       });
@@ -91,6 +94,7 @@ export class GithubApiIssuesService {
       })
       .catch((error: Readonly<Error>): never => {
         this.issueProcessor.logger.error(`Failed to close the issue`, LoggerService.value(issueId));
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_CLOSE);
 
         throw error;
       });

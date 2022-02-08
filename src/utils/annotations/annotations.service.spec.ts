@@ -1,4 +1,6 @@
 import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
+import { EAnnotationNotice } from '@utils/annotations/enums/annotation-notice.enum';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.service';
 
@@ -15,16 +17,16 @@ describe(`AnnotationsService`, (): void => {
     it(`should log the notice`, (): void => {
       expect.assertions(2);
 
-      AnnotationsService.notice(`dummy message`);
+      AnnotationsService.notice(EAnnotationNotice.DUMMY);
 
       expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledTimes(1);
-      expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledWith(`dummy message`);
+      expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledWith(EAnnotationNotice.DUMMY);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = AnnotationsService.notice();
+      const result = AnnotationsService.notice(EAnnotationNotice.DUMMY);
 
       expect(result).toStrictEqual(AnnotationsService);
     });
@@ -51,7 +53,7 @@ describe(`AnnotationsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = AnnotationsService.warning();
+      const result = AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
 
       expect(result).toStrictEqual(AnnotationsService);
     });
@@ -67,16 +69,20 @@ describe(`AnnotationsService`, (): void => {
     it(`should log the error`, (): void => {
       expect.assertions(2);
 
-      AnnotationsService.error(`dummy message`);
+      AnnotationsService.error(EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED);
 
       expect(loggerAnnotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-      expect(loggerAnnotationsServiceErrorSpy).toHaveBeenCalledWith(`dummy message`);
+      expect(loggerAnnotationsServiceErrorSpy).toHaveBeenCalledWith(
+        EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+      );
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = AnnotationsService.error();
+      const result = AnnotationsService.error(
+        EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+      );
 
       expect(result).toStrictEqual(AnnotationsService);
     });

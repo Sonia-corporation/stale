@@ -5,6 +5,8 @@ import { AbstractGithubApiTimelineItemsService } from '@github/api/timeline-item
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { context } from '@actions/github';
@@ -42,6 +44,7 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
               `Could not find a single added label event for the issue`,
               LoggerService.value(issueNumber)
             );
+            AnnotationsService.error(EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND);
             throw new Error(`Could not find a single added label event for the issue ${issueNumber}`);
           }
 
@@ -50,6 +53,7 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
             this.processor.logger.error(
               `Reached the maximum number of added label events supported for now. The pagination support is not yet implemented!`
             );
+            AnnotationsService.error(EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED);
             throw new Error(`Reached the maximum number of added label events supported for now`);
           }
 
@@ -67,6 +71,7 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
           `Failed to fetch the added labels events on the issue`,
           LoggerService.value(issueNumber)
         );
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS);
 
         throw error;
       });
