@@ -7,6 +7,7 @@ import _ from 'lodash';
  * No ANSI characters should be used
  * Annotations are not compatible to colours logs
  * See the [issue #422](https://github.com/Sonia-corporation/stale/issues/422)
+ * Should normally be used through {@link AnnotationsService}
  */
 export class LoggerAnnotationsService {
   public static notice(...message: ReadonlyArray<string>): LoggerAnnotationsService {

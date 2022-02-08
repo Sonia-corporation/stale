@@ -22,19 +22,19 @@ export class LoggerService {
   }
 
   public static notice(...message: ReadonlyArray<string>): LoggerService {
-    core.notice(LoggerFormatService.whiteBright(_.join(message, ` `)));
+    core.info(LoggerFormatService.whiteBright(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static warning(...message: ReadonlyArray<string>): LoggerService {
-    core.warning(LoggerFormatService.yellow(_.join(message, ` `)));
+    core.info(LoggerFormatService.yellow(_.join(message, ` `)));
 
     return LoggerService;
   }
 
   public static error(...message: ReadonlyArray<string>): LoggerService {
-    core.error(LoggerFormatService.red(_.join(message, ` `)));
+    core.info(LoggerFormatService.red(_.join(message, ` `)));
 
     return LoggerService;
   }

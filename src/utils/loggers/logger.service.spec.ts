@@ -84,10 +84,10 @@ describe(`LoggerService`, (): void => {
   });
 
   describe(`notice()`, (): void => {
-    let coreNoticeSpy: jest.SpyInstance;
+    let coreInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      coreNoticeSpy = jest.spyOn(core, `notice`).mockImplementation();
+      coreInfoSpy = jest.spyOn(core, `info`).mockImplementation();
     });
 
     describe(`when there is one given message`, (): void => {
@@ -96,8 +96,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.notice(`dummy message`);
 
-        expect(coreNoticeSpy).toHaveBeenCalledTimes(1);
-        expect(coreNoticeSpy).toHaveBeenCalledWith(`whiteBright-dummy message`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`whiteBright-dummy message`);
       });
     });
 
@@ -107,8 +107,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.notice(`dummy message 1`, `dummy message 2`);
 
-        expect(coreNoticeSpy).toHaveBeenCalledTimes(1);
-        expect(coreNoticeSpy).toHaveBeenCalledWith(`whiteBright-dummy message 1 dummy message 2`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`whiteBright-dummy message 1 dummy message 2`);
       });
     });
 
@@ -122,10 +122,10 @@ describe(`LoggerService`, (): void => {
   });
 
   describe(`warning()`, (): void => {
-    let coreWarningSpy: jest.SpyInstance;
+    let coreInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      coreWarningSpy = jest.spyOn(core, `warning`).mockImplementation();
+      coreInfoSpy = jest.spyOn(core, `info`).mockImplementation();
     });
 
     describe(`when there is one given message`, (): void => {
@@ -134,8 +134,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.warning(`dummy message`);
 
-        expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`yellow-dummy message`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`yellow-dummy message`);
       });
     });
 
@@ -145,8 +145,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.warning(`dummy message 1`, `dummy message 2`);
 
-        expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`yellow-dummy message 1 dummy message 2`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`yellow-dummy message 1 dummy message 2`);
       });
     });
 
@@ -160,10 +160,10 @@ describe(`LoggerService`, (): void => {
   });
 
   describe(`error()`, (): void => {
-    let coreErrorSpy: jest.SpyInstance;
+    let coreInfoSpy: jest.SpyInstance;
 
     beforeEach((): void => {
-      coreErrorSpy = jest.spyOn(core, `error`).mockImplementation();
+      coreInfoSpy = jest.spyOn(core, `info`).mockImplementation();
     });
 
     describe(`when there is one given message`, (): void => {
@@ -172,8 +172,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.error(`dummy message`);
 
-        expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`red-dummy message`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`red-dummy message`);
       });
     });
 
@@ -183,8 +183,8 @@ describe(`LoggerService`, (): void => {
 
         LoggerService.error(`dummy message 1`, `dummy message 2`);
 
-        expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`red-dummy message 1 dummy message 2`);
+        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
+        expect(coreInfoSpy).toHaveBeenCalledWith(`red-dummy message 1 dummy message 2`);
       });
     });
 
