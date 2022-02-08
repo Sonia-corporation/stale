@@ -253,4 +253,78 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     return false;
   }
+
+  public shouldIgnoreDueToAnyWhiteListedProjectCard$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed based on any of the associated project cards...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (_.isEmpty(issuesInputs.issueOnlyAnyProjectCards)) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS),
+        LoggerFormatService.whiteBright(
+          `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+        )
+      );
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS),
+      LoggerFormatService.whiteBright(
+        `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+      )
+    );
+
+    if (this.processor.item.projectCards.nodes.length === 0) {
+      this.processor.logger.info(`Not containing any project card. Skipping the processing of this issue...`);
+
+      return true;
+    }
+
+    const duplicatedProjectNames: string[] = getDuplicates(
+      this._getProjectNames(this.processor.item.projectCards.nodes),
+      issuesInputs.issueOnlyAnyProjectCards
+    );
+    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectNames);
+
+    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+      this.processor.logger.info(
+        `Containing one of the required project card`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedProjectCard)
+      );
+      this.processor.logger.info(`Continuing the processing for this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+
+    // @todo handle the pagination
+    const { totalCount } = this.processor.item.projectCards;
+
+    if (totalCount > GithubApiIssuesService.projectCardsPerIssue) {
+      this.processor.logger.warning(
+        `Found`,
+        LoggerService.value(_.toString(totalCount)),
+        LoggerFormatService.whiteBright(
+          `project card${
+            totalCount > 1 ? `s` : ``
+          } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+        )
+      );
+    }
+
+    this.processor.logger.info(
+      `Not containing any of the required project card. Skipping the processing of this issue...`
+    );
+
+    return true;
+  }
 }

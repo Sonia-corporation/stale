@@ -31,6 +31,9 @@ export const GITHUB_API_ISSUES_QUERY = `
             totalCount
             nodes {
               id
+              project {
+                name
+              }
             }
           }
         }

@@ -69,6 +69,9 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
         nodes: [
           {
             id: faker.datatype.uuid(),
+            project: {
+              name: faker.datatype.string(),
+            },
           },
         ],
         totalCount: 1,

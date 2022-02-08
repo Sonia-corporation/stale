@@ -1,16 +1,24 @@
 ---
-id: issues-examples
-title: Issues configuration examples
+id: stale-with-comments-except-if-assigned-example
+title: Stale with comments except if assigned
+description: |
+  Example to stale all issues with a comment except if somebody is assigned.
 tags:
   - Issues
+  - Comments
+  - Assignees
   - Examples
 ---
 
 ## Stale all issues with comments except if somebody is assigned {#stale-all-issues-with-comments-except-if-somebody-is-assigned}
 
+### Description {#description}
+
 The label `ìnactive` will be added on all issues without any activity during the last 45 days, except if someone is assigned to it or if this is either a frozen bug, a bug that need help or a confirmed bug.  
 A comment will also be added to warn the people about this.  
 If there is still no activity after two weeks, the issue will be closed and the `closed-due-to-inactivity` label will be added.
+
+### Example {#example}
 
 ```yml
 # ...

@@ -68,7 +68,7 @@ const config = {
               },
               {
                 label: `Examples`,
-                to: `/docs/examples/issues-examples`,
+                to: `/docs/examples/stale-with-comments-except-if-assigned-example`,
               },
             ],
             title: `Docs`,
