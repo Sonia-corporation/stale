@@ -126,7 +126,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
       this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.processor.logger.notice(`The issue is no longer stale`);
+    this.processor.logger.info(`The issue is no longer stale`);
   }
 
   private _getStaleLabelEvents(

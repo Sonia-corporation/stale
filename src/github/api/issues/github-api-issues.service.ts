@@ -41,7 +41,7 @@ export class GithubApiIssuesService {
           const { totalCount } = response.repository.issues;
 
           if (totalCount === 0) {
-            LoggerService.notice(`No issue can be processed`);
+            LoggerService.info(`No issue can be processed`);
           } else {
             LoggerService.info(
               LoggerService.value(_.toString(totalCount)),

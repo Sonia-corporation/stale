@@ -45,7 +45,7 @@ export abstract class AbstractExtraLabelsProcessor<
     if (!commonInputs.dryRun) {
       await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
 
-      this.processor.logger.notice(
+      this.processor.logger.info(
         LoggerService.value(labelsToAdd.length),
         LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
       );

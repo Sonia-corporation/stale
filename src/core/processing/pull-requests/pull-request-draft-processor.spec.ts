@@ -45,7 +45,6 @@ describe(`PullRequestDraftProcessor`, (): void => {
 
     describe(`draft()`, (): void => {
       let processorLoggerInfoSpy: jest.SpyInstance;
-      let processorLoggerNoticeSpy: jest.SpyInstance;
       let githubApiPullRequestsServiceDraftPullRequestSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseDraftPullRequestsCountSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
@@ -59,9 +58,6 @@ describe(`PullRequestDraftProcessor`, (): void => {
         pullRequestDraftProcessor = new PullRequestDraftProcessor(pullRequestProcessor);
 
         processorLoggerInfoSpy = jest.spyOn(pullRequestDraftProcessor.processor.logger, `info`).mockImplementation();
-        processorLoggerNoticeSpy = jest
-          .spyOn(pullRequestDraftProcessor.processor.logger, `notice`)
-          .mockImplementation();
         githubApiPullRequestsServiceDraftPullRequestSpy = jest
           .spyOn(pullRequestDraftProcessor.githubApiPullRequestsService$$, `draftPullRequest`)
           .mockImplementation();
@@ -80,8 +76,8 @@ describe(`PullRequestDraftProcessor`, (): void => {
 
         await pullRequestDraftProcessor.draft();
 
-        expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(processorLoggerInfoSpy).toHaveBeenCalledWith(`Converting this pull request to draft...`);
+        expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Converting this pull request to draft...`);
       });
 
       it(`should get the common inputs`, async (): Promise<void> => {
@@ -121,8 +117,8 @@ describe(`PullRequestDraftProcessor`, (): void => {
 
             await pullRequestDraftProcessor.draft();
 
-            expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now a draft pull request`);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+            expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The pull request is now a draft pull request`);
           });
 
           it(`should increase the draft pull requests count statistic by 1`, async (): Promise<void> => {
@@ -151,7 +147,7 @@ describe(`PullRequestDraftProcessor`, (): void => {
 
             await expect(pullRequestDraftProcessor.draft()).rejects.toThrow(new Error(`draft error`));
 
-            expect(processorLoggerNoticeSpy).not.toHaveBeenCalled();
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(1);
           });
 
           it(`should not increase the draft pull requests count statistic by 1`, async (): Promise<void> => {

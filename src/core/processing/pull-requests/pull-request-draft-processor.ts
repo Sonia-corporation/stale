@@ -29,7 +29,7 @@ export class PullRequestDraftProcessor extends AbstractProcessor<PullRequestProc
     if (!commonInputs.dryRun) {
       await this.githubApiPullRequestsService$$.draftPullRequest(this.processor.item.id);
 
-      this.processor.logger.notice(`The pull request is now a draft pull request`);
+      this.processor.logger.info(`The pull request is now a draft pull request`);
     } else {
       this.processor.logger.info(`The pull request could not be converted to draft due to the dry-run mode`);
     }

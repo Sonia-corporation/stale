@@ -124,7 +124,6 @@ describe(`PullRequestStaleProcessor`, (): void => {
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceAddLabelSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let annotationsServiceErrorSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
@@ -166,9 +165,6 @@ describe(`PullRequestStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestStaleProcessor.processor.logger, `info`)
           .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestStaleProcessor.processor.logger, `notice`)
-          .mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest
           .spyOn(pullRequestStaleProcessor.processor.logger, `error`)
           .mockImplementation();
@@ -195,7 +191,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
           `Adding the stale state to this pull request...`
@@ -305,16 +301,15 @@ describe(`PullRequestStaleProcessor`, (): void => {
           });
 
           it(`should add the stale label on the pull request`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(5);
 
             await pullRequestStaleProcessor.stale();
 
             expect(githubApiPullRequestLabelsServiceAddLabelSpy).toHaveBeenCalledTimes(1);
             expect(githubApiPullRequestLabelsServiceAddLabelSpy).toHaveBeenCalledWith(pullRequestId, staleLabelId);
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now stale`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The pull request is now stale`);
           });
 
           it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
@@ -357,18 +352,17 @@ describe(`PullRequestStaleProcessor`, (): void => {
           });
 
           it(`should not add the stale label on the pull request`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await pullRequestStaleProcessor.stale();
 
             expect(githubApiPullRequestLabelsServiceAddLabelSpy).not.toHaveBeenCalled();
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,
               `The stale label was not added due to the dry-run mode`
             );
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now stale`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The pull request is now stale`);
           });
 
           it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
@@ -521,7 +515,6 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerErrorSpy: jest.SpyInstance;
-      let processorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
@@ -539,9 +532,6 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
         processorLoggerInfoSpy = jest.spyOn(pullRequestStaleProcessor.processor.logger, `info`).mockImplementation();
         processorLoggerErrorSpy = jest.spyOn(pullRequestStaleProcessor.processor.logger, `error`).mockImplementation();
-        processorLoggerNoticeSpy = jest
-          .spyOn(pullRequestStaleProcessor.processor.logger, `notice`)
-          .mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
           .mockReturnValue(
@@ -704,7 +694,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             await pullRequestStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -795,8 +785,8 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
               await pullRequestStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-1`, `whiteBright-extra label added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `value-1`, `whiteBright-extra label added`);
             });
           });
         });
@@ -906,7 +896,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
             await pullRequestStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -1004,8 +994,8 @@ describe(`PullRequestStaleProcessor`, (): void => {
 
               await pullRequestStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-2`, `whiteBright-extra labels added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `value-2`, `whiteBright-extra labels added`);
             });
           });
         });

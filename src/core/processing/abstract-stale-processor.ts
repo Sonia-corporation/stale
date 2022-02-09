@@ -67,7 +67,7 @@ export abstract class AbstractStaleProcessor<
     }
 
     this._increaseAddedLabelsCountStatistic();
-    this.processor.logger.notice(`The ${this.type} is now stale`);
+    this.processor.logger.info(`The ${this.type} is now stale`);
   }
 
   public isStaleByUpdateDate$$(): boolean {
@@ -136,7 +136,7 @@ export abstract class AbstractStaleProcessor<
     if (!commonInputs.dryRun) {
       await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
 
-      this.processor.logger.notice(
+      this.processor.logger.info(
         LoggerService.value(labelsToAdd.length),
         LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
       );

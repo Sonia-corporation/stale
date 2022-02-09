@@ -21,12 +21,6 @@ export class LoggerService {
     return LoggerService;
   }
 
-  public static notice(...message: ReadonlyArray<string>): LoggerService {
-    core.info(LoggerFormatService.whiteBright(_.join(message, ` `)));
-
-    return LoggerService;
-  }
-
   public static warning(...message: ReadonlyArray<string>): LoggerService {
     core.info(LoggerFormatService.yellow(_.join(message, ` `)));
 

@@ -120,7 +120,6 @@ describe(`IssueStaleProcessor`, (): void => {
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiIssueLabelsServiceAddLabelSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
       let annotationsServiceErrorSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessStaleCommentSpy: jest.SpyInstance;
@@ -158,7 +157,6 @@ describe(`IssueStaleProcessor`, (): void => {
           .spyOn(issueStaleProcessor.githubApiIssueLabelsService$$, `addLabel`)
           .mockImplementation();
         issueProcessorLoggerInfoSpy = jest.spyOn(issueStaleProcessor.processor.logger, `info`).mockImplementation();
-        issueProcessorLoggerNoticeSpy = jest.spyOn(issueStaleProcessor.processor.logger, `notice`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueStaleProcessor.processor.logger, `error`).mockImplementation();
         annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         issueCommentsProcessorProcessStaleCommentSpy = jest
@@ -181,7 +179,7 @@ describe(`IssueStaleProcessor`, (): void => {
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Adding the stale state to this issue...`);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           2,
@@ -285,16 +283,15 @@ describe(`IssueStaleProcessor`, (): void => {
           });
 
           it(`should add the stale label on the issue`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(5);
 
             await issueStaleProcessor.stale();
 
             expect(githubApiIssueLabelsServiceAddLabelSpy).toHaveBeenCalledTimes(1);
             expect(githubApiIssueLabelsServiceAddLabelSpy).toHaveBeenCalledWith(issueId, staleLabelId);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was added`);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The issue is now stale`);
           });
 
           it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
@@ -337,18 +334,17 @@ describe(`IssueStaleProcessor`, (): void => {
           });
 
           it(`should not add the stale label on the issue`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await issueStaleProcessor.stale();
 
             expect(githubApiIssueLabelsServiceAddLabelSpy).not.toHaveBeenCalled();
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,
               `The stale label was not added due to the dry-run mode`
             );
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is now stale`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The issue is now stale`);
           });
 
           it(`should increase the number of added labels count statistic by 1`, async (): Promise<void> => {
@@ -494,7 +490,6 @@ describe(`IssueStaleProcessor`, (): void => {
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerErrorSpy: jest.SpyInstance;
       let annotationsServiceErrorSpy: jest.SpyInstance;
-      let processorLoggerNoticeSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiIssueLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
@@ -513,7 +508,6 @@ describe(`IssueStaleProcessor`, (): void => {
         processorLoggerInfoSpy = jest.spyOn(issueStaleProcessor.processor.logger, `info`).mockImplementation();
         processorLoggerErrorSpy = jest.spyOn(issueStaleProcessor.processor.logger, `error`).mockImplementation();
         annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
-        processorLoggerNoticeSpy = jest.spyOn(issueStaleProcessor.processor.logger, `notice`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>(<Partial<IIssuesInputs>>{
             issueAddLabelsAfterStale: [],
@@ -685,7 +679,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
             await issueStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -774,8 +768,8 @@ describe(`IssueStaleProcessor`, (): void => {
 
               await issueStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-1`, `whiteBright-extra label added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `value-1`, `whiteBright-extra label added`);
             });
           });
         });
@@ -897,7 +891,7 @@ describe(`IssueStaleProcessor`, (): void => {
 
             await issueStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -995,8 +989,8 @@ describe(`IssueStaleProcessor`, (): void => {
 
               await issueStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-2`, `whiteBright-extra labels added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `value-2`, `whiteBright-extra labels added`);
             });
           });
         });

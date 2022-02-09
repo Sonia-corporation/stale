@@ -42,7 +42,7 @@ export class GithubApiPullRequestsService {
           const { totalCount } = response.repository.pullRequests;
 
           if (totalCount === 0) {
-            LoggerService.notice(`No pull request can be processed`);
+            LoggerService.info(`No pull request can be processed`);
           } else {
             LoggerService.info(
               LoggerService.value(_.toString(totalCount)),

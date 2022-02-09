@@ -134,7 +134,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
       this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.processor.logger.notice(`The pull request is no longer stale`);
+    this.processor.logger.info(`The pull request is no longer stale`);
   }
 
   private _getStaleLabelEvents(

@@ -50,7 +50,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
     let annotationsServiceErrorSpy: jest.SpyInstance;
-    let loggerServiceNoticeSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
     let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
@@ -61,7 +60,6 @@ describe(`GithubApiPullRequestsService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
       annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
-      loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
         // @ts-ignore
@@ -165,8 +163,8 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
             await GithubApiPullRequestsService.fetchPullRequests();
 
-            expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`No pull request can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `No pull request can be processed`);
           });
         });
 

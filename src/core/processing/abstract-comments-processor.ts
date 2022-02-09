@@ -35,7 +35,7 @@ export abstract class AbstractCommentsProcessor<
     }
 
     this._increaseAddedCommentsCountStatistic();
-    this.processor.logger.notice(`Stale comment added`);
+    this.processor.logger.info(`Stale comment added`);
   }
 
   public async processCloseComment(): Promise<void> {
@@ -59,7 +59,7 @@ export abstract class AbstractCommentsProcessor<
     }
 
     this._increaseAddedCommentsCountStatistic();
-    this.processor.logger.notice(`Close comment added`);
+    this.processor.logger.info(`Close comment added`);
   }
 
   protected abstract _getItemId(): IUuid;

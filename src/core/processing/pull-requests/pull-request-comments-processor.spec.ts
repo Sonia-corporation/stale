@@ -51,7 +51,6 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy: jest.SpyInstance;
       let githubApiPullRequestCommentsServiceAddCommentSpy: jest.SpyInstance;
 
@@ -78,9 +77,6 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           );
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestCommentsProcessor.processor.logger, `info`)
-          .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
@@ -161,7 +157,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processStaleComment();
 
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale comment is set to`,
@@ -176,8 +172,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processStaleComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Stale comment added`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Stale comment added`);
           });
         });
 
@@ -191,19 +187,18 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           });
 
           it(`should add the stale comment on the pull request`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await pullRequestCommentsProcessor.processStaleComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Stale comment added`);
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The stale comment is set to`,
               `value-dummy-comment`
             );
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the stale comment...`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Stale comment added`);
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {
@@ -220,8 +215,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processStaleComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Stale comment added`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Stale comment added`);
           });
         });
       });
@@ -233,7 +228,6 @@ describe(`PullRequestCommentsProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy: jest.SpyInstance;
       let githubApiPullRequestCommentsServiceAddCommentSpy: jest.SpyInstance;
 
@@ -260,9 +254,6 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           );
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestCommentsProcessor.processor.logger, `info`)
-          .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCommentsProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseAddedPullRequestsCommentsCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseAddedPullRequestsCommentsCount`)
@@ -343,7 +334,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processCloseComment();
 
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The close comment is set to`,
@@ -358,8 +349,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processCloseComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Close comment added`);
           });
         });
 
@@ -373,19 +364,18 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           });
 
           it(`should add the close comment on the pull request`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await pullRequestCommentsProcessor.processCloseComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `The close comment is set to`,
               `value-dummy-comment`
             );
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the close comment...`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Close comment added`);
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {
@@ -402,8 +392,8 @@ describe(`PullRequestCommentsProcessor`, (): void => {
 
             await pullRequestCommentsProcessor.processCloseComment();
 
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`Close comment added`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Close comment added`);
           });
         });
       });

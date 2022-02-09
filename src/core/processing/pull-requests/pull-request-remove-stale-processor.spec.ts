@@ -600,7 +600,6 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceRemoveLabelSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
       let annotationsServiceErrorSpy: jest.SpyInstance;
 
@@ -640,9 +639,6 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `info`)
           .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `notice`)
-          .mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest
           .spyOn(pullRequestRemoveStaleProcessor.processor.logger, `error`)
           .mockImplementation();
@@ -660,7 +656,7 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           1,
           `Removing the stale state from this pull request...`
@@ -740,16 +736,15 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           });
 
           it(`should remove the stale label from this pull request`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(5);
 
             await pullRequestRemoveStaleProcessor.removeStale();
 
             expect(githubApiPullRequestLabelsServiceRemoveLabelSpy).toHaveBeenCalledTimes(1);
             expect(githubApiPullRequestLabelsServiceRemoveLabelSpy).toHaveBeenCalledWith(pullRequestId, staleLabelId);
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was removed`);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is no longer stale`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The pull request is no longer stale`);
           });
         });
 
@@ -765,18 +760,17 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
           });
 
           it(`should not remove the stale label from this pull request`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await pullRequestRemoveStaleProcessor.removeStale();
 
             expect(githubApiPullRequestLabelsServiceRemoveLabelSpy).not.toHaveBeenCalled();
-            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,
               `The stale label was not removed due to the dry-run mode`
             );
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is no longer stale`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The pull request is no longer stale`);
           });
         });
       });

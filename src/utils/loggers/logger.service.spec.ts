@@ -83,44 +83,6 @@ describe(`LoggerService`, (): void => {
     });
   });
 
-  describe(`notice()`, (): void => {
-    let coreInfoSpy: jest.SpyInstance;
-
-    beforeEach((): void => {
-      coreInfoSpy = jest.spyOn(core, `info`).mockImplementation();
-    });
-
-    describe(`when there is one given message`, (): void => {
-      it(`should log the message in white bright`, (): void => {
-        expect.assertions(2);
-
-        LoggerService.notice(`dummy message`);
-
-        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
-        expect(coreInfoSpy).toHaveBeenCalledWith(`whiteBright-dummy message`);
-      });
-    });
-
-    describe(`when there is multiple given messages`, (): void => {
-      it(`should merge, separate by a space and log the messages in white bright`, (): void => {
-        expect.assertions(2);
-
-        LoggerService.notice(`dummy message 1`, `dummy message 2`);
-
-        expect(coreInfoSpy).toHaveBeenCalledTimes(1);
-        expect(coreInfoSpy).toHaveBeenCalledWith(`whiteBright-dummy message 1 dummy message 2`);
-      });
-    });
-
-    it(`should return the service`, (): void => {
-      expect.assertions(1);
-
-      const result = LoggerService.notice();
-
-      expect(result).toStrictEqual(LoggerService);
-    });
-  });
-
   describe(`warning()`, (): void => {
     let coreInfoSpy: jest.SpyInstance;
 
