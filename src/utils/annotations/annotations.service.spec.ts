@@ -1,6 +1,5 @@
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
-import { EAnnotationNotice } from '@utils/annotations/enums/annotation-notice.enum';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.service';
 
@@ -17,16 +16,16 @@ describe(`AnnotationsService`, (): void => {
     it(`should log the notice`, (): void => {
       expect.assertions(2);
 
-      AnnotationsService.notice(EAnnotationNotice.DUMMY);
+      AnnotationsService.notice(`dummy notice`);
 
       expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledTimes(1);
-      expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledWith(EAnnotationNotice.DUMMY);
+      expect(loggerAnnotationsServiceNoticeSpy).toHaveBeenCalledWith(`dummy notice`);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = AnnotationsService.notice(EAnnotationNotice.DUMMY);
+      const result = AnnotationsService.notice(`dummy notice`);
 
       expect(result).toStrictEqual(AnnotationsService);
     });
