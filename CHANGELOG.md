@@ -1,5 +1,14 @@
 # Sonia stale action
 
+## [1.43.1](https://github.com/Sonia-corporation/stale/compare/1.43.0...1.43.1) (2022-02-09)
+
+
+### :bug: Bug Fixes
+
+* **logs:** properly count the number of processed items within all batches in the logs ([8a17a18](https://github.com/Sonia-corporation/stale/commit/8a17a18df755c446c48ddf8f719bd5afcaedd6be)), closes [#431](https://github.com/Sonia-corporation/stale/issues/431)
+  Only the first batch was taken into consideration.
+The information was lost during the recursion of batches processing.
+
 # [1.43.0](https://github.com/Sonia-corporation/stale/compare/1.42.1...1.43.0) (2022-02-09)
 
 
