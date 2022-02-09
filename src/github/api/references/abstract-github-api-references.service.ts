@@ -3,6 +3,8 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -39,6 +41,7 @@ export abstract class AbstractGithubApiReferencesService<
           LoggerService.value(referenceId),
           LoggerFormatService.red(`from this ${this.type}`)
         );
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE);
 
         throw error;
       });

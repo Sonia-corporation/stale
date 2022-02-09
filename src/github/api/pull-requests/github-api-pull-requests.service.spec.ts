@@ -6,6 +6,8 @@ import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/consta
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
@@ -47,7 +49,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
     let loggerServiceInfoSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
-    let loggerServiceNoticeSpy: jest.SpyInstance;
+    let annotationsServiceErrorSpy: jest.SpyInstance;
     let loggerServiceDebugSpy: jest.SpyInstance;
     let octokitServiceGetOctokitSpy: jest.SpyInstance;
     let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy: jest.SpyInstance;
@@ -57,7 +59,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
-      loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
+      annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
         // @ts-ignore
@@ -98,13 +100,30 @@ describe(`GithubApiPullRequestsService`, (): void => {
         graphqlMock.mockRejectedValue(new Error(`graphql error`));
       });
 
-      it(`should log about the error and rethrow it`, async (): Promise<void> => {
+      it(`should log about the error`, async (): Promise<void> => {
         expect.assertions(3);
 
         await expect(GithubApiPullRequestsService.fetchPullRequests()).rejects.toThrow(new Error(`graphql error`));
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`Failed to fetch the pull requests`);
+      });
+
+      it(`should annotate about the error`, async (): Promise<void> => {
+        expect.assertions(3);
+
+        await expect(GithubApiPullRequestsService.fetchPullRequests()).rejects.toThrow(new Error(`graphql error`));
+
+        expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+        expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
+          EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS
+        );
+      });
+
+      it(`should rethrow`, async (): Promise<void> => {
+        expect.assertions(1);
+
+        await expect(GithubApiPullRequestsService.fetchPullRequests()).rejects.toThrow(new Error(`graphql error`));
       });
 
       it(`should not increase the statistic regarding the API pull requests queries calls`, async (): Promise<void> => {
@@ -144,8 +163,8 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
             await GithubApiPullRequestsService.fetchPullRequests();
 
-            expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`No pull request can be processed`);
+            expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+            expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(2, `No pull request can be processed`);
           });
         });
 
@@ -341,6 +360,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
@@ -351,6 +371,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
         pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -395,7 +416,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
@@ -406,6 +427,25 @@ describe(`GithubApiPullRequestsService`, (): void => {
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to close the pull request`,
             `value-${pullRequestId}`
+          );
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_CLOSE);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
+            new Error(`graphql error`)
           );
         });
       });
@@ -446,6 +486,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
@@ -456,6 +497,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
         pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -501,7 +543,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
@@ -512,6 +554,25 @@ describe(`GithubApiPullRequestsService`, (): void => {
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to draft the pull request`,
             `value-${pullRequestId}`
+          );
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DRAFT);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiPullRequestsService.draftPullRequest(pullRequestId)).rejects.toThrow(
+            new Error(`graphql error`)
           );
         });
       });

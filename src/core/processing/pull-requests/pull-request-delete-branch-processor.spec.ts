@@ -53,7 +53,6 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy: jest.SpyInstance;
       let githubApiPullRequestReferencesServiceDeleteReferenceSpy: jest.SpyInstance;
 
@@ -86,9 +85,6 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
           );
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestDeleteBranchProcessor.processor.logger, `info`)
-          .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestDeleteBranchProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsStatisticsServiceIncreaseDeletedPullRequestsBranchesCountSpy = jest
           .spyOn(PullRequestsStatisticsService.getInstance(), `increaseDeletedPullRequestsBranchesCount`)
@@ -166,7 +162,7 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
 
           await pullRequestDeleteBranchProcessor.delete();
 
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The input`,
@@ -205,8 +201,9 @@ describe(`PullRequestDeleteBranchProcessor`, (): void => {
 
             expect(githubApiPullRequestReferencesServiceDeleteReferenceSpy).toHaveBeenCalledTimes(1);
             expect(githubApiPullRequestReferencesServiceDeleteReferenceSpy).toHaveBeenCalledWith(branchId);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
               `The branch`,
               `value-${branchName}`,
               `whiteBright-was deleted`

@@ -9,6 +9,9 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
 import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/github-api-issue-timeline-items.service';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -57,6 +60,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
 
     if (!lastAddedStaleLabelEvent) {
       this.processor.logger.error(`Could not find the stale label in the added labels events`);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
 
       throw new Error(`Could not find the stale label in the added labels events`);
     }
@@ -106,6 +110,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
 
     if (!label) {
       this.processor.logger.error(`Could not find the stale label`, LoggerService.value(issuesInputs.issueStaleLabel));
+      AnnotationsService.error(EAnnotationErrorIssue.NOT_FOUND_STALE_LABEL_EVENT);
 
       throw new Error(`Could not find the stale label ${issuesInputs.issueStaleLabel}`);
     }
@@ -121,7 +126,7 @@ export class IssueRemoveStaleProcessor extends AbstractRemoveStaleProcessor<Issu
       this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.processor.logger.notice(`The issue is no longer stale`);
+    this.processor.logger.info(`The issue is no longer stale`);
   }
 
   private _getStaleLabelEvents(

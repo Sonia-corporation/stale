@@ -9,6 +9,9 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
 import { GithubApiPullRequestTimelineItemsService } from '@github/api/timeline-items/github-api-pull-request-timeline-items.service';
 import { IGithubApiTimelineItemsPullRequestLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-event.interface';
 import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { isDateMoreRecent } from '@utils/dates/is-date-more-recent';
 import { iso8601ToDatetime } from '@utils/dates/iso-8601-to-datetime';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
@@ -59,6 +62,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
 
     if (!lastAddedStaleLabelEvent) {
       this.processor.logger.error(`Could not find the stale label in the added labels events`);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
 
       throw new Error(`Could not find the stale label in the added labels events`);
     }
@@ -114,6 +118,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
         `Could not find the stale label`,
         LoggerService.value(pullRequestsInputs.pullRequestStaleLabel)
       );
+      AnnotationsService.error(EAnnotationErrorPullRequest.NOT_FOUND_STALE_LABEL_EVENT);
 
       throw new Error(`Could not find the stale label ${pullRequestsInputs.pullRequestStaleLabel}`);
     }
@@ -129,7 +134,7 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
       this.processor.logger.info(`The stale label was not removed due to the dry-run mode`);
     }
 
-    this.processor.logger.notice(`The pull request is no longer stale`);
+    this.processor.logger.info(`The pull request is no longer stale`);
   }
 
   private _getStaleLabelEvents(

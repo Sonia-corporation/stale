@@ -21,12 +21,6 @@ export abstract class AbstractLogger {
     return this;
   }
 
-  public notice(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.notice(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
-
-    return this;
-  }
-
   public warning(...message: ReadonlyArray<string>): AbstractLogger {
     LoggerService.warning(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
 

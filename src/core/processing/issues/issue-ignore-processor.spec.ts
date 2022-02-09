@@ -5,6 +5,8 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
@@ -1085,6 +1087,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredLabels$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -1095,6 +1098,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyLabels: [`ignored-label`],
@@ -1206,6 +1210,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerWarningSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
           it(`should log a warning about finding too many labels on this issue since the pagination is not handled`, (): void => {
@@ -1218,6 +1223,17 @@ describe(`IssueIgnoreProcessor`, (): void => {
               `Found`,
               `value-21`,
               `whiteBright-labels attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            issueIgnoreProcessor.hasAnyIgnoredLabels$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED
             );
           });
         });
@@ -1241,6 +1257,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerWarningSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
           it(`should not log a warning about finding too many labels on this issue since the pagination is not handled`, (): void => {
@@ -1249,6 +1266,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueIgnoreProcessor.hasAnyIgnoredLabels$$();
 
             expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            issueIgnoreProcessor.hasAnyIgnoredLabels$$();
+
+            expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
           });
         });
 
@@ -1265,6 +1290,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`hasAnyIgnoredAssignees$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -1275,6 +1301,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueIgnoreAnyAssignees: [`ignored-assignee`],
@@ -1386,6 +1413,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerWarningSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
           it(`should log a warning about finding too many assignees on this issue since the pagination is not handled`, (): void => {
@@ -1398,6 +1426,17 @@ describe(`IssueIgnoreProcessor`, (): void => {
               `Found`,
               `value-21`,
               `whiteBright-assignees attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should annotate about finding too many assignees on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED
             );
           });
         });
@@ -1421,6 +1460,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorLoggerWarningSpy = jest
               .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
               .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
           });
 
           it(`should not log a warning about finding too many assignees on this issue since the pagination is not handled`, (): void => {
@@ -1429,6 +1469,14 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
 
             expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not annotate about finding too many assignees on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+            expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
           });
         });
 
@@ -1445,6 +1493,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
     describe(`shouldIgnoreDueToAnyWhiteListedProjectCard$$()`, (): void => {
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -1455,6 +1504,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         issueProcessorLoggerWarningSpy = jest
           .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
           .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
         issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<IIssuesInputs>({
             issueOnlyAnyProjectCards: [],
@@ -1667,6 +1717,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
               issueProcessorLoggerWarningSpy = jest
                 .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
                 .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
               issuesInputsServiceGetInputsSpy = jest
                 .spyOn(IssuesInputsService.getInstance(), `getInputs`)
                 .mockReturnValue(
@@ -1686,6 +1737,17 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 `Found`,
                 `value-21`,
                 `whiteBright-project cards attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+              );
+            });
+
+            it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
+
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+                EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED
               );
             });
 

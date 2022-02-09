@@ -6,6 +6,8 @@ import { GithubApiIssueTimelineItemsService } from '@github/api/timeline-items/g
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
 import { context } from '@actions/github';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -43,6 +45,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
 
@@ -53,6 +56,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -94,7 +98,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
@@ -105,6 +109,25 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Failed to fetch the added labels events on the issue`,
             `value-${issueNumber}`
+          );
+        });
+
+        it(`should annotate the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+            new Error(`graphql error`)
           );
         });
 
@@ -143,7 +166,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             graphqlMock.mockResolvedValue(githubApiTimelineItemsIssueLabeledEvents);
           });
 
-          it(`should log about not finding any added labels events and throw an error`, async (): Promise<void> => {
+          it(`should log about not finding any added labels events`, async (): Promise<void> => {
             expect.assertions(4);
 
             await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
@@ -160,6 +183,29 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
               2,
               `Failed to fetch the added labels events on the issue`,
               `value-${issueNumber}`
+            );
+          });
+
+          it(`should annotate about not finding any added labels events`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+              new Error(`Could not find a single added label event for the issue ${issueNumber}`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
+              2,
+              EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS
+            );
+          });
+
+          it(`should throw an error`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+              new Error(`Could not find a single added label event for the issue ${issueNumber}`)
             );
           });
 
@@ -230,7 +276,7 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             graphqlMock.mockResolvedValue(githubApiTimelineItemsIssueLabeledEvents);
           });
 
-          it(`should log about not handling the pagination yet for the added labels events and throw an error`, async (): Promise<void> => {
+          it(`should log about not handling the pagination yet for the added labels events`, async (): Promise<void> => {
             expect.assertions(4);
 
             await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
@@ -246,6 +292,32 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
               2,
               `Failed to fetch the added labels events on the issue`,
               `value-${issueNumber}`
+            );
+          });
+
+          it(`should annotate about not handling the pagination yet for the added labels events`, async (): Promise<void> => {
+            expect.assertions(4);
+
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+              new Error(`Reached the maximum number of added label events supported for now`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
+              1,
+              EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+            );
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
+              2,
+              EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS
+            );
+          });
+
+          it(`should throw an error`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await expect(githubApiIssueTimelineItemsService.fetchIssueAddedLabels(issueNumber)).rejects.toThrow(
+              new Error(`Reached the maximum number of added label events supported for now`)
             );
           });
 

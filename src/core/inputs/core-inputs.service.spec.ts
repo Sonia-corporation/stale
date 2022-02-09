@@ -1,6 +1,8 @@
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IInputs } from '@core/inputs/types/inputs';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 import { InputOptions } from '@actions/core';
@@ -305,6 +307,7 @@ describe(`CoreInputsService`, (): void => {
 
     let coreGetInputSpy: jest.SpyInstance;
     let loggerServiceErrorSpy: jest.SpyInstance;
+    let annotationsServiceErrorSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       input = EInputs.ISSUE_IGNORE_ANY_LABELS;
@@ -312,6 +315,7 @@ describe(`CoreInputsService`, (): void => {
 
       coreGetInputSpy = jest.spyOn(core, `getInput`).mockReturnValue(`0`);
       loggerServiceErrorSpy = jest.spyOn(LoggerService, `error`).mockImplementation();
+      annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
     });
 
     it(`should get the value related to the given input`, (): void => {
@@ -330,7 +334,7 @@ describe(`CoreInputsService`, (): void => {
           coreGetInputSpy.mockReturnValue(value);
         });
 
-        it(`should log an error and throw`, (): void => {
+        it(`should log an error`, (): void => {
           expect.assertions(3);
 
           expect((): number => CoreInputsService.getNumberInput$$(input, options)).toThrow(
@@ -343,6 +347,25 @@ describe(`CoreInputsService`, (): void => {
             `value-${input}`,
             `white-->`,
             `value-${value}`
+          );
+        });
+
+        it(`should log an error annotation`, (): void => {
+          expect.assertions(3);
+
+          expect((): number => CoreInputsService.getNumberInput$$(input, options)).toThrow(
+            `Wrong value given to the input number ${input}`
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveReturnedTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.WRONG_INPUT_VALUE);
+        });
+
+        it(`should throw`, (): void => {
+          expect.assertions(1);
+
+          expect((): number => CoreInputsService.getNumberInput$$(input, options)).toThrow(
+            `Wrong value given to the input number ${input}`
           );
         });
       }

@@ -51,7 +51,7 @@ export class PullRequestDeleteBranchProcessor extends AbstractProcessor<PullRequ
     if (!commonInputs.dryRun) {
       await this.githubApiPullRequestReferencesService$$.deleteReference(this.processor.item.headRef.id);
 
-      this.processor.logger.notice(
+      this.processor.logger.info(
         `The branch`,
         LoggerService.value(this.processor.item.headRef.name),
         LoggerFormatService.whiteBright(`was deleted`)

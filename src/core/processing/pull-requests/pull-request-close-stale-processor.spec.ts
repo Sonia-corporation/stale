@@ -69,7 +69,6 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
       let githubApiPullRequestsServiceClosePullRequestSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
-      let pullRequestProcessorLoggerNoticeSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessCloseCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
@@ -88,9 +87,6 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
           .mockImplementation();
         pullRequestProcessorLoggerInfoSpy = jest
           .spyOn(pullRequestCloseStaleProcessor.processor.logger, `info`)
-          .mockImplementation();
-        pullRequestProcessorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCloseStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         commonInputsServiceGetInputsSpy = jest.spyOn(CommonInputsService.getInstance(), `getInputs`).mockReturnValue(
           createHydratedMock<ICommonInputs>({
@@ -112,7 +108,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Closing this pull request...`);
       });
 
@@ -126,16 +122,15 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         });
 
         it(`should close the pull request`, async (): Promise<void> => {
-          expect.assertions(6);
+          expect.assertions(5);
 
           await pullRequestCloseStaleProcessor.close();
 
           expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledTimes(1);
           expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledWith(pullRequestId);
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The pull request was closed`);
-          expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now closed`);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is now closed`);
         });
 
         it(`should try to add a close comment`, async (): Promise<void> => {
@@ -167,18 +162,17 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         });
 
         it(`should not close the pull request`, async (): Promise<void> => {
-          expect.assertions(5);
+          expect.assertions(4);
 
           await pullRequestCloseStaleProcessor.close();
 
           expect(githubApiPullRequestsServiceClosePullRequestSpy).not.toHaveBeenCalled();
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
             2,
             `The pull request was not closed due to the dry-run mode`
           );
-          expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-          expect(pullRequestProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The pull request is now closed`);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is now closed`);
         });
 
         it(`should try to add a close comment`, async (): Promise<void> => {
@@ -206,7 +200,6 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
       let processorLoggerInfoSpy: jest.SpyInstance;
       let processorLoggerErrorSpy: jest.SpyInstance;
-      let processorLoggerNoticeSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiPullRequestLabelsServiceFetchLabelByNameSpy: jest.SpyInstance;
@@ -227,9 +220,6 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
           .mockImplementation();
         processorLoggerErrorSpy = jest
           .spyOn(pullRequestCloseStaleProcessor.processor.logger, `error`)
-          .mockImplementation();
-        processorLoggerNoticeSpy = jest
-          .spyOn(pullRequestCloseStaleProcessor.processor.logger, `notice`)
           .mockImplementation();
         pullRequestsInputsServiceGetInputsSpy = jest
           .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
@@ -393,7 +383,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
             await pullRequestCloseStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -484,8 +474,8 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
               await pullRequestCloseStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-1`, `whiteBright-extra label added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `value-1`, `whiteBright-extra label added`);
             });
           });
         });
@@ -595,7 +585,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
             await pullRequestCloseStaleProcessor.processToAddExtraLabels$$();
 
-            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(
               4,
               `The label`,
@@ -693,8 +683,8 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
 
               await pullRequestCloseStaleProcessor.processToAddExtraLabels$$();
 
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-              expect(processorLoggerNoticeSpy).toHaveBeenCalledWith(`value-2`, `whiteBright-extra labels added`);
+              expect(processorLoggerInfoSpy).toHaveBeenCalledTimes(6);
+              expect(processorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `value-2`, `whiteBright-extra labels added`);
             });
           });
         });

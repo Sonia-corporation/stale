@@ -7,6 +7,9 @@ import { IssueRemoveStaleProcessor } from '@core/processing/issues/issue-remove-
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvent } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-event.interface';
 import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { DateTime } from 'luxon';
@@ -44,6 +47,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueProcessor = createHydratedMock<IssueProcessor>({
@@ -63,6 +67,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         );
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       });
 
       it(`should fetch all the labels added events on this issue`, async (): Promise<void> => {
@@ -104,7 +109,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           );
         });
 
-        it(`should throw an error`, async (): Promise<void> => {
+        it(`should log the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(issueRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
@@ -114,6 +119,25 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label in the added labels events`
+          );
+        });
+
+        it(`should annotate the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(issueRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
+            new Error(`Could not find the stale label in the added labels events`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(issueRemoveStaleProcessor.shouldRemoveStale()).rejects.toThrow(
+            new Error(`Could not find the stale label in the added labels events`)
           );
         });
       });
@@ -547,8 +571,8 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
       let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
       let githubApiIssueLabelsServiceRemoveLabelSpy: jest.SpyInstance;
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerNoticeSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -584,12 +608,10 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         issueProcessorLoggerInfoSpy = jest
           .spyOn(issueRemoveStaleProcessor.processor.logger, `info`)
           .mockImplementation();
-        issueProcessorLoggerNoticeSpy = jest
-          .spyOn(issueRemoveStaleProcessor.processor.logger, `notice`)
-          .mockImplementation();
         issueProcessorLoggerErrorSpy = jest
           .spyOn(issueRemoveStaleProcessor.processor.logger, `error`)
           .mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
       });
 
       it(`should fetch the stale label id from the repository`, async (): Promise<void> => {
@@ -603,7 +625,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
         expect(commonInputsServiceGetInputsSpy).toHaveBeenCalledWith();
         expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
         expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(1, `Removing the stale state from this issue...`);
         expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
           2,
@@ -620,7 +642,7 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           githubApiIssueLabelsServiceFetchLabelByNameSpy.mockResolvedValue(null);
         });
 
-        it(`should log and throw an error`, async (): Promise<void> => {
+        it(`should log an error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(issueRemoveStaleProcessor.removeStale()).rejects.toThrow(
@@ -631,6 +653,25 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
             `Could not find the stale label`,
             `value-${issueStaleLabel}`
+          );
+        });
+
+        it(`should annotate`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(issueRemoveStaleProcessor.removeStale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.NOT_FOUND_STALE_LABEL_EVENT);
+        });
+
+        it(`should throw an error`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(issueRemoveStaleProcessor.removeStale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
           );
         });
       });
@@ -656,16 +697,15 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           });
 
           it(`should remove the stale label from this issue`, async (): Promise<void> => {
-            expect.assertions(6);
+            expect.assertions(5);
 
             await issueRemoveStaleProcessor.removeStale();
 
             expect(githubApiIssueLabelsServiceRemoveLabelSpy).toHaveBeenCalledTimes(1);
             expect(githubApiIssueLabelsServiceRemoveLabelSpy).toHaveBeenCalledWith(issueId, staleLabelId);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(5, `The stale label was removed`);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is no longer stale`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The issue is no longer stale`);
           });
         });
 
@@ -681,18 +721,17 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           });
 
           it(`should not remove the stale label from this issue`, async (): Promise<void> => {
-            expect.assertions(5);
+            expect.assertions(4);
 
             await issueRemoveStaleProcessor.removeStale();
 
             expect(githubApiIssueLabelsServiceRemoveLabelSpy).not.toHaveBeenCalled();
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(6);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               5,
               `The stale label was not removed due to the dry-run mode`
             );
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerNoticeSpy).toHaveBeenCalledWith(`The issue is no longer stale`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(6, `The issue is no longer stale`);
           });
         });
       });
