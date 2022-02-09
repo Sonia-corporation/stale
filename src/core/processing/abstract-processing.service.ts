@@ -28,6 +28,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       return;
     }
 
+    // This is processing recursively all the batches
     const processedItemsCount: number = await this.processBatch();
 
     LoggerService.info(
@@ -39,12 +40,17 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
 
   /**
    * @description
-   * Process a single batch
+   * Process recursively all the batches
    * @param {Readonly<number>} batch The batch index
+   * @param {number} processedItemsCount The current sum of all the processed items
    * @param {Readonly<string>} fromPageId The id of the previous page (GitHub)
-   * @returns {Promise<number>} The number of processed items
+   * @returns {Promise<number>} The number of processed items (sum of all the batches)
    */
-  public async processBatch(batch: Readonly<number> = 1, fromPageId?: Readonly<string>): Promise<number> {
+  public async processBatch(
+    batch: Readonly<number> = 1,
+    processedItemsCount: number = 0,
+    fromPageId?: Readonly<string>
+  ): Promise<number> {
     LoggerService.info(
       `Fetching the batch of ${_.toLower(this._itemType)}s`,
       `${LoggerFormatService.white(`#`)}${LoggerService.value(_.toString(batch))}${LoggerFormatService.whiteBright(
@@ -54,7 +60,6 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
 
     const items: TItems | never = await this._getItems(fromPageId);
     const itemsCount: number = this._getPagination(items).nodes.length;
-    let processedItemsCount: number = 0;
     let shouldBeProcess: boolean = true;
 
     LoggerService.info(
@@ -94,7 +99,11 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       if (this._getPagination(items).pageInfo.hasNextPage) {
         LoggerService.info(`Continuing with the next batch of ${_.toLower(this._itemType)}s`);
 
-        await this.processBatch(++batch, this._getPagination(items).pageInfo.endCursor);
+        processedItemsCount = await this.processBatch(
+          ++batch,
+          processedItemsCount,
+          this._getPagination(items).pageInfo.endCursor
+        );
       } else {
         LoggerService.info(
           LoggerFormatService.green(`All the ${_.toLower(this._itemType)}s batches`),
