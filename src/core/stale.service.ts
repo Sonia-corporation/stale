@@ -1,4 +1,5 @@
 import { InputsService } from '@core/inputs/inputs.service';
+import { OutputsAnnotationsService } from '@core/outputs/annotations/outputs-annotations.service';
 import { OutputsService } from '@core/outputs/outputs.service';
 import { IssuesService } from '@core/processing/issues/issues.service';
 import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
@@ -20,6 +21,7 @@ export class StaleService {
       LoggerService.info(LoggerFormatService.green(`The stale processing is over`));
       StatisticsService.logsAllStatistics();
       OutputsService.setOutputs();
+      OutputsAnnotationsService.noticeAllOutputs();
     } catch (error: unknown) {
       if (error instanceof Error) {
         LoggerService.error(`[${error.name}] ${error.message}`);

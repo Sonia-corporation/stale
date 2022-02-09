@@ -1,4 +1,3 @@
-import { EAnnotationNotice } from '@utils/annotations/enums/annotation-notice.enum';
 import { IAnnotationsErrors } from '@utils/annotations/types/annotations-errors';
 import { IAnnotationsWarnings } from '@utils/annotations/types/annotations-warnings';
 import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.service';
@@ -11,7 +10,7 @@ import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.serv
  * See the [issue #422](https://github.com/Sonia-corporation/stale/issues/422)
  */
 export class AnnotationsService {
-  public static notice(annotation: Readonly<EAnnotationNotice>): AnnotationsService {
+  public static notice(annotation: Readonly<string>): AnnotationsService {
     LoggerAnnotationsService.notice(annotation);
 
     return AnnotationsService;
