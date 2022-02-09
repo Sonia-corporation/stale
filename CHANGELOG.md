@@ -1,5 +1,15 @@
 # Sonia stale action
 
+## [1.42.1](https://github.com/Sonia-corporation/stale/compare/1.42.0...1.42.1) (2022-02-09)
+
+
+### :bug: Bug Fixes
+
+* **annotations:** format properly the errors annotations ([13bcd6a](https://github.com/Sonia-corporation/stale/commit/13bcd6a9f70ca44159bbab7e5a8bec78872caaca)), closes [#422](https://github.com/Sonia-corporation/stale/issues/422)
+* **annotations:** format properly the warning annotations ([469609c](https://github.com/Sonia-corporation/stale/commit/469609ce0f074aef3929af01c523ff371267474b)), closes [#422](https://github.com/Sonia-corporation/stale/issues/422)
+* **annotations:** remove every existing notice annotations ([3c3a2d5](https://github.com/Sonia-corporation/stale/commit/3c3a2d574784f0bdfcb89c70f90fe1c45bbf7844)), closes [#422](https://github.com/Sonia-corporation/stale/issues/422)
+  The logs were not static - including some variables - and were broken due to the colours.
+
 # [1.42.0](https://github.com/Sonia-corporation/stale/compare/1.41.0...1.42.0) (2022-02-08)
 
 
