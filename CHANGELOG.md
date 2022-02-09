@@ -1,5 +1,12 @@
 # Sonia stale action
 
+# [1.43.0](https://github.com/Sonia-corporation/stale/compare/1.42.1...1.43.0) (2022-02-09)
+
+
+### :rocket: Features
+
+* **annotations:** add notice annotations for all outputs greater than 0 ([f26f219](https://github.com/Sonia-corporation/stale/commit/f26f219f6a6d40717f1fe075c51d19fa62b2aae5)), closes [#429](https://github.com/Sonia-corporation/stale/issues/429)
+
 ## [1.42.1](https://github.com/Sonia-corporation/stale/compare/1.42.0...1.42.1) (2022-02-09)
 
 
