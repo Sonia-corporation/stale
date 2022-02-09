@@ -3,6 +3,8 @@ import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-st
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { GithubApiPullRequestReferencesService } from '@github/api/references/github-api-pull-request-references.service';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -40,6 +42,7 @@ describe(`GithubApiPullRequestReferencesService`, (): void => {
 
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy: jest.SpyInstance;
 
@@ -50,6 +53,7 @@ describe(`GithubApiPullRequestReferencesService`, (): void => {
 
         pullRequestProcessorLoggerInfoSpy = jest.spyOn(pullRequestProcessor.logger, `info`).mockImplementation();
         pullRequestProcessorLoggerErrorSpy = jest.spyOn(pullRequestProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -85,7 +89,7 @@ describe(`GithubApiPullRequestReferencesService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiPullRequestCommentsService.deleteReference(referenceId)).rejects.toThrow(
@@ -97,6 +101,25 @@ describe(`GithubApiPullRequestReferencesService`, (): void => {
             `Failed to delete the reference`,
             `value-${referenceId}`,
             `red-from this pull request`
+          );
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiPullRequestCommentsService.deleteReference(referenceId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiPullRequestCommentsService.deleteReference(referenceId)).rejects.toThrow(
+            new Error(`graphql error`)
           );
         });
 

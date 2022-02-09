@@ -63,23 +63,6 @@ describe(`PullRequestLogger`, (): void => {
       });
     });
 
-    describe(`notice()`, (): void => {
-      let loggerServiceNoticeSpy: jest.SpyInstance;
-
-      beforeEach((): void => {
-        loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
-      });
-
-      it(`should log the given message and add the pull request number as a prefix`, (): void => {
-        expect.assertions(2);
-
-        pullRequestLogger.notice(`dummy message 1`, `dummy message 2`);
-
-        expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`blue-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
-      });
-    });
-
     describe(`warning()`, (): void => {
       let loggerServiceWarningSpy: jest.SpyInstance;
 

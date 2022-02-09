@@ -3,6 +3,8 @@ import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
@@ -48,6 +50,7 @@ export abstract class AbstractStaleProcessor<
 
     if (!label) {
       this.processor.logger.error(`Could not find the stale label`, LoggerService.value(staleLabel));
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL);
 
       throw new Error(`Could not find the stale label ${staleLabel}`);
     }
@@ -64,7 +67,7 @@ export abstract class AbstractStaleProcessor<
     }
 
     this._increaseAddedLabelsCountStatistic();
-    this.processor.logger.notice(`The ${this.type} is now stale`);
+    this.processor.logger.info(`The ${this.type} is now stale`);
   }
 
   public isStaleByUpdateDate$$(): boolean {
@@ -133,7 +136,7 @@ export abstract class AbstractStaleProcessor<
     if (!commonInputs.dryRun) {
       await this._addExtraLabels(this._getItemId(), this._getLabelsId(labels));
 
-      this.processor.logger.notice(
+      this.processor.logger.info(
         LoggerService.value(labelsToAdd.length),
         LoggerFormatService.whiteBright(`extra label${labelsToAdd.length > 1 ? `s` : ``} added`)
       );
@@ -161,6 +164,7 @@ export abstract class AbstractStaleProcessor<
 
     if (!label) {
       this.processor.logger.error(`Could not find the label`, LoggerService.value(labelName));
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_LABEL);
 
       throw new Error(`Could not find the label ${labelName}`);
     }

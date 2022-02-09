@@ -9,6 +9,8 @@ import { GITHUB_PROJECT_CARDS_PER_PULL_REQUEST } from '@github/api/pull-requests
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -40,7 +42,7 @@ export class GithubApiPullRequestsService {
           const { totalCount } = response.repository.pullRequests;
 
           if (totalCount === 0) {
-            LoggerService.notice(`No pull request can be processed`);
+            LoggerService.info(`No pull request can be processed`);
           } else {
             LoggerService.info(
               LoggerService.value(_.toString(totalCount)),
@@ -61,6 +63,7 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(`Failed to fetch the pull requests`);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS);
 
         throw error;
       });
@@ -92,6 +95,7 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         this.pullRequestProcessor.logger.error(`Failed to close the pull request`, LoggerService.value(pullRequestId));
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_CLOSE);
 
         throw error;
       });
@@ -118,6 +122,7 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         this.pullRequestProcessor.logger.error(`Failed to draft the pull request`, LoggerService.value(pullRequestId));
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DRAFT);
 
         throw error;
       });

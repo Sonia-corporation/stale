@@ -24,7 +24,7 @@ export abstract class AbstractCloseStaleProcessor<
     await this._processCloseComment();
     await this.processToAddExtraLabels$$();
 
-    this.processor.logger.notice(`The ${this.type} is now closed`);
+    this.processor.logger.info(`The ${this.type} is now closed`);
   }
 
   protected abstract _closeItem(itemId: Readonly<IUuid>): Promise<void>;

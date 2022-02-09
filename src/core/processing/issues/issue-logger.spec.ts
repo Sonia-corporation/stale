@@ -63,23 +63,6 @@ describe(`IssueLogger`, (): void => {
       });
     });
 
-    describe(`notice()`, (): void => {
-      let loggerServiceNoticeSpy: jest.SpyInstance;
-
-      beforeEach((): void => {
-        loggerServiceNoticeSpy = jest.spyOn(LoggerService, `notice`).mockImplementation();
-      });
-
-      it(`should log the given message and add the issue number as a prefix`, (): void => {
-        expect.assertions(2);
-
-        issueLogger.notice(`dummy message 1`, `dummy message 2`);
-
-        expect(loggerServiceNoticeSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceNoticeSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
-      });
-    });
-
     describe(`warning()`, (): void => {
       let loggerServiceWarningSpy: jest.SpyInstance;
 

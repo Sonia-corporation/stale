@@ -3,6 +3,8 @@ import { IssuesStatisticsService } from '@core/statistics/issues-statistics.serv
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
 import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
 import { OctokitService } from '@github/octokit/octokit.service';
+import { AnnotationsService } from '@utils/annotations/annotations.service';
+import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -42,6 +44,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
 
@@ -53,6 +56,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
         issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
         octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
           // @ts-ignore
           graphql: graphqlMock,
@@ -90,7 +94,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
           graphqlMock.mockRejectedValue(new Error(`graphql error`));
         });
 
-        it(`should log about the error and rethrow it`, async (): Promise<void> => {
+        it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
           await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
@@ -103,6 +107,25 @@ describe(`GithubApiIssueCommentsService`, (): void => {
             `value-${comment}`,
             `red-on the issue`,
             `value-${issueId}`
+          );
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_COMMENT);
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
+            new Error(`graphql error`)
           );
         });
 
