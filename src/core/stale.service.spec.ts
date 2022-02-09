@@ -1,4 +1,5 @@
 import { InputsService } from '@core/inputs/inputs.service';
+import { OutputsAnnotationsService } from '@core/outputs/annotations/outputs-annotations.service';
 import { OutputsService } from '@core/outputs/outputs.service';
 import { IssuesService } from '@core/processing/issues/issues.service';
 import { PullRequestsService } from '@core/processing/pull-requests/pull-requests.service';
@@ -24,6 +25,7 @@ describe(`StaleService`, (): void => {
     let loggerServiceInfoSpy: jest.SpyInstance;
     let statisticsServiceLogsAllStatisticsSpy: jest.SpyInstance;
     let outputsServiceSetOutputsSpy: jest.SpyInstance;
+    let outputsAnnotationsServiceNoticeAllOutputsSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       statisticsServiceInitializeSpy = jest.spyOn(StatisticsService, `initialize`).mockImplementation();
@@ -37,6 +39,9 @@ describe(`StaleService`, (): void => {
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
       statisticsServiceLogsAllStatisticsSpy = jest.spyOn(StatisticsService, `logsAllStatistics`).mockImplementation();
       outputsServiceSetOutputsSpy = jest.spyOn(OutputsService, `setOutputs`).mockImplementation();
+      outputsAnnotationsServiceNoticeAllOutputsSpy = jest
+        .spyOn(OutputsAnnotationsService, `noticeAllOutputs`)
+        .mockImplementation();
     });
 
     it(`should log starting the stale process`, async (): Promise<void> => {
@@ -205,6 +210,15 @@ describe(`StaleService`, (): void => {
 
       expect(outputsServiceSetOutputsSpy).toHaveBeenCalledTimes(1);
       expect(outputsServiceSetOutputsSpy).toHaveBeenCalledWith();
+    });
+
+    it(`should expose all outputs through notices`, async (): Promise<void> => {
+      expect.assertions(2);
+
+      await StaleService.initialize();
+
+      expect(outputsAnnotationsServiceNoticeAllOutputsSpy).toHaveBeenCalledTimes(1);
+      expect(outputsAnnotationsServiceNoticeAllOutputsSpy).toHaveBeenCalledWith();
     });
 
     it(`should return the service`, async (): Promise<void> => {
