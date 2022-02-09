@@ -9,6 +9,7 @@ import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
 import faker from 'faker';
+import _ from 'lodash';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
 import { mocked } from 'ts-jest/utils';
@@ -476,7 +477,75 @@ describe(`PullRequestsService`, (): void => {
           await service.processBatch();
 
           expect(processBatchSpy).toHaveBeenCalledTimes(2);
-          expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, `dummy-end-cursor`);
+          expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, 2, `dummy-end-cursor`);
+        });
+
+        it(`should return the sum of all the processed pull requests`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          const result = await service.processBatch();
+
+          expect(result).toBe(2);
+        });
+      });
+
+      describe(`when this batch contains 22 pull requests to process`, (): void => {
+        let githubApiPullRequests: IGithubApiGetPullRequests;
+
+        beforeEach((): void => {
+          githubApiPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
+            repository: {
+              pullRequests: {
+                nodes: _.times(22, (): IGithubApiPullRequest => createHydratedMock<IGithubApiPullRequest>()),
+                pageInfo: {
+                  endCursor: `dummy-end-cursor`,
+                  hasNextPage: true,
+                },
+              },
+            },
+          });
+
+          githubApiPullRequestsServiceFetchPullRequestsSpy
+            .mockResolvedValue(
+              createHydratedMock<IGithubApiGetPullRequests>({
+                repository: {
+                  pullRequests: {
+                    nodes: [],
+                    pageInfo: {
+                      endCursor: undefined,
+                      hasNextPage: false,
+                    },
+                  },
+                },
+              })
+            )
+            .mockResolvedValueOnce(githubApiPullRequests);
+        });
+
+        it(`should log about the need of creating a new batch to process the next pull requests`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(8);
+          expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(4, `Continuing with the next batch of pull requests`);
+        });
+
+        it(`should process the next batch of pull requests`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await service.processBatch();
+
+          expect(processBatchSpy).toHaveBeenCalledTimes(2);
+          expect(processBatchSpy).toHaveBeenNthCalledWith(2, 2, 22, `dummy-end-cursor`);
+        });
+
+        it(`should return the sum of all the processed pull requests`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          const result = await service.processBatch();
+
+          expect(result).toBe(22);
         });
       });
     });
