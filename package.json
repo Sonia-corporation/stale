@@ -86,6 +86,7 @@
     "commit": "npm run cz",
     "git:push": "git push-upstream",
     "contributors:add": "all-contributors add",
+    "contributors:check": "all-contributors check",
     "contributors:generate": "all-contributors generate",
     "concurrently": "concurrently --kill-others-on-fail --prefix '[{name}][{time}]' --timestamp-format 'HH:mm:ss'",
     "prepare": "husky install",

@@ -28,7 +28,12 @@
         "review",
         "question",
         "maintenance",
-        "bug"
+        "bug",
+        "example",
+        "projectManagement",
+        "test",
+        "translation",
+        "tutorial"
       ]
     },
     {
@@ -70,6 +75,29 @@
       "contributions": [
         "review",
         "bug"
+      ]
+    },
+    {
+      "login": "Sonia-corporation-bot",
+      "name": "Sonia Corporation Bot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99146817?v=4",
+      "profile": "https://github.com/Sonia-corporation-bot",
+      "contributions": [
+        "doc",
+        "infra",
+        "projectManagement",
+        "security",
+        "tool"
+      ]
+    },
+    {
+      "login": "iainlane",
+      "name": "Iain Lane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/321014?v=4",
+      "profile": "https://orangesquash.org.uk/",
+      "contributions": [
+        "bug",
+        "ideas"
       ]
     }
   ],
