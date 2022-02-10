@@ -1,5 +1,18 @@
 # Sonia stale action
 
+## [1.43.2](https://github.com/Sonia-corporation/stale/compare/1.43.1...1.43.2) (2022-02-10)
+
+
+### :books: Documentation
+
+* **fix:** correctly highlight the examples ([c6fe0d0](https://github.com/Sonia-corporation/stale/commit/c6fe0d022e5e88548136a0d6b870fef192c3d8cf)), closes [#439](https://github.com/Sonia-corporation/stale/issues/439)
+
+
+### :bug: Bug Fixes
+
+* **deps:** update dependency prism-react-renderer to v1.3.1 ([#425](https://github.com/Sonia-corporation/stale/issues/425)) ([f4eae39](https://github.com/Sonia-corporation/stale/commit/f4eae3925b8e696997e11c65e8e3fa45b75cfac8))
+  Co-authored-by: Renovate Bot <bot@renovateapp.com>
+
 ## [1.43.1](https://github.com/Sonia-corporation/stale/compare/1.43.0...1.43.1) (2022-02-09)
 
 
