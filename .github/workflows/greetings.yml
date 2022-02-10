@@ -9,5 +9,19 @@ jobs:
       - uses: actions/first-interaction@bd33205aa5c96838e10fd65df0d01efd613677c1 # renovate: tag=v1
         with:
           repo-token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
-          issue-message: 'Please, use the [issue template](ISSUE_TEMPLATE.md) to help you, and us, fix this issue.'
-          pr-message: 'Please, use the [pull request template](PULL_REQUEST_TEMPLATE.md) to help you, and us, ship this wonderful feature. Remember, contributions to this repository should follow its [contributing guidelines](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md) to ensure consistency over the quality.'
+          issue-message: |
+            Hello and thank you for your first contribution!
+
+            All contributions are welcome, just keep in mind following the [contributing guidelines](https://github.com/Sonia-corporation/stale/blob/develop/CONTRIBUTING.md) and to always respect the [code of conduct](https://github.com/Sonia-corporation/stale/blob/develop/CODE_OF_CONDUCT.md)!
+
+            Thank you!
+
+            Your **@Sonia-corporation-bot** :rocket:
+          pr-message: |
+            Hello and thank you for providing your first contribution!
+
+            If you need any kind of help, do not hesitate to [ask a question](https://github.com/Sonia-corporation/stale/discussions/new?category=q-a)!
+
+            Thank you!
+
+            Your **@Sonia-corporation-bot** :rocket:
