@@ -28,7 +28,12 @@
         "review",
         "question",
         "maintenance",
-        "bug"
+        "bug",
+        "example",
+        "projectManagement",
+        "test",
+        "translation",
+        "tutorial"
       ]
     },
     {
