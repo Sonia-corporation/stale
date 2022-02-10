@@ -89,6 +89,16 @@
         "security",
         "tool"
       ]
+    },
+    {
+      "login": "iainlane",
+      "name": "Iain Lane",
+      "avatar_url": "https://avatars.githubusercontent.com/u/321014?v=4",
+      "profile": "https://orangesquash.org.uk/",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "skipCi": false,
