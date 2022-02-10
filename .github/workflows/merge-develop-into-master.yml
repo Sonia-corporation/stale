@@ -14,7 +14,7 @@ jobs:
         id: check_labels
         uses: shioyang/check-pr-labels-on-push-action@6902edf856909c50ff1d69b2cd7dc0d82f1061b6 # renovate: tag=v1.0.3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           labels: '["merge-into-master :crown:"]'
       - name: Save has label result
         id: save-has-label
@@ -49,7 +49,7 @@ jobs:
         if: needs.HasLabel.outputs.HAS_LABEL == 'true'
         uses: peter-evans/create-pull-request@f22a7da129c901513876a2380e2dae9f8e145330 # renovate: tag=v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(master): merge develop into master'
           branch: feature/merge-develop-into-master
           assignees: C0ZEN
