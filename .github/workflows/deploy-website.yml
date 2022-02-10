@@ -35,7 +35,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305 # renovate: tag=v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           publish_dir: ./documentation/build
           user_name: ${{ secrets.GIT_COMMITTER_NAME }}
           user_email: ${{ secrets.GIT_COMMITTER_EMAIL }}

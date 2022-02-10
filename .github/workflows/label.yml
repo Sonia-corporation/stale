@@ -14,4 +14,4 @@ jobs:
     steps:
       - uses: actions/labeler@e54d1c08bb51b1826c8da4b05eb3fbfbc5cc4943 # renovate: tag=v3
         with:
-          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          repo-token: '${{ secrets.SONIA_BOT_GH_TOKEN }}'
