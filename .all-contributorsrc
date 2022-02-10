@@ -71,6 +71,19 @@
         "review",
         "bug"
       ]
+    },
+    {
+      "login": "Sonia-corporation-bot",
+      "name": "Sonia Corporation Bot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/99146817?v=4",
+      "profile": "https://github.com/Sonia-corporation-bot",
+      "contributions": [
+        "doc",
+        "infra",
+        "projectManagement",
+        "security",
+        "tool"
+      ]
     }
   ],
   "skipCi": false,
