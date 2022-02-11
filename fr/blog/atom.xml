@@ -2,28 +2,53 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/fr/blog</id>
     <title>GitHub stale action Blog</title>
-    <updated>2022-02-11T20:01:41.620Z</updated>
+    <updated>2022-02-11T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/fr/blog"/>
     <subtitle>GitHub stale action Blog</subtitle>
     <icon>https://sonia-corporation.github.io/stale/fr/img/favicon.ico</icon>
     <entry>
-        <title type="html"><![CDATA[Bienvenue !]]></title>
-        <id>bienvenue</id>
-        <link href="https://sonia-corporation.github.io/stale/fr/blog/bienvenue"/>
-        <updated>2022-02-11T20:01:41.620Z</updated>
-        <summary type="html"><![CDATA[Bienvenue sur la toute première version de ce site web !]]></summary>
-        <content type="html"><![CDATA[<p>Nous sommes heureux de vous annoncer que c'est la première version de ce site web !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="pourquoi-tant-de-peine-">Pourquoi tant de peine ?<a class="hash-link" href="#pourquoi-tant-de-peine-" title="Lien direct vers le titre">​</a></h2><p>Nous pensons vraiment que géré un grand nombre de bugs dans un repository prend trop de temps et c'est vraiment un travail de peon.<br>
-<!-- -->Nous espérons qu'en créant ce site web, vous aurez accès à encore plus d'aide pour vous aider au mieux à configuration votre GitHub action stale comme vous le souhaitez.<br>
-<!-- -->La configuration peut parfois être complexe quand vous avez des besoins précis, mais c'est tout à fait OK !</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="partage-ton-travail-">Partage ton travail !<a class="hash-link" href="#partage-ton-travail-" title="Lien direct vers le titre">​</a></h2><p>En partageant avec la communauté votre configuration, vous pouvez aider d'autres personnes à concevoir des scénarios avec l'aide de cette action.<br>
-<!-- -->N'hésitez pas à <a href="https://github.com/Sonia-corporation/stale/issues/new/choose" target="_blank" rel="noopener noreferrer">ouvrir un ticket</a> pour partager un nouvel article sur ce blog.</p>]]></content>
+        <title type="html"><![CDATA[The first inclusive filter input is here!]]></title>
+        <id>first-inclusive-input</id>
+        <link href="https://sonia-corporation.github.io/stale/fr/blog/first-inclusive-input"/>
+        <updated>2022-02-11T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[This stale action now contains the first input of the genre: an inclusive filter!
+This will change how the ignoring process can be leverage to process only items that matters!
+]]></summary>
+        <content type="html"><![CDATA[<p>The first input of the inclusive filtering kind is out!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="tldr">TL;DR<a class="hash-link" href="#tldr" title="Lien direct vers le titre">​</a></h2><p>The input <a href="/stale/fr/docs/issues/inputs/issue-only-any-project-cards-input">issue-only-any-project-cards</a> is out!<br>
+<!-- -->You can now only process your issues when they are linked to a project.</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="a-bit-of-context">A bit of context<a class="hash-link" href="#a-bit-of-context" title="Lien direct vers le titre">​</a></h2><p>All the inputs added so far were useful to ignore all the items not having certain criteria.</p><p>For example, the only inputs available to ignore the processing of issues for a project were the <a href="/stale/fr/docs/issues/inputs/issue-ignore-all-project-cards-input">issue-ignore-all-project-cards</a> and the <a href="/stale/fr/docs/issues/inputs/issue-ignore-any-project-cards-input">issue-ignore-any-project-cards</a> inputs.<br>
+<!-- -->But what if you only wish to process issues that belongs to a specific project?<br>
+<!-- -->You simply couldn't!</p><p>Having inputs to reverse the logic to only process by using inclusive criteria was not something possible so far.</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="what-is-new">What is new?<a class="hash-link" href="#what-is-new" title="Lien direct vers le titre">​</a></h2><p>To tackle this issue and be able to only process issues that belongs to a specific project or to a specific list of projects, we needed a new input.<br>
+<!-- -->So, the input <a href="/stale/fr/docs/issues/inputs/issue-only-any-project-cards-input">issue-only-any-project-cards</a> was created for this purpose.</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="why-is-that-so-important">Why is that so important?<a class="hash-link" href="#why-is-that-so-important" title="Lien direct vers le titre">​</a></h2><p>Developing those features are not that hard, but thinking about how to combine them all together in a way that makes sense is a bit more difficult.<br>
+<!-- -->But now we have a recipe to <em>inclusive inputs</em>, and we will be able to provide more functionalities following the same scheme! 🚀</p><div class="admonition admonition-info alert alert--info"><div class="admonition-heading"><h5><span class="admonition-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>info</h5></div><div class="admonition-content"><p>You can see an <a href="/stale/fr/docs/examples/multiple-cron-example">advanced example</a> to configure different workflows with multiple cron that may help you fine-tune even more the action.</p></div></div>]]></content>
+        <author>
+            <name>Geoffrey "C0ZEN" Testelin</name>
+            <uri>https://github.com/C0ZEN</uri>
+        </author>
+        <category label="input" term="input"/>
+        <category label="new kind" term="new kind"/>
+        <category label="ignoring process" term="ignoring process"/>
+        <category label="projects" term="projects"/>
+        <category label="inclusive criteria" term="inclusive criteria"/>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Welcome!]]></title>
+        <id>welcome</id>
+        <link href="https://sonia-corporation.github.io/stale/fr/blog/welcome"/>
+        <updated>2022-01-20T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to the very first version of the Website!
+]]></summary>
+        <content type="html"><![CDATA[<p>Happy to announce that this is the very first version of this website!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="why-even-bother">Why even bother?<a class="hash-link" href="#why-even-bother" title="Lien direct vers le titre">​</a></h2><p>We really think that handling a huge number of issues on a repository is time-consuming, a real grunt task in a way.<br>
+<!-- -->We hope that by adding this website, you will have access to even further help to let you customize your stale action at your convenience.<br>
+<!-- -->The configuration can be complex when you have strong requirements, but it's OK!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="share-your-work">Share your work!<a class="hash-link" href="#share-your-work" title="Lien direct vers le titre">​</a></h2><p>By letting the community know your configuration, it can help to clarify what kind of scenarios to expect from this action.<br>
+<!-- -->Do not hesitate to <a href="https://github.com/Sonia-corporation/stale/issues/new/choose" target="_blank" rel="noopener noreferrer">open a new blog article suggestion</a>.</p>]]></content>
         <author>
             <name>Geoffrey "C0ZEN" Testelin</name>
             <uri>https://github.com/C0ZEN</uri>
         </author>
         <category label="stale" term="stale"/>
-        <category label="site web" term="site web"/>
+        <category label="website" term="website"/>
         <category label="documentation" term="documentation"/>
-        <category label="première version" term="première version"/>
+        <category label="first draft" term="first draft"/>
     </entry>
 </feed>

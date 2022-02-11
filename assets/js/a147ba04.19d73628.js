@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[8054],{9411:function(t){t.exports=JSON.parse('{"allTagsPath":"/stale/blog/tags","slug":"/stale/blog/tags/input","name":"input","count":1,"permalink":"/stale/blog/tags/input"}')}}]);
