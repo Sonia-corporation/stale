@@ -254,5 +254,25 @@
   "theme.SearchPage.fetchingNewResults": {
     "message": "Chargement de nouveaux résultats...",
     "description": "The paragraph for fetching new search results"
+  },
+  "theme.IdealImageMessage.loading": {
+    "message": "Chargement...",
+    "description": "When the full-scale image is loading"
+  },
+  "theme.IdealImageMessage.load": {
+    "message": "Cliquez pour chargé{sizeMessage}",
+    "description": "To prompt users to load the full image. sizeMessage is a parenthesized size figure."
+  },
+  "theme.IdealImageMessage.offline": {
+    "message": "Le navigateur est hors-ligne. L'image n'a pas pu être téléchargée",
+    "description": "When the user is viewing an offline document"
+  },
+  "theme.IdealImageMessage.404error": {
+    "message": "404. L'image n'a pas pu être trouvée",
+    "description": "When the image is not found"
+  },
+  "theme.IdealImageMessage.error": {
+    "message": "Erreur. Cliquez pour rechargé",
+    "description": "When the image fails to load for unknown error"
   }
 }
