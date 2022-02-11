@@ -16,6 +16,7 @@ const config = {
   onBrokenMarkdownLinks: `throw`,
   onDuplicateRoutes: `throw`,
   organizationName: `sonia-corporation`,
+  plugins: [`@docusaurus/plugin-ideal-image`],
   presets: [
     [
       `classic`,
