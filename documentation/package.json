@@ -12,7 +12,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-translations:french": "npm run write-translations -- --locale fr",
-    "write-heading-ids": "docusaurus write-heading-ids",
+    "write-heading-ids": "docusaurus write-heading-ids .",
     "write-heading-ids:changelog": "docusaurus write-heading-ids . docs/12-changelog.md",
     "typecheck": "tsc",
     "generate-files": "npm run generate-changelog",

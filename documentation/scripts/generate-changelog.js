@@ -23,7 +23,7 @@ async function initialize() {
   await mergeOriginalIntoDocumentationChangelog(originalChangelog, documentationChangelog);
 
   LOGGER.debug(CONTEXT, CHALK.text(`Linting the documentation changelog...`));
-  execSync(`npm run lint:other:this -- documentation/docs/11-changelog.md`, {
+  execSync(`npm run lint:other:this -- documentation/docs/12-changelog.md`, {
     stdio: `inherit`,
   });
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog linted`));
@@ -62,7 +62,7 @@ async function loadOriginalChangelog() {
 async function loadDocumentationChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the documentation changelog...`));
 
-  const changelog = await FS.readFile(`documentation/docs/11-changelog.md`, `utf-8`);
+  const changelog = await FS.readFile(`documentation/docs/12-changelog.md`, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog loaded`));
 
@@ -78,7 +78,7 @@ async function loadDocumentationChangelog() {
 async function updateDocumentationChangelog(content) {
   LOGGER.debug(CONTEXT, CHALK.text(`Updating the documentation changelog...`));
 
-  await FS.writeFile(`documentation/docs/11-changelog.md`, content);
+  await FS.writeFile(`documentation/docs/12-changelog.md`, content);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog updated`));
 }
