@@ -1,0 +1,45 @@
+---
+slug: first-inclusive-input
+title: The first inclusive filter input is here!
+description: |
+  This stale action now contains the first input of the genre: an inclusive filter!
+  This will change how the ignoring process can be leverage to process only items that matters!
+authors: [C0ZEN]
+tags: [input, new kind, ignoring process, projects, inclusive criteria]
+hide_table_of_contents: false
+---
+
+The first input of the inclusive filtering kind is out!
+
+<!--truncate-->
+
+## TL;DR {#tldr}
+
+The input [issue-only-any-project-cards](../docs/issues/inputs/issue-only-any-project-cards-input) is out!  
+You can now only process your issues when they are linked to a project.
+
+## A bit of context {#a-bit-of-context}
+
+All the inputs added so far were useful to ignore all the items not having certain criteria.
+
+For example, the only inputs available to ignore the processing of issues for a project were the [issue-ignore-all-project-cards](../docs/issues/inputs/issue-ignore-all-project-cards-input) and the [issue-ignore-any-project-cards](../docs/issues/inputs/issue-ignore-any-project-cards-input) inputs.  
+But what if you only wish to process issues that belongs to a specific project?  
+You simply couldn't!
+
+Having inputs to reverse the logic to only process by using inclusive criteria was not something possible so far.
+
+## What is new? {#what-is-new}
+
+To tackle this issue and be able to only process issues that belongs to a specific project or to a specific list of projects, we needed a new input.  
+So, the input [issue-only-any-project-cards](../docs/issues/inputs/issue-only-any-project-cards-input) was created for this purpose.
+
+## Why is that so important? {#why-is-that-so-important}
+
+Developing those features are not that hard, but thinking about how to combine them all together in a way that makes sense is a bit more difficult.  
+But now we have a recipe to _inclusive inputs_, and we will be able to provide more functionalities following the same scheme! :rocket:
+
+:::info
+
+You can see an [advanced example](../docs/examples/multiple-cron-example) to configure different workflows with multiple cron that may help you fine-tune even more the action.
+
+:::
