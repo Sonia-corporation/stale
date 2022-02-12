@@ -36,7 +36,7 @@
   "prHourlyLimit": 5,
   "automergeType": "pr",
   "ignoreTests": false,
-  "updateNotScheduled": false,
+  "updateNotScheduled": true,
   "semanticCommits": "enabled",
   "ignoreUnstable": true,
   "respectLatest": true,
