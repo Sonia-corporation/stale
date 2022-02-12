@@ -438,7 +438,7 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`shouldIgnore$$()`, (): void => {
-      const mockedIssueIgnoreProcessor: MockedObjectDeep<typeof IssueIgnoreProcessor> = jest.jest.mocked(
+      const mockedIssueIgnoreProcessor: MockedObjectDeep<typeof IssueIgnoreProcessor> = jest.mocked(
         IssueIgnoreProcessor,
         true
       );
