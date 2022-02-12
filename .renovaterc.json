@@ -48,32 +48,27 @@
   "major": {
     "branchPrefix": "dependencies/major/",
     "automerge": false,
-    "enabled": true,
-    "extends": ["schedule:daily"]
+    "enabled": true
   },
   "minor": {
     "branchPrefix": "dependencies/minor/",
     "automerge": false,
-    "enabled": true,
-    "extends": ["schedule:daily"]
+    "enabled": true
   },
   "patch": {
     "branchPrefix": "dependencies/patch/",
     "automerge": false,
-    "enabled": true,
-    "extends": ["schedule:daily"]
+    "enabled": true
   },
   "pin": {
     "branchPrefix": "dependencies/pin/",
     "automerge": false,
-    "enabled": true,
-    "extends": ["schedule:daily"]
+    "enabled": true
   },
   "lockFileMaintenance": {
     "branchPrefix": "dependencies/lock-file/",
     "automerge": false,
-    "enabled": true,
-    "extends": ["schedule:daily"]
+    "enabled": true
   },
   "vulnerabilityAlerts": {
     "enabled": true
