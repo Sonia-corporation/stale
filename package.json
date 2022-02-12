@@ -63,7 +63,7 @@
     "test:watch": "jest --watch-all",
     "test:watch:no-cache": "jest --watch-all --no-cache",
     "test:leaks": "jest --detect-leaks",
-    "test:ci": "jest --bail=1 --ci --maxWorkers=2 --silent",
+    "test:ci": "jest --bail=1 --ci --runInBand --silent",
     "test:ci:coverage": "npm run test:ci -- --collect-coverage",
     "test:ci:coverage:integration:issues": "npm run test:ci:coverage -- tests/issues",
     "test:ci:coverage:integration:pull-requests": "npm run test:ci:coverage -- tests/pull-requests",
