@@ -23,10 +23,10 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         blog: {
-          blogDescription: `The blog containing the important updates and information to know about this GitHub stale action.`,
+          blogDescription: `The blog containing the important updates and information to know about this action.`,
           blogSidebarCount: 5,
           blogSidebarTitle: `Recent posts`,
-          blogTitle: `GitHub stale action blog`,
+          blogTitle: `Sonia stale action blog`,
           editUrl: `https://github.com/Sonia-corporation/stale/tree/develop/documentation/`,
           path: `blog`,
           postsPerPage: 10,
@@ -127,17 +127,17 @@ const config = {
           },
         ],
         logo: {
-          alt: `GitHub stale action`,
+          alt: `Sonia stale action`,
           src: `img/logo.svg`,
         },
-        title: `GitHub stale action`,
+        title: `Sonia stale action`,
       },
       prism: {
         darkTheme: darkCodeTheme,
         theme: lightCodeTheme,
       },
     }),
-  title: `GitHub stale action`,
+  title: `Sonia stale action`,
   trailingSlash: false,
   url: `https://sonia-corporation.github.io`,
 };
