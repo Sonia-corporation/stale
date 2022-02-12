@@ -9,9 +9,24 @@ tags:
 
 # Changelog
 
-## [1.43.2](https://github.com/Sonia-corporation/stale/compare/1.43.1...1.43.2) (2022-02-10) {#1432-2022-02-10}
+# [1.44.0](https://github.com/Sonia-corporation/stale/compare/1.43.2...1.44.0) (2022-02-11)
 
 ### :books: Documentation {#books-documentation}
+
+- add [@iainlane](https://github.com/iainlane) as a contributor ([aac06f5](https://github.com/Sonia-corporation/stale/commit/aac06f55a4fd21ceeca0e513e835509570a5b8d9))
+- add @Sonia-corporation-bot as a contributor ([c73b937](https://github.com/Sonia-corporation/stale/commit/c73b937fc152786f6a8338e17aee7be8438c642e))
+- **readme:** add a link to the changelog ([ecc7c62](https://github.com/Sonia-corporation/stale/commit/ecc7c62a9f2be6bc8ca4c4db98d10b6cf742b08a)), closes [#414](https://github.com/Sonia-corporation/stale/issues/414)
+- **need-help:** add a new page to explain how to get some help ([1d148e9](https://github.com/Sonia-corporation/stale/commit/1d148e9589e86a0ef7e4df44a443feb73a364cc3)), closes [#415](https://github.com/Sonia-corporation/stale/issues/415)
+- **annotations:** add a new page to explain what are the annotations ([c37a183](https://github.com/Sonia-corporation/stale/commit/c37a1834a03a26567bfd02990ace810ca18d95e2)), closes [#448](https://github.com/Sonia-corporation/stale/issues/448)
+  Explain what to expect to find with the notices, warnings and errors.
+- **blog:** add new blog post to introduce the first inclusive input ([f40b60f](https://github.com/Sonia-corporation/stale/commit/f40b60f01b926fe298a25b62c1068f1aefaf15e2)), closes [#458](https://github.com/Sonia-corporation/stale/issues/458)
+- **outputs:** add tip about annotations ([36c7378](https://github.com/Sonia-corporation/stale/commit/36c737812292ec561a2b42ef3d215358b39ce8de)), closes [#447](https://github.com/Sonia-corporation/stale/issues/447)
+- **stats:** add tip about annotations ([3923187](https://github.com/Sonia-corporation/stale/commit/3923187cf235e69d809bb113bf0c8085f56c1e53))
+- update @C0ZEN as a contributor ([578ed8c](https://github.com/Sonia-corporation/stale/commit/578ed8ce5f059be33d1a98e419358a320c7ee8a4))
+
+## [1.43.2](https://github.com/Sonia-corporation/stale/compare/1.43.1...1.43.2) (2022-02-10) {#1432-2022-02-10}
+
+### :books: Documentation {#books-documentation-1}
 
 - **fix:** correctly highlight the examples ([c6fe0d0](https://github.com/Sonia-corporation/stale/commit/c6fe0d022e5e88548136a0d6b870fef192c3d8cf)), closes [#439](https://github.com/Sonia-corporation/stale/issues/439)
 
@@ -45,7 +60,7 @@ tags:
 
 # [1.42.0](https://github.com/Sonia-corporation/stale/compare/1.41.0...1.42.0) (2022-02-08)
 
-### :books: Documentation {#books-documentation-1}
+### :books: Documentation {#books-documentation-2}
 
 - **examples:** add a multiple-cron jobs example ([d57bc19](https://github.com/Sonia-corporation/stale/commit/d57bc196ee7839e2b6ddb843c7677023437c569c))
 - **website:** add more tags to existing docs pages ([4c92a80](https://github.com/Sonia-corporation/stale/commit/4c92a8047925923fb452c64070070b93cb432f6b))
@@ -62,13 +77,13 @@ tags:
 
 # [1.41.0](https://github.com/Sonia-corporation/stale/compare/1.40.0...1.41.0) (2022-02-06)
 
-### :books: Documentation {#books-documentation-2}
+### :books: Documentation {#books-documentation-3}
 
 - **website:** add a changelog page inside the docs ([5cdf738](https://github.com/Sonia-corporation/stale/commit/5cdf7381581014361e2109529d60b533d5e120c8)), closes [#385](https://github.com/Sonia-corporation/stale/issues/385)
 
 # [1.40.0](https://github.com/Sonia-corporation/stale/compare/1.39.0...1.40.0) (2022-02-05)
 
-### :books: Documentation {#books-documentation-3}
+### :books: Documentation {#books-documentation-4}
 
 - **fix:** fix wrong configuration examples ([98ca681](https://github.com/Sonia-corporation/stale/commit/98ca681065bd39762b32b6db35c7fe6aec9f3550))
 
@@ -101,14 +116,14 @@ tags:
 
 # [1.36.0](https://github.com/Sonia-corporation/stale/compare/1.35.0...1.36.0) (2022-02-01)
 
-### :books: Documentation {#books-documentation-4}
+### :books: Documentation {#books-documentation-5}
 
 - **website:** add a search bar ([f32c9dc](https://github.com/Sonia-corporation/stale/commit/f32c9dcd89837a9fb49c5c72fcddb6cc2a04c3b4)), closes [#325](https://github.com/Sonia-corporation/stale/issues/325)
   Provided by Algolia
 
 # [1.35.0](https://github.com/Sonia-corporation/stale/compare/1.34.0...1.35.0) (2022-01-31)
 
-### :books: Documentation {#books-documentation-5}
+### :books: Documentation {#books-documentation-6}
 
 - **website:** add new pages to list the outputs ([54f33b0](https://github.com/Sonia-corporation/stale/commit/54f33b0cea6594753532dc76fb95de707163c425))
 - **website:** put the issues and prs inputs into an inputs folder ([c338ab7](https://github.com/Sonia-corporation/stale/commit/c338ab732c666cf82ed789a9053949d7f8509aac))
@@ -156,7 +171,7 @@ tags:
 
 # [1.32.0](https://github.com/Sonia-corporation/stale/compare/1.31.0...1.32.0) (2022-01-23)
 
-### :books: Documentation {#books-documentation-6}
+### :books: Documentation {#books-documentation-7}
 
 - **website:** add a new page to explain how the statistics can be helpful ([ae85a4f](https://github.com/Sonia-corporation/stale/commit/ae85a4f7eb3d899b7fd5c3f633fb2481b2379605)), closes [#331](https://github.com/Sonia-corporation/stale/issues/331)
 - **website:** change some references of inputs to link to the website ([11f2e62](https://github.com/Sonia-corporation/stale/commit/11f2e62deffea25dd7abe2f0a493d60475286e29))
@@ -169,7 +184,7 @@ tags:
 
 # [1.31.0](https://github.com/Sonia-corporation/stale/compare/1.30.0...1.31.0) (2022-01-22)
 
-### :books: Documentation {#books-documentation-7}
+### :books: Documentation {#books-documentation-8}
 
 - **website:** add explicit docs for every pull requests inputs ([566376d](https://github.com/Sonia-corporation/stale/commit/566376dd181f77e50a81c5c273a723031c583181))
 - **website:** add explicit docs for every issues inputs ([12af4f5](https://github.com/Sonia-corporation/stale/commit/12af4f53cb7fc03341304a6375790f6f05aa6525))

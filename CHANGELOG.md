@@ -1,5 +1,21 @@
 # Sonia stale action
 
+# [1.44.0](https://github.com/Sonia-corporation/stale/compare/1.43.2...1.44.0) (2022-02-11)
+
+
+### :books: Documentation
+
+* add [@iainlane](https://github.com/iainlane) as a contributor ([aac06f5](https://github.com/Sonia-corporation/stale/commit/aac06f55a4fd21ceeca0e513e835509570a5b8d9))
+* add @Sonia-corporation-bot as a contributor ([c73b937](https://github.com/Sonia-corporation/stale/commit/c73b937fc152786f6a8338e17aee7be8438c642e))
+* **readme:** add a link to the changelog ([ecc7c62](https://github.com/Sonia-corporation/stale/commit/ecc7c62a9f2be6bc8ca4c4db98d10b6cf742b08a)), closes [#414](https://github.com/Sonia-corporation/stale/issues/414)
+* **need-help:** add a new page to explain how to get some help ([1d148e9](https://github.com/Sonia-corporation/stale/commit/1d148e9589e86a0ef7e4df44a443feb73a364cc3)), closes [#415](https://github.com/Sonia-corporation/stale/issues/415)
+* **annotations:** add a new page to explain what are the annotations ([c37a183](https://github.com/Sonia-corporation/stale/commit/c37a1834a03a26567bfd02990ace810ca18d95e2)), closes [#448](https://github.com/Sonia-corporation/stale/issues/448)
+  Explain what to expect to find with the notices, warnings and errors.
+* **blog:** add new blog post to introduce the first inclusive input ([f40b60f](https://github.com/Sonia-corporation/stale/commit/f40b60f01b926fe298a25b62c1068f1aefaf15e2)), closes [#458](https://github.com/Sonia-corporation/stale/issues/458)
+* **outputs:** add tip about annotations ([36c7378](https://github.com/Sonia-corporation/stale/commit/36c737812292ec561a2b42ef3d215358b39ce8de)), closes [#447](https://github.com/Sonia-corporation/stale/issues/447)
+* **stats:** add tip about annotations ([3923187](https://github.com/Sonia-corporation/stale/commit/3923187cf235e69d809bb113bf0c8085f56c1e53))
+* update @C0ZEN as a contributor ([578ed8c](https://github.com/Sonia-corporation/stale/commit/578ed8ce5f059be33d1a98e419358a320c7ee8a4))
+
 ## [1.43.2](https://github.com/Sonia-corporation/stale/compare/1.43.1...1.43.2) (2022-02-10)
 
 
