@@ -14,7 +14,6 @@ import * as CreateLinkModule from '@utils/links/create-link';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
-import { mocked } from 'ts-jest/utils';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -446,7 +445,7 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`shouldIgnore$$()`, (): void => {
-      const mockedPullRequestIgnoreProcessor: MockedObjectDeep<typeof PullRequestIgnoreProcessor> = mocked(
+      const mockedPullRequestIgnoreProcessor: MockedObjectDeep<typeof PullRequestIgnoreProcessor> = jest.mocked(
         PullRequestIgnoreProcessor,
         true
       );
@@ -498,11 +497,11 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`processForStale$$()`, (): void => {
-      const mockedPullRequestStaleProcessor: MockedObjectDeep<typeof PullRequestStaleProcessor> = mocked(
+      const mockedPullRequestStaleProcessor: MockedObjectDeep<typeof PullRequestStaleProcessor> = jest.mocked(
         PullRequestStaleProcessor,
         true
       );
-      const mockedPullRequestDraftProcessor: MockedObjectDeep<typeof PullRequestDraftProcessor> = mocked(
+      const mockedPullRequestDraftProcessor: MockedObjectDeep<typeof PullRequestDraftProcessor> = jest.mocked(
         PullRequestDraftProcessor,
         true
       );
@@ -680,7 +679,7 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`isAlreadyStale$$()`, (): void => {
-      const mockedPullRequestIsStaleProcessor: MockedObjectDeep<typeof PullRequestIsStaleProcessor> = mocked(
+      const mockedPullRequestIsStaleProcessor: MockedObjectDeep<typeof PullRequestIsStaleProcessor> = jest.mocked(
         PullRequestIsStaleProcessor,
         true
       );
@@ -732,10 +731,8 @@ describe(`PullRequestProcessor`, (): void => {
     describe(`processToRemoveStale$$()`, (): void => {
       let pullRequestsStatisticsServiceIncreaseRemoveStalePullRequestsCountSpy: jest.SpyInstance;
 
-      const mockedPullRequestRemoveStaleProcessor: MockedObjectDeep<typeof PullRequestRemoveStaleProcessor> = mocked(
-        PullRequestRemoveStaleProcessor,
-        true
-      );
+      const mockedPullRequestRemoveStaleProcessor: MockedObjectDeep<typeof PullRequestRemoveStaleProcessor> =
+        jest.mocked(PullRequestRemoveStaleProcessor, true);
 
       beforeEach((): void => {
         mockedPullRequestRemoveStaleProcessor.mockClear();
@@ -820,11 +817,9 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`processForClose$$()`, (): void => {
-      const mockedPullRequestShouldCloseProcessor: MockedObjectDeep<typeof PullRequestShouldCloseProcessor> = mocked(
-        PullRequestShouldCloseProcessor,
-        true
-      );
-      const mockedPullRequestCloseStaleProcessor: MockedObjectDeep<typeof PullRequestCloseStaleProcessor> = mocked(
+      const mockedPullRequestShouldCloseProcessor: MockedObjectDeep<typeof PullRequestShouldCloseProcessor> =
+        jest.mocked(PullRequestShouldCloseProcessor, true);
+      const mockedPullRequestCloseStaleProcessor: MockedObjectDeep<typeof PullRequestCloseStaleProcessor> = jest.mocked(
         PullRequestCloseStaleProcessor,
         true
       );
@@ -952,10 +947,8 @@ describe(`PullRequestProcessor`, (): void => {
     });
 
     describe(`processToDeleteBranch$$()`, (): void => {
-      const mockedPullRequestDeleteBranchProcessor: MockedObjectDeep<typeof PullRequestDeleteBranchProcessor> = mocked(
-        PullRequestDeleteBranchProcessor,
-        true
-      );
+      const mockedPullRequestDeleteBranchProcessor: MockedObjectDeep<typeof PullRequestDeleteBranchProcessor> =
+        jest.mocked(PullRequestDeleteBranchProcessor, true);
 
       beforeEach((): void => {
         mockedPullRequestDeleteBranchProcessor.mockClear();

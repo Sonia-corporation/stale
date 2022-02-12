@@ -12,7 +12,6 @@ import * as CreateLinkModule from '@utils/links/create-link';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
-import { mocked } from 'ts-jest/utils';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -439,7 +438,7 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`shouldIgnore$$()`, (): void => {
-      const mockedIssueIgnoreProcessor: MockedObjectDeep<typeof IssueIgnoreProcessor> = mocked(
+      const mockedIssueIgnoreProcessor: MockedObjectDeep<typeof IssueIgnoreProcessor> = jest.jest.mocked(
         IssueIgnoreProcessor,
         true
       );
@@ -491,7 +490,10 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`processForStale$$()`, (): void => {
-      const mockedIssueStaleProcessor: MockedObjectDeep<typeof IssueStaleProcessor> = mocked(IssueStaleProcessor, true);
+      const mockedIssueStaleProcessor: MockedObjectDeep<typeof IssueStaleProcessor> = jest.mocked(
+        IssueStaleProcessor,
+        true
+      );
 
       let stopProcessingSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseStaleIssuesCountSpy: jest.SpyInstance;
@@ -596,7 +598,7 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`isAlreadyStale$$()`, (): void => {
-      const mockedIssueIsStaleProcessor: MockedObjectDeep<typeof IssueIsStaleProcessor> = mocked(
+      const mockedIssueIsStaleProcessor: MockedObjectDeep<typeof IssueIsStaleProcessor> = jest.mocked(
         IssueIsStaleProcessor,
         true
       );
@@ -648,7 +650,7 @@ describe(`IssueProcessor`, (): void => {
     describe(`processToRemoveStale$$()`, (): void => {
       let issuesStatisticsServiceIncreaseRemoveStaleIssuesCountSpy: jest.SpyInstance;
 
-      const mockedIssueRemoveStaleProcessor: MockedObjectDeep<typeof IssueRemoveStaleProcessor> = mocked(
+      const mockedIssueRemoveStaleProcessor: MockedObjectDeep<typeof IssueRemoveStaleProcessor> = jest.mocked(
         IssueRemoveStaleProcessor,
         true
       );
@@ -736,11 +738,11 @@ describe(`IssueProcessor`, (): void => {
     });
 
     describe(`processForClose$$()`, (): void => {
-      const mockedIssueShouldCloseProcessor: MockedObjectDeep<typeof IssueShouldCloseProcessor> = mocked(
+      const mockedIssueShouldCloseProcessor: MockedObjectDeep<typeof IssueShouldCloseProcessor> = jest.mocked(
         IssueShouldCloseProcessor,
         true
       );
-      const mockedIssueCloseStaleProcessor: MockedObjectDeep<typeof IssueCloseStaleProcessor> = mocked(
+      const mockedIssueCloseStaleProcessor: MockedObjectDeep<typeof IssueCloseStaleProcessor> = jest.mocked(
         IssueCloseStaleProcessor,
         true
       );
