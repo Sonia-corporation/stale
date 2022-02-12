@@ -84,6 +84,10 @@ const config = {
                 href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
                 label: `Changelog`,
               },
+              {
+                href: `/docs/need-help`,
+                label: `Need help?`,
+              },
             ],
             title: `Useful links`,
           },

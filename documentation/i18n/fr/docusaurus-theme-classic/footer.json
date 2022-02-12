@@ -42,5 +42,9 @@
   "link.item.label.Getting started": {
     "message": "Pour bien commencé",
     "description": "The label of footer link with label=Getting started linking to /docs/getting-started/workflow-creation"
+  },
+  "link.item.label.Need help?": {
+    "message": "Besoin d'aide ?",
+    "description": "The label of footer link with label=Need help? linking to /docs/need-help"
   }
 }
