@@ -30,7 +30,7 @@
   "separateMinorPatch": true,
   "branchPrefix": "dependencies/",
   "labels": ["dependencies :package:"],
-  "rebaseWhen": "behind-base-branch",
+  "rebaseWhen": "conflicted",
   "baseBranches": ["develop"],
   "prCreation": "immediate",
   "prHourlyLimit": 5,
