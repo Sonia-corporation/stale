@@ -68,10 +68,13 @@
   "lockFileMaintenance": {
     "branchPrefix": "dependencies/lock-file/",
     "automerge": false,
-    "enabled": true
+    "enabled": true,
+    "rebaseWhen": "behind-base-branch"
   },
   "vulnerabilityAlerts": {
-    "enabled": true
+    "automerge": false,
+    "enabled": true,
+    "rebaseWhen": "behind-base-branch"
   },
   "semanticCommitType": "chore",
   "assignees": ["C0ZEN"],
