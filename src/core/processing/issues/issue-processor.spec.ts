@@ -18,6 +18,7 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 jest.mock(`@core/processing/issues/issue-logger`);
 jest.mock(`@core/processing/issues/issue-ignore-processor`);
+jest.mock(`@core/processing/issues/issue-include-processor`);
 jest.mock(`@core/processing/issues/issue-stale-processor`);
 jest.mock(`@core/processing/issues/issue-is-stale-processor`);
 jest.mock(`@core/processing/issues/issue-remove-stale-processor`);
@@ -66,6 +67,7 @@ describe(`IssueProcessor`, (): void => {
       let loggerStartGroupSpy: jest.SpyInstance;
       let stopProcessingSpy: jest.SpyInstance;
       let shouldIgnoreSpy: jest.SpyInstance;
+      let shouldIncludeSpy: jest.SpyInstance;
       let isAlreadyStaleSpy: jest.SpyInstance;
       let processToRemoveStaleSpy: jest.SpyInstance;
       let processForCloseSpy: jest.SpyInstance;
@@ -79,6 +81,7 @@ describe(`IssueProcessor`, (): void => {
         loggerStartGroupSpy = jest.spyOn(issueProcessor.logger, `startGroup`).mockImplementation();
         stopProcessingSpy = jest.spyOn(issueProcessor, `stopProcessing$$`).mockImplementation();
         shouldIgnoreSpy = jest.spyOn(issueProcessor, `shouldIgnore$$`).mockImplementation();
+        shouldIncludeSpy = jest.spyOn(issueProcessor, `shouldInclude$$`).mockImplementation();
         isAlreadyStaleSpy = jest.spyOn(issueProcessor, `isAlreadyStale$$`).mockImplementation();
         processToRemoveStaleSpy = jest.spyOn(issueProcessor, `processToRemoveStale$$`).mockImplementation();
         processForStaleSpy = jest.spyOn(issueProcessor, `processForStale$$`).mockImplementation();
@@ -163,95 +166,36 @@ describe(`IssueProcessor`, (): void => {
           shouldIgnoreSpy.mockReturnValue(false);
         });
 
-        it(`should not increase the ignore issues statistic`, async (): Promise<void> => {
-          expect.assertions(1);
-
-          await issueProcessor.process();
-
-          expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).not.toHaveBeenCalled();
-        });
-
-        it(`should check if the issue is already stale`, async (): Promise<void> => {
+        it(`should check if this issue should be included in the processing (based on the inputs and user configuration)`, async (): Promise<void> => {
           expect.assertions(2);
 
           await issueProcessor.process();
 
-          expect(isAlreadyStaleSpy).toHaveBeenCalledTimes(1);
-          expect(isAlreadyStaleSpy).toHaveBeenCalledWith();
+          expect(shouldIncludeSpy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeSpy).toHaveBeenCalledWith();
         });
 
-        describe(`when the issue is already stale`, (): void => {
+        describe(`when this issue should not be included in the processing (based on the inputs and user configuration)`, (): void => {
           beforeEach((): void => {
-            isAlreadyStaleSpy.mockReturnValue(true);
+            shouldIncludeSpy.mockReturnValue(false);
           });
 
-          it(`should try to remove the stale state (if conditions are met)`, async (): Promise<void> => {
-            expect.assertions(5);
-
-            await issueProcessor.process();
-
-            expect(processToRemoveStaleSpy).toHaveBeenCalledTimes(1);
-            expect(processToRemoveStaleSpy).toHaveBeenCalledWith();
-            expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
-            expect(loggerInfoSpy).toHaveBeenCalledWith(`Already stale`);
-            expect(processForStaleSpy).not.toHaveBeenCalled();
-          });
-
-          it(`should increase the already stale issues statistic by 1`, async (): Promise<void> => {
+          it(`should log about ignoring the processing of this issue`, async (): Promise<void> => {
             expect.assertions(2);
 
             await issueProcessor.process();
 
-            expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledWith();
+            expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
+            expect(loggerInfoSpy).toHaveBeenCalledWith(`Ignored`);
           });
 
-          describe(`when the stale state was removed`, (): void => {
-            beforeEach((): void => {
-              processToRemoveStaleSpy.mockResolvedValue(true);
-            });
-
-            it(`should stop the processing`, async (): Promise<void> => {
-              expect.assertions(2);
-
-              await issueProcessor.process();
-
-              expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
-              expect(stopProcessingSpy).toHaveBeenCalledWith();
-            });
-          });
-
-          describe(`when the stale state was not removed`, (): void => {
-            beforeEach((): void => {
-              processToRemoveStaleSpy.mockResolvedValue(false);
-            });
-
-            it(`should try to close the issue`, async (): Promise<void> => {
-              expect.assertions(2);
-
-              await issueProcessor.process();
-
-              expect(processForCloseSpy).toHaveBeenCalledTimes(1);
-              expect(processForCloseSpy).toHaveBeenCalledWith();
-            });
-          });
-        });
-
-        describe(`when the issue is not stale yet`, (): void => {
-          beforeEach((): void => {
-            isAlreadyStaleSpy.mockReturnValue(false);
-          });
-
-          it(`should really process the issue for the stale checks`, async (): Promise<void> => {
-            expect.assertions(5);
+          it(`should increase the ignore issues statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
 
             await issueProcessor.process();
 
-            expect(processForStaleSpy).toHaveBeenCalledTimes(1);
-            expect(processForStaleSpy).toHaveBeenCalledWith();
-            expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
-            expect(stopProcessingSpy).not.toHaveBeenCalled();
-            expect(processForCloseSpy).not.toHaveBeenCalled();
+            expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledTimes(1);
+            expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should not increase the already stale issues statistic`, async (): Promise<void> => {
@@ -260,6 +204,125 @@ describe(`IssueProcessor`, (): void => {
             await issueProcessor.process();
 
             expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should stop to process this issue`, async (): Promise<void> => {
+            expect.assertions(6);
+
+            await issueProcessor.process();
+
+            expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+            expect(stopProcessingSpy).toHaveBeenCalledWith();
+            expect(isAlreadyStaleSpy).not.toHaveBeenCalled();
+            expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
+            expect(processForStaleSpy).not.toHaveBeenCalled();
+            expect(processForCloseSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        describe(`when this issue should be included in the processing (based on the inputs and user configuration)`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeSpy.mockReturnValue(true);
+          });
+
+          it(`should not increase the ignore issues statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await issueProcessor.process();
+
+            expect(issuesStatisticsServiceIncreaseIgnoredIssuesCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should check if the issue is already stale`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await issueProcessor.process();
+
+            expect(isAlreadyStaleSpy).toHaveBeenCalledTimes(1);
+            expect(isAlreadyStaleSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the issue is already stale`, (): void => {
+            beforeEach((): void => {
+              isAlreadyStaleSpy.mockReturnValue(true);
+            });
+
+            it(`should try to remove the stale state (if conditions are met)`, async (): Promise<void> => {
+              expect.assertions(5);
+
+              await issueProcessor.process();
+
+              expect(processToRemoveStaleSpy).toHaveBeenCalledTimes(1);
+              expect(processToRemoveStaleSpy).toHaveBeenCalledWith();
+              expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
+              expect(loggerInfoSpy).toHaveBeenCalledWith(`Already stale`);
+              expect(processForStaleSpy).not.toHaveBeenCalled();
+            });
+
+            it(`should increase the already stale issues statistic by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await issueProcessor.process();
+
+              expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).toHaveBeenCalledWith();
+            });
+
+            describe(`when the stale state was removed`, (): void => {
+              beforeEach((): void => {
+                processToRemoveStaleSpy.mockResolvedValue(true);
+              });
+
+              it(`should stop the processing`, async (): Promise<void> => {
+                expect.assertions(2);
+
+                await issueProcessor.process();
+
+                expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+                expect(stopProcessingSpy).toHaveBeenCalledWith();
+              });
+            });
+
+            describe(`when the stale state was not removed`, (): void => {
+              beforeEach((): void => {
+                processToRemoveStaleSpy.mockResolvedValue(false);
+              });
+
+              it(`should try to close the issue`, async (): Promise<void> => {
+                expect.assertions(2);
+
+                await issueProcessor.process();
+
+                expect(processForCloseSpy).toHaveBeenCalledTimes(1);
+                expect(processForCloseSpy).toHaveBeenCalledWith();
+              });
+            });
+          });
+
+          describe(`when the issue is not stale yet`, (): void => {
+            beforeEach((): void => {
+              isAlreadyStaleSpy.mockReturnValue(false);
+            });
+
+            it(`should really process the issue for the stale checks`, async (): Promise<void> => {
+              expect.assertions(5);
+
+              await issueProcessor.process();
+
+              expect(processForStaleSpy).toHaveBeenCalledTimes(1);
+              expect(processForStaleSpy).toHaveBeenCalledWith();
+              expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
+              expect(stopProcessingSpy).not.toHaveBeenCalled();
+              expect(processForCloseSpy).not.toHaveBeenCalled();
+            });
+
+            it(`should not increase the already stale issues statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await issueProcessor.process();
+
+              expect(issuesStatisticsServiceIncreaseAlreadyStaleIssuesCountSpy).not.toHaveBeenCalled();
+            });
           });
         });
       });

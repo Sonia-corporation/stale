@@ -1,6 +1,7 @@
 import { AbstractProcessor } from '@core/processing/abstract-processor';
 import { IssueCloseStaleProcessor } from '@core/processing/issues/issue-close-stale-processor';
 import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-processor';
+import { IssueIncludeProcessor } from '@core/processing/issues/issue-include-processor';
 import { IssueIsStaleProcessor } from '@core/processing/issues/issue-is-stale-processor';
 import { IssueLogger } from '@core/processing/issues/issue-logger';
 import { IssueRemoveStaleProcessor } from '@core/processing/issues/issue-remove-stale-processor';
@@ -15,14 +16,25 @@ import { IGithubApiIssue } from '@github/api/issues/interfaces/github-api-issue.
  */
 export class IssueProcessor extends AbstractProcessor<IGithubApiIssue, IssueLogger> {
   public readonly type: 'issue' = `issue`;
+
   /**
    * @description
    * The first thing to do
-   * Check if the issue is a good candidate for processing or not
+   * Check if the issue is a good candidate for processing or not (with exclusion filters)
    * @returns {boolean} Returns true if the issue should be ignored by the processor
    */
   public shouldIgnore$$(): boolean {
     return new IssueIgnoreProcessor(this).shouldIgnore();
+  }
+
+  /**
+   * @description
+   * The second thing to do
+   * Check if the issue is a good candidate for processing or not (with inclusion filters)
+   * @returns {boolean} Returns true if the issue should be included in the processing
+   */
+  public shouldInclude$$(): boolean {
+    return new IssueIncludeProcessor(this).shouldInclude();
   }
 
   /**

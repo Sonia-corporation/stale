@@ -20,6 +20,7 @@ jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
 jest.mock(`@core/processing/pull-requests/pull-request-logger`);
 jest.mock(`@core/processing/pull-requests/pull-request-ignore-processor`);
+jest.mock(`@core/processing/pull-requests/pull-request-include-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-is-stale-processor`);
 jest.mock(`@core/processing/pull-requests/pull-request-remove-stale-processor`);
@@ -70,6 +71,7 @@ describe(`PullRequestProcessor`, (): void => {
       let loggerStartGroupSpy: jest.SpyInstance;
       let stopProcessingSpy: jest.SpyInstance;
       let shouldIgnoreSpy: jest.SpyInstance;
+      let shouldIncludeSpy: jest.SpyInstance;
       let isAlreadyStaleSpy: jest.SpyInstance;
       let processToRemoveStaleSpy: jest.SpyInstance;
       let processForCloseSpy: jest.SpyInstance;
@@ -83,6 +85,7 @@ describe(`PullRequestProcessor`, (): void => {
         loggerStartGroupSpy = jest.spyOn(pullRequestProcessor.logger, `startGroup`).mockImplementation();
         stopProcessingSpy = jest.spyOn(pullRequestProcessor, `stopProcessing$$`).mockImplementation();
         shouldIgnoreSpy = jest.spyOn(pullRequestProcessor, `shouldIgnore$$`).mockImplementation();
+        shouldIncludeSpy = jest.spyOn(pullRequestProcessor, `shouldInclude$$`).mockImplementation();
         isAlreadyStaleSpy = jest.spyOn(pullRequestProcessor, `isAlreadyStale$$`).mockImplementation();
         processToRemoveStaleSpy = jest.spyOn(pullRequestProcessor, `processToRemoveStale$$`).mockImplementation();
         processForStaleSpy = jest.spyOn(pullRequestProcessor, `processForStale$$`).mockImplementation();
@@ -170,95 +173,36 @@ describe(`PullRequestProcessor`, (): void => {
           shouldIgnoreSpy.mockReturnValue(false);
         });
 
-        it(`should not increase the ignore pull requests statistic`, async (): Promise<void> => {
-          expect.assertions(1);
-
-          await pullRequestProcessor.process();
-
-          expect(pullRequestsStatisticsServiceIncreaseIgnoredPullRequestsCountSpy).not.toHaveBeenCalled();
-        });
-
-        it(`should check if the pull request is already stale`, async (): Promise<void> => {
+        it(`should check if this pull request should be included in the processing (based on the inputs and user configuration)`, async (): Promise<void> => {
           expect.assertions(2);
 
           await pullRequestProcessor.process();
 
-          expect(isAlreadyStaleSpy).toHaveBeenCalledTimes(1);
-          expect(isAlreadyStaleSpy).toHaveBeenCalledWith();
+          expect(shouldIncludeSpy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeSpy).toHaveBeenCalledWith();
         });
 
-        describe(`when the pull request is already stale`, (): void => {
+        describe(`when this pull request should not be included in the processing (based on the inputs and user configuration)`, (): void => {
           beforeEach((): void => {
-            isAlreadyStaleSpy.mockReturnValue(true);
+            shouldIncludeSpy.mockReturnValue(false);
           });
 
-          it(`should try to remove the stale state (if conditions are met)`, async (): Promise<void> => {
-            expect.assertions(5);
-
-            await pullRequestProcessor.process();
-
-            expect(processToRemoveStaleSpy).toHaveBeenCalledTimes(1);
-            expect(processToRemoveStaleSpy).toHaveBeenCalledWith();
-            expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
-            expect(loggerInfoSpy).toHaveBeenCalledWith(`Already stale`);
-            expect(processForStaleSpy).not.toHaveBeenCalled();
-          });
-
-          it(`should increase the already stale pull requests statistic by 1`, async (): Promise<void> => {
+          it(`should log about ignoring the processing of this pull request`, async (): Promise<void> => {
             expect.assertions(2);
 
             await pullRequestProcessor.process();
 
-            expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).toHaveBeenCalledTimes(1);
-            expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).toHaveBeenCalledWith();
+            expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
+            expect(loggerInfoSpy).toHaveBeenCalledWith(`Ignored`);
           });
 
-          describe(`when the stale state was removed`, (): void => {
-            beforeEach((): void => {
-              processToRemoveStaleSpy.mockResolvedValue(true);
-            });
-
-            it(`should stop the processing`, async (): Promise<void> => {
-              expect.assertions(2);
-
-              await pullRequestProcessor.process();
-
-              expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
-              expect(stopProcessingSpy).toHaveBeenCalledWith();
-            });
-          });
-
-          describe(`when the stale state was not removed`, (): void => {
-            beforeEach((): void => {
-              processToRemoveStaleSpy.mockResolvedValue(false);
-            });
-
-            it(`should try to close the pull request`, async (): Promise<void> => {
-              expect.assertions(2);
-
-              await pullRequestProcessor.process();
-
-              expect(processForCloseSpy).toHaveBeenCalledTimes(1);
-              expect(processForCloseSpy).toHaveBeenCalledWith();
-            });
-          });
-        });
-
-        describe(`when the pull request is not stale yet`, (): void => {
-          beforeEach((): void => {
-            isAlreadyStaleSpy.mockReturnValue(false);
-          });
-
-          it(`should really process the pull request for the stale checks`, async (): Promise<void> => {
-            expect.assertions(5);
+          it(`should increase the ignore pull requests statistic by 1`, async (): Promise<void> => {
+            expect.assertions(2);
 
             await pullRequestProcessor.process();
 
-            expect(processForStaleSpy).toHaveBeenCalledTimes(1);
-            expect(processForStaleSpy).toHaveBeenCalledWith();
-            expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
-            expect(stopProcessingSpy).not.toHaveBeenCalled();
-            expect(processForCloseSpy).not.toHaveBeenCalled();
+            expect(pullRequestsStatisticsServiceIncreaseIgnoredPullRequestsCountSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsStatisticsServiceIncreaseIgnoredPullRequestsCountSpy).toHaveBeenCalledWith();
           });
 
           it(`should not increase the already stale pull requests statistic`, async (): Promise<void> => {
@@ -267,6 +211,125 @@ describe(`PullRequestProcessor`, (): void => {
             await pullRequestProcessor.process();
 
             expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should stop to process this pull request`, async (): Promise<void> => {
+            expect.assertions(6);
+
+            await pullRequestProcessor.process();
+
+            expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+            expect(stopProcessingSpy).toHaveBeenCalledWith();
+            expect(isAlreadyStaleSpy).not.toHaveBeenCalled();
+            expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
+            expect(processForStaleSpy).not.toHaveBeenCalled();
+            expect(processForCloseSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        describe(`when this pull request should be included in the processing (based on the inputs and user configuration)`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeSpy.mockReturnValue(true);
+          });
+
+          it(`should not increase the ignore pull requests statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await pullRequestProcessor.process();
+
+            expect(pullRequestsStatisticsServiceIncreaseIgnoredPullRequestsCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should check if the pull request is already stale`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await pullRequestProcessor.process();
+
+            expect(isAlreadyStaleSpy).toHaveBeenCalledTimes(1);
+            expect(isAlreadyStaleSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the pull request is already stale`, (): void => {
+            beforeEach((): void => {
+              isAlreadyStaleSpy.mockReturnValue(true);
+            });
+
+            it(`should try to remove the stale state (if conditions are met)`, async (): Promise<void> => {
+              expect.assertions(5);
+
+              await pullRequestProcessor.process();
+
+              expect(processToRemoveStaleSpy).toHaveBeenCalledTimes(1);
+              expect(processToRemoveStaleSpy).toHaveBeenCalledWith();
+              expect(loggerInfoSpy).toHaveBeenCalledTimes(1);
+              expect(loggerInfoSpy).toHaveBeenCalledWith(`Already stale`);
+              expect(processForStaleSpy).not.toHaveBeenCalled();
+            });
+
+            it(`should increase the already stale pull requests statistic by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await pullRequestProcessor.process();
+
+              expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).toHaveBeenCalledWith();
+            });
+
+            describe(`when the stale state was removed`, (): void => {
+              beforeEach((): void => {
+                processToRemoveStaleSpy.mockResolvedValue(true);
+              });
+
+              it(`should stop the processing`, async (): Promise<void> => {
+                expect.assertions(2);
+
+                await pullRequestProcessor.process();
+
+                expect(stopProcessingSpy).toHaveBeenCalledTimes(1);
+                expect(stopProcessingSpy).toHaveBeenCalledWith();
+              });
+            });
+
+            describe(`when the stale state was not removed`, (): void => {
+              beforeEach((): void => {
+                processToRemoveStaleSpy.mockResolvedValue(false);
+              });
+
+              it(`should try to close the pull request`, async (): Promise<void> => {
+                expect.assertions(2);
+
+                await pullRequestProcessor.process();
+
+                expect(processForCloseSpy).toHaveBeenCalledTimes(1);
+                expect(processForCloseSpy).toHaveBeenCalledWith();
+              });
+            });
+          });
+
+          describe(`when the pull request is not stale yet`, (): void => {
+            beforeEach((): void => {
+              isAlreadyStaleSpy.mockReturnValue(false);
+            });
+
+            it(`should really process the pull request for the stale checks`, async (): Promise<void> => {
+              expect.assertions(5);
+
+              await pullRequestProcessor.process();
+
+              expect(processForStaleSpy).toHaveBeenCalledTimes(1);
+              expect(processForStaleSpy).toHaveBeenCalledWith();
+              expect(processToRemoveStaleSpy).not.toHaveBeenCalled();
+              expect(stopProcessingSpy).not.toHaveBeenCalled();
+              expect(processForCloseSpy).not.toHaveBeenCalled();
+            });
+
+            it(`should not increase the already stale pull requests statistic`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await pullRequestProcessor.process();
+
+              expect(pullRequestsStatisticsServiceIncreaseAlreadyStalePullRequestsCountSpy).not.toHaveBeenCalled();
+            });
           });
         });
       });
