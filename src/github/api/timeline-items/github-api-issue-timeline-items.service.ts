@@ -44,7 +44,11 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
               `Could not find a single added label event for the issue`,
               LoggerService.value(issueNumber)
             );
-            AnnotationsService.error(EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND);
+            AnnotationsService.error(EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND, {
+              file: `github-api-issue-timeline-items.service.ts`,
+              startLine: 38,
+              title: `Error`,
+            });
             throw new Error(`Could not find a single added label event for the issue ${issueNumber}`);
           }
 
@@ -53,7 +57,11 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
             this.processor.logger.error(
               `Reached the maximum number of added label events supported for now. The pagination support is not yet implemented!`
             );
-            AnnotationsService.error(EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED);
+            AnnotationsService.error(EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED, {
+              file: `github-api-issue-timeline-items.service.ts`,
+              startLine: 38,
+              title: `Error`,
+            });
             throw new Error(`Reached the maximum number of added label events supported for now`);
           }
 
@@ -71,7 +79,11 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
           `Failed to fetch the added labels events on the issue`,
           LoggerService.value(issueNumber)
         );
-        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS);
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS, {
+          file: `github-api-issue-timeline-items.service.ts`,
+          startLine: 77,
+          title: `Error`,
+        });
 
         throw error;
       });

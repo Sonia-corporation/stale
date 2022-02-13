@@ -354,7 +354,11 @@ describe(`IssueCloseStaleProcessor`, (): void => {
             );
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-extra-labels-processor.ts`,
+              startLine: 72,
+              title: `Error`,
+            });
           });
 
           it(`should not add the extra label on the issue`, async (): Promise<void> => {
@@ -559,8 +563,16 @@ describe(`IssueCloseStaleProcessor`, (): void => {
             );
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
-            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL);
-            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-extra-labels-processor.ts`,
+              startLine: 72,
+              title: `Error`,
+            });
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-extra-labels-processor.ts`,
+              startLine: 72,
+              title: `Error`,
+            });
           });
 
           it(`should not add the extra labels on the issue`, async (): Promise<void> => {

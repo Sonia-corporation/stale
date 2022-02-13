@@ -121,7 +121,12 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
-            EAnnotationErrorPullRequest.FAILED_FETCHING_LABELS_EVENTS
+            EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+            {
+              file: `github-api-pull-request-timeline-items.service.ts`,
+              startLine: 83,
+              title: `Error`,
+            }
           );
         });
 
@@ -204,11 +209,21 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
-              EAnnotationErrorPullRequest.NO_LABEL_EVENT_FOUND
+              EAnnotationErrorPullRequest.NO_LABEL_EVENT_FOUND,
+              {
+                file: `github-api-pull-request-timeline-items.service.ts`,
+                startLine: 41,
+                title: `Error`,
+              }
             );
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               2,
-              EAnnotationErrorPullRequest.FAILED_FETCHING_LABELS_EVENTS
+              EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+              {
+                file: `github-api-pull-request-timeline-items.service.ts`,
+                startLine: 83,
+                title: `Error`,
+              }
             );
           });
 
@@ -324,11 +339,21 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
-              EAnnotationErrorPullRequest.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationErrorPullRequest.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `github-api-pull-request-timeline-items.service.ts`,
+                startLine: 41,
+                title: `Error`,
+              }
             );
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               2,
-              EAnnotationErrorPullRequest.FAILED_FETCHING_LABELS_EVENTS
+              EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+              {
+                file: `github-api-pull-request-timeline-items.service.ts`,
+                startLine: 83,
+                title: `Error`,
+              }
             );
           });
 

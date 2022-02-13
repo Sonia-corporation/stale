@@ -73,7 +73,11 @@ export abstract class AbstractExtraLabelsProcessor<
 
     if (!label) {
       this.processor.logger.error(`Could not find the label`, LoggerService.value(labelName));
-      AnnotationsService.error(EAnnotationError.NOT_FOUND_LABEL);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_LABEL, {
+        file: `abstract-extra-labels-processor.ts`,
+        startLine: 72,
+        title: `Error`,
+      });
 
       throw new Error(`Could not find the label ${labelName}`);
     }

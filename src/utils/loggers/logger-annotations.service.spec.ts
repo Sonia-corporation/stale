@@ -1,5 +1,7 @@
+import { IAnnotationsProperties } from '@utils/annotations/types/annotations-properties';
 import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.service';
 import * as core from '@actions/core';
+import { createHydratedMock } from 'ts-auto-mock';
 
 jest.mock(`@utils/loggers/logger-format.service`);
 
@@ -36,7 +38,7 @@ describe(`LoggerAnnotationsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = LoggerAnnotationsService.notice();
+      const result = LoggerAnnotationsService.notice(`dummy message`);
 
       expect(result).toStrictEqual(LoggerAnnotationsService);
     });
@@ -74,45 +76,36 @@ describe(`LoggerAnnotationsService`, (): void => {
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = LoggerAnnotationsService.warning();
+      const result = LoggerAnnotationsService.warning(`dummy message`);
 
       expect(result).toStrictEqual(LoggerAnnotationsService);
     });
   });
 
   describe(`error()`, (): void => {
+    let properties: IAnnotationsProperties;
+
     let coreErrorSpy: jest.SpyInstance;
 
     beforeEach((): void => {
+      properties = createHydratedMock<IAnnotationsProperties>();
+
       coreErrorSpy = jest.spyOn(core, `error`).mockImplementation();
     });
 
-    describe(`when there is one given message`, (): void => {
-      it(`should log the message`, (): void => {
-        expect.assertions(2);
+    it(`should log the message`, (): void => {
+      expect.assertions(2);
 
-        LoggerAnnotationsService.error(`dummy message`);
+      LoggerAnnotationsService.error(`dummy message`, properties);
 
-        expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`dummy message`);
-      });
-    });
-
-    describe(`when there is multiple given messages`, (): void => {
-      it(`should merge, separate by a space and log the messages`, (): void => {
-        expect.assertions(2);
-
-        LoggerAnnotationsService.error(`dummy message 1`, `dummy message 2`);
-
-        expect(coreErrorSpy).toHaveBeenCalledTimes(1);
-        expect(coreErrorSpy).toHaveBeenCalledWith(`dummy message 1 dummy message 2`);
-      });
+      expect(coreErrorSpy).toHaveBeenCalledTimes(1);
+      expect(coreErrorSpy).toHaveBeenCalledWith(`dummy message`, properties);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = LoggerAnnotationsService.error();
+      const result = LoggerAnnotationsService.error(`dummy message`, properties);
 
       expect(result).toStrictEqual(LoggerAnnotationsService);
     });

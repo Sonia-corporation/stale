@@ -1,3 +1,4 @@
+import { IAnnotationsProperties } from '@utils/annotations/types/annotations-properties';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
@@ -22,8 +23,11 @@ export class LoggerAnnotationsService {
     return LoggerAnnotationsService;
   }
 
-  public static error(...message: ReadonlyArray<string>): LoggerAnnotationsService {
-    core.error(_.join(message, ` `));
+  public static error(
+    message: Readonly<string>,
+    properties: Readonly<IAnnotationsProperties>
+  ): LoggerAnnotationsService {
+    core.error(message, properties);
 
     return LoggerAnnotationsService;
   }

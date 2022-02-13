@@ -358,7 +358,11 @@ describe(`CoreInputsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveReturnedTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.WRONG_INPUT_VALUE);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.WRONG_INPUT_VALUE, {
+            file: `core-inputs.service.ts`,
+            startLine: 35,
+            title: `Error`,
+          });
         });
 
         it(`should throw`, (): void => {

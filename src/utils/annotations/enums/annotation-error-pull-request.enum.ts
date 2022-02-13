@@ -1,6 +1,5 @@
 export enum EAnnotationErrorPullRequest {
   NO_LABEL_EVENT_FOUND = `Could not find a single added label event for this pull request!`,
-  FAILED_FETCHING_LABELS_EVENTS = `Failed to fetch the added labels events on this pull request!`,
   FAILED_DELETE_REFERENCE = `Failed to delete the reference on this pull request!`,
   FAILED_CLOSE = `Failed to close the pull request!`,
   FAILED_DRAFT = `Failed to draft the pull request!`,

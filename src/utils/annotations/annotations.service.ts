@@ -1,4 +1,5 @@
 import { IAnnotationsErrors } from '@utils/annotations/types/annotations-errors';
+import { IAnnotationsProperties } from '@utils/annotations/types/annotations-properties';
 import { IAnnotationsWarnings } from '@utils/annotations/types/annotations-warnings';
 import { LoggerAnnotationsService } from '@utils/loggers/logger-annotations.service';
 
@@ -22,8 +23,11 @@ export class AnnotationsService {
     return AnnotationsService;
   }
 
-  public static error(annotation: Readonly<IAnnotationsErrors>): AnnotationsService {
-    LoggerAnnotationsService.error(annotation);
+  public static error(
+    annotation: Readonly<IAnnotationsErrors>,
+    properties: Readonly<IAnnotationsProperties>
+  ): AnnotationsService {
+    LoggerAnnotationsService.error(annotation, properties);
 
     return AnnotationsService;
   }

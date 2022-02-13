@@ -118,7 +118,11 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_COMMENT);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_COMMENT, {
+            file: `abstract-github-api-comments.service.ts`,
+            startLine: 42,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {
