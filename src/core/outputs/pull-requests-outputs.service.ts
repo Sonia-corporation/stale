@@ -5,7 +5,7 @@ import { getEnumKeys } from '@utils/enums/get-enum-keys';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
-const OUTPUTS_MAP: { [key in keyof typeof EPullRequestsOutputs]: () => number } = {
+const MAP: { [key in keyof typeof EPullRequestsOutputs]: () => number } = {
   ADDED_PULL_REQUESTS_COMMENTS_COUNT: (): number =>
     PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount,
   ADDED_PULL_REQUESTS_LABELS_COUNT: (): number =>
@@ -44,7 +44,7 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
 
   protected _setOutputs(): void {
     getEnumKeys(EPullRequestsOutputs).forEach((key): void => {
-      core.setOutput(EPullRequestsOutputs[key], OUTPUTS_MAP[key]());
+      core.setOutput(EPullRequestsOutputs[key], MAP[key]());
     });
   }
 }

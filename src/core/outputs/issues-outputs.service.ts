@@ -5,7 +5,7 @@ import { getEnumKeys } from '@utils/enums/get-enum-keys';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
-const OUTPUTS_MAP: { [key in keyof typeof EIssuesOutputs]: () => number } = {
+const MAP: { [key in keyof typeof EIssuesOutputs]: () => number } = {
   ADDED_ISSUES_COMMENTS_COUNT: (): number => IssuesStatisticsService.getInstance().addedIssuesCommentsCount,
   ADDED_ISSUES_LABELS_COUNT: (): number => IssuesStatisticsService.getInstance().addedIssuesLabelsCount,
   ALREADY_STALE_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().alreadyStaleIssuesCount,
@@ -35,7 +35,7 @@ export class IssuesOutputsService extends AbstractOutputsService {
 
   protected _setOutputs(): void {
     getEnumKeys(EIssuesOutputs).forEach((key): void => {
-      core.setOutput(EIssuesOutputs[key], OUTPUTS_MAP[key]());
+      core.setOutput(EIssuesOutputs[key], MAP[key]());
     });
   }
 }
