@@ -55,18 +55,18 @@ describe(`PullRequestsOutputsAnnotationsService`, (): void => {
     describe(`when all the pull requests statistics are greater than 0`, (): void => {
       beforeEach((): void => {
         PullRequestsStatisticsService.getInstance().processedPullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().stalePullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().closedPullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount = 1;
-        PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount = 1;
-        PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount = 1;
-        PullRequestsStatisticsService.getInstance().draftPullRequestsCount = 1;
-        PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount = 1;
-        PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount = 1;
+        PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount = 2;
+        PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount = 3;
+        PullRequestsStatisticsService.getInstance().stalePullRequestsCount = 4;
+        PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount = 5;
+        PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount = 6;
+        PullRequestsStatisticsService.getInstance().closedPullRequestsCount = 7;
+        PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount = 8;
+        PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount = 9;
+        PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount = 10;
+        PullRequestsStatisticsService.getInstance().draftPullRequestsCount = 11;
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount = 12;
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount = 13;
       });
 
       it(`should log the pull requests outputs annotations`, (): void => {
@@ -75,20 +75,20 @@ describe(`PullRequestsOutputsAnnotationsService`, (): void => {
         service.noticeAllOutputs();
 
         expect(coreNoticeSpy).toHaveBeenCalledTimes(14);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(4, `Stale pull requests: 1`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale pull requests: 5`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored pull requests: 2`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered pull requests: 3`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(4, `Stale pull requests: 4`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(5, `Processed pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(6, `Remove stale pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Close pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Deleted pull requests branches: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added pull requests comments: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Added pull requests labels: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Draft pull requests: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api pull requests: 2`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(13, `Called api pull requests queries: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(14, `Called api pull requests mutations: 1`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(6, `Remove stale pull requests: 6`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Closed pull requests: 7`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Deleted pull requests branches: 8`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added pull requests comments: 9`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Added pull requests labels: 10`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Draft pull requests: 11`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api pull requests: 25`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(13, `Called api pull requests queries: 12`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(14, `Called api pull requests mutations: 13`);
       });
     });
 

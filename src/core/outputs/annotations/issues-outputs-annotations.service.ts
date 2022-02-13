@@ -25,7 +25,7 @@ const MAP: { [key in keyof typeof EIssuesOutputs]: () => void } = {
     noticeCount(`Called api issues queries`, IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount);
   },
   CLOSE_ISSUES_COUNT(): void {
-    noticeCount(`Close issues`, IssuesStatisticsService.getInstance().closedIssuesCount);
+    noticeCount(`Closed issues`, IssuesStatisticsService.getInstance().closedIssuesCount);
   },
   IGNORED_ISSUES_COUNT(): void {
     noticeCount(`Ignored issues`, IssuesStatisticsService.getInstance().ignoredIssuesCount);
