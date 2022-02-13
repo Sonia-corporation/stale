@@ -1,5 +1,29 @@
 # Sonia stale action
 
+# [1.45.0](https://github.com/Sonia-corporation/stale/compare/1.44.0...1.45.0) (2022-02-13)
+
+
+### :books: Documentation
+
+* **footer:** add a link on the footer to get some help ([4619a5a](https://github.com/Sonia-corporation/stale/commit/4619a5ac96db02797f8cdf641153d887a67c91e2)), closes [#469](https://github.com/Sonia-corporation/stale/issues/469)
+* **badge:** add a new page to show our badge ([93e8f80](https://github.com/Sonia-corporation/stale/commit/93e8f80d608f15733baf90e0d79f36bd180ba337)), closes [#456](https://github.com/Sonia-corporation/stale/issues/456)
+* **blog:** add new entry to explain the change of UI ([396c1a3](https://github.com/Sonia-corporation/stale/commit/396c1a33f551bb92a5b0f868cb784b25eb96cbf9))
+* **readme:** add the sonia changelog badge ([e4d529d](https://github.com/Sonia-corporation/stale/commit/e4d529d43f013e8235d57f4ccf95d14d4720fe09))
+* **readme:** add the sonia stale badge ([2ae6eff](https://github.com/Sonia-corporation/stale/commit/2ae6eff367ef0ddece9cba2c8e20dbe1ddf9e880))
+* **ui:** change the brand name and the color scheme to follow Sonia style ([3ce0536](https://github.com/Sonia-corporation/stale/commit/3ce0536e843e5f0708b25ce6a4137d96ad14cd27)), closes [#473](https://github.com/Sonia-corporation/stale/issues/473)
+  The Sonia corporation is a big joke, it's not a corporation and is only about open-source stuff.
+But having consistency between the different apps is cool, hence this change.
+I am not fond of the pink colour, but whatever I am just bad regarding the design.
+
+
+### :rocket: Features
+
+* **prs:** add new input `pull-request-only-any-project-cards` ([ad82fd8](https://github.com/Sonia-corporation/stale/commit/ad82fd87aebe5caac4eeeef5985bc363f28d3e7b)), closes [#416](https://github.com/Sonia-corporation/stale/issues/416)
+  This new input allow to only process prs belonging to specific projects.
+You can link your prs to a project card.
+Pass as a multi-line input the names of your projects.
+When this input is set, all prs without a project card will not be processed.
+
 # [1.44.0](https://github.com/Sonia-corporation/stale/compare/1.43.2...1.44.0) (2022-02-11)
 
 
