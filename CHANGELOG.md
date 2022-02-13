@@ -1,5 +1,21 @@
 # Sonia stale action
 
+# [1.46.0](https://github.com/Sonia-corporation/stale/compare/1.45.0...1.46.0) (2022-02-13)
+
+
+### :bug: Bug Fixes
+
+* **logs:** hide the sub-statistics when the count is 0 ([13e2bb1](https://github.com/Sonia-corporation/stale/commit/13e2bb1608d6e3ea014ad079a8a3193cfdc7438d)), closes [#477](https://github.com/Sonia-corporation/stale/issues/477)
+  It will simply avoid polluting the logs with empty counts.
+
+
+### :rocket: Features
+
+* **annotations:** add references to the root cause of the error annotations ([6124e3e](https://github.com/Sonia-corporation/stale/commit/6124e3e713dfc0896bce2a11bcc6cd9b03f8a005)), closes [#457](https://github.com/Sonia-corporation/stale/issues/457)
+  See AnnotationProperties in https://github.com/actions/toolkit/tree/main/packages/core.
+* **annotations:** add references to the root cause of the warning annotations ([4cc9b0c](https://github.com/Sonia-corporation/stale/commit/4cc9b0c55d9ab2cc5ce012985511fbf7bd8bfed8)), closes [#484](https://github.com/Sonia-corporation/stale/issues/484)
+  See AnnotationProperties in https://github.com/actions/toolkit/tree/main/packages/core.
+
 # [1.45.0](https://github.com/Sonia-corporation/stale/compare/1.44.0...1.45.0) (2022-02-13)
 
 
