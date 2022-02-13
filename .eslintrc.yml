@@ -220,6 +220,10 @@ rules:
         - PascalCase
       prefix:
         - E
+    - selector: objectLiteralMethod
+      format:
+        - camelCase
+        - UPPER_CASE
   '@typescript-eslint/no-explicit-any':
     - error
     - fixToUnknown: false
@@ -316,7 +320,15 @@ rules:
       ignoreReadBeforeAssign: false
   camelcase: off
   valid-jsdoc: off
-  'jsdoc/require-jsdoc': warn # @todo change it to error but we should fix all current jsdoc errors
+  'jsdoc/require-jsdoc': error
+  'jsdoc/require-param-description': error
+  'jsdoc/require-returns-description': error
+  'jsdoc/no-undefined-types':
+    - error
+    - definedTypes:
+        - unknown
+  'jsdoc/require-param-type': error
+  'jsdoc/require-returns-type': error
   curly:
     - error
     - all

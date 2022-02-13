@@ -52,16 +52,16 @@ describe(`IssuesOutputsAnnotationsService`, (): void => {
     describe(`when all the issues statistics are greater than 0`, (): void => {
       beforeEach((): void => {
         IssuesStatisticsService.getInstance().processedIssuesCount = 1;
-        IssuesStatisticsService.getInstance().ignoredIssuesCount = 1;
-        IssuesStatisticsService.getInstance().unalteredIssuesCount = 1;
-        IssuesStatisticsService.getInstance().staleIssuesCount = 1;
-        IssuesStatisticsService.getInstance().alreadyStaleIssuesCount = 1;
-        IssuesStatisticsService.getInstance().removeStaleIssuesCount = 1;
-        IssuesStatisticsService.getInstance().closedIssuesCount = 1;
-        IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 1;
-        IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 1;
-        IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 1;
-        IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 1;
+        IssuesStatisticsService.getInstance().ignoredIssuesCount = 2;
+        IssuesStatisticsService.getInstance().unalteredIssuesCount = 3;
+        IssuesStatisticsService.getInstance().staleIssuesCount = 4;
+        IssuesStatisticsService.getInstance().alreadyStaleIssuesCount = 5;
+        IssuesStatisticsService.getInstance().removeStaleIssuesCount = 6;
+        IssuesStatisticsService.getInstance().closedIssuesCount = 7;
+        IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 8;
+        IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 9;
+        IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 10;
+        IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 11;
       });
 
       it(`should log the issues outputs annotations`, (): void => {
@@ -70,18 +70,18 @@ describe(`IssuesOutputsAnnotationsService`, (): void => {
         service.noticeAllOutputs();
 
         expect(coreNoticeSpy).toHaveBeenCalledTimes(12);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(4, `Stale issues: 1`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale issues: 5`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored issues: 2`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered issues: 3`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(4, `Stale issues: 4`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(5, `Processed issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(6, `Remove stale issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Close issues: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Added issues comments: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added issues labels: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Called api issues: 2`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Called api issues queries: 1`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api issues mutations: 1`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(6, `Remove stale issues: 6`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Closed issues: 7`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Added issues comments: 8`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added issues labels: 9`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Called api issues: 21`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Called api issues queries: 10`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api issues mutations: 11`);
       });
     });
 

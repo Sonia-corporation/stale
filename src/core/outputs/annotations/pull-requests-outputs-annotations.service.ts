@@ -1,7 +1,69 @@
 import { AbstractOutputsAnnotationsService } from '@core/outputs/annotations/abstract-outputs-annotations.service';
+import { noticeCount } from '@core/outputs/annotations/notice-count';
+import { EPullRequestsOutputs } from '@core/outputs/enums/pull-requests-outputs.enum';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
-import * as core from '@actions/core';
+import { getEnumKeys } from '@utils/enums/get-enum-keys';
 import _ from 'lodash';
+
+const MAP: { [key in keyof typeof EPullRequestsOutputs]: () => void } = {
+  ADDED_PULL_REQUESTS_COMMENTS_COUNT(): void {
+    noticeCount(
+      `Added pull requests comments`,
+      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount
+    );
+  },
+  ADDED_PULL_REQUESTS_LABELS_COUNT(): void {
+    noticeCount(`Added pull requests labels`, PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount);
+  },
+  ALREADY_STALE_PULL_REQUESTS_COUNT(): void {
+    noticeCount(
+      `Already stale pull requests`,
+      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount
+    );
+  },
+  CALLED_API_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Called api pull requests`, PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount);
+  },
+  CALLED_API_PULL_REQUESTS_MUTATIONS_COUNT(): void {
+    noticeCount(
+      `Called api pull requests mutations`,
+      PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount
+    );
+  },
+  CALLED_API_PULL_REQUESTS_QUERIES_COUNT(): void {
+    noticeCount(
+      `Called api pull requests queries`,
+      PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount
+    );
+  },
+  CLOSE_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Closed pull requests`, PullRequestsStatisticsService.getInstance().closedPullRequestsCount);
+  },
+  DELETED_PULL_REQUESTS_BRANCHES_COUNT(): void {
+    noticeCount(
+      `Deleted pull requests branches`,
+      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount
+    );
+  },
+  DRAFT_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Draft pull requests`, PullRequestsStatisticsService.getInstance().draftPullRequestsCount);
+  },
+  IGNORED_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Ignored pull requests`, PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount);
+  },
+  PROCESSED_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Processed pull requests`, PullRequestsStatisticsService.getInstance().processedPullRequestsCount);
+  },
+  REMOVE_STALE_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Remove stale pull requests`, PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount);
+  },
+  STALE_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Stale pull requests`, PullRequestsStatisticsService.getInstance().stalePullRequestsCount);
+  },
+  UNALTERED_PULL_REQUESTS_COUNT(): void {
+    noticeCount(`Unaltered pull requests`, PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount);
+  },
+};
 
 export class PullRequestsOutputsAnnotationsService extends AbstractOutputsAnnotationsService {
   private static _instance: PullRequestsOutputsAnnotationsService;
@@ -17,82 +79,8 @@ export class PullRequestsOutputsAnnotationsService extends AbstractOutputsAnnota
   protected readonly _outputsName: 'pull requests' = `pull requests`;
 
   protected _noticeAllOutputs(): void {
-    if (PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount > 0) {
-      core.notice(
-        `Already stale pull requests: ${PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount}`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount > 0) {
-      core.notice(`Ignored pull requests: ${PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount > 0) {
-      core.notice(`Unaltered pull requests: ${PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().stalePullRequestsCount > 0) {
-      core.notice(`Stale pull requests: ${PullRequestsStatisticsService.getInstance().stalePullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().processedPullRequestsCount > 0) {
-      core.notice(`Processed pull requests: ${PullRequestsStatisticsService.getInstance().processedPullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount > 0) {
-      core.notice(
-        `Remove stale pull requests: ${PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount}`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().closedPullRequestsCount > 0) {
-      core.notice(`Close pull requests: ${PullRequestsStatisticsService.getInstance().closedPullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount > 0) {
-      core.notice(
-        `Deleted pull requests branches: ${
-          PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount
-        }`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount > 0) {
-      core.notice(
-        `Added pull requests comments: ${PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount}`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount > 0) {
-      core.notice(
-        `Added pull requests labels: ${PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount}`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().draftPullRequestsCount > 0) {
-      core.notice(`Draft pull requests: ${PullRequestsStatisticsService.getInstance().draftPullRequestsCount}`);
-    }
-
-    if (PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount > 0) {
-      core.notice(
-        `Called api pull requests: ${PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount}`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount > 0) {
-      core.notice(
-        `Called api pull requests queries: ${
-          PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount
-        }`
-      );
-    }
-
-    if (PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount > 0) {
-      core.notice(
-        `Called api pull requests mutations: ${
-          PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount
-        }`
-      );
-    }
+    getEnumKeys(EPullRequestsOutputs).forEach((key): void => {
+      MAP[key]();
+    });
   }
 }
