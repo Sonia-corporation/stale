@@ -45,38 +45,29 @@ describe(`LoggerAnnotationsService`, (): void => {
   });
 
   describe(`warning()`, (): void => {
+    let properties: IAnnotationsProperties;
+
     let coreWarningSpy: jest.SpyInstance;
 
     beforeEach((): void => {
+      properties = createHydratedMock<IAnnotationsProperties>();
+
       coreWarningSpy = jest.spyOn(core, `warning`).mockImplementation();
     });
 
-    describe(`when there is one given message`, (): void => {
-      it(`should log the message`, (): void => {
-        expect.assertions(2);
+    it(`should log the message`, (): void => {
+      expect.assertions(2);
 
-        LoggerAnnotationsService.warning(`dummy message`);
+      LoggerAnnotationsService.warning(`dummy message`, properties);
 
-        expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`dummy message`);
-      });
-    });
-
-    describe(`when there is multiple given messages`, (): void => {
-      it(`should merge, separate by a space and log the messages`, (): void => {
-        expect.assertions(2);
-
-        LoggerAnnotationsService.warning(`dummy message 1`, `dummy message 2`);
-
-        expect(coreWarningSpy).toHaveBeenCalledTimes(1);
-        expect(coreWarningSpy).toHaveBeenCalledWith(`dummy message 1 dummy message 2`);
-      });
+      expect(coreWarningSpy).toHaveBeenCalledTimes(1);
+      expect(coreWarningSpy).toHaveBeenCalledWith(`dummy message`, properties);
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = LoggerAnnotationsService.warning(`dummy message`);
+      const result = LoggerAnnotationsService.warning(`dummy message`, properties);
 
       expect(result).toStrictEqual(LoggerAnnotationsService);
     });

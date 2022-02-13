@@ -340,7 +340,12 @@ describe(`IssueIncludeProcessor`, (): void => {
 
               expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
               expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-                EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED
+                EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `issue-include-processor.ts`,
+                  startLine: 76,
+                  title: `Warning`,
+                }
               );
             });
 

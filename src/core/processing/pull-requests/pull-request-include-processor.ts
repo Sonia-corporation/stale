@@ -85,7 +85,11 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
           } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+        file: `pull-request-include-processor.ts`,
+        startLine: 76,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(

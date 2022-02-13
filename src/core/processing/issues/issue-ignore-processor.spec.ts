@@ -1199,7 +1199,12 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
             expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-              EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `issue-ignore-processor.ts`,
+                startLine: 198,
+                title: `Warning`,
+              }
             );
           });
         });
@@ -1402,7 +1407,12 @@ describe(`IssueIgnoreProcessor`, (): void => {
 
             expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-              EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `issue-ignore-processor.ts`,
+                startLine: 245,
+                title: `Warning`,
+              }
             );
           });
         });

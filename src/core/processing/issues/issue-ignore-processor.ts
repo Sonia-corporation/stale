@@ -207,7 +207,11 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED, {
+        file: `issue-ignore-processor.ts`,
+        startLine: 198,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(`Not containing an ignored label. Continuing...`);
@@ -250,7 +254,11 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED, {
+        file: `issue-ignore-processor.ts`,
+        startLine: 245,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(`Not containing an ignored assignee. Continuing...`);
