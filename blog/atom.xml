@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/blog</id>
-    <title>GitHub stale action Blog</title>
-    <updated>2022-02-11T00:00:00.000Z</updated>
+    <title>Sonia stale action Blog</title>
+    <updated>2022-02-12T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/blog"/>
-    <subtitle>GitHub stale action Blog</subtitle>
+    <subtitle>Sonia stale action Blog</subtitle>
     <icon>https://sonia-corporation.github.io/stale/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[The new UI is here!]]></title>
+        <id>new-ui</id>
+        <link href="https://sonia-corporation.github.io/stale/blog/new-ui"/>
+        <updated>2022-02-12T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The UI of this action changed from blue to pink.
+The name was also updated to reflect that this action belongs to the Sonia corporation collective group of open-source projects.
+]]></summary>
+        <content type="html"><![CDATA[<p>The brand-new UI of the stale action is here, changing the name and the colour palette!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="re-branding">Re-branding<a class="hash-link" href="#re-branding" title="Direct link to heading">​</a></h2><p>In order to keep consistency with the other projects inside the <a href="https://github.com/Sonia-corporation?type=source" target="_blank" rel="noopener noreferrer">Sonia corporation organization</a>, the action name was changed in some places to reflect that it's a "Sonia thing".<br>
+<!-- -->The logo was changed from a thermostat to just the usual Sonia logo.</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="colour-palette">Colour palette<a class="hash-link" href="#colour-palette" title="Direct link to heading">​</a></h2><p>The previous colour palette was a cold blue, to reflect the "stale" state of the items.<br>
+<!-- -->Now, everything is pink, to follow the dress colour inside the Sonia's logo.</p><p><strong>Before:</strong></p><p><img alt="Example banner" src="/stale/assets/images/before-rebranding-to-sonia-c61df369cf08fbe3b2f7cd69d40d8359.png" width="2560" height="1297"></p><p><strong>After:</strong></p><p><img alt="Example banner" src="/stale/assets/images/after-rebranding-to-sonia-84ad5bfcbb3bc023e23ae76feebc7de9.png" width="2560" height="1297"></p><p>We hope you like, and if not, blame Sonia. 😉</p>]]></content>
+        <author>
+            <name>Geoffrey "C0ZEN" Testelin</name>
+            <uri>https://github.com/C0ZEN</uri>
+        </author>
+        <category label="new ui" term="new ui"/>
+        <category label="pink" term="pink"/>
+        <category label="brand" term="brand"/>
+        <category label="sonia" term="sonia"/>
+        <category label="sonia corporation" term="sonia corporation"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[The first inclusive filter input is here!]]></title>
         <id>first-inclusive-input</id>

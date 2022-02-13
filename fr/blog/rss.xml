@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
-        <title>GitHub stale action Blog</title>
+        <title>Sonia stale action Blog</title>
         <link>https://sonia-corporation.github.io/stale/fr/blog</link>
-        <description>GitHub stale action Blog</description>
-        <lastBuildDate>Fri, 11 Feb 2022 00:00:00 GMT</lastBuildDate>
+        <description>Sonia stale action Blog</description>
+        <lastBuildDate>Sat, 12 Feb 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[The new UI is here!]]></title>
+            <link>https://sonia-corporation.github.io/stale/fr/blog/new-ui</link>
+            <guid>new-ui</guid>
+            <pubDate>Sat, 12 Feb 2022 00:00:00 GMT</pubDate>
+            <description><![CDATA[The UI of this action changed from blue to pink.
+The name was also updated to reflect that this action belongs to the Sonia corporation collective group of open-source projects.
+]]></description>
+            <content:encoded><![CDATA[<p>The brand-new UI of the stale action is here, changing the name and the colour palette!</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="re-branding">Re-branding<a class="hash-link" href="#re-branding" title="Lien direct vers le titre">​</a></h2><p>In order to keep consistency with the other projects inside the <a href="https://github.com/Sonia-corporation?type=source" target="_blank" rel="noopener noreferrer">Sonia corporation organization</a>, the action name was changed in some places to reflect that it's a "Sonia thing".<br>
+<!-- -->The logo was changed from a thermostat to just the usual Sonia logo.</p><h2 class="anchor anchorWithStickyNavbar_mojV" id="colour-palette">Colour palette<a class="hash-link" href="#colour-palette" title="Lien direct vers le titre">​</a></h2><p>The previous colour palette was a cold blue, to reflect the "stale" state of the items.<br>
+<!-- -->Now, everything is pink, to follow the dress colour inside the Sonia's logo.</p><p><strong>Before:</strong></p><p><img alt="Example banner" src="/stale/fr/assets/images/before-rebranding-to-sonia-c61df369cf08fbe3b2f7cd69d40d8359.png" width="2560" height="1297"></p><p><strong>After:</strong></p><p><img alt="Example banner" src="/stale/fr/assets/images/after-rebranding-to-sonia-84ad5bfcbb3bc023e23ae76feebc7de9.png" width="2560" height="1297"></p><p>We hope you like, and if not, blame Sonia. 😉</p>]]></content:encoded>
+            <category>new ui</category>
+            <category>pink</category>
+            <category>brand</category>
+            <category>sonia</category>
+            <category>sonia corporation</category>
+        </item>
         <item>
             <title><![CDATA[The first inclusive filter input is here!]]></title>
             <link>https://sonia-corporation.github.io/stale/fr/blog/first-inclusive-input</link>

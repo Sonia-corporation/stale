@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[2535],{5641:function(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"The first inclusive filter input is here!","permalink":"/stale/blog/first-inclusive-input"},{"title":"Welcome!","permalink":"/stale/blog/welcome"}]}')}}]);
