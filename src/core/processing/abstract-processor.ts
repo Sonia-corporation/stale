@@ -42,6 +42,14 @@ export abstract class AbstractProcessor<
       return;
     }
 
+    if (!this.shouldInclude$$()) {
+      this.logger.info(`Ignored`);
+      this._increaseIgnoredCount();
+      this.stopProcessing$$();
+
+      return;
+    }
+
     if (this.isAlreadyStale$$()) {
       this.logger.info(`Already stale`);
       this._increaseAlreadyStaleCount();
@@ -88,6 +96,8 @@ export abstract class AbstractProcessor<
   }
 
   public abstract shouldIgnore$$(): boolean;
+
+  public abstract shouldInclude$$(): boolean;
 
   public abstract processForStale$$(): Promise<void>;
 

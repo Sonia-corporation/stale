@@ -77,6 +77,10 @@ jobs:
     needs: [CurrentTag, Release]
     steps:
       - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        with:
+          # Since the previous job (Release) is doing a commit containing the new website changelog
+          # We need to specify exactly the ref so that we are sure to load the last commit from the branch
+          ref: master
       - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
         with:
           node-version: ${{ env.NODE_VERSION }}

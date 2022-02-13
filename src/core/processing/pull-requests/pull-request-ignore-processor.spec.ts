@@ -45,7 +45,6 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
       let isDraftSpy: jest.SpyInstance;
-      let shouldIgnoreDueToAnyWhiteListedProjectCardSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
@@ -66,9 +65,6 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           .spyOn(pullRequestIgnoreProcessor, `hasIgnoredCreationDate$$`)
           .mockImplementation();
         isDraftSpy = jest.spyOn(pullRequestIgnoreProcessor, `isDraft$$`).mockImplementation();
-        shouldIgnoreDueToAnyWhiteListedProjectCardSpy = jest
-          .spyOn(pullRequestIgnoreProcessor, `shouldIgnoreDueToAnyWhiteListedProjectCard$$`)
-          .mockImplementation();
       });
 
       it(`should check if the pull request is locked`, (): void => {
@@ -267,41 +263,12 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                         isDraftSpy.mockReturnValue(false);
                       });
 
-                      it(`should check if the pull request should be ignored due to any white-listed project card`, (): void => {
-                        expect.assertions(2);
+                      it(`should return false`, (): void => {
+                        expect.assertions(1);
 
-                        pullRequestIgnoreProcessor.shouldIgnore();
+                        const result = pullRequestIgnoreProcessor.shouldIgnore();
 
-                        expect(shouldIgnoreDueToAnyWhiteListedProjectCardSpy).toHaveBeenCalledTimes(1);
-                        expect(shouldIgnoreDueToAnyWhiteListedProjectCardSpy).toHaveBeenCalledWith();
-                      });
-
-                      describe(`when the pull request should not be ignored due to any white-listed project card`, (): void => {
-                        beforeEach((): void => {
-                          shouldIgnoreDueToAnyWhiteListedProjectCardSpy.mockReturnValue(false);
-                        });
-
-                        it(`should return false`, (): void => {
-                          expect.assertions(1);
-
-                          const result = pullRequestIgnoreProcessor.shouldIgnore();
-
-                          expect(result).toBeFalse();
-                        });
-                      });
-
-                      describe(`when the pull request should be ignored due to any white-listed project card`, (): void => {
-                        beforeEach((): void => {
-                          shouldIgnoreDueToAnyWhiteListedProjectCardSpy.mockReturnValue(true);
-                        });
-
-                        it(`should return true`, (): void => {
-                          expect.assertions(1);
-
-                          const result = pullRequestIgnoreProcessor.shouldIgnore();
-
-                          expect(result).toBeTrue();
-                        });
+                        expect(result).toBeFalse();
                       });
                     });
 

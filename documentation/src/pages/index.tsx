@@ -35,7 +35,7 @@ export default function Home(): JSX.Element {
       })}
       description={
       translate({
-        message: 'GitHub stale action website',
+        message: 'Sonia stale action website',
         description: 'Home page description'
       })
       }>

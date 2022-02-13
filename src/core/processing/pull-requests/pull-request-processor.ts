@@ -3,6 +3,7 @@ import { PullRequestCloseStaleProcessor } from '@core/processing/pull-requests/p
 import { PullRequestDeleteBranchProcessor } from '@core/processing/pull-requests/pull-request-delete-branch-processor';
 import { PullRequestDraftProcessor } from '@core/processing/pull-requests/pull-request-draft-processor';
 import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-request-ignore-processor';
+import { PullRequestIncludeProcessor } from '@core/processing/pull-requests/pull-request-include-processor';
 import { PullRequestIsStaleProcessor } from '@core/processing/pull-requests/pull-request-is-stale-processor';
 import { PullRequestLogger } from '@core/processing/pull-requests/pull-request-logger';
 import { PullRequestRemoveStaleProcessor } from '@core/processing/pull-requests/pull-request-remove-stale-processor';
@@ -17,6 +18,7 @@ import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/gith
  */
 export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullRequest, PullRequestLogger> {
   public readonly type: 'pull request' = `pull request`;
+
   /**
    * @description
    * Only used log the end of the processing for this pull request
@@ -29,11 +31,21 @@ export class PullRequestProcessor extends AbstractProcessor<IGithubApiPullReques
   /**
    * @description
    * The first thing to do
-   * Check if the pull request is a good candidate for processing or not
+   * Check if the pull request is a good candidate for processing or not (with exclusion filters)
    * @returns {boolean} Returns true if the pull request should be ignored by the processor
    */
   public shouldIgnore$$(): boolean {
     return new PullRequestIgnoreProcessor(this).shouldIgnore();
+  }
+
+  /**
+   * @description
+   * The second thing to do
+   * Check if the pull request is a good candidate for processing or not (with inclusion filters)
+   * @returns {boolean} Returns true if the pull request should be included in the processing
+   */
+  public shouldInclude$$(): boolean {
+    return new PullRequestIncludeProcessor(this).shouldInclude();
   }
 
   /**

@@ -1,5 +1,5 @@
 name: 'Process stale issues and PRs'
-description: 'A GitHub action to stale and close automatically your issues and pull requests.'
+description: 'An action to stale and close automatically your issues and pull requests'
 author: 'C0ZEN'
 inputs:
   # Common inputs
@@ -157,6 +157,10 @@ inputs:
     description: 'Limit the quantity of API mutations calls performed during the processing of pull requests (-1 for unlimited).'
     required: false
     default: '-1'
+  pull-request-only-any-project-cards:
+    description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
+    required: false
+    default: ''
 outputs:
   # Issues outputs
   processed-issues-count:
