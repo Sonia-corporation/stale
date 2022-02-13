@@ -34,27 +34,35 @@ describe(`AnnotationsService`, (): void => {
   });
 
   describe(`warning()`, (): void => {
+    let properties: IAnnotationsProperties;
+
     let loggerAnnotationsServiceWarningSpy: jest.SpyInstance;
 
     beforeEach((): void => {
+      properties = createHydratedMock<IAnnotationsProperties>();
+
       loggerAnnotationsServiceWarningSpy = jest.spyOn(LoggerAnnotationsService, `warning`).mockImplementation();
     });
 
     it(`should log the warning`, (): void => {
       expect.assertions(2);
 
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED, properties);
 
       expect(loggerAnnotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
       expect(loggerAnnotationsServiceWarningSpy).toHaveBeenCalledWith(
-        EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED
+        EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
+        properties
       );
     });
 
     it(`should return the service`, (): void => {
       expect.assertions(1);
 
-      const result = AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
+      const result = AnnotationsService.warning(
+        EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
+        properties
+      );
 
       expect(result).toStrictEqual(AnnotationsService);
     });

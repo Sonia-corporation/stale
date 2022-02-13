@@ -85,7 +85,11 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+        file: `issue-include-processor.ts`,
+        startLine: 76,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(

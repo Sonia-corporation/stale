@@ -17,8 +17,11 @@ export class AnnotationsService {
     return AnnotationsService;
   }
 
-  public static warning(annotation: Readonly<IAnnotationsWarnings>): AnnotationsService {
-    LoggerAnnotationsService.warning(annotation);
+  public static warning(
+    annotation: Readonly<IAnnotationsWarnings>,
+    properties: Readonly<IAnnotationsProperties>
+  ): AnnotationsService {
+    LoggerAnnotationsService.warning(annotation, properties);
 
     return AnnotationsService;
   }

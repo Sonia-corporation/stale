@@ -17,8 +17,11 @@ export class LoggerAnnotationsService {
     return LoggerAnnotationsService;
   }
 
-  public static warning(...message: ReadonlyArray<string>): LoggerAnnotationsService {
-    core.warning(_.join(message, ` `));
+  public static warning(
+    message: Readonly<string>,
+    properties: Readonly<IAnnotationsProperties>
+  ): LoggerAnnotationsService {
+    core.warning(message, properties);
 
     return LoggerAnnotationsService;
   }

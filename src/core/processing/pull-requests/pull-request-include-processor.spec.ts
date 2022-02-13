@@ -344,7 +344,12 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
               expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
               expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-                EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED
+                EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `pull-request-include-processor.ts`,
+                  startLine: 76,
+                  title: `Warning`,
+                }
               );
             });
 
