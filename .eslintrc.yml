@@ -220,6 +220,10 @@ rules:
         - PascalCase
       prefix:
         - E
+    - selector: objectLiteralMethod
+      format:
+        - camelCase
+        - UPPER_CASE
   '@typescript-eslint/no-explicit-any':
     - error
     - fixToUnknown: false
