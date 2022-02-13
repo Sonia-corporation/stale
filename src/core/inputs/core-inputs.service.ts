@@ -41,7 +41,11 @@ export class CoreInputsService {
         LoggerFormatService.white(`->`),
         LoggerService.value(inputValue)
       );
-      AnnotationsService.error(EAnnotationError.WRONG_INPUT_VALUE);
+      AnnotationsService.error(EAnnotationError.WRONG_INPUT_VALUE, {
+        file: `core-inputs.service.ts`,
+        startLine: 35,
+        title: `Error`,
+      });
 
       throw new Error(`Wrong value given to the input number ${input}`);
     }

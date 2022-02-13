@@ -112,7 +112,11 @@ describe(`GithubApiPullRequestReferencesService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE, {
+            file: `abstract-github-api-references.service.ts`,
+            startLine: 38,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {

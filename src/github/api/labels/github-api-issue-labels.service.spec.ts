@@ -126,7 +126,12 @@ describe(`GithubApiIssueLabelsService`, (): void => {
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
-            EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH
+            EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
+            {
+              file: `abstract-github-api-labels.service.ts`,
+              startLine: 70,
+              title: `Error`,
+            }
           );
         });
 
@@ -201,11 +206,21 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
-              EAnnotationError.FAILED_FINDING_LABELS_MATCHING_SEARCH
+              EAnnotationError.FAILED_FINDING_LABELS_MATCHING_SEARCH,
+              {
+                file: `abstract-github-api-labels.service.ts`,
+                startLine: 48,
+                title: `Error`,
+              }
             );
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               2,
-              EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH
+              EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
+              {
+                file: `abstract-github-api-labels.service.ts`,
+                startLine: 70,
+                title: `Error`,
+              }
             );
           });
 
@@ -413,7 +428,11 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL, {
+            file: `abstract-github-api-labels.service.ts`,
+            startLine: 112,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {
@@ -475,7 +494,11 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL, {
+              file: `abstract-github-api-labels.service.ts`,
+              startLine: 95,
+              title: `Error`,
+            });
           });
 
           it(`should return null`, async (): Promise<void> => {
@@ -620,7 +643,11 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABEL);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABEL, {
+            file: `abstract-github-api-labels.service.ts`,
+            startLine: 146,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {
@@ -754,7 +781,11 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABELS);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABELS, {
+            file: `abstract-github-api-labels.service.ts`,
+            startLine: 185,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {
@@ -888,7 +919,11 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_REMOVING_LABEL);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_REMOVING_LABEL, {
+            file: `abstract-github-api-labels.service.ts`,
+            startLine: 224,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {

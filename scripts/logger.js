@@ -5,14 +5,21 @@ const _ = require(`lodash`);
 const LOG_PREFIX = `● `;
 
 /**
- * @param logType
+ * @description
+ * Format the given log type
+ * @param {Readonly<string>} logType The type of logger message
+ * @returns {string} Return the formatted log type
  */
 function getLogTypePrefix(logType) {
   return CHALK[logType](LOG_PREFIX);
 }
 
 /**
- * @param scope
+ * @description
+ * Format the scope
+ * Add the time
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @returns {string} Return the given scope formatted and with the current time
  */
 function getContext(scope) {
   /* eslint-disable new-cap */
@@ -22,8 +29,10 @@ function getContext(scope) {
 }
 
 /**
- * @param scope
- * @param message
+ * @description
+ * Log an error message
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @param {Readonly<string>} message The message to log
  */
 function error(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`error`))}${getContext(scope)}${_.toString(message)}`);
@@ -32,8 +41,10 @@ function error(scope, message) {
 module.exports.error = error;
 
 /**
- * @param scope
- * @param message
+ * @description
+ * Log a warning message
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @param {Readonly<string>} message The message to log
  */
 function warning(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`warning`))}${getContext(scope)}${_.toString(message)}`);
@@ -42,8 +53,10 @@ function warning(scope, message) {
 module.exports.warning = warning;
 
 /**
- * @param scope
- * @param message
+ * @description
+ * Log a success message
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @param {Readonly<string>} message The message to log
  */
 function success(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`success`))}${getContext(scope)}${_.toString(message)}`);
@@ -52,8 +65,10 @@ function success(scope, message) {
 module.exports.success = success;
 
 /**
- * @param scope
- * @param message
+ * @description
+ * Log a log message
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @param {Readonly<string>} message The message to log
  */
 function log(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`log`))}${getContext(scope)}${_.toString(message)}`);
@@ -62,8 +77,10 @@ function log(scope, message) {
 module.exports.log = log;
 
 /**
- * @param scope
- * @param message
+ * @description
+ * Log a debug message
+ * @param {Readonly<string>} scope The scope (usually the file name)
+ * @param {Readonly<string>} message The message to log
  */
 function debug(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`debug`))}${getContext(scope)}${_.toString(message)}`);

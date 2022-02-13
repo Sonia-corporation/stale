@@ -114,7 +114,11 @@ describe(`GithubApiIssuesService`, (): void => {
         await expect(GithubApiIssuesService.fetchIssues()).rejects.toThrow(new Error(`graphql error`));
 
         expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES);
+        expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES, {
+          file: `github-api-issues.service.ts`,
+          startLine: 63,
+          title: `Error`,
+        });
       });
 
       it(`should rethrow`, async (): Promise<void> => {
@@ -416,7 +420,11 @@ describe(`GithubApiIssuesService`, (): void => {
           await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_CLOSE);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_CLOSE, {
+            file: `github-api-issues.service.ts`,
+            startLine: 99,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {

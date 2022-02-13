@@ -1,8 +1,33 @@
 import { AbstractOutputsService } from '@core/outputs/abstract-outputs.service';
 import { EPullRequestsOutputs } from '@core/outputs/enums/pull-requests-outputs.enum';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
+import { getEnumKeys } from '@utils/enums/get-enum-keys';
 import * as core from '@actions/core';
 import _ from 'lodash';
+
+const MAP: { [key in keyof typeof EPullRequestsOutputs]: () => number } = {
+  ADDED_PULL_REQUESTS_COMMENTS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount,
+  ADDED_PULL_REQUESTS_LABELS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount,
+  ALREADY_STALE_PULL_REQUESTS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount,
+  CALLED_API_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount,
+  CALLED_API_PULL_REQUESTS_MUTATIONS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount,
+  CALLED_API_PULL_REQUESTS_QUERIES_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount,
+  CLOSE_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().closedPullRequestsCount,
+  DELETED_PULL_REQUESTS_BRANCHES_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount,
+  DRAFT_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().draftPullRequestsCount,
+  IGNORED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount,
+  PROCESSED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().processedPullRequestsCount,
+  REMOVE_STALE_PULL_REQUESTS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount,
+  STALE_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().stalePullRequestsCount,
+  UNALTERED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount,
+};
 
 export class PullRequestsOutputsService extends AbstractOutputsService {
   private static _instance: PullRequestsOutputsService;
@@ -18,61 +43,8 @@ export class PullRequestsOutputsService extends AbstractOutputsService {
   protected readonly _outputsName: 'pull requests' = `pull requests`;
 
   protected _setOutputs(): void {
-    core.setOutput(
-      EPullRequestsOutputs.ALREADY_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.IGNORED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.UNALTERED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().stalePullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.PROCESSED_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().processedPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.REMOVE_STALE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CLOSE_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().closedPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.DELETED_PULL_REQUESTS_BRANCHES_COUNT,
-      PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.ADDED_PULL_REQUESTS_COMMENTS_COUNT,
-      PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.ADDED_PULL_REQUESTS_LABELS_COUNT,
-      PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.DRAFT_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().draftPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_QUERIES_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount
-    );
-    core.setOutput(
-      EPullRequestsOutputs.CALLED_API_PULL_REQUESTS_MUTATIONS_COUNT,
-      PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount
-    );
+    getEnumKeys(EPullRequestsOutputs).forEach((key): void => {
+      core.setOutput(EPullRequestsOutputs[key], MAP[key]());
+    });
   }
 }

@@ -1282,7 +1282,12 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
             expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-              EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `pull-request-ignore-processor.ts`,
+                startLine: 204,
+                title: `Warning`,
+              }
             );
           });
         });
@@ -1493,7 +1498,12 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
             expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-              EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `pull-request-ignore-processor.ts`,
+                startLine: 251,
+                title: `Warning`,
+              }
             );
           });
         });

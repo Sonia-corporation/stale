@@ -10,7 +10,10 @@ const COLOR_PURPLE_MOUNTAIN_MAJESTY = `#786FA6`;
 const COLOR_SAWTOOTH_AAK = `#F19066`;
 
 /**
- * @param message
+ * @description
+ * Format a success message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function success(message) {
   return CHALK.hex(COLOR_AURORA_GREEN)(message);
@@ -19,7 +22,10 @@ function success(message) {
 module.exports.success = success;
 
 /**
- * @param message
+ * @description
+ * Format a context message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function context(message) {
   return CHALK.hex(COLOR_ROSY_HIGHLIGHT)(message);
@@ -28,7 +34,10 @@ function context(message) {
 module.exports.context = context;
 
 /**
- * @param message
+ * @description
+ * Format a value message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function value(message) {
   return CHALK.hex(COLOR_BLUE_CARACAO)(message);
@@ -37,7 +46,10 @@ function value(message) {
 module.exports.value = value;
 
 /**
- * @param message
+ * @description
+ * Format an error message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function error(message) {
   return CHALK.hex(COLOR_DEEP_ROSE)(message);
@@ -46,7 +58,10 @@ function error(message) {
 module.exports.error = error;
 
 /**
- * @param message
+ * @description
+ * Format a warning message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function warning(message) {
   return CHALK.hex(COLOR_SAWTOOTH_AAK)(message);
@@ -55,7 +70,10 @@ function warning(message) {
 module.exports.warning = warning;
 
 /**
- * @param message
+ * @description
+ * Format a text message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function text(message) {
   return CHALK.hex(COLOR_WHITE)(message);
@@ -64,7 +82,10 @@ function text(message) {
 module.exports.text = text;
 
 /**
- * @param message
+ * @description
+ * Format a log message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function log(message) {
   return CHALK.hex(COLOR_SOFT_BLUE)(message);
@@ -73,7 +94,10 @@ function log(message) {
 module.exports.log = log;
 
 /**
- * @param message
+ * @description
+ * Format a debug message
+ * @param {unknown} message The message to format
+ * @returns {string} The formatted message
  */
 function debug(message) {
   return CHALK.hex(COLOR_PURPLE_MOUNTAIN_MAJESTY)(message);

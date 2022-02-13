@@ -47,7 +47,11 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
               `Could not find a single added label event for the pull request`,
               LoggerService.value(pullRequestNumber)
             );
-            AnnotationsService.error(EAnnotationErrorPullRequest.NO_LABEL_EVENT_FOUND);
+            AnnotationsService.error(EAnnotationErrorPullRequest.NO_LABEL_EVENT_FOUND, {
+              file: `github-api-pull-request-timeline-items.service.ts`,
+              startLine: 41,
+              title: `Error`,
+            });
             throw new Error(`Could not find a single added label event for the pull request ${pullRequestNumber}`);
           }
 
@@ -57,7 +61,12 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
               `Reached the maximum number of added label events supported for now. The pagination support is not yet implemented!`
             );
             AnnotationsService.error(
-              EAnnotationErrorPullRequest.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationErrorPullRequest.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `github-api-pull-request-timeline-items.service.ts`,
+                startLine: 41,
+                title: `Error`,
+              }
             );
             throw new Error(`Reached the maximum number of added label events supported for now`);
           }
@@ -76,7 +85,11 @@ export class GithubApiPullRequestTimelineItemsService extends AbstractGithubApiT
           `Failed to fetch the added labels events on the pull request`,
           LoggerService.value(pullRequestNumber)
         );
-        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_ADDED_LABELS_EVENTS, {
+          file: `github-api-pull-request-timeline-items.service.ts`,
+          startLine: 83,
+          title: `Error`,
+        });
 
         throw error;
       });

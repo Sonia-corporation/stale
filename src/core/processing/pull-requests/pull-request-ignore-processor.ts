@@ -213,7 +213,11 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
           } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED, {
+        file: `pull-request-ignore-processor.ts`,
+        startLine: 204,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(`Not containing an ignored label. Continuing...`);
@@ -256,7 +260,11 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
           } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED);
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED, {
+        file: `pull-request-ignore-processor.ts`,
+        startLine: 251,
+        title: `Warning`,
+      });
     }
 
     this.processor.logger.info(`Not containing an ignored assignee. Continuing...`);

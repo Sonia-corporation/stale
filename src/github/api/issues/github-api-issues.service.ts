@@ -62,7 +62,11 @@ export class GithubApiIssuesService {
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(`Failed to fetch the issues`);
-        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES);
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_FETCHING_ISSUES, {
+          file: `github-api-issues.service.ts`,
+          startLine: 63,
+          title: `Error`,
+        });
 
         throw error;
       });
@@ -94,7 +98,11 @@ export class GithubApiIssuesService {
       })
       .catch((error: Readonly<Error>): never => {
         this.issueProcessor.logger.error(`Failed to close the issue`, LoggerService.value(issueId));
-        AnnotationsService.error(EAnnotationErrorIssue.FAILED_CLOSE);
+        AnnotationsService.error(EAnnotationErrorIssue.FAILED_CLOSE, {
+          file: `github-api-issues.service.ts`,
+          startLine: 99,
+          title: `Error`,
+        });
 
         throw error;
       });

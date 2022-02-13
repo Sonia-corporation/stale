@@ -116,7 +116,12 @@ describe(`GithubApiPullRequestsService`, (): void => {
 
         expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
         expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
-          EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS
+          EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS,
+          {
+            file: `github-api-pull-requests.service.ts`,
+            startLine: 64,
+            title: `Error`,
+          }
         );
       });
 
@@ -438,7 +443,11 @@ describe(`GithubApiPullRequestsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_CLOSE);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_CLOSE, {
+            file: `github-api-pull-requests.service.ts`,
+            startLine: 100,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {
@@ -565,7 +574,11 @@ describe(`GithubApiPullRequestsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DRAFT);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_DRAFT, {
+            file: `github-api-pull-requests.service.ts`,
+            startLine: 131,
+            title: `Error`,
+          });
         });
 
         it(`should rethrow`, async (): Promise<void> => {

@@ -62,7 +62,11 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
 
     if (!lastAddedStaleLabelEvent) {
       this.processor.logger.error(`Could not find the stale label in the added labels events`);
-      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT, {
+        file: `pull-request-remove-stale-processor.ts`,
+        startLine: 60,
+        title: `Error`,
+      });
 
       throw new Error(`Could not find the stale label in the added labels events`);
     }
@@ -118,7 +122,12 @@ export class PullRequestRemoveStaleProcessor extends AbstractRemoveStaleProcesso
         `Could not find the stale label`,
         LoggerService.value(pullRequestsInputs.pullRequestStaleLabel)
       );
-      AnnotationsService.error(EAnnotationErrorPullRequest.NOT_FOUND_STALE_LABEL_EVENT);
+      AnnotationsService.error(EAnnotationErrorPullRequest.NOT_FOUND_STALE_LABEL_EVENT, {
+        endLine: 118,
+        file: `pull-request-remove-stale-processor.ts`,
+        startLine: 116,
+        title: `Error`,
+      });
 
       throw new Error(`Could not find the stale label ${pullRequestsInputs.pullRequestStaleLabel}`);
     }

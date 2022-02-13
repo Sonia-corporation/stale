@@ -236,7 +236,11 @@ describe(`PullRequestStaleProcessor`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL, {
+            file: `abstract-stale-processor.ts`,
+            startLine: 49,
+            title: `Error`,
+          });
         });
 
         it(`should throw an error`, async (): Promise<void> => {

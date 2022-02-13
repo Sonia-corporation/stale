@@ -64,7 +64,7 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
    * @private
    */
   private _logsAllStatistics(): AbstractStatisticsService<TStatistic> {
-    const allStatistics: Map<TStatistic, Map<TStatistic, number> | number> = this._getAllFilteredStatisticsMap();
+    const allStatistics: Map<TStatistic, Map<TStatistic, number> | number> = this._getAllFilteredStatisticsMaps();
 
     this._logStatisticsMap(allStatistics);
 
@@ -90,7 +90,8 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
 
       // Data is a map - we need to add a level
       if (!isFiniteNumber(data)) {
-        this._logStatisticsSubMap(data, prefix);
+        // We will beforehand exclude the count lower than 1
+        this._logStatisticsSubMap(this._getAllFilteredStatisticsMap(data), prefix);
       }
     });
   }
@@ -160,11 +161,12 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
   /**
    * @description
    * Get the map of filtered statistics excluding all bellow 1
+   * Do the same for sub-maps having at least one value to display
    * @template TStatistic
    * @returns {Map<TStatistic, Map<TStatistic, number> | number>} The filtered map of statistics
    * @private
    */
-  private _getAllFilteredStatisticsMap(): Map<TStatistic, Map<TStatistic, number> | number> {
+  private _getAllFilteredStatisticsMaps(): Map<TStatistic, Map<TStatistic, number> | number> {
     return mapFilter<TStatistic, Map<TStatistic, number> | number>(
       this._getAllStatisticsMap(),
       ([_statistic, data]): boolean => {
@@ -179,6 +181,18 @@ export abstract class AbstractStatisticsService<TStatistic extends string> {
         return subMapStatisticsCount > 0;
       }
     );
+  }
+
+  /**
+   * @description
+   * Get the map of filtered statistics excluding all count bellow 1
+   * @template TStatistic
+   * @param {Map<TStatistic, number>} map The sub-map
+   * @returns {Readonly<Map<TStatistic, number>>} The filtered map of statistics
+   * @private
+   */
+  private _getAllFilteredStatisticsMap(map: Readonly<Map<TStatistic, number>>): Map<TStatistic, number> {
+    return mapFilter<TStatistic, number>(map, ([_statistic, count]): boolean => count > 0);
   }
 
   /**
