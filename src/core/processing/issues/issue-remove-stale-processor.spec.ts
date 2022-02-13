@@ -130,7 +130,11 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL_EVENT, {
+            file: `issue-remove-stale-processor.ts`,
+            startLine: 58,
+            title: `Error`,
+          });
         });
 
         it(`should throw an error`, async (): Promise<void> => {
@@ -664,7 +668,12 @@ describe(`IssueRemoveStaleProcessor`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.NOT_FOUND_STALE_LABEL_EVENT);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.NOT_FOUND_STALE_LABEL_EVENT, {
+            endLine: 113,
+            file: `issue-remove-stale-processor.ts`,
+            startLine: 111,
+            title: `Error`,
+          });
         });
 
         it(`should throw an error`, async (): Promise<void> => {

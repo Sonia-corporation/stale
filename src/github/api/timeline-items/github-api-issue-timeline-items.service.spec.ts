@@ -120,7 +120,14 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(
+            EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+            {
+              file: `github-api-issue-timeline-items.service.ts`,
+              startLine: 77,
+              title: `Error`,
+            }
+          );
         });
 
         it(`should rethrow`, async (): Promise<void> => {
@@ -194,10 +201,19 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             );
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
-            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationErrorIssue.NO_LABEL_EVENT_FOUND, {
+              file: `github-api-issue-timeline-items.service.ts`,
+              startLine: 38,
+              title: `Error`,
+            });
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               2,
-              EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS
+              EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+              {
+                file: `github-api-issue-timeline-items.service.ts`,
+                startLine: 77,
+                title: `Error`,
+              }
             );
           });
 
@@ -305,11 +321,21 @@ describe(`GithubApiIssueTimelineItemsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               1,
-              EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED
+              EAnnotationErrorIssue.TOO_MANY_ADDED_LABELS_EVENTS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `github-api-issue-timeline-items.service.ts`,
+                startLine: 38,
+                title: `Error`,
+              }
             );
             expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(
               2,
-              EAnnotationErrorIssue.FAILED_FETCHING_LABELS_EVENTS
+              EAnnotationErrorIssue.FAILED_FETCHING_ADDED_LABELS_EVENTS,
+              {
+                file: `github-api-issue-timeline-items.service.ts`,
+                startLine: 77,
+                title: `Error`,
+              }
             );
           });
 

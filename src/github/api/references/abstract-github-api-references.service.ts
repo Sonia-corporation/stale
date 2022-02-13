@@ -41,7 +41,11 @@ export abstract class AbstractGithubApiReferencesService<
           LoggerService.value(referenceId),
           LoggerFormatService.red(`from this ${this.type}`)
         );
-        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DELETE_REFERENCE, {
+          file: `abstract-github-api-references.service.ts`,
+          startLine: 38,
+          title: `Error`,
+        });
 
         throw error;
       });

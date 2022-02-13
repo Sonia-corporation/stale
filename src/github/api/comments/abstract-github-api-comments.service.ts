@@ -46,7 +46,11 @@ export abstract class AbstractGithubApiCommentsService<
           LoggerFormatService.red(`on the ${this.type}`),
           LoggerService.value(targetId)
         );
-        AnnotationsService.error(EAnnotationError.FAILED_ADDING_COMMENT);
+        AnnotationsService.error(EAnnotationError.FAILED_ADDING_COMMENT, {
+          file: `abstract-github-api-comments.service.ts`,
+          startLine: 42,
+          title: `Error`,
+        });
 
         throw error;
       });

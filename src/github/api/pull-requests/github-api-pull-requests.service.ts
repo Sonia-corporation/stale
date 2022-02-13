@@ -63,7 +63,11 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         LoggerService.error(`Failed to fetch the pull requests`);
-        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_FETCHING_PULL_REQUESTS, {
+          file: `github-api-pull-requests.service.ts`,
+          startLine: 64,
+          title: `Error`,
+        });
 
         throw error;
       });
@@ -95,7 +99,11 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         this.pullRequestProcessor.logger.error(`Failed to close the pull request`, LoggerService.value(pullRequestId));
-        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_CLOSE);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_CLOSE, {
+          file: `github-api-pull-requests.service.ts`,
+          startLine: 100,
+          title: `Error`,
+        });
 
         throw error;
       });
@@ -122,7 +130,11 @@ export class GithubApiPullRequestsService {
       })
       .catch((error: Readonly<Error>): never => {
         this.pullRequestProcessor.logger.error(`Failed to draft the pull request`, LoggerService.value(pullRequestId));
-        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DRAFT);
+        AnnotationsService.error(EAnnotationErrorPullRequest.FAILED_DRAFT, {
+          file: `github-api-pull-requests.service.ts`,
+          startLine: 131,
+          title: `Error`,
+        });
 
         throw error;
       });

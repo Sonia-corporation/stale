@@ -50,7 +50,11 @@ export abstract class AbstractStaleProcessor<
 
     if (!label) {
       this.processor.logger.error(`Could not find the stale label`, LoggerService.value(staleLabel));
-      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_STALE_LABEL, {
+        file: `abstract-stale-processor.ts`,
+        startLine: 49,
+        title: `Error`,
+      });
 
       throw new Error(`Could not find the stale label ${staleLabel}`);
     }
@@ -164,7 +168,11 @@ export abstract class AbstractStaleProcessor<
 
     if (!label) {
       this.processor.logger.error(`Could not find the label`, LoggerService.value(labelName));
-      AnnotationsService.error(EAnnotationError.NOT_FOUND_LABEL);
+      AnnotationsService.error(EAnnotationError.NOT_FOUND_LABEL, {
+        file: `abstract-stale-processor.ts`,
+        startLine: 167,
+        title: `Error`,
+      });
 
       throw new Error(`Could not find the label ${labelName}`);
     }

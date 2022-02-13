@@ -218,7 +218,11 @@ describe(`IssueStaleProcessor`, (): void => {
           );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_STALE_LABEL, {
+            file: `abstract-stale-processor.ts`,
+            startLine: 49,
+            title: `Error`,
+          });
         });
 
         it(`should throw an error`, async (): Promise<void> => {
@@ -641,7 +645,11 @@ describe(`IssueStaleProcessor`, (): void => {
             );
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-stale-processor.ts`,
+              startLine: 167,
+              title: `Error`,
+            });
           });
 
           it(`should not add the extra label on the issue`, async (): Promise<void> => {
@@ -846,8 +854,16 @@ describe(`IssueStaleProcessor`, (): void => {
             );
 
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(2);
-            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL);
-            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL);
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(1, EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-stale-processor.ts`,
+              startLine: 167,
+              title: `Error`,
+            });
+            expect(annotationsServiceErrorSpy).toHaveBeenNthCalledWith(2, EAnnotationError.NOT_FOUND_LABEL, {
+              file: `abstract-stale-processor.ts`,
+              startLine: 167,
+              title: `Error`,
+            });
           });
 
           it(`should not add the extra labels on the issue`, async (): Promise<void> => {
