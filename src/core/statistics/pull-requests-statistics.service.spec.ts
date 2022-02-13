@@ -527,6 +527,44 @@ describe(`PullRequestsStatisticsService`, (): void => {
       });
     });
 
+    describe(`when there is one called api pull requests queries count statistic`, (): void => {
+      beforeEach((): void => {
+        service.processedPullRequestsCount = 0;
+        service.ignoredPullRequestsCount = 0;
+        service.unalteredPullRequestsCount = 0;
+        service.stalePullRequestsCount = 0;
+        service.alreadyStalePullRequestsCount = 0;
+        service.removeStalePullRequestsCount = 0;
+        service.closedPullRequestsCount = 0;
+        service.deletedPullRequestsBranchesCount = 0;
+        service.addedPullRequestsCommentsCount = 0;
+        service.addedPullRequestsLabelsCount = 0;
+        service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 1;
+        service.calledApiPullRequestsMutationsCount = 0;
+      });
+
+      it(`should log the called api pull requests queries count statistic but not the called api pull requests mutations count statistic`, (): void => {
+        expect.assertions(3);
+
+        service.logsAllStatistics();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `white-└──`,
+          `whiteBright-Called API pull requests`,
+          `value-1`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `white-    └──`,
+          `whiteBright-Called API pull requests queries`,
+          `value-1`
+        );
+      });
+    });
+
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 

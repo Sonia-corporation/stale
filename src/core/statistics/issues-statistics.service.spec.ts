@@ -463,6 +463,42 @@ describe(`IssuesStatisticsService`, (): void => {
       });
     });
 
+    describe(`when there is one called api issues queries count statistic`, (): void => {
+      beforeEach((): void => {
+        service.processedIssuesCount = 0;
+        service.ignoredIssuesCount = 0;
+        service.unalteredIssuesCount = 0;
+        service.staleIssuesCount = 0;
+        service.removeStaleIssuesCount = 0;
+        service.alreadyStaleIssuesCount = 0;
+        service.closedIssuesCount = 0;
+        service.addedIssuesCommentsCount = 0;
+        service.addedIssuesLabelsCount = 0;
+        service.calledApiIssuesQueriesCount = 1;
+        service.calledApiIssuesMutationsCount = 0;
+      });
+
+      it(`should log the called api issues queries count statistic but not the called api issues mutations count statistic`, (): void => {
+        expect.assertions(3);
+
+        service.logsAllStatistics();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `white-└──`,
+          `whiteBright-Called API issues`,
+          `value-1`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `white-    └──`,
+          `whiteBright-Called API issues queries`,
+          `value-1`
+        );
+      });
+    });
+
     it(`should close the group of logs`, (): void => {
       expect.assertions(2);
 
