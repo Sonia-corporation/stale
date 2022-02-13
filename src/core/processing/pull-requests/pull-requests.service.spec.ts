@@ -12,7 +12,6 @@ import faker from 'faker';
 import _ from 'lodash';
 import { createHydratedMock } from 'ts-auto-mock';
 import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
-import { mocked } from 'ts-jest/utils';
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);
@@ -111,11 +110,11 @@ describe(`PullRequestsService`, (): void => {
   });
 
   describe(`processBatches()`, (): void => {
-    const mockedPullRequestProcessor: MockedObjectDeep<typeof PullRequestProcessor> = mocked(
+    const mockedPullRequestProcessor: MockedObjectDeep<typeof PullRequestProcessor> = jest.mocked(
       PullRequestProcessor,
       true
     );
-    const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = mocked(PullRequestLogger, true);
+    const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = jest.mocked(PullRequestLogger, true);
 
     let githubApiPullRequestsServiceFetchPullRequestsSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;

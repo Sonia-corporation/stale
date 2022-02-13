@@ -157,6 +157,10 @@ inputs:
     description: 'Limit the quantity of API mutations calls performed during the processing of pull requests (-1 for unlimited).'
     required: false
     default: '-1'
+  pull-request-only-any-project-cards:
+    description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
+    required: false
+    default: ''
 outputs:
   # Issues outputs
   processed-issues-count:

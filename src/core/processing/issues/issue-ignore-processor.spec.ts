@@ -4,7 +4,6 @@ import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-proce
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { DateTime } from 'luxon';
@@ -45,7 +44,6 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
-      let shouldIgnoreDueToAnyWhiteListedProjectCardSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
@@ -59,9 +57,6 @@ describe(`IssueIgnoreProcessor`, (): void => {
           .spyOn(issueIgnoreProcessor, `hasAllIgnoredProjectCards$$`)
           .mockImplementation();
         hasIgnoredCreationDateSpy = jest.spyOn(issueIgnoreProcessor, `hasIgnoredCreationDate$$`).mockImplementation();
-        shouldIgnoreDueToAnyWhiteListedProjectCardSpy = jest
-          .spyOn(issueIgnoreProcessor, `shouldIgnoreDueToAnyWhiteListedProjectCard$$`)
-          .mockImplementation();
       });
 
       it(`should check if the issue is locked`, (): void => {
@@ -246,41 +241,12 @@ describe(`IssueIgnoreProcessor`, (): void => {
                       hasIgnoredCreationDateSpy.mockReturnValue(false);
                     });
 
-                    it(`should check if the issue should be ignored due to any white-listed project card`, (): void => {
-                      expect.assertions(2);
+                    it(`should return false`, (): void => {
+                      expect.assertions(1);
 
-                      issueIgnoreProcessor.shouldIgnore();
+                      const result = issueIgnoreProcessor.shouldIgnore();
 
-                      expect(shouldIgnoreDueToAnyWhiteListedProjectCardSpy).toHaveBeenCalledTimes(1);
-                      expect(shouldIgnoreDueToAnyWhiteListedProjectCardSpy).toHaveBeenCalledWith();
-                    });
-
-                    describe(`when the issue should not be ignored due to any white-listed project card`, (): void => {
-                      beforeEach((): void => {
-                        shouldIgnoreDueToAnyWhiteListedProjectCardSpy.mockReturnValue(true);
-                      });
-
-                      it(`should return true`, (): void => {
-                        expect.assertions(1);
-
-                        const result = issueIgnoreProcessor.shouldIgnore();
-
-                        expect(result).toBeTrue();
-                      });
-                    });
-
-                    describe(`when the issue should be ignored due to any white-listed project card`, (): void => {
-                      beforeEach((): void => {
-                        shouldIgnoreDueToAnyWhiteListedProjectCardSpy.mockReturnValue(false);
-                      });
-
-                      it(`should return false`, (): void => {
-                        expect.assertions(1);
-
-                        const result = issueIgnoreProcessor.shouldIgnore();
-
-                        expect(result).toBeFalse();
-                      });
+                      expect(result).toBeFalse();
                     });
                   });
                 });
@@ -1486,335 +1452,6 @@ describe(`IssueIgnoreProcessor`, (): void => {
           const result = issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
 
           expect(result).toBeFalse();
-        });
-      });
-    });
-
-    describe(`shouldIgnoreDueToAnyWhiteListedProjectCard$$()`, (): void => {
-      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
-      let issueProcessorLoggerWarningSpy: jest.SpyInstance;
-      let annotationsServiceWarningSpy: jest.SpyInstance;
-      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
-
-      beforeEach((): void => {
-        issueProcessor = createHydratedMock<IssueProcessor>();
-        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
-
-        issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
-        issueProcessorLoggerWarningSpy = jest
-          .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
-          .mockImplementation();
-        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
-        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
-          createHydratedMock<IIssuesInputs>({
-            issueOnlyAnyProjectCards: [],
-          })
-        );
-      });
-
-      it(`should log about checking the issue-only-any-project-cards input`, (): void => {
-        expect.assertions(2);
-
-        issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-          1,
-          `Checking if this issue should only be processed based on any of the associated project cards...`
-        );
-      });
-
-      it(`should get the issue inputs`, (): void => {
-        expect.assertions(2);
-
-        issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
-        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
-      });
-
-      describe(`when the issue-only-any-project-cards input is empty`, (): void => {
-        beforeEach((): void => {
-          issuesInputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IIssuesInputs>({
-              issueOnlyAnyProjectCards: [],
-            })
-          );
-        });
-
-        it(`should log about continuing the processing for this issue (the feature is not enabled)`, (): void => {
-          expect.assertions(2);
-
-          issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-            2,
-            `The input`,
-            `input-issue-only-any-project-cards`,
-            `whiteBright-is empty. This feature is considered as disabled, and so, ignored. Continuing...`
-          );
-        });
-
-        it(`should return false`, (): void => {
-          expect.assertions(1);
-
-          const result = issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-          expect(result).toBeFalse();
-        });
-      });
-
-      describe(`when the issue-only-any-project-cards input is not empty`, (): void => {
-        beforeEach((): void => {
-          issuesInputsServiceGetInputsSpy.mockReturnValue(
-            createHydratedMock<IIssuesInputs>({
-              issueOnlyAnyProjectCards: [`dummy-card`],
-            })
-          );
-        });
-
-        it(`should log about checking if this issue should be processed or ignored based on this input`, (): void => {
-          expect.assertions(2);
-
-          issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-            2,
-            `The input`,
-            `input-issue-only-any-project-cards`,
-            `whiteBright-is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
-          );
-        });
-
-        describe(`when the issue has no project card`, (): void => {
-          beforeEach((): void => {
-            issueProcessor = createHydratedMock<IssueProcessor>({
-              item: {
-                projectCards: {
-                  nodes: [],
-                  totalCount: 0,
-                },
-              },
-            });
-            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
-
-            issueProcessorLoggerInfoSpy = jest
-              .spyOn(issueIgnoreProcessor.processor.logger, `info`)
-              .mockImplementation();
-            issuesInputsServiceGetInputsSpy = jest
-              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
-              .mockReturnValue(
-                createHydratedMock<IIssuesInputs>({
-                  issueOnlyAnyProjectCards: [`dummy-card`],
-                })
-              );
-          });
-
-          it(`should log about not containing any project card (skipping the processing)`, (): void => {
-            expect.assertions(2);
-
-            issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              3,
-              `Not containing any project card. Skipping the processing of this issue...`
-            );
-          });
-
-          it(`should return true`, (): void => {
-            expect.assertions(1);
-
-            const result = issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-            expect(result).toBeTrue();
-          });
-        });
-
-        describe(`when the issue has at least one project card`, (): void => {
-          beforeEach((): void => {
-            issueProcessor = createHydratedMock<IssueProcessor>({
-              item: {
-                projectCards: {
-                  nodes: [
-                    createHydratedMock<IGithubApiProjectCard>({
-                      project: {
-                        name: `dummy-project`,
-                      },
-                    }),
-                  ],
-                  totalCount: 1,
-                },
-              },
-            });
-            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
-
-            issueProcessorLoggerInfoSpy = jest
-              .spyOn(issueIgnoreProcessor.processor.logger, `info`)
-              .mockImplementation();
-            issuesInputsServiceGetInputsSpy = jest
-              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
-              .mockReturnValue(
-                createHydratedMock<IIssuesInputs>({
-                  issueOnlyAnyProjectCards: [`dummy-card`],
-                })
-              );
-          });
-
-          describe(`when none of the project cards match`, (): void => {
-            beforeEach((): void => {
-              issuesInputsServiceGetInputsSpy.mockReturnValue(
-                createHydratedMock<IIssuesInputs>({
-                  issueOnlyAnyProjectCards: [`dummy-other-project`],
-                })
-              );
-            });
-
-            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
-                `Not containing any of the required project card. Skipping the processing of this issue...`
-              );
-            });
-
-            it(`should return true`, (): void => {
-              expect.assertions(1);
-
-              const result = issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(result).toBeTrue();
-            });
-          });
-
-          describe(`when none of the project cards match and the pagination is higher than 20`, (): void => {
-            beforeEach((): void => {
-              issueProcessor = createHydratedMock<IssueProcessor>({
-                item: {
-                  projectCards: {
-                    nodes: [
-                      createHydratedMock<IGithubApiProjectCard>({
-                        project: {
-                          name: `dummy-project`,
-                        },
-                      }),
-                    ],
-                    totalCount: 21,
-                  },
-                },
-              });
-              issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
-
-              issueProcessorLoggerInfoSpy = jest
-                .spyOn(issueIgnoreProcessor.processor.logger, `info`)
-                .mockImplementation();
-              issueProcessorLoggerWarningSpy = jest
-                .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
-                .mockImplementation();
-              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
-              issuesInputsServiceGetInputsSpy = jest
-                .spyOn(IssuesInputsService.getInstance(), `getInputs`)
-                .mockReturnValue(
-                  createHydratedMock<IIssuesInputs>({
-                    issueOnlyAnyProjectCards: [`dummy-other-project`],
-                  })
-                );
-            });
-
-            it(`should log a warning about finding too many labels on this issue since the pagination is not handled`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
-              expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledWith(
-                `Found`,
-                `value-21`,
-                `whiteBright-project cards attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
-              );
-            });
-
-            it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
-              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
-                EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED
-              );
-            });
-
-            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
-                `Not containing any of the required project card. Skipping the processing of this issue...`
-              );
-            });
-
-            it(`should return true`, (): void => {
-              expect.assertions(1);
-
-              const result = issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(result).toBeTrue();
-            });
-          });
-
-          describe(`when at least one of the project cards match`, (): void => {
-            beforeEach((): void => {
-              issuesInputsServiceGetInputsSpy.mockReturnValue(
-                createHydratedMock<IIssuesInputs>({
-                  issueOnlyAnyProjectCards: [`dummy-project`],
-                })
-              );
-            });
-
-            it(`should log about finding one project card in common (continuing the processing)`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
-                `Containing one of the required project card`,
-                `white-->`,
-                `value-dummy-project`
-              );
-            });
-
-            it(`should log continuing the processing`, (): void => {
-              expect.assertions(2);
-
-              issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                4,
-                `Continuing the processing for this issue...`
-              );
-            });
-
-            it(`should return false`, (): void => {
-              expect.assertions(1);
-
-              const result = issueIgnoreProcessor.shouldIgnoreDueToAnyWhiteListedProjectCard$$();
-
-              expect(result).toBeFalse();
-            });
-          });
         });
       });
     });
