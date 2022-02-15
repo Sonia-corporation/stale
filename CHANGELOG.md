@@ -1,5 +1,19 @@
 # Sonia stale action
 
+# [1.47.0](https://github.com/Sonia-corporation/stale/compare/1.46.0...1.47.0) (2022-02-15)
+
+
+### :books: Documentation
+
+* **workflow-testing:** add a section to explain how to enable the actions step debug ([c81331d](https://github.com/Sonia-corporation/stale/commit/c81331d8d27f69f1377f425dbf030ed18993b6f0))
+
+
+### :rocket: Features
+
+* **logs:** add more logs to debug the project card features ([ec9d2ce](https://github.com/Sonia-corporation/stale/commit/ec9d2ceb08b4f248431cddd4ba1aecf37d83a0e9)), closes [#498](https://github.com/Sonia-corporation/stale/issues/498)
+* **logs:** log the item data before processing (debug) ([2c73a90](https://github.com/Sonia-corporation/stale/commit/2c73a907e990c5aab4ffc6bf5d8bacf0411f0c4c))
+  This will expose the content fetched from GitHub, which can be helpful to debug.
+
 # [1.46.0](https://github.com/Sonia-corporation/stale/compare/1.45.0...1.46.0) (2022-02-13)
 
 
