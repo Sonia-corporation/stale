@@ -3,6 +3,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
@@ -46,15 +47,25 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
         `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
       )
     );
+    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
+    const projectCardsCount: number = projectCards.length;
+    const projectNames: string[] = this._getProjectNames(projectCards);
 
-    if (this.processor.item.projectCards.nodes.length === 0) {
+    if (projectCardsCount === 0) {
       this.processor.logger.info(`Not containing any project card. Skipping the processing of this pull request...`);
 
       return false;
     }
 
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(projectCardsCount),
+      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this pull request`),
+      LoggerService.value(projectNames)
+    );
+
     const duplicatedProjectNames: string[] = getDuplicates(
-      this._getProjectNames(this.processor.item.projectCards.nodes),
+      projectNames,
       pullRequestsInputs.pullRequestOnlyAnyProjectCards
     );
     const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectNames);

@@ -162,11 +162,6 @@ All the inputs that are used both for issues and pull requests.
 
 Checkout the [documentation](https://sonia-corporation.github.io/stale/docs/introduction) to have some examples.
 
-## Debug the action
-
-If you have an issue, you could help yourself to save some time by enabling the debug mode of the actions by adding the `ACTIONS_STEP_DEBUG` GitHub secret to `true` in your repository.  
-Follow this [documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) if you need more details.
-
 ## Changelog
 
 See all the changes on the [website](https://sonia-corporation.github.io/stale/docs/changelog).

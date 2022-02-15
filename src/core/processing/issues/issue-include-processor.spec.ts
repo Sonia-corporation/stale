@@ -265,14 +265,29 @@ describe(`IssueIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this issue`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about not containing any common project card (skipping the processing)`, (): void => {
               expect.assertions(2);
 
               issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Not containing any of the required project card. Skipping the processing of this issue...`
               );
             });
@@ -349,14 +364,29 @@ describe(`IssueIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this issue`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about not containing any common project card (skipping the processing)`, (): void => {
               expect.assertions(2);
 
               issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Not containing any of the required project card. Skipping the processing of this issue...`
               );
             });
@@ -379,14 +409,29 @@ describe(`IssueIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this issue`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about finding one project card in common (continuing the processing)`, (): void => {
               expect.assertions(2);
 
               issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Containing one of the required project card`,
                 `white-->`,
                 `value-dummy-project`
@@ -398,9 +443,253 @@ describe(`IssueIncludeProcessor`, (): void => {
 
               issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `Continuing the processing for this issue...`
+              );
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeTrue();
+            });
+          });
+        });
+
+        describe(`when the issue has two project cards`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: {
+                        name: `dummy-project-1`,
+                      },
+                    }),
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: {
+                        name: `dummy-project-2`,
+                      },
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyProjectCards: [`dummy-card`],
+                })
+              );
+          });
+
+          describe(`when none of the project cards match`, (): void => {
+            beforeEach((): void => {
+              issuesInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyProjectCards: [`dummy-other-project`],
+                })
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this issue`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
               expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
                 4,
+                `Not containing any of the required project card. Skipping the processing of this issue...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when none of the project cards match and the pagination is higher than 20`, (): void => {
+            beforeEach((): void => {
+              issueProcessor = createHydratedMock<IssueProcessor>({
+                item: {
+                  projectCards: {
+                    nodes: [
+                      createHydratedMock<IGithubApiProjectCard>({
+                        project: {
+                          name: `dummy-project-1`,
+                        },
+                      }),
+                      createHydratedMock<IGithubApiProjectCard>({
+                        project: {
+                          name: `dummy-project-2`,
+                        },
+                      }),
+                    ],
+                    totalCount: 21,
+                  },
+                },
+              });
+              issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+              issueProcessorLoggerInfoSpy = jest
+                .spyOn(issueIncludeProcessor.processor.logger, `info`)
+                .mockImplementation();
+              issueProcessorLoggerWarningSpy = jest
+                .spyOn(issueIncludeProcessor.processor.logger, `warning`)
+                .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+              issuesInputsServiceGetInputsSpy = jest
+                .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+                .mockReturnValue(
+                  createHydratedMock<IIssuesInputs>({
+                    issueOnlyAnyProjectCards: [`dummy-other-project`],
+                  })
+                );
+            });
+
+            it(`should log a warning about finding too many labels on this issue since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+              expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+                `Found`,
+                `value-21`,
+                `whiteBright-project cards attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+              );
+            });
+
+            it(`should annotate about finding too many labels on this issue since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+                EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `issue-include-processor.ts`,
+                  startLine: 76,
+                  title: `Warning`,
+                }
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this issue`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required project card. Skipping the processing of this issue...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when at least one of the project cards match`, (): void => {
+            beforeEach((): void => {
+              issuesInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyProjectCards: [`dummy-project-2`],
+                })
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this issue`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about finding one project card in common (continuing the processing)`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Containing one of the required project card`,
+                `white-->`,
+                `value-dummy-project-2`
+              );
+            });
+
+            it(`should log continuing the processing`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
                 `Continuing the processing for this issue...`
               );
             });

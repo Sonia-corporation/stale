@@ -269,14 +269,29 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this pull request`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about not containing any common project card (skipping the processing)`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Not containing any of the required project card. Skipping the processing of this pull request...`
               );
             });
@@ -353,14 +368,29 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this pull request`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about not containing any common project card (skipping the processing)`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Not containing any of the required project card. Skipping the processing of this pull request...`
               );
             });
@@ -383,14 +413,29 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               );
             });
 
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-project card on this pull request`,
+                `value-dummy-project`
+              );
+            });
+
             it(`should log about finding one project card in common (continuing the processing)`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
-              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-                3,
+                4,
                 `Containing one of the required project card`,
                 `white-->`,
                 `value-dummy-project`
@@ -402,9 +447,253 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
 
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `Continuing the processing for this pull request...`
+              );
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeTrue();
+            });
+          });
+        });
+
+        describe(`when the pull request has two project cards`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: {
+                        name: `dummy-project-1`,
+                      },
+                    }),
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: {
+                        name: `dummy-project-2`,
+                      },
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyProjectCards: [`dummy-card`],
+                })
+              );
+          });
+
+          describe(`when none of the project cards match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyProjectCards: [`dummy-other-project`],
+                })
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this pull request`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
                 4,
+                `Not containing any of the required project card. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when none of the project cards match and the pagination is higher than 20`, (): void => {
+            beforeEach((): void => {
+              pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+                item: {
+                  projectCards: {
+                    nodes: [
+                      createHydratedMock<IGithubApiProjectCard>({
+                        project: {
+                          name: `dummy-project-1`,
+                        },
+                      }),
+                      createHydratedMock<IGithubApiProjectCard>({
+                        project: {
+                          name: `dummy-project-2`,
+                        },
+                      }),
+                    ],
+                    totalCount: 21,
+                  },
+                },
+              });
+              pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+              pullRequestProcessorLoggerInfoSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+                .mockImplementation();
+              pullRequestProcessorLoggerWarningSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `warning`)
+                .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+              pullRequestsInputsServiceGetInputsSpy = jest
+                .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+                .mockReturnValue(
+                  createHydratedMock<IPullRequestsInputs>({
+                    pullRequestOnlyAnyProjectCards: [`dummy-other-project`],
+                  })
+                );
+            });
+
+            it(`should log a warning about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+                `Found`,
+                `value-21`,
+                `whiteBright-project cards attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+              );
+            });
+
+            it(`should annotate about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+                EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `pull-request-include-processor.ts`,
+                  startLine: 76,
+                  title: `Warning`,
+                }
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this pull request`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about not containing any common project card (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required project card. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when at least one of the project cards match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyProjectCards: [`dummy-project-2`],
+                })
+              );
+            });
+
+            it(`should log the project names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-project cards on this pull request`,
+                `value-dummy-project-1,dummy-project-2`
+              );
+            });
+
+            it(`should log about finding one project card in common (continuing the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Containing one of the required project card`,
+                `white-->`,
+                `value-dummy-project-2`
+              );
+            });
+
+            it(`should log continuing the processing`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
                 `Continuing the processing for this pull request...`
               );
             });

@@ -13,7 +13,7 @@ describe(`Pull request any of the required project card`, (): void => {
       });
     });
 
-    describe(`when an pull request has no project card`, (): void => {
+    describe(`when a pull request has no project card`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
@@ -36,7 +36,7 @@ describe(`Pull request any of the required project card`, (): void => {
       });
     });
 
-    describe(`when an pull request has one project card which does not match`, (): void => {
+    describe(`when a pull request has one project card which does not match`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
@@ -65,7 +65,7 @@ describe(`Pull request any of the required project card`, (): void => {
       });
     });
 
-    describe(`when an pull request has one project card which does match`, (): void => {
+    describe(`when a pull request has one project card which does match`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
