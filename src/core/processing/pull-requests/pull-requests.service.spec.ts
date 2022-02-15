@@ -109,7 +109,7 @@ describe(`PullRequestsService`, (): void => {
     });
   });
 
-  describe(`processBatches()`, (): void => {
+  describe(`processBatch()`, (): void => {
     const mockedPullRequestProcessor: MockedObjectDeep<typeof PullRequestProcessor> = jest.mocked(
       PullRequestProcessor,
       true
@@ -118,6 +118,7 @@ describe(`PullRequestsService`, (): void => {
 
     let githubApiPullRequestsServiceFetchPullRequestsSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
+    let loggerServiceDebugSpy: jest.SpyInstance;
     let processBatchSpy: jest.SpyInstance;
     let pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy: jest.SpyInstance;
     let canProcessSpy: jest.SpyInstance;
@@ -138,6 +139,7 @@ describe(`PullRequestsService`, (): void => {
           })
         );
       loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      loggerServiceDebugSpy = jest.spyOn(LoggerService, `debug`).mockImplementation();
       processBatchSpy = jest.spyOn(service, `processBatch`);
       pullRequestsStatisticsServiceIncreaseProcessedPullRequestsCountSpy = jest
         .spyOn(PullRequestsStatisticsService.getInstance(), `increaseProcessedPullRequestsCount`)
@@ -212,6 +214,14 @@ describe(`PullRequestsService`, (): void => {
           canProcessSpy.mockReturnValue(true);
         });
 
+        it(`should log the pull request data coming from GitHub`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(1);
+        });
+
         it(`should process the pull request`, async (): Promise<void> => {
           expect.assertions(6);
 
@@ -241,6 +251,14 @@ describe(`PullRequestsService`, (): void => {
       describe(`when the pull requests cannot be processed`, (): void => {
         beforeEach((): void => {
           canProcessSpy.mockReturnValue(false);
+        });
+
+        it(`should not log the pull request data coming from GitHub`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(loggerServiceDebugSpy).not.toHaveBeenCalled();
         });
 
         it(`should not process the pull request`, async (): Promise<void> => {
@@ -310,6 +328,14 @@ describe(`PullRequestsService`, (): void => {
           canProcessSpy.mockReturnValue(true);
         });
 
+        it(`should log the pull request data coming from GitHub`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(2);
+        });
+
         it(`should process the two pull requests`, async (): Promise<void> => {
           expect.assertions(9);
 
@@ -347,6 +373,14 @@ describe(`PullRequestsService`, (): void => {
       describe(`when the pull requests cannot be processed`, (): void => {
         beforeEach((): void => {
           canProcessSpy.mockReturnValue(false);
+        });
+
+        it(`should not log the pull request data coming from GitHub`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await service.processBatch();
+
+          expect(loggerServiceDebugSpy).not.toHaveBeenCalled();
         });
 
         it(`should not process the pull requests`, async (): Promise<void> => {

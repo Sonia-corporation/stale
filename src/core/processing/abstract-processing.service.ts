@@ -77,6 +77,9 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
         break;
       }
 
+      // Expose the item data for debug purpose
+      LoggerService.debug(JSON.stringify(item));
+
       // Note: we do not wish to have a blazing fast action
       // The goal is to process a single item at a time
       // Hence the "await" ; )

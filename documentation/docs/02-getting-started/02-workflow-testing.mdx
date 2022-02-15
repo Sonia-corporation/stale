@@ -49,6 +49,13 @@ with:
   pull-request-limit-api-queries-count: 30
 ```
 
+### Debug the action {#debug-the-action}
+
+At this point, if you have an issue, you could help yourself to save some time by enabling the debug mode of the actions by adding the `ACTIONS_STEP_DEBUG` GitHub secret to `true` in your repository.  
+Follow this [documentation](https://github.com/actions/toolkit/blob/main/docs/action-debugging.md#how-to-access-step-debug-logs) if you need more details.
+
+You will be able to see more logs that may help you understand how the workflow is working, and also see the data fetched from your repository.
+
 ## Customize the behaviour {#customize-the-behaviour}
 
 If the action was successful, you may wish now to configure it at your convenience.  
