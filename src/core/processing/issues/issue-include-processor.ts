@@ -4,6 +4,7 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
@@ -46,17 +47,24 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
         `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
       )
     );
+    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
+    const projectCardsCount: number = projectCards.length;
+    const projectNames: string[] = this._getProjectNames(projectCards);
 
-    if (this.processor.item.projectCards.nodes.length === 0) {
+    if (projectCardsCount === 0) {
       this.processor.logger.info(`Not containing any project card. Skipping the processing of this issue...`);
 
       return false;
     }
 
-    const duplicatedProjectNames: string[] = getDuplicates(
-      this._getProjectNames(this.processor.item.projectCards.nodes),
-      issuesInputs.issueOnlyAnyProjectCards
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(projectCardsCount),
+      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this issue`),
+      LoggerService.value(projectNames)
     );
+
+    const duplicatedProjectNames: string[] = getDuplicates(projectNames, issuesInputs.issueOnlyAnyProjectCards);
     const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectNames);
 
     if (!_.isUndefined(firstDuplicatedProjectCard)) {
