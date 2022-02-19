@@ -62,7 +62,7 @@ describe(`Pull request to stale comment`, (): void => {
       pullRequestSut.expect({
         addedPullRequestsLabelsCount: 1,
         calledApiPullRequestsMutationsCount: 1,
-        calledApiPullRequestsQueriesCount: 2,
+        calledApiPullRequestsQueriesCount: 1,
         processedPullRequestsCount: 1,
         stalePullRequestsCount: 1,
       });

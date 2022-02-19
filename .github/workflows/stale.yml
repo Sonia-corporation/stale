@@ -45,6 +45,7 @@ jobs:
           issue-close-comment: |
             :warning: **Warning!** :warning:
             This issue was closed due to a lack of activity for 10 days after it was stale. :worried:
+          issue-stale-label: 'stale :cold_face:'
           pull-request-days-before-stale: 30
           pull-request-days-before-close: 10
           pull-request-ignore-any-labels: |
@@ -75,3 +76,4 @@ jobs:
           pull-request-close-comment: |
             :warning: **Warning!** :warning:
             This pull request was closed due to a lack of activity for 10 days after it was stale. :worried:
+          pull-request-stale-label: 'stale :cold_face:'

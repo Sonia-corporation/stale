@@ -63,7 +63,7 @@ describe(`Pull request to stale extra labels`, (): void => {
         addedPullRequestsCommentsCount: 1,
         addedPullRequestsLabelsCount: 2,
         calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 3,
+        calledApiPullRequestsQueriesCount: 2,
         processedPullRequestsCount: 1,
         stalePullRequestsCount: 1,
       });
@@ -96,7 +96,7 @@ describe(`Pull request to stale extra labels`, (): void => {
         addedPullRequestsCommentsCount: 1,
         addedPullRequestsLabelsCount: 4,
         calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 5,
+        calledApiPullRequestsQueriesCount: 4,
         processedPullRequestsCount: 1,
         stalePullRequestsCount: 1,
       });
@@ -133,7 +133,7 @@ describe(`Pull request to stale extra labels`, (): void => {
         pullRequestSut.expect({
           addedPullRequestsCommentsCount: 1,
           addedPullRequestsLabelsCount: 4,
-          calledApiPullRequestsQueriesCount: 5,
+          calledApiPullRequestsQueriesCount: 1,
           processedPullRequestsCount: 1,
           stalePullRequestsCount: 1,
         });

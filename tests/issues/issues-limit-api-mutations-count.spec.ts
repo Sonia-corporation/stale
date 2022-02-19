@@ -240,7 +240,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
           addedIssuesCommentsCount: 2,
           addedIssuesLabelsCount: 2,
           calledApiIssuesMutationsCount: 4,
-          calledApiIssuesQueriesCount: 3,
+          calledApiIssuesQueriesCount: 1,
           processedIssuesCount: 2,
           staleIssuesCount: 2,
         });
