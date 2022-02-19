@@ -8,13 +8,14 @@ tags:
   - Pull requests
   - Inputs
   - API
+  - Cache
 ---
 
 ### Input {#input}
 
 Name: `pull-request-limit-api-queries-count`  
 Type: `number`  
-Default value: `-1`
+Default value: `-1` (unlimited)
 
 ### Description {#description}
 
@@ -23,10 +24,16 @@ If the limit is reached, the ongoing processed pull request will finish it's pro
 This can be useful when you want to play it safe with this action.  
 This can be also very useful if you have a lot of pull requests to process, and you want to limit the quotas of your associated [GitHub token](../../github-token-input).
 
+:::info
+
+When the value is below `0`, the input will have no effect.
+
+:::
+
 ### Cache {#cache}
 
 Some queries are cached during the workflow when loading static resources like the labels.  
-This will reduce the number of calls made to the GitHub API, which will also reduce the quotas consumed for your GitHub token.
+This will reduce the number of calls made to the GitHub API, which will also reduce the quotas consumed for your GitHub token, avoiding reaching rate limits.
 
 ### Example {#example}
 
