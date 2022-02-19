@@ -62,7 +62,7 @@ describe(`Issue to stale comment`, (): void => {
       issueSut.expect({
         addedIssuesLabelsCount: 1,
         calledApiIssuesMutationsCount: 1,
-        calledApiIssuesQueriesCount: 2,
+        calledApiIssuesQueriesCount: 1,
         processedIssuesCount: 1,
         staleIssuesCount: 1,
       });

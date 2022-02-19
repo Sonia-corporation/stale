@@ -263,7 +263,7 @@ describe(`Pull request to close extra labels`, (): void => {
           addedPullRequestsCommentsCount: 1,
           addedPullRequestsLabelsCount: 3,
           alreadyStalePullRequestsCount: 1,
-          calledApiPullRequestsQueriesCount: 5,
+          calledApiPullRequestsQueriesCount: 2,
           closedPullRequestsCount: 1,
           processedPullRequestsCount: 1,
         });

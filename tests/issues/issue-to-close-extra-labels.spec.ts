@@ -263,7 +263,7 @@ describe(`Issue to close extra labels`, (): void => {
           addedIssuesCommentsCount: 1,
           addedIssuesLabelsCount: 3,
           alreadyStaleIssuesCount: 1,
-          calledApiIssuesQueriesCount: 5,
+          calledApiIssuesQueriesCount: 2,
           closedIssuesCount: 1,
           processedIssuesCount: 1,
         });
