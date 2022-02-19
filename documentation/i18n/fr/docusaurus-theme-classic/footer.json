@@ -46,5 +46,9 @@
   "link.item.label.Need help?": {
     "message": "Besoin d'aide ?",
     "description": "The label of footer link with label=Need help? linking to /docs/need-help"
+  },
+  "link.item.label.Troubleshooting": {
+    "message": "Dépannage",
+    "description": "The label of footer link with label=Troubleshooting linking to /docs/troubleshooting"
   }
 }
