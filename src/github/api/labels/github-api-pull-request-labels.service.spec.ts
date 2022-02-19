@@ -242,6 +242,20 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledTimes(1);
             expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsQueriesCountSpy).toHaveBeenCalledWith();
           });
+
+          it(`should not log about finding the matching labels`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(githubApiPullRequestLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+              new Error(`Could not find a single label matching ${labelName}`)
+            );
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestProcessorLoggerInfoSpy).not.toHaveBeenCalledWith(
+              `green-Found the labels matching`,
+              `value-${labelName}`
+            );
+          });
         });
 
         describe(`when one label matching the search one was found`, (): void => {
@@ -262,10 +276,10 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
             graphqlMock.mockResolvedValue(githubApiGetLabels);
           });
 
-          it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(3);
+          it(`should log about finding the matching labels`, async (): Promise<void> => {
+            expect.assertions(2);
 
-            const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+            await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
 
             expect(pullRequestProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -273,6 +287,13 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               `green-Found the labels matching`,
               `value-${labelName}`
             );
+          });
+
+          it(`should return the label`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+
             expect(result).toStrictEqual(githubApiGetLabels);
           });
 
@@ -321,10 +342,10 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
               graphqlMock.mockResolvedValue(githubApiGetLabels);
             });
 
-            it(`should return the label`, async (): Promise<void> => {
-              expect.assertions(3);
+            it(`should log about finding the matching labels`, async (): Promise<void> => {
+              expect.assertions(2);
 
-              const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+              await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
 
               expect(pullRequestProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
               expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -332,6 +353,13 @@ describe(`GithubApiPullRequestLabelsService`, (): void => {
                 `green-Found the labels matching`,
                 `value-${labelName}`
               );
+            });
+
+            it(`should return the label`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              const result = await githubApiPullRequestLabelsService.fetchLabelsByName(labelName);
+
               expect(result).toStrictEqual(githubApiGetLabels);
             });
 
