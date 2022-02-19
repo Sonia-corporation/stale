@@ -1,5 +1,20 @@
 # Sonia stale action
 
+# [1.49.0](https://github.com/Sonia-corporation/stale/compare/1.48.0...1.49.0) (2022-02-19)
+
+
+### :books: Documentation
+
+* **troubleshooting:** add a new page to help troubleshooting ([c67dc84](https://github.com/Sonia-corporation/stale/commit/c67dc843e1985a929bc3053acddc5e596f1b29e4))
+  Including information about GitHub token missing permissions.
+* **api-count:** add info block to explain that a negative count disable the inputs ([ac54236](https://github.com/Sonia-corporation/stale/commit/ac542362e0bd45b33b7568527e6cde9a2c23f7c3))
+  Using -X for the API queries and mutations count will just disable the feaure.
+* **github-token:** add information about the required permissions ([63fb15b](https://github.com/Sonia-corporation/stale/commit/63fb15bbcdbd35bc50c99ecd3756bc6f8a294443))
+  Also explain how the token is used under the hood.
+* **troubleshooting:** add more tips ([975f2d7](https://github.com/Sonia-corporation/stale/commit/975f2d7101441a862ea2acb5608cb348253ef205))
+* **cache:** add the "Cache" tag for all docs pages related to cache topics ([7b401b7](https://github.com/Sonia-corporation/stale/commit/7b401b7cff0f2142187bb9e89310cca5e9bcf08a))
+* **fix:** fix 2 typos in the 1.48.0 changelog ([4145e7b](https://github.com/Sonia-corporation/stale/commit/4145e7b464d47268c483523ef92bd1d907b65a90))
+
 # [1.48.0](https://github.com/Sonia-corporation/stale/compare/1.47.0...1.48.0) (2022-02-19)
 
 
