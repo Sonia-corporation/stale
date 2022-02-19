@@ -81,8 +81,8 @@ const config = {
                 label: `New issue`,
               },
               {
-                href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
-                label: `Changelog`,
+                href: `/docs/troubleshooting`,
+                label: `Troubleshooting`,
               },
               {
                 href: `/docs/need-help`,
@@ -93,6 +93,10 @@ const config = {
           },
           {
             items: [
+              {
+                href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
+                label: `Changelog`,
+              },
               {
                 label: `Blog`,
                 to: `/blog`,

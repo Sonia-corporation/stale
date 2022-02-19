@@ -18,7 +18,23 @@ Default value: `${{ github.token }}`
 ### Description {#description}
 
 This input will let you define what GitHub token to use to perform the calls to the GitHub API.  
-You can also read the [Automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) to have more information.
+You can also read the [automatic token authentication](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) to have more information.
+
+:::caution
+
+Based on your configuration, make sure to give the proper [permissions](https://docs.github.com/en/rest/reference/permissions-required-for-github-apps) to your GitHub token.  
+If not, you may end up having weird behaviours, where some data will be missing from the queries.
+
+Note that if you have unusual behaviours, a debug log is exposing the queried data from your issues and pull request.  
+This may be very helpful to debug your workflow, before creating a [new issue](https://github.com/Sonia-corporation/stale/issues/new/choose).
+
+:::
+
+:::info
+
+Under the hood, the value will be consumed by the [@actions/github](https://github.com/actions/toolkit/tree/main/packages/github), through the [getOctokit method](https://github.com/actions/toolkit/blob/fcb8c4ca798bd0d81a9b07e2f7dffee8397c4707/packages/github/src/github.ts#L15-L20).
+
+:::
 
 ### Example {#example}
 

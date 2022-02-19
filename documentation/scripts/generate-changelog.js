@@ -6,6 +6,7 @@ const _ = require(`lodash`);
 const { getDirectoryName } = require(`./get-directory-name`);
 const CONTEXT = `generate-changelog`;
 const { execSync } = require(`child_process`);
+const CHANGELOG_PATH = `documentation/docs/15-changelog.md`;
 
 /**
  * @description
@@ -23,7 +24,7 @@ async function initialize() {
   await mergeOriginalIntoDocumentationChangelog(originalChangelog, documentationChangelog);
 
   LOGGER.debug(CONTEXT, CHALK.text(`Linting the documentation changelog...`));
-  execSync(`npm run lint:other:this -- documentation/docs/14-changelog.md`, {
+  execSync(`npm run lint:other:this -- ${CHANGELOG_PATH}`, {
     stdio: `inherit`,
   });
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog linted`));
@@ -62,7 +63,7 @@ async function loadOriginalChangelog() {
 async function loadDocumentationChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the documentation changelog...`));
 
-  const changelog = await FS.readFile(`documentation/docs/14-changelog.md`, `utf-8`);
+  const changelog = await FS.readFile(CHANGELOG_PATH, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog loaded`));
 
@@ -78,7 +79,7 @@ async function loadDocumentationChangelog() {
 async function updateDocumentationChangelog(content) {
   LOGGER.debug(CONTEXT, CHALK.text(`Updating the documentation changelog...`));
 
-  await FS.writeFile(`documentation/docs/14-changelog.md`, content);
+  await FS.writeFile(CHANGELOG_PATH, content);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog updated`));
 }
