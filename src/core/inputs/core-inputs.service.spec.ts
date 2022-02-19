@@ -323,7 +323,7 @@ describe(`CoreInputsService`, (): void => {
 
       CoreInputsService.getNumberInput$$(input, options);
 
-      expect(coreGetInputSpy).toHaveReturnedTimes(1);
+      expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
       expect(coreGetInputSpy).toHaveBeenCalledWith(input, options);
     });
 
@@ -341,7 +341,7 @@ describe(`CoreInputsService`, (): void => {
             `Wrong value given to the input number ${input}`
           );
 
-          expect(loggerServiceErrorSpy).toHaveReturnedTimes(1);
+          expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(loggerServiceErrorSpy).toHaveBeenCalledWith(
             `Wrong value given to the input`,
             `value-${input}`,
@@ -357,7 +357,7 @@ describe(`CoreInputsService`, (): void => {
             `Wrong value given to the input number ${input}`
           );
 
-          expect(annotationsServiceErrorSpy).toHaveReturnedTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.WRONG_INPUT_VALUE, {
             file: `core-inputs.service.ts`,
             startLine: 35,

@@ -129,7 +129,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
             {
               file: `abstract-github-api-labels.service.ts`,
-              startLine: 70,
+              startLine: 74,
               title: `Error`,
             }
           );
@@ -209,7 +209,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               EAnnotationError.FAILED_FINDING_LABELS_MATCHING_SEARCH,
               {
                 file: `abstract-github-api-labels.service.ts`,
-                startLine: 48,
+                startLine: 56,
                 title: `Error`,
               }
             );
@@ -218,7 +218,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
               {
                 file: `abstract-github-api-labels.service.ts`,
-                startLine: 70,
+                startLine: 74,
                 title: `Error`,
               }
             );
@@ -242,6 +242,20 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
             expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
           });
+
+          it(`should not log about finding the matching labels`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(githubApiIssueLabelsService.fetchLabelsByName(labelName)).rejects.toThrow(
+              new Error(`Could not find a single label matching ${labelName}`)
+            );
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerInfoSpy).not.toHaveBeenCalledWith(
+              `green-Found the labels matching`,
+              `value-${labelName}`
+            );
+          });
         });
 
         describe(`when one label matching the search one was found`, (): void => {
@@ -262,17 +276,24 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             graphqlMock.mockResolvedValue(githubApiGetLabels);
           });
 
-          it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(3);
+          it(`should log about finding the matching labels`, async (): Promise<void> => {
+            expect.assertions(2);
 
-            const result = await githubApiIssueLabelsService.fetchLabelsByName(labelName);
+            await githubApiIssueLabelsService.fetchLabelsByName(labelName);
 
-            expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `green-Found the labels matching`,
               `value-${labelName}`
             );
+          });
+
+          it(`should return the label`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            const result = await githubApiIssueLabelsService.fetchLabelsByName(labelName);
+
             expect(result).toStrictEqual(githubApiGetLabels);
           });
 
@@ -321,17 +342,24 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               graphqlMock.mockResolvedValue(githubApiGetLabels);
             });
 
-            it(`should return the label`, async (): Promise<void> => {
-              expect.assertions(3);
+            it(`should log about finding the matching labels`, async (): Promise<void> => {
+              expect.assertions(2);
 
-              const result = await githubApiIssueLabelsService.fetchLabelsByName(labelName);
+              await githubApiIssueLabelsService.fetchLabelsByName(labelName);
 
-              expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
               expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
                 2,
                 `green-Found the labels matching`,
                 `value-${labelName}`
               );
+            });
+
+            it(`should return the label`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              const result = await githubApiIssueLabelsService.fetchLabelsByName(labelName);
+
               expect(result).toStrictEqual(githubApiGetLabels);
             });
 
@@ -430,7 +458,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 112,
+            startLine: 118,
             title: `Error`,
           });
         });
@@ -496,7 +524,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL, {
               file: `abstract-github-api-labels.service.ts`,
-              startLine: 95,
+              startLine: 102,
               title: `Error`,
             });
           });
@@ -517,6 +545,15 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
             expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
           });
+
+          it(`should not log about finding the label`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerInfoSpy).not.toHaveBeenCalledWith(`green-Found the label`, `value-${labelName}`);
+          });
         });
 
         describe(`when the label was found`, (): void => {
@@ -533,17 +570,24 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             graphqlMock.mockResolvedValue(githubApiGetLabel);
           });
 
-          it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(3);
+          it(`should log about finding the label`, async (): Promise<void> => {
+            expect.assertions(2);
 
-            const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
+            await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
-            expect(issueProcessorLoggerInfoSpy).toHaveReturnedTimes(2);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
               2,
               `green-Found the label`,
               `value-${labelName}`
             );
+          });
+
+          it(`should return the label`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
             expect(result).toStrictEqual({
               id: `dummy-id`,
               name: labelName,
@@ -645,7 +689,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 146,
+            startLine: 157,
             title: `Error`,
           });
         });
@@ -783,7 +827,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABELS, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 185,
+            startLine: 196,
             title: `Error`,
           });
         });
@@ -921,7 +965,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_REMOVING_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 224,
+            startLine: 235,
             title: `Error`,
           });
         });

@@ -53,7 +53,7 @@ export abstract class AbstractGithubApiLabelsService<
           this.processor.logger.error(`Could not find a single label matching`, LoggerService.value(labelName));
           AnnotationsService.error(EAnnotationError.FAILED_FINDING_LABELS_MATCHING_SEARCH, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 48,
+            startLine: 56,
             title: `Error`,
           });
 
@@ -71,7 +71,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(`Failed to fetch the labels matching`, LoggerService.value(labelName));
         AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 70,
+          startLine: 74,
           title: `Error`,
         });
 
@@ -99,10 +99,12 @@ export abstract class AbstractGithubApiLabelsService<
           this.processor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
           AnnotationsService.error(EAnnotationError.COULD_NOT_FETCH_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 95,
+            startLine: 102,
             title: `Error`,
           });
           this.processor.logger.debug(`Are you sure it exists in your repository?`);
+
+          return null;
         }
 
         this.processor.logger.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
@@ -113,7 +115,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(`Failed to fetch the label`, LoggerService.value(labelName));
         AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 112,
+          startLine: 118,
           title: `Error`,
         });
 
@@ -152,7 +154,7 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 146,
+          startLine: 157,
           title: `Error`,
         });
 
@@ -191,7 +193,7 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABELS, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 185,
+          startLine: 196,
           title: `Error`,
         });
 
@@ -230,7 +232,7 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_REMOVING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 224,
+          startLine: 235,
           title: `Error`,
         });
 
