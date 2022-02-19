@@ -12,6 +12,7 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { GithubApiLabelsCacheService } from '@utils/cache/github-api-labels.cache.service';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -86,6 +87,10 @@ export abstract class AbstractGithubApiLabelsService<
       LoggerFormatService.whiteBright(`from GitHub...`)
     );
 
+    if (this.hasLabelInCache$$(labelName)) {
+      return Promise.resolve(this.loadLabelFromCache$$(labelName));
+    }
+
     return OctokitService.getOctokit()
       .graphql<IGithubApiGetLabel>(GITHUB_API_LABEL_BY_NAME_QUERY, {
         labelName,
@@ -108,6 +113,8 @@ export abstract class AbstractGithubApiLabelsService<
         }
 
         this.processor.logger.info(LoggerFormatService.green(`Found the label`), LoggerService.value(labelName));
+
+        this.addLabelToCache$$(response.repository.label);
 
         return response.repository.label;
       })
@@ -238,6 +245,43 @@ export abstract class AbstractGithubApiLabelsService<
 
         throw error;
       });
+  }
+
+  public hasLabelInCache$$(labelName: Readonly<string>): boolean {
+    this.processor.logger.info(
+      `Checking if the label`,
+      LoggerService.value(labelName),
+      LoggerFormatService.whiteBright(`exists in the cache`)
+    );
+
+    return GithubApiLabelsCacheService.has(labelName);
+  }
+
+  public addLabelToCache$$(label: Readonly<IGithubApiLabel>): void {
+    this.processor.logger.info(
+      `Adding the label`,
+      LoggerService.value(label.name),
+      LoggerFormatService.whiteBright(`to the cache`)
+    );
+
+    GithubApiLabelsCacheService.set(label.name, label);
+  }
+
+  public loadLabelFromCache$$(labelName: Readonly<string>): IGithubApiLabel | never {
+    const label: IGithubApiLabel = GithubApiLabelsCacheService.get(labelName);
+
+    this.processor.logger.info(
+      `The label`,
+      LoggerService.value(labelName),
+      LoggerFormatService.whiteBright(`was found in the cache`)
+    );
+    this.processor.logger.info(
+      `Returning the cached version`,
+      LoggerFormatService.white(`->`),
+      LoggerService.value(label.id)
+    );
+
+    return label;
   }
 
   protected abstract _increaseCalledApiQueriesCount(): void;

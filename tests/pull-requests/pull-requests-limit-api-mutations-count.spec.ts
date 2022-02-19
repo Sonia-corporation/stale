@@ -240,7 +240,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
           addedPullRequestsCommentsCount: 2,
           addedPullRequestsLabelsCount: 2,
           calledApiPullRequestsMutationsCount: 4,
-          calledApiPullRequestsQueriesCount: 3,
+          calledApiPullRequestsQueriesCount: 1,
           processedPullRequestsCount: 2,
           stalePullRequestsCount: 2,
         });

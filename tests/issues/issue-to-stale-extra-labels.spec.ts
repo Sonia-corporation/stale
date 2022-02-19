@@ -63,7 +63,7 @@ describe(`Issue to stale extra labels`, (): void => {
         addedIssuesCommentsCount: 1,
         addedIssuesLabelsCount: 2,
         calledApiIssuesMutationsCount: 3,
-        calledApiIssuesQueriesCount: 3,
+        calledApiIssuesQueriesCount: 2,
         processedIssuesCount: 1,
         staleIssuesCount: 1,
       });
@@ -96,7 +96,7 @@ describe(`Issue to stale extra labels`, (): void => {
         addedIssuesCommentsCount: 1,
         addedIssuesLabelsCount: 4,
         calledApiIssuesMutationsCount: 3,
-        calledApiIssuesQueriesCount: 5,
+        calledApiIssuesQueriesCount: 4,
         processedIssuesCount: 1,
         staleIssuesCount: 1,
       });
@@ -133,7 +133,7 @@ describe(`Issue to stale extra labels`, (): void => {
         issueSut.expect({
           addedIssuesCommentsCount: 1,
           addedIssuesLabelsCount: 4,
-          calledApiIssuesQueriesCount: 5,
+          calledApiIssuesQueriesCount: 1,
           processedIssuesCount: 1,
           staleIssuesCount: 1,
         });

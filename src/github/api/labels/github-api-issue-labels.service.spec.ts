@@ -12,6 +12,7 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { GithubApiLabelsCacheService } from '@utils/cache/github-api-labels.cache.service';
 import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 import faker from 'faker';
@@ -379,6 +380,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
     describe(`fetchLabelByName()`, (): void => {
       let labelName: string;
       let graphqlMock: jest.Mock;
+      let cachedLabel: IGithubApiLabel;
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
       let issueProcessorLoggerErrorSpy: jest.SpyInstance;
@@ -386,10 +388,14 @@ describe(`GithubApiIssueLabelsService`, (): void => {
       let issueProcessorLoggerDebugSpy: jest.SpyInstance;
       let octokitServiceGetOctokitSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy: jest.SpyInstance;
+      let hasLabelInCacheSpy: jest.SpyInstance;
+      let loadLabelFromCacheSpy: jest.SpyInstance;
+      let addLabelToCacheSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         labelName = faker.random.word();
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        cachedLabel = createHydratedMock<IGithubApiLabel>();
         githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
 
         issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
@@ -407,10 +413,15 @@ describe(`GithubApiIssueLabelsService`, (): void => {
         issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesQueriesCount`)
           .mockImplementation();
+        hasLabelInCacheSpy = jest.spyOn(githubApiIssueLabelsService, `hasLabelInCache$$`).mockReturnValue(false);
+        loadLabelFromCacheSpy = jest
+          .spyOn(githubApiIssueLabelsService, `loadLabelFromCache$$`)
+          .mockReturnValue(cachedLabel);
+        addLabelToCacheSpy = jest.spyOn(githubApiIssueLabelsService, `addLabelToCache$$`).mockImplementation();
       });
 
-      it(`should fetch the label with the given name`, async (): Promise<void> => {
-        expect.assertions(7);
+      it(`should log about fetching the label`, async (): Promise<void> => {
+        expect.assertions(3);
 
         await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
           new Error(`graphql error`)
@@ -422,186 +433,319 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           `value-${labelName}`,
           `whiteBright-from GitHub...`
         );
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
-        expect(graphqlMock).toHaveBeenCalledTimes(1);
-        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_LABEL_BY_NAME_QUERY, {
-          labelName,
-          owner: `dummy-owner`,
-          repository: `dummy-repo`,
-        });
       });
 
-      describe(`when the label failed to be fetched`, (): void => {
+      it(`should check if the label was cached`, async (): Promise<void> => {
+        expect.assertions(3);
+
+        await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(hasLabelInCacheSpy).toHaveBeenCalledTimes(1);
+        expect(hasLabelInCacheSpy).toHaveBeenCalledWith(labelName);
+      });
+
+      describe(`when the label was not cached`, (): void => {
         beforeEach((): void => {
-          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+          hasLabelInCacheSpy.mockReturnValue(false);
         });
 
-        it(`should log about the error`, async (): Promise<void> => {
-          expect.assertions(3);
+        it(`should fetch the label with the given name`, async (): Promise<void> => {
+          expect.assertions(5);
 
           await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to fetch the label`, `value-${labelName}`);
-        });
-
-        it(`should annotate about the error`, async (): Promise<void> => {
-          expect.assertions(3);
-
-          await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
-
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL, {
-            file: `abstract-github-api-labels.service.ts`,
-            startLine: 118,
-            title: `Error`,
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_LABEL_BY_NAME_QUERY, {
+            labelName,
+            owner: `dummy-owner`,
+            repository: `dummy-repo`,
           });
         });
 
-        it(`should rethrow`, async (): Promise<void> => {
-          expect.assertions(1);
+        describe(`when the label failed to be fetched`, (): void => {
+          beforeEach((): void => {
+            graphqlMock.mockRejectedValue(new Error(`graphql error`));
+          });
 
-          await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          it(`should log about the error`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              new Error(`graphql error`)
+            );
+
+            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+              `Failed to fetch the label`,
+              `value-${labelName}`
+            );
+          });
+
+          it(`should annotate about the error`, async (): Promise<void> => {
+            expect.assertions(3);
+
+            await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              new Error(`graphql error`)
+            );
+
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL, {
+              file: `abstract-github-api-labels.service.ts`,
+              startLine: 118,
+              title: `Error`,
+            });
+          });
+
+          it(`should rethrow`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              new Error(`graphql error`)
+            );
+          });
+
+          it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              new Error(`graphql error`)
+            );
+
+            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not cache the label`, async (): Promise<void> => {
+            expect.assertions(2);
+
+            await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
+              new Error(`graphql error`)
+            );
+
+            expect(addLabelToCacheSpy).not.toHaveBeenCalled();
+          });
         });
 
-        it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
+        describe(`when the label was successfully fetched`, (): void => {
+          let githubApiGetLabel: IGithubApiGetLabel;
+
+          beforeEach((): void => {
+            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>();
+
+            graphqlMock.mockResolvedValue(githubApiGetLabel);
+          });
+
+          describe(`when the label was not found`, (): void => {
+            beforeEach((): void => {
+              githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+                repository: {
+                  label: null,
+                },
+              });
+
+              graphqlMock.mockResolvedValue(githubApiGetLabel);
+            });
+
+            it(`should log about not finding this label`, async (): Promise<void> => {
+              expect.assertions(4);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+              expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+                `Could not fetch the label`,
+                `value-${labelName}`
+              );
+              expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledTimes(1);
+              expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledWith(`Are you sure it exists in your repository?`);
+            });
+
+            it(`should annotate about not finding this label`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL, {
+                file: `abstract-github-api-labels.service.ts`,
+                startLine: 102,
+                title: `Error`,
+              });
+            });
+
+            it(`should return null`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(result).toBeNull();
+            });
+
+            it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
+            });
+
+            it(`should not log about finding the label`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+              expect(issueProcessorLoggerInfoSpy).not.toHaveBeenCalledWith(
+                `green-Found the label`,
+                `value-${labelName}`
+              );
+            });
+
+            it(`should not cache the label`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(addLabelToCacheSpy).not.toHaveBeenCalled();
+            });
+          });
+
+          describe(`when the label was found`, (): void => {
+            beforeEach((): void => {
+              githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
+                repository: {
+                  label: createHydratedMock<IGithubApiLabel>({
+                    id: `dummy-id`,
+                    name: labelName,
+                  }),
+                },
+              });
+
+              graphqlMock.mockResolvedValue(githubApiGetLabel);
+            });
+
+            it(`should log about finding the label`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                2,
+                `green-Found the label`,
+                `value-${labelName}`
+              );
+            });
+
+            it(`should cache the label`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(addLabelToCacheSpy).toHaveBeenCalledTimes(1);
+              expect(addLabelToCacheSpy).toHaveBeenCalledWith(githubApiGetLabel.repository.label);
+            });
+
+            it(`should return the label`, async (): Promise<void> => {
+              expect.assertions(1);
+
+              const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(result).toStrictEqual({
+                id: `dummy-id`,
+                name: labelName,
+              });
+            });
+
+            it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
+              expect.assertions(2);
+
+              await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
+              expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
+            });
+          });
+        });
+
+        it(`should not load the label from the cache`, async (): Promise<void> => {
           expect.assertions(2);
 
           await expect(githubApiIssueLabelsService.fetchLabelByName(labelName)).rejects.toThrow(
             new Error(`graphql error`)
           );
 
-          expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
+          expect(loadLabelFromCacheSpy).not.toHaveBeenCalled();
         });
       });
 
-      describe(`when the label was successfully fetched`, (): void => {
-        let githubApiGetLabel: IGithubApiGetLabel;
-
+      describe(`when the label was cached`, (): void => {
         beforeEach((): void => {
-          githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>();
-
-          graphqlMock.mockResolvedValue(githubApiGetLabel);
+          hasLabelInCacheSpy.mockReturnValue(true);
         });
 
-        describe(`when the label was not found`, (): void => {
-          beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
-              repository: {
-                label: null,
-              },
-            });
+        it(`should load the label from the cache`, async (): Promise<void> => {
+          expect.assertions(2);
 
-            graphqlMock.mockResolvedValue(githubApiGetLabel);
-          });
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
-          it(`should log about not finding this label`, async (): Promise<void> => {
-            expect.assertions(4);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
-              `Could not fetch the label`,
-              `value-${labelName}`
-            );
-            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerDebugSpy).toHaveBeenCalledWith(`Are you sure it exists in your repository?`);
-          });
-
-          it(`should annotate about not finding this label`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
-            expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL, {
-              file: `abstract-github-api-labels.service.ts`,
-              startLine: 102,
-              title: `Error`,
-            });
-          });
-
-          it(`should return null`, async (): Promise<void> => {
-            expect.assertions(1);
-
-            const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(result).toBeNull();
-          });
-
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
-
-          it(`should not log about finding the label`, async (): Promise<void> => {
-            expect.assertions(2);
-
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
-
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-            expect(issueProcessorLoggerInfoSpy).not.toHaveBeenCalledWith(`green-Found the label`, `value-${labelName}`);
-          });
+          expect(loadLabelFromCacheSpy).toHaveBeenCalledTimes(1);
+          expect(loadLabelFromCacheSpy).toHaveBeenCalledWith(labelName);
         });
 
-        describe(`when the label was found`, (): void => {
-          beforeEach((): void => {
-            githubApiGetLabel = createHydratedMock<IGithubApiGetLabel>({
-              repository: {
-                label: createHydratedMock<IGithubApiLabel>({
-                  id: `dummy-id`,
-                  name: labelName,
-                }),
-              },
-            });
+        it(`should return the cached label`, async (): Promise<void> => {
+          expect.assertions(1);
 
-            graphqlMock.mockResolvedValue(githubApiGetLabel);
-          });
+          const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
-          it(`should log about finding the label`, async (): Promise<void> => {
-            expect.assertions(2);
+          expect(result).toStrictEqual(cachedLabel);
+        });
 
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
+        it(`should not fetch the label`, async (): Promise<void> => {
+          expect.assertions(2);
 
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
-            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
-              2,
-              `green-Found the label`,
-              `value-${labelName}`
-            );
-          });
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
-          it(`should return the label`, async (): Promise<void> => {
-            expect.assertions(1);
+          expect(octokitServiceGetOctokitSpy).not.toHaveBeenCalled();
+          expect(graphqlMock).not.toHaveBeenCalled();
+        });
 
-            const result = await githubApiIssueLabelsService.fetchLabelByName(labelName);
+        it(`should not log an error`, async (): Promise<void> => {
+          expect.assertions(1);
 
-            expect(result).toStrictEqual({
-              id: `dummy-id`,
-              name: labelName,
-            });
-          });
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
 
-          it(`should increase the statistic regarding the API issues queries calls by 1`, async (): Promise<void> => {
-            expect.assertions(2);
+          expect(issueProcessorLoggerErrorSpy).not.toHaveBeenCalled();
+        });
 
-            await githubApiIssueLabelsService.fetchLabelByName(labelName);
+        it(`should not annotate`, async (): Promise<void> => {
+          expect.assertions(1);
 
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledTimes(1);
-            expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).toHaveBeenCalledWith();
-          });
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+          expect(annotationsServiceErrorSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not increase the statistic regarding the API issues queries calls`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesQueriesCountSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not cache the label`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await githubApiIssueLabelsService.fetchLabelByName(labelName);
+
+          expect(addLabelToCacheSpy).not.toHaveBeenCalled();
         });
       });
     });
@@ -1016,6 +1160,210 @@ describe(`GithubApiIssueLabelsService`, (): void => {
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
+        });
+      });
+    });
+
+    describe(`hasLabelInCache$$()`, (): void => {
+      let labelName: string;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let githubApiLabelsCacheServiceHasSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        labelName = faker.random.word();
+        githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        githubApiLabelsCacheServiceHasSpy = jest.spyOn(GithubApiLabelsCacheService, `has`).mockImplementation();
+      });
+
+      it(`should log about checking if the label was cached`, (): void => {
+        expect.assertions(2);
+
+        githubApiIssueLabelsService.hasLabelInCache$$(labelName);
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Checking if the label`,
+          `value-${labelName}`,
+          `whiteBright-exists in the cache`
+        );
+      });
+
+      it(`should check if the label was cached`, (): void => {
+        expect.assertions(2);
+
+        githubApiIssueLabelsService.hasLabelInCache$$(labelName);
+
+        expect(githubApiLabelsCacheServiceHasSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsCacheServiceHasSpy).toHaveBeenCalledWith(labelName);
+      });
+
+      describe(`when the label was not cached`, (): void => {
+        beforeEach((): void => {
+          githubApiLabelsCacheServiceHasSpy.mockReturnValue(false);
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = githubApiIssueLabelsService.hasLabelInCache$$(labelName);
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the label not cached`, (): void => {
+        beforeEach((): void => {
+          githubApiLabelsCacheServiceHasSpy.mockReturnValue(true);
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = githubApiIssueLabelsService.hasLabelInCache$$(labelName);
+
+          expect(result).toBeTrue();
+        });
+      });
+    });
+
+    describe(`addLabelToCache$$()`, (): void => {
+      let label: IGithubApiLabel;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let githubApiLabelsCacheServiceSetSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        label = createHydratedMock<IGithubApiLabel>();
+        githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        githubApiLabelsCacheServiceSetSpy = jest.spyOn(GithubApiLabelsCacheService, `set`).mockImplementation();
+      });
+
+      it(`should log about caching the label`, (): void => {
+        expect.assertions(2);
+
+        githubApiIssueLabelsService.addLabelToCache$$(label);
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Adding the label`,
+          `value-${label.name}`,
+          `whiteBright-to the cache`
+        );
+      });
+
+      it(`should cache the label`, (): void => {
+        expect.assertions(2);
+
+        githubApiIssueLabelsService.addLabelToCache$$(label);
+
+        expect(githubApiLabelsCacheServiceSetSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsCacheServiceSetSpy).toHaveBeenCalledWith(label.name, label);
+      });
+    });
+
+    describe(`loadLabelFromCache$$()`, (): void => {
+      let labelName: string;
+      let label: IGithubApiLabel;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let githubApiLabelsCacheServiceGetSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        labelName = faker.random.word();
+        label = createHydratedMock<IGithubApiLabel>({
+          id: `dummy-id`,
+        });
+        githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        githubApiLabelsCacheServiceGetSpy = jest
+          .spyOn(GithubApiLabelsCacheService, `get`)
+          .mockImplementation((): never => {
+            throw new Error(`error`);
+          });
+      });
+
+      it(`should get the cached label`, (): void => {
+        expect.assertions(3);
+
+        expect((): IGithubApiLabel | never => githubApiIssueLabelsService.loadLabelFromCache$$(labelName)).toThrow(
+          new Error(`error`)
+        );
+
+        expect(githubApiLabelsCacheServiceGetSpy).toHaveBeenCalledTimes(1);
+        expect(githubApiLabelsCacheServiceGetSpy).toHaveBeenCalledWith(labelName);
+      });
+
+      describe(`when the cached label could not be loaded`, (): void => {
+        beforeEach((): void => {
+          githubApiLabelsCacheServiceGetSpy.mockImplementation((): never => {
+            throw new Error(`error`);
+          });
+        });
+
+        it(`should throw an error`, (): void => {
+          expect.assertions(1);
+
+          expect((): IGithubApiLabel | never => githubApiIssueLabelsService.loadLabelFromCache$$(labelName)).toThrow(
+            new Error(`error`)
+          );
+        });
+
+        it(`should not log`, (): void => {
+          expect.assertions(2);
+
+          expect((): IGithubApiLabel | never => githubApiIssueLabelsService.loadLabelFromCache$$(labelName)).toThrow(
+            new Error(`error`)
+          );
+
+          expect(issueProcessorLoggerInfoSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe(`when the cached label was successfully loaded`, (): void => {
+        beforeEach((): void => {
+          githubApiLabelsCacheServiceGetSpy.mockReturnValue(label);
+        });
+
+        it(`should log about finding successfully the label in the cache`, (): void => {
+          expect.assertions(2);
+
+          githubApiIssueLabelsService.loadLabelFromCache$$(labelName);
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            1,
+            `The label`,
+            `value-${labelName}`,
+            `whiteBright-was found in the cache`
+          );
+        });
+
+        it(`should log about returning the cached label`, (): void => {
+          expect.assertions(2);
+
+          githubApiIssueLabelsService.loadLabelFromCache$$(labelName);
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Returning the cached version`,
+            `white-->`,
+            `value-${label.id}`
+          );
+        });
+
+        it(`should return the cached label`, (): void => {
+          expect.assertions(1);
+
+          const result = githubApiIssueLabelsService.loadLabelFromCache$$(labelName);
+
+          expect(result).toStrictEqual(label);
         });
       });
     });
