@@ -1,5 +1,27 @@
 # Sonia stale action
 
+# [1.48.0](https://github.com/Sonia-corporation/stale/compare/1.47.0...1.48.0) (2022-02-19)
+
+
+### :books: Documentation
+
+* **cache:** mention in the docs where and why there is some cache ([9ce0445](https://github.com/Sonia-corporation/stale/commit/9ce0445fd2573fa9a720fa3fa8f08108f62286d2))
+
+
+### :bug: Bug Fixes
+
+* **logs:** avoid showing a success log on error while fetching a label ([26c07bf](https://github.com/Sonia-corporation/stale/commit/26c07bf1b29236d5b00bf9776dfb0b725e5c10bd)), closes [#507](https://github.com/Sonia-corporation/stale/issues/507)
+  When a label could not be found, a log saying the label was loaded was display.
+It was misleading and now it's no longer shown on error.
+
+
+### :zap: Performance Improvements
+
+* **cache:** cache the fetching of labels to reduce the amount of API calls ([9b78d0d](https://github.com/Sonia-corporation/stale/commit/9b78d0dc38774502d56e2fb9f43f724d1cfc6278)), closes [#270](https://github.com/Sonia-corporation/stale/issues/270)
+  Every request to fetch a single label, like the stale one, will be cached for the whole workflow.
+This may reduce drastically the number of API calls made to GitHub.
+The limits related to your GitHub token wll like this.
+
 # [1.47.0](https://github.com/Sonia-corporation/stale/compare/1.46.0...1.47.0) (2022-02-15)
 
 
