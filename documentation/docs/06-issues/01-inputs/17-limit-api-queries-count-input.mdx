@@ -23,6 +23,11 @@ If the limit is reached, the ongoing processed issue will finish it's processing
 This can be useful when you want to play it safe with this action.  
 This can be also very useful if you have a lot of issues to process, and you want to limit the quotas of your associated [GitHub token](../../github-token-input).
 
+### Cache {#cache}
+
+Some queries are cached during the workflow when loading static resources like the labels.  
+This will reduce the number of calls made to the GitHub API, which will also reduce the quotas consumed for your GitHub token.
+
 ### Example {#example}
 
 ```yml {6}
