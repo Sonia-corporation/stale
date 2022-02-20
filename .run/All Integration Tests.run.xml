@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Integration Tests" type="JavaScriptTestRunnerJest">
     <node-interpreter value="project" />
-    <node-options value="" />
+    <node-options value="--max_old_space_size=5000" />
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
     <jest-options value="--selectProjects integration-issues integration-pull-requests" />

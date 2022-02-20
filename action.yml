@@ -80,6 +80,10 @@ inputs:
     description: 'Only allow the processing of issues that contains one of those project cards (multiline).'
     required: false
     default: ''
+  issue-only-any-milestones:
+    description: 'Only allow the processing of issues that contains one of those milestones (multiline).'
+    required: false
+    default: ''
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
