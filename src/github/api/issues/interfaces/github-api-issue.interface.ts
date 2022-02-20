@@ -12,7 +12,7 @@ export interface IGithubApiIssue {
   readonly id: IUuid;
   readonly labels: IGithubApiLabelsPagination;
   readonly locked: boolean;
-  readonly milestone: IGithubApiMilestone | null | undefined;
+  readonly milestone?: IGithubApiMilestone;
   readonly number: IGithubApiIssueNumber;
   readonly projectCards: IGithubApiProjectCardsPagination;
   readonly updatedAt: IIso8601Date;
