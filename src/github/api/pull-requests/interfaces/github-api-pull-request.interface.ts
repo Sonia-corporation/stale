@@ -1,5 +1,6 @@
 import { IGithubApiAssigneesPagination } from '@github/api/labels/interfaces/github-api-assignees-pagination.interface';
 import { IGithubApiLabelsPagination } from '@github/api/labels/interfaces/github-api-labels-pagination.interface';
+import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
 import { IGithubApiProjectCardsPagination } from '@github/api/projects/interfaces/github-api-project-cards-pagination.interface';
 import { IGithubApiPullRequestNumber } from '@github/api/pull-requests/github-api-pull-request-number';
 import { IGithubApiReference } from '@github/api/references/interfaces/github-api-reference.interface';
@@ -14,6 +15,7 @@ export interface IGithubApiPullRequest {
   readonly isDraft: boolean;
   readonly labels: IGithubApiLabelsPagination;
   readonly locked: boolean;
+  readonly milestone?: IGithubApiMilestone;
   readonly number: IGithubApiPullRequestNumber;
   readonly projectCards: IGithubApiProjectCardsPagination;
   readonly updatedAt: IIso8601Date;

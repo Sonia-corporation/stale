@@ -41,6 +41,12 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
             name
             id
           }
+          milestone {
+            id
+            number
+            state
+            title
+          }
         }
       }
     }
