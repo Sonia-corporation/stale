@@ -3,7 +3,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
@@ -108,5 +108,10 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
     );
 
     return false;
+  }
+
+  public shouldIncludeAnyWhiteListedMilestone$$(): boolean {
+    // @todo add the feature
+    return true;
   }
 }

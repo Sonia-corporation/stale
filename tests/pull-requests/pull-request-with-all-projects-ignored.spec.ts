@@ -1,4 +1,4 @@
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import { createHydratedMock } from 'ts-auto-mock';
 

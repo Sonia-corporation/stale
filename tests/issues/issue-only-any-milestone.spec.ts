@@ -1,24 +1,44 @@
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
-import { IGithubApiProjectCardsPagination } from '@github/api/projects/interfaces/github-api-project-cards-pagination.interface';
+import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Issue any of the required project card`, (): void => {
+describe(`Issue any of the required milestone`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  describe(`when the input "issue-only-any-project-cards" contains at least one project card`, (): void => {
+  describe(`when the input "issue-only-any-milestones" contains at least one milestone`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueOnlyAnyProjectCards: [`project-x`],
+        issueOnlyAnyMilestones: [`milestone-x`],
       });
     });
 
-    describe(`when an issue has no project card`, (): void => {
+    describe(`when an issue has no milestone`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projectCards: createHydratedMock<IGithubApiProjectCardsPagination>({
-            nodes: [],
+          milestone: null,
+        });
+      });
+
+      it(`should ignore the issue`, async (): Promise<void> => {
+        expect.assertions(11);
+
+        await issueSut.process();
+
+        issueSut.expect({
+          calledApiIssuesQueriesCount: 1,
+          ignoredIssuesCount: 1,
+          processedIssuesCount: 1,
+        });
+      });
+    });
+
+    describe(`when an issue has one milestone which does not match`, (): void => {
+      beforeEach((): void => {
+        issueSut.addIssue({
+          locked: false,
+          milestone: createHydratedMock<IGithubApiMilestone>({
+            title: `milestone-y`,
           }),
         });
       });
@@ -36,47 +56,12 @@ describe(`Issue any of the required project card`, (): void => {
       });
     });
 
-    describe(`when an issue has one project card which does not match`, (): void => {
+    describe(`when an issue has one milestone which does match`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projectCards: createHydratedMock<IGithubApiProjectCardsPagination>({
-            nodes: [
-              createHydratedMock<IGithubApiProjectCard>({
-                project: {
-                  name: `project-y`,
-                },
-              }),
-            ],
-          }),
-        });
-      });
-
-      it(`should ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
-
-        await issueSut.process();
-
-        issueSut.expect({
-          calledApiIssuesQueriesCount: 1,
-          ignoredIssuesCount: 1,
-          processedIssuesCount: 1,
-        });
-      });
-    });
-
-    describe(`when an issue has one project card which does match`, (): void => {
-      beforeEach((): void => {
-        issueSut.addIssue({
-          locked: false,
-          projectCards: createHydratedMock<IGithubApiProjectCardsPagination>({
-            nodes: [
-              createHydratedMock<IGithubApiProjectCard>({
-                project: {
-                  name: `project-x`,
-                },
-              }),
-            ],
+          milestone: createHydratedMock<IGithubApiMilestone>({
+            title: `milestone-x`,
           }),
         });
       });

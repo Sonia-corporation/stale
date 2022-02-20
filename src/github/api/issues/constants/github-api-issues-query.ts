@@ -36,6 +36,12 @@ export const GITHUB_API_ISSUES_QUERY = `
               }
             }
           }
+          milestone {
+            id
+            number
+            state
+            title
+          }
         }
       }
     }

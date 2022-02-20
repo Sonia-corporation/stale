@@ -17,6 +17,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueIgnoreBeforeCreationDate: ``,
   issueLimitApiMutationsCount: -1,
   issueLimitApiQueriesCount: -1,
+  issueOnlyAnyMilestones: [],
   issueOnlyAnyProjectCards: [],
   issueProcessing: true,
   issueStaleComment: `stale-comment`,
