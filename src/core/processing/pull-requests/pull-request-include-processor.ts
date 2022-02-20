@@ -111,62 +111,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
   }
 
   public shouldIncludeAnyWhiteListedMilestone$$(): boolean {
-    this.processor.logger.info(
-      `Checking if this pull request should only be processed based on any of the associated milestones...`
-    );
-
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
-
-    if (_.isEmpty(pullRequestsInputs.pullRequestOnlyAnyMilestones)) {
-      this.processor.logger.info(
-        `The input`,
-        LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_MILESTONES),
-        LoggerFormatService.whiteBright(
-          `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
-        )
-      );
-
-      return true;
-    }
-
-    this.processor.logger.info(
-      `The input`,
-      LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_MILESTONES),
-      LoggerFormatService.whiteBright(
-        `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
-      )
-    );
-    const { milestone } = this.processor.item;
-
-    if (_.isNil(milestone)) {
-      this.processor.logger.info(`Not containing a milestone. Skipping the processing of this pull request...`);
-
-      return false;
-    }
-
-    this.processor.logger.info(
-      `Found the milestone`,
-      LoggerService.value(milestone.title),
-      LoggerFormatService.whiteBright(`on this pull request`)
-    );
-
-    const isMilestoneMatched: boolean = _.includes(pullRequestsInputs.pullRequestOnlyAnyMilestones, milestone.title);
-
-    if (isMilestoneMatched) {
-      this.processor.logger.info(
-        `Containing one of the required milestone`,
-        LoggerFormatService.white(`->`),
-        LoggerService.value(milestone.title)
-      );
-      this.processor.logger.info(`Continuing the processing for this pull request...`);
-
-      return true;
-    }
-
-    this.processor.logger.info(
-      `Not containing any of the required milestone. Skipping the processing of this pull request...`
-    );
-
-    return false;
+    // @todo add the feature
+    return true;
   }
 }

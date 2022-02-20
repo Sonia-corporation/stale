@@ -37,7 +37,6 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreDraft: false,
   pullRequestLimitApiMutationsCount: -1,
   pullRequestLimitApiQueriesCount: -1,
-  pullRequestOnlyAnyMilestones: [],
   pullRequestOnlyAnyProjectCards: [],
   pullRequestProcessing: true,
   pullRequestStaleComment: `stale-comment`,

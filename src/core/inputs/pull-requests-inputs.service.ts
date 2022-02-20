@@ -69,9 +69,6 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
           required: false,
         }
       ),
-      pullRequestOnlyAnyMilestones: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_MILESTONES, {
-        required: false,
-      }),
       pullRequestOnlyAnyProjectCards: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_PROJECT_CARDS, {
         required: false,
       }),
