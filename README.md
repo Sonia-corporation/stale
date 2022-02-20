@@ -139,6 +139,7 @@ All the inputs that are used both for issues and pull requests.
 | [pull-request-limit-api-queries-count](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-limit-api-queries-count-input)         | Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).                                           | `-1`    |
 | [pull-request-limit-api-mutations-count](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-limit-api-mutations-count-input)     | Limit the quantity of API mutations calls performed during the processing of pull requests (-1 for unlimited).                                         | `-1`    |
 | [pull-request-only-any-project-cards](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-project-cards-input)           | Only allow the processing of pull requests that contains one of those project cards (multiline).                                                       |         |
+| [pull-request-only-any-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-milestones-input)                 | Only allow the processing of pull requests that contains one of those milestones (multiline).                                                          |         |
 
 ## All the pull requests outputs
 

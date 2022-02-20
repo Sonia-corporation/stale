@@ -18,6 +18,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestIgnoreDraft: boolean;
   readonly pullRequestLimitApiMutationsCount: number;
   readonly pullRequestLimitApiQueriesCount: number;
+  readonly pullRequestOnlyAnyMilestones: string[];
   readonly pullRequestOnlyAnyProjectCards: string[];
   readonly pullRequestProcessing: boolean;
   readonly pullRequestStaleComment: IComment | '';
