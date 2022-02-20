@@ -1,5 +1,13 @@
 # Sonia stale action
 
+# [1.50.0](https://github.com/Sonia-corporation/stale/compare/1.49.0...1.50.0) (2022-02-20)
+
+
+### :rocket: Features
+
+* **milestone:** add new input `issue-only-any-milestones` ([8d3fffd](https://github.com/Sonia-corporation/stale/commit/8d3fffdc039d567043eba50fe027335046e02bbf)), closes [#310](https://github.com/Sonia-corporation/stale/issues/310)
+  This new input will let you process only the issues that contains one of the specified milestone.
+
 # [1.49.0](https://github.com/Sonia-corporation/stale/compare/1.48.0...1.49.0) (2022-02-19)
 
 
