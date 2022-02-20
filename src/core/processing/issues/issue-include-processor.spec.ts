@@ -836,7 +836,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                milestone: undefined,
+                milestone: null,
               },
             });
             issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);

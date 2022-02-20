@@ -16,7 +16,7 @@ describe(`Issue any of the required milestone`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          milestone: undefined,
+          milestone: null,
         });
       });
 

@@ -165,10 +165,6 @@ inputs:
     description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
     required: false
     default: ''
-  pull-request-only-any-milestones:
-    description: 'Only allow the processing of pull requests that contains one of those milestones (multiline).'
-    required: false
-    default: ''
 outputs:
   # Issues outputs
   processed-issues-count:

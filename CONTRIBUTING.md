@@ -174,7 +174,6 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the pull request creation date is before x date and stop the processing if this is the case (coming from the `pull-request-ignore-before-creation-date` input)
 - Check if the pull request is a draft and stop the processing if this is the case (coming from the `pull-request-ignore-draft` input)
 - Check if the input `pull-request-only-any-project-cards` contains some project cards. If this is the case and the pull request has at least one project card matching linked to it, the processing will continue, else the processing will stop.
-- Check if the input `pull-request-only-any-milestones` contains some milestones. If this is the case and the pull request has at least one milestone matching linked to it, the processing will continue, else the processing will stop.
 - Check if the pull request has already a stale state (stale label)
   - If the pull request has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
