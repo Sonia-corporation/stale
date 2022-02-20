@@ -2,7 +2,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestIncludeProcessor } from '@core/processing/pull-requests/pull-request-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -36,12 +36,16 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
     describe(`shouldInclude()`, (): void => {
       let shouldIncludeAnyWhiteListedProjectCardSpy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedMilestoneSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
 
         shouldIncludeAnyWhiteListedProjectCardSpy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedProjectCard$$`)
+          .mockImplementation();
+        shouldIncludeAnyWhiteListedMilestoneSpy = jest
+          .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedMilestone$$`)
           .mockImplementation();
       });
 
@@ -59,12 +63,41 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(true);
         });
 
-        it(`should return true`, (): void => {
-          expect.assertions(1);
+        it(`should check if the pull request should be processed because she belongs to any of the white-listed milestone`, (): void => {
+          expect.assertions(2);
 
-          const result = pullRequestIncludeProcessor.shouldInclude();
+          pullRequestIncludeProcessor.shouldInclude();
 
-          expect(result).toBeTrue();
+          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledWith();
+        });
+
+        describe(`when the pull request belongs to any of the white-listed milestone`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(true);
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldInclude();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the pull request does not belong to any of the white-listed milestone`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(false);
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldInclude();
+
+            expect(result).toBeFalse();
+          });
         });
       });
 

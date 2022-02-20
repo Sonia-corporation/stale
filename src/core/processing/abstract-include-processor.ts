@@ -1,6 +1,6 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import _ from 'lodash';
 
@@ -19,7 +19,7 @@ export abstract class AbstractIncludeProcessor<
   public shouldInclude(): boolean {
     this.processor.logger.info(`Checking if this ${this.type} should be included in the processing...`);
 
-    return this.shouldIncludeAnyWhiteListedProjectCard$$();
+    return this.shouldIncludeAnyWhiteListedProjectCard$$() && this.shouldIncludeAnyWhiteListedMilestone$$();
   }
 
   protected _getProjectNames(projectCards: ReadonlyArray<IGithubApiProjectCard>): string[] {
@@ -27,4 +27,6 @@ export abstract class AbstractIncludeProcessor<
   }
 
   public abstract shouldIncludeAnyWhiteListedProjectCard$$(): boolean;
+
+  public abstract shouldIncludeAnyWhiteListedMilestone$$(): boolean;
 }

@@ -2,7 +2,8 @@ import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { IssueIncludeProcessor } from '@core/processing/issues/issue-include-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -36,12 +37,16 @@ describe(`IssueIncludeProcessor`, (): void => {
 
     describe(`shouldInclude()`, (): void => {
       let shouldIncludeAnyWhiteListedProjectCardSpy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedMilestoneSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
 
         shouldIncludeAnyWhiteListedProjectCardSpy = jest
           .spyOn(issueIncludeProcessor, `shouldIncludeAnyWhiteListedProjectCard$$`)
+          .mockImplementation();
+        shouldIncludeAnyWhiteListedMilestoneSpy = jest
+          .spyOn(issueIncludeProcessor, `shouldIncludeAnyWhiteListedMilestone$$`)
           .mockImplementation();
       });
 
@@ -59,12 +64,41 @@ describe(`IssueIncludeProcessor`, (): void => {
           shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(true);
         });
 
-        it(`should return true`, (): void => {
-          expect.assertions(1);
+        it(`should check if the issue should be processed because she belongs to any of the white-listed milestone`, (): void => {
+          expect.assertions(2);
 
-          const result = issueIncludeProcessor.shouldInclude();
+          issueIncludeProcessor.shouldInclude();
 
-          expect(result).toBeTrue();
+          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledWith();
+        });
+
+        describe(`when the issue belongs to any of the white-listed milestone`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(true);
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldInclude();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the issue does not belong to any of the white-listed milestone`, (): void => {
+          beforeEach((): void => {
+            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(false);
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldInclude();
+
+            expect(result).toBeFalse();
+          });
         });
       });
 
@@ -698,6 +732,268 @@ describe(`IssueIncludeProcessor`, (): void => {
               expect.assertions(1);
 
               const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
+
+              expect(result).toBeTrue();
+            });
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyWhiteListedMilestone$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIncludeProcessor.processor.logger, `info`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueOnlyAnyMilestones: [],
+          })
+        );
+      });
+
+      it(`should log about checking the issue-only-any-milestones input`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue should only be processed based on any of the associated milestones...`
+        );
+      });
+
+      it(`should get the issue inputs`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue-only-any-milestones input is empty`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyAnyMilestones: [],
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this issue (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-any-milestones`,
+            `whiteBright-is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue-only-any-milestones input is not empty`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyAnyMilestones: [`dummy-milestone`],
+            })
+          );
+        });
+
+        it(`should log about checking if this issue should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-any-milestones`,
+            `whiteBright-is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+          );
+        });
+
+        describe(`when the issue has no milestone`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                milestone: null,
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyMilestones: [`dummy-milestone`],
+                })
+              );
+          });
+
+          it(`should log about not containing any milestone (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing a milestone. Skipping the processing of this issue...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has a milestone`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                milestone: createHydratedMock<IGithubApiMilestone>({
+                  title: `dummy-milestone`,
+                }),
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyMilestones: [`dummy-milestone`],
+                })
+              );
+          });
+
+          describe(`when none of the milestones match`, (): void => {
+            beforeEach((): void => {
+              issuesInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyMilestones: [`dummy-other-milestone`],
+                })
+              );
+            });
+
+            it(`should log the milestone name`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found the milestone`,
+                `value-dummy-milestone`,
+                `whiteBright-on this issue`
+              );
+            });
+
+            it(`should log about not containing any white-listed milestone (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required milestone. Skipping the processing of this issue...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when at least one of the milestones match`, (): void => {
+            beforeEach((): void => {
+              issuesInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueOnlyAnyMilestones: [`dummy-milestone`],
+                })
+              );
+            });
+
+            it(`should log the milestone name`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found the milestone`,
+                `value-dummy-milestone`,
+                `whiteBright-on this issue`
+              );
+            });
+
+            it(`should log about finding one milestone in common (continuing the processing)`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Containing one of the required milestone`,
+                `white-->`,
+                `value-dummy-milestone`
+              );
+            });
+
+            it(`should log continuing the processing`, (): void => {
+              expect.assertions(2);
+
+              issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `Continuing the processing for this issue...`
+              );
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = issueIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
 
               expect(result).toBeTrue();
             });

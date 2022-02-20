@@ -28,9 +28,9 @@ jobs:
           issue-stale-comment: |
             [~frozen :ice_cube:]: https://img.shields.io/badge/-frozen-D6FFFA.svg
             [~waiting :hourglass:]: https://img.shields.io/badge/-waiting-F5CD79.svg
-            [~dependency-fix]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
+            [~dependency-fix :wrench:]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
             [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
-            [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
+            [~help wanted :sos:]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
 
             :warning: **Warning!** :warning:
             This issue was marked as stale due to a lack of activity for 30 days. :worried:
@@ -61,7 +61,7 @@ jobs:
             [~waiting :hourglass:]: https://img.shields.io/badge/-waiting-F5CD79.svg
             [~dependency-fix :wrench:]: https://img.shields.io/badge/-dependency%20fix-c44569.svg
             [~dependencies :package:]: https://img.shields.io/badge/-dependencies-1e3799.svg
-            [~help-wanted]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
+            [~help wanted :sos:]: https://img.shields.io/badge/-help%20wanted-63cdda.svg
 
             :warning: **Warning!** :warning:
             This pull request was marked as stale due to a lack of activity for 30 days. :worried:

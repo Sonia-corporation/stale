@@ -4,7 +4,7 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
-import { IGithubApiProjectCard } from '@github/api/labels/interfaces/github-api-project-card.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
@@ -102,6 +102,66 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     this.processor.logger.info(
       `Not containing any of the required project card. Skipping the processing of this issue...`
+    );
+
+    return false;
+  }
+
+  public shouldIncludeAnyWhiteListedMilestone$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed based on any of the associated milestones...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (_.isEmpty(issuesInputs.issueOnlyAnyMilestones)) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_ANY_MILESTONES),
+        LoggerFormatService.whiteBright(
+          `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+        )
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_ANY_MILESTONES),
+      LoggerFormatService.whiteBright(
+        `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+      )
+    );
+    const { milestone } = this.processor.item;
+
+    if (_.isNil(milestone)) {
+      this.processor.logger.info(`Not containing a milestone. Skipping the processing of this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found the milestone`,
+      LoggerService.value(milestone.title),
+      LoggerFormatService.whiteBright(`on this issue`)
+    );
+
+    const isMilestoneMatched: boolean = _.includes(issuesInputs.issueOnlyAnyMilestones, milestone.title);
+
+    if (isMilestoneMatched) {
+      this.processor.logger.info(
+        `Containing one of the required milestone`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(milestone.title)
+      );
+      this.processor.logger.info(`Continuing the processing for this issue...`);
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `Not containing any of the required milestone. Skipping the processing of this issue...`
     );
 
     return false;
