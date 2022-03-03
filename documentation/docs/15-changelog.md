@@ -13,7 +13,7 @@ tags:
 
 ### :rocket: Features {#rocket-features}
 
-- **milestone:** add new input `pull-request-only-any-milestones` ([6b9aa5a](https://github.com/Sonia-corporation/stale/commit/6b9aa5ad518326929f1531269deabbff2fd7f543)), closes [#518](https://github.com/Sonia-corporation/stale/issues/518)
+- **milestone:** add new input `pull-request-only-any-milestones` ([6b9aa5a](https://github.com/Sonia-corporation/stale/commit/6b9aa5ad518326929f1531269deabbff2fd7f543)), closes [#516](https://github.com/Sonia-corporation/stale/issues/516)
   This new input will let you process only the pull requests that contains one of the specified milestone.
 
 # [1.50.0](https://github.com/Sonia-corporation/stale/compare/1.49.0...1.50.0) (2022-02-20)

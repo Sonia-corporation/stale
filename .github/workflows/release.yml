@@ -13,7 +13,7 @@ jobs:
       CURRENT_TAG: ${{ steps.save-current-tag.outputs.CURRENT_TAG }}
     steps:
       - name: Checkout develop
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
         with:
           ref: develop
       - name: Reset branch
@@ -35,9 +35,9 @@ jobs:
     needs: [CurrentTag]
     steps:
       - name: Checkout
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
+        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -76,12 +76,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [CurrentTag, Release]
     steps:
-      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+      - uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
         with:
           # Since the previous job (Release) is doing a commit containing the new website changelog
           # We need to specify exactly the ref so that we are sure to load the last commit from the branch
           ref: master
-      - uses: actions/setup-node@1f8c6b94b26d0feae1e387ca63ccbdc44d27b561 # renovate: tag=v2
+      - uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -119,7 +119,7 @@ jobs:
     needs: [CurrentTag, Release]
     steps:
       - name: Checkout develop
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # renovate: tag=v2
+        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
         with:
           ref: develop
       - name: Reset branch
@@ -141,7 +141,7 @@ jobs:
         run: echo 'The current tag is not the same after the release. A new tag has been created'
       - name: Create PR from master to develop
         if: needs.CurrentTag.outputs.CURRENT_TAG != steps.latest-tag.outputs.tag
-        uses: peter-evans/create-pull-request@f22a7da129c901513876a2380e2dae9f8e145330 # renovate: tag=v3
+        uses: peter-evans/create-pull-request@18f7dc018cc2cd597073088f7c7591b9d1c02672 # tag=v3
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(develop): merge master into develop due to new version ${{ steps.latest-tag.outputs.tag }}'
