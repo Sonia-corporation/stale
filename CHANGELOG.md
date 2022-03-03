@@ -3,19 +3,8 @@
 # [1.52.0](https://github.com/Sonia-corporation/stale/compare/1.51.0...1.52.0) (2022-03-03)
 
 
-### :bug: Bug Fixes
-
-* **deps:** update dependency luxon to v2.3.1 ([#533](https://github.com/Sonia-corporation/stale/issues/533)) ([8d406f6](https://github.com/Sonia-corporation/stale/commit/8d406f6443b4a1613104502f9b1b73f5d74e6b8e))
-  Co-authored-by: Renovate Bot <bot@renovateapp.com>
-Co-authored-by: TESTELIN Geoffrey <geoffrey.testelin@gmail.com>
-* **deps:** update docusaurus monorepo to v2.0.0-beta.16 (patch) ([#536](https://github.com/Sonia-corporation/stale/issues/536)) ([9858196](https://github.com/Sonia-corporation/stale/commit/985819672a6039f902cefcb4ac7603bbb5810db3))
-  Co-authored-by: Renovate Bot <bot@renovateapp.com>
-
-
 ### :rocket: Features
 
-* **milestone:** add new input `pull-request-only-any-milestones` ([419d444](https://github.com/Sonia-corporation/stale/commit/419d444956c0c013f7fd78bf7f3d8811e8327649)), closes [#516](https://github.com/Sonia-corporation/stale/issues/516)
-  This new input will let you process only the pull requests that contains one of the specified milestone.
 * **input:** add new inputs to ignore any project cards ([#551](https://github.com/Sonia-corporation/stale/issues/551)) ([ba79907](https://github.com/Sonia-corporation/stale/commit/ba799071e7eff6cbe4d99cb2e30a2ef177d4bb93))
 
 # [1.51.0](https://github.com/Sonia-corporation/stale/compare/1.50.0...1.51.0) (2022-02-20)
