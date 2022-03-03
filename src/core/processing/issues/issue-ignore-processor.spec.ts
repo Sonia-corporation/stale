@@ -4,6 +4,7 @@ import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-proce
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { DateTime } from 'luxon';
@@ -40,6 +41,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
       let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
+      let hasAnyIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
@@ -51,6 +53,9 @@ describe(`IssueIgnoreProcessor`, (): void => {
         isLockedSpy = jest.spyOn(issueIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
         hasAnyIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredAssignees$$`).mockImplementation();
+        hasAnyIgnoredProjectCardsSpy = jest
+          .spyOn(issueIgnoreProcessor, `hasAnyIgnoredProjectCards$$`)
+          .mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
         hasAllIgnoredProjectCardsSpy = jest
@@ -171,18 +176,18 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 hasAllIgnoredAssigneesSpy.mockReturnValue(false);
               });
 
-              it(`should check if the issue should ignore all project cards`, (): void => {
+              it(`should check if the issue should ignore any assignees`, (): void => {
                 expect.assertions(2);
 
                 issueIgnoreProcessor.shouldIgnore();
 
-                expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
-                expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledWith();
+                expect(hasAnyIgnoredAssigneesSpy).toHaveBeenCalledTimes(1);
+                expect(hasAnyIgnoredAssigneesSpy).toHaveBeenCalledWith();
               });
 
-              describe(`when the issue should ignore all project cards`, (): void => {
+              describe(`when the issue should ignore any assignees`, (): void => {
                 beforeEach((): void => {
-                  hasAllIgnoredProjectCardsSpy.mockReturnValue(true);
+                  hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
                 });
 
                 it(`should return true`, (): void => {
@@ -194,37 +199,51 @@ describe(`IssueIgnoreProcessor`, (): void => {
                 });
               });
 
-              describe(`when the issue should not ignore all project cards`, (): void => {
+              describe(`when the issue should not ignore any assignees`, (): void => {
                 beforeEach((): void => {
-                  hasAllIgnoredProjectCardsSpy.mockReturnValue(false);
+                  hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
                 });
 
-                it(`should check if the issue has one of the ignored assignees`, (): void => {
+                it(`should check if the issue should ignore all project cards`, (): void => {
                   expect.assertions(2);
 
                   issueIgnoreProcessor.shouldIgnore();
 
-                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                  expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
+                  expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledWith();
                 });
 
-                describe(`when the issue does not have one of the ignored assignees`, (): void => {
+                describe(`when the issue should ignore all project cards`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
+                    hasAllIgnoredProjectCardsSpy.mockReturnValue(true);
                   });
 
-                  it(`should check if the issue should ignore based on the creation date`, (): void => {
+                  it(`should return true`, (): void => {
+                    expect.assertions(1);
+
+                    const result = issueIgnoreProcessor.shouldIgnore();
+
+                    expect(result).toBeTrue();
+                  });
+                });
+
+                describe(`when the issue should not ignore all project cards`, (): void => {
+                  beforeEach((): void => {
+                    hasAllIgnoredProjectCardsSpy.mockReturnValue(false);
+                  });
+
+                  it(`should check if the issue should ignore any project cards`, (): void => {
                     expect.assertions(2);
 
                     issueIgnoreProcessor.shouldIgnore();
 
-                    expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                    expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                    expect(hasAnyIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
+                    expect(hasAnyIgnoredProjectCardsSpy).toHaveBeenCalledWith();
                   });
 
-                  describe(`when the issue should ignore based on the creation date`, (): void => {
+                  describe(`when the issue should ignore any project cards`, (): void => {
                     beforeEach((): void => {
-                      hasIgnoredCreationDateSpy.mockReturnValue(true);
+                      hasAnyIgnoredProjectCardsSpy.mockReturnValue(true);
                     });
 
                     it(`should return true`, (): void => {
@@ -236,32 +255,47 @@ describe(`IssueIgnoreProcessor`, (): void => {
                     });
                   });
 
-                  describe(`when the issue should not ignore based on the creation date`, (): void => {
+                  describe(`when the issue should not ignore any project cards`, (): void => {
                     beforeEach((): void => {
-                      hasIgnoredCreationDateSpy.mockReturnValue(false);
+                      hasAnyIgnoredProjectCardsSpy.mockReturnValue(false);
                     });
 
-                    it(`should return false`, (): void => {
-                      expect.assertions(1);
+                    it(`should check if the issue should be ignored based on its creation date`, (): void => {
+                      expect.assertions(2);
 
-                      const result = issueIgnoreProcessor.shouldIgnore();
+                      issueIgnoreProcessor.shouldIgnore();
 
-                      expect(result).toBeFalse();
+                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
                     });
-                  });
-                });
 
-                describe(`when the issue has one of the ignored assignees`, (): void => {
-                  beforeEach((): void => {
-                    hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
-                  });
+                    describe(`when the issue should be ignored based on its creation date`, (): void => {
+                      beforeEach((): void => {
+                        hasIgnoredCreationDateSpy.mockReturnValue(true);
+                      });
 
-                  it(`should return true`, (): void => {
-                    expect.assertions(1);
+                      it(`should return true`, (): void => {
+                        expect.assertions(1);
 
-                    const result = issueIgnoreProcessor.shouldIgnore();
+                        const result = issueIgnoreProcessor.shouldIgnore();
 
-                    expect(result).toBeTrue();
+                        expect(result).toBeTrue();
+                      });
+                    });
+
+                    describe(`when the issue should not be ignored based on its creation date`, (): void => {
+                      beforeEach((): void => {
+                        hasIgnoredCreationDateSpy.mockReturnValue(false);
+                      });
+
+                      it(`should return false`, (): void => {
+                        expect.assertions(1);
+
+                        const result = issueIgnoreProcessor.shouldIgnore();
+
+                        expect(result).toBeFalse();
+                      });
+                    });
                   });
                 });
               });
@@ -1202,7 +1236,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
               EAnnotationWarningIssue.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
               {
                 file: `issue-ignore-processor.ts`,
-                startLine: 198,
+                startLine: 212,
                 title: `Warning`,
               }
             );
@@ -1410,7 +1444,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
               EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
               {
                 file: `issue-ignore-processor.ts`,
-                startLine: 245,
+                startLine: 259,
                 title: `Warning`,
               }
             );
@@ -1460,6 +1494,214 @@ describe(`IssueIgnoreProcessor`, (): void => {
           expect.assertions(1);
 
           const result = issueIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAnyIgnoredProjectCards$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        issueProcessorLoggerWarningSpy = jest
+          .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
+          .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueIgnoreAnyProjectCards: [`ignored-project-card`],
+          })
+        );
+      });
+
+      it(`should log about checking if the issue has one of the ignored project cards`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue has one of the ignored project cards...`
+        );
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue has one of the ignored project cards`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            item: {
+              projectCards: {
+                nodes: [
+                  createHydratedMock<IGithubApiProjectCard>({
+                    project: { name: `ignored-project-card` },
+                  }),
+                ],
+              },
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        });
+
+        it(`should log about the ignored project card`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Containing one of the ignored project cards`,
+            `white-->`,
+            `value-ignored-project-card`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue does not have one of the ignored proejct cards`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            item: {
+              projectCards: {
+                nodes: [
+                  createHydratedMock<IGithubApiProjectCard>({
+                    project: { name: `not-ignored-project-card` },
+                  }),
+                ],
+              },
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        });
+
+        it(`should log about not containing an ignored project card`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored project card. Continuing...`
+          );
+        });
+
+        describe(`when the issue has more than 20 project cards`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `not-ignored-project-card` },
+                    }),
+                  ],
+                  totalCount: 21,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerWarningSpy = jest
+              .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
+              .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+          });
+
+          it(`should log a warning about finding too many project cards on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+            expect(issueProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+              `Found`,
+              `value-21`,
+              `whiteBright-project cards attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should annotate about finding too many project cards on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `issue-ignore-processor.ts`,
+                startLine: 306,
+                title: `Warning`,
+              }
+            );
+          });
+        });
+
+        describe.each([19, 20])(`when the issue has less or just 20 project cards`, (totalCount: number): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `not-ignored-project-card` },
+                    }),
+                  ],
+                  totalCount,
+                },
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerWarningSpy = jest
+              .spyOn(issueIgnoreProcessor.processor.logger, `warning`)
+              .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+          });
+
+          it(`should not log a warning about finding too many project cards on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(issueProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+          });
+
+          it(`should not annotate about finding too many project cards on this issue since the pagination is not handled`, (): void => {
+            expect.assertions(1);
+
+            issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
+          });
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
 
           expect(result).toBeFalse();
         });

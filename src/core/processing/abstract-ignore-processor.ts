@@ -2,6 +2,7 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import _ from 'lodash';
 
@@ -27,6 +28,7 @@ export abstract class AbstractIgnoreProcessor<
       this.hasAllIgnoredAssignees$$() ||
       this.hasAnyIgnoredAssignees$$() ||
       this.hasAllIgnoredProjectCards$$() ||
+      this.hasAnyIgnoredProjectCards$$() ||
       this.hasIgnoredCreationDate$$()
     );
   }
@@ -54,6 +56,10 @@ export abstract class AbstractIgnoreProcessor<
     return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
   }
 
+  protected _getProjectCardNames(projectCards: ReadonlyArray<IGithubApiProjectCard>): string[] {
+    return _.map(projectCards, (projectCard: Readonly<IGithubApiProjectCard>): string => projectCard.project.name);
+  }
+
   private _isLocked(): boolean {
     return this.processor.item.locked;
   }
@@ -69,4 +75,6 @@ export abstract class AbstractIgnoreProcessor<
   public abstract hasAnyIgnoredLabels$$(): boolean;
 
   public abstract hasAnyIgnoredAssignees$$(): boolean;
+
+  public abstract hasAnyIgnoredProjectCards$$(): boolean;
 }

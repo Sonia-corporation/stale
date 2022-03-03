@@ -13,6 +13,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueIgnoreAllProjectCards: boolean;
   readonly issueIgnoreAnyAssignees: string[];
   readonly issueIgnoreAnyLabels: string[];
+  readonly issueIgnoreAnyProjectCards: string[];
   readonly issueIgnoreBeforeCreationDate: IIso8601Date | '';
   readonly issueLimitApiMutationsCount: number;
   readonly issueLimitApiQueriesCount: number;
