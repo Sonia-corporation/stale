@@ -14,6 +14,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestIgnoreAllProjectCards: boolean;
   readonly pullRequestIgnoreAnyAssignees: string[];
   readonly pullRequestIgnoreAnyLabels: string[];
+  readonly pullRequestIgnoreAnyProjectCards: string[];
   readonly pullRequestIgnoreBeforeCreationDate: IIso8601Date | '';
   readonly pullRequestIgnoreDraft: boolean;
   readonly pullRequestLimitApiMutationsCount: number;

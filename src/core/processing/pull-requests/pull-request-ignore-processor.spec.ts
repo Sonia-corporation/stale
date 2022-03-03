@@ -4,6 +4,7 @@ import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
 import { DateTime } from 'luxon';
@@ -40,6 +41,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
       let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
+      let hasAnyIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
@@ -53,6 +55,9 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         hasAnyIgnoredLabelsSpy = jest.spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
         hasAnyIgnoredAssigneesSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredAssignees$$`)
+          .mockImplementation();
+        hasAnyIgnoredProjectCardsSpy = jest
+          .spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredProjectCards$$`)
           .mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(pullRequestIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest
@@ -179,18 +184,18 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                 hasAllIgnoredAssigneesSpy.mockReturnValue(false);
               });
 
-              it(`should check if the pull request should ignore all project cards`, (): void => {
+              it(`should check if the pull request should ignore any assignees`, (): void => {
                 expect.assertions(2);
 
                 pullRequestIgnoreProcessor.shouldIgnore();
 
-                expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
-                expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledWith();
+                expect(hasAnyIgnoredAssigneesSpy).toHaveBeenCalledTimes(1);
+                expect(hasAnyIgnoredAssigneesSpy).toHaveBeenCalledWith();
               });
 
-              describe(`when the pull request should ignore all project cards`, (): void => {
+              describe(`when the pull request should ignore any assignees`, (): void => {
                 beforeEach((): void => {
-                  hasAllIgnoredProjectCardsSpy.mockReturnValue(true);
+                  hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
                 });
 
                 it(`should return true`, (): void => {
@@ -202,37 +207,51 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                 });
               });
 
-              describe(`when the pull request should not ignore all project cards`, (): void => {
+              describe(`when the pull request should not ignore any assignees`, (): void => {
                 beforeEach((): void => {
-                  hasAllIgnoredProjectCardsSpy.mockReturnValue(false);
+                  hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
                 });
 
-                it(`should check if the pull request has one of the ignored assignees`, (): void => {
+                it(`should check if the pull request should ignore all project cards`, (): void => {
                   expect.assertions(2);
 
                   pullRequestIgnoreProcessor.shouldIgnore();
 
-                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                  expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                  expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
+                  expect(hasAllIgnoredProjectCardsSpy).toHaveBeenCalledWith();
                 });
 
-                describe(`when the pull request does not have one of the ignored assignees`, (): void => {
+                describe(`when the pull request should ignore all project cards`, (): void => {
                   beforeEach((): void => {
-                    hasAnyIgnoredAssigneesSpy.mockReturnValue(false);
+                    hasAllIgnoredProjectCardsSpy.mockReturnValue(true);
                   });
 
-                  it(`should check if the pull request should ignore based on the creation date`, (): void => {
+                  it(`should return true`, (): void => {
+                    expect.assertions(1);
+
+                    const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                    expect(result).toBeTrue();
+                  });
+                });
+
+                describe(`when the pull request should not ignore all project cards`, (): void => {
+                  beforeEach((): void => {
+                    hasAllIgnoredProjectCardsSpy.mockReturnValue(false);
+                  });
+
+                  it(`should check if the pull request should ignore any project cards`, (): void => {
                     expect.assertions(2);
 
                     pullRequestIgnoreProcessor.shouldIgnore();
 
-                    expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                    expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                    expect(hasAnyIgnoredProjectCardsSpy).toHaveBeenCalledTimes(1);
+                    expect(hasAnyIgnoredProjectCardsSpy).toHaveBeenCalledWith();
                   });
 
-                  describe(`when the pull request should ignore based on the creation date`, (): void => {
+                  describe(`when the pull request should ignore any project cards`, (): void => {
                     beforeEach((): void => {
-                      hasIgnoredCreationDateSpy.mockReturnValue(true);
+                      hasAnyIgnoredProjectCardsSpy.mockReturnValue(true);
                     });
 
                     it(`should return true`, (): void => {
@@ -244,37 +263,23 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                     });
                   });
 
-                  describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                  describe(`when the pull request should not ignore any project cards`, (): void => {
                     beforeEach((): void => {
-                      hasIgnoredCreationDateSpy.mockReturnValue(false);
+                      hasAnyIgnoredProjectCardsSpy.mockReturnValue(false);
                     });
 
-                    it(`should check if the pull request is a draft`, (): void => {
+                    it(`should check if the pull request should ignore based on the creation date`, (): void => {
                       expect.assertions(2);
 
                       pullRequestIgnoreProcessor.shouldIgnore();
 
-                      expect(isDraftSpy).toHaveBeenCalledTimes(1);
-                      expect(isDraftSpy).toHaveBeenCalledWith();
+                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
                     });
 
-                    describe(`when the pull request is not a draft`, (): void => {
+                    describe(`when the pull request should ignore based on the creation date`, (): void => {
                       beforeEach((): void => {
-                        isDraftSpy.mockReturnValue(false);
-                      });
-
-                      it(`should return false`, (): void => {
-                        expect.assertions(1);
-
-                        const result = pullRequestIgnoreProcessor.shouldIgnore();
-
-                        expect(result).toBeFalse();
-                      });
-                    });
-
-                    describe(`when the pull request is a draft`, (): void => {
-                      beforeEach((): void => {
-                        isDraftSpy.mockReturnValue(true);
+                        hasIgnoredCreationDateSpy.mockReturnValue(true);
                       });
 
                       it(`should return true`, (): void => {
@@ -285,20 +290,49 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                         expect(result).toBeTrue();
                       });
                     });
-                  });
-                });
 
-                describe(`when the pull request has one of the ignored assignees`, (): void => {
-                  beforeEach((): void => {
-                    hasAnyIgnoredAssigneesSpy.mockReturnValue(true);
-                  });
+                    describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                      beforeEach((): void => {
+                        hasIgnoredCreationDateSpy.mockReturnValue(false);
+                      });
 
-                  it(`should return true`, (): void => {
-                    expect.assertions(1);
+                      it(`should check if the pull request is a draft`, (): void => {
+                        expect.assertions(2);
 
-                    const result = pullRequestIgnoreProcessor.shouldIgnore();
+                        pullRequestIgnoreProcessor.shouldIgnore();
 
-                    expect(result).toBeTrue();
+                        expect(isDraftSpy).toHaveBeenCalledTimes(1);
+                        expect(isDraftSpy).toHaveBeenCalledWith();
+                      });
+
+                      describe(`when the pull request is not a draft`, (): void => {
+                        beforeEach((): void => {
+                          isDraftSpy.mockReturnValue(false);
+                        });
+
+                        it(`should return false`, (): void => {
+                          expect.assertions(1);
+
+                          const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                          expect(result).toBeFalse();
+                        });
+                      });
+
+                      describe(`when the pull request is a draft`, (): void => {
+                        beforeEach((): void => {
+                          isDraftSpy.mockReturnValue(true);
+                        });
+
+                        it(`should return true`, (): void => {
+                          expect.assertions(1);
+
+                          const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                          expect(result).toBeTrue();
+                        });
+                      });
+                    });
                   });
                 });
               });
@@ -1285,7 +1319,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
               EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED,
               {
                 file: `pull-request-ignore-processor.ts`,
-                startLine: 204,
+                startLine: 218,
                 title: `Warning`,
               }
             );
@@ -1501,7 +1535,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
               EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
               {
                 file: `pull-request-ignore-processor.ts`,
-                startLine: 251,
+                startLine: 265,
                 title: `Warning`,
               }
             );
@@ -1551,6 +1585,225 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           expect.assertions(1);
 
           const result = pullRequestIgnoreProcessor.hasAnyIgnoredAssignees$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAnyIgnoredProjectCards$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestProcessorLoggerWarningSpy = jest
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
+          .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAnyProjectCards: [`ignored-project-card`],
+            })
+          );
+      });
+
+      it(`should log about checking if the pull request has one of the ignored project cards`, (): void => {
+        expect.assertions(4);
+
+        pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request has one of the ignored project cards...`
+        );
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull request has one of the ignored project cards`, (): void => {
+        beforeEach((): void => {
+          pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+            item: {
+              projectCards: {
+                nodes: [
+                  createHydratedMock<IGithubApiProjectCard>({
+                    project: { name: `ignored-project-card` },
+                  }),
+                ],
+              },
+            },
+          });
+          pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+          pullRequestProcessorLoggerInfoSpy = jest
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about the ignored project card`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Containing one of the ignored project cards`,
+            `white-->`,
+            `value-ignored-project-card`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull request does not have one of the ignored project cards`, (): void => {
+        beforeEach((): void => {
+          pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+            item: {
+              projectCards: {
+                nodes: [
+                  createHydratedMock<IGithubApiProjectCard>({
+                    project: { name: `not-ignored-project-card` },
+                  }),
+                ],
+              },
+            },
+          });
+          pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+          pullRequestProcessorLoggerInfoSpy = jest
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about not containing an ignored project card`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored project card. Continuing...`
+          );
+        });
+
+        describe(`when the pull request has more than 20 project cards`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `not-ignored-project-card` },
+                    }),
+                  ],
+                  totalCount: 21,
+                },
+              },
+            });
+            pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerWarningSpy = jest
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
+              .mockImplementation();
+            annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+          });
+
+          it(`should log a warning about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+              `Found`,
+              `value-21`,
+              `whiteBright-project cards attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+            );
+          });
+
+          it(`should annotate about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+            expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+              EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
+              {
+                file: `pull-request-ignore-processor.ts`,
+                startLine: 312,
+                title: `Warning`,
+              }
+            );
+          });
+        });
+
+        describe.each([19, 20])(
+          `when the pull request has less or just 20 project cards`,
+          (totalCount: number): void => {
+            beforeEach((): void => {
+              pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+                item: {
+                  projectCards: {
+                    nodes: [
+                      createHydratedMock<IGithubApiProjectCard>({
+                        project: { name: `not-ignored-project-card` },
+                      }),
+                    ],
+                    totalCount,
+                  },
+                },
+              });
+              pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+              pullRequestProcessorLoggerWarningSpy = jest
+                .spyOn(pullRequestIgnoreProcessor.processor.logger, `warning`)
+                .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+            });
+
+            it(`should not log a warning about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(1);
+
+              pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+              expect(pullRequestProcessorLoggerWarningSpy).not.toHaveBeenCalled();
+            });
+
+            it(`should not annotate about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(1);
+
+              pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+              expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
+            });
+          }
+        );
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIgnoreProcessor.hasAnyIgnoredProjectCards$$();
 
           expect(result).toBeFalse();
         });

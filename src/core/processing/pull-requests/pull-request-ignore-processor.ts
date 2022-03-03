@@ -215,7 +215,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       );
       AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_LABELS_PAGINATION_NOT_IMPLEMENTED, {
         file: `pull-request-ignore-processor.ts`,
-        startLine: 204,
+        startLine: 218,
         title: `Warning`,
       });
     }
@@ -262,12 +262,59 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       );
       AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED, {
         file: `pull-request-ignore-processor.ts`,
-        startLine: 251,
+        startLine: 265,
         title: `Warning`,
       });
     }
 
     this.processor.logger.info(`Not containing an ignored assignee. Continuing...`);
+
+    return false;
+  }
+
+  public hasAnyIgnoredProjectCards$$(): boolean {
+    this.processor.logger.info(`Checking if this pull request has one of the ignored project cards...`);
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+    const duplicatedProjectCards: string[] = getDuplicates(
+      this._getProjectCardNames(this.processor.item.projectCards.nodes),
+      pullRequestsInputs.pullRequestIgnoreAnyProjectCards
+    );
+    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectCards);
+
+    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+      this.processor.logger.info(
+        `Containing one of the ignored project cards`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedProjectCard)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
+
+    // @todo handle the pagination
+    const { totalCount } = this.processor.item.projectCards;
+
+    if (totalCount > GithubApiPullRequestsService.projectCardsPerPullRequest) {
+      this.processor.logger.warning(
+        `Found`,
+        LoggerService.value(_.toString(totalCount)),
+        LoggerFormatService.whiteBright(
+          `project card${
+            totalCount > 1 ? `s` : ``
+          } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+        )
+      );
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+        file: `pull-request-ignore-processor.ts`,
+        startLine: 312,
+        title: `Warning`,
+      });
+    }
+
+    this.processor.logger.info(`Not containing an ignored project card. Continuing...`);
 
     return false;
   }

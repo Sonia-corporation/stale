@@ -14,6 +14,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueIgnoreAllProjectCards: false,
   issueIgnoreAnyAssignees: [`issue-ignore-any-assignee-1`, `issue-ignore-any-assignee-2`],
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
+  issueIgnoreAnyProjectCards: [`issue-ignore-any-project-card-1`, `issue-ignore-any-project-card-2`],
   issueIgnoreBeforeCreationDate: ``,
   issueLimitApiMutationsCount: -1,
   issueLimitApiQueriesCount: -1,
@@ -33,6 +34,10 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreAllProjectCards: false,
   pullRequestIgnoreAnyAssignees: [`pull-request-ignore-any-assignee-1`, `pull-request-ignore-any-assignee-2`],
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
+  pullRequestIgnoreAnyProjectCards: [
+    `pull-request-ignore-any-project-card-1`,
+    `pull-request-ignore-any-project-card-2`,
+  ],
   pullRequestIgnoreBeforeCreationDate: ``,
   pullRequestIgnoreDraft: false,
   pullRequestLimitApiMutationsCount: -1,

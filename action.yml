@@ -36,6 +36,10 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains any project cards.'
     required: false
     default: 'false'
+  issue-ignore-any-project-cards:
+    description: 'Allow to ignore the processing of issues that contains one of those project cards (multiline).'
+    required: false
+    default: ''
   issue-ignore-before-creation-date:
     description: 'Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
@@ -109,6 +113,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains any project cards.'
     required: false
     default: 'false'
+  pull-request-ignore-any-project-cards:
+    description: 'Allow to ignore the processing of pull requests that contains one of those project cards (multiline).'
+    required: false
+    default: ''
   pull-request-ignore-before-creation-date:
     description: 'Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
