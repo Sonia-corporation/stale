@@ -68,6 +68,7 @@ const createProject = (type) => {
 
     // A set of global variables that need to be available in all test environments
     globals: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       'ts-jest': {
         compiler: `ttypescript`,
       },
@@ -89,9 +90,13 @@ const createProject = (type) => {
 
     // A map from regular expressions to module names that allow to stub out resources with a single module
     moduleNameMapper: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '@core/(.*)': `<rootDir>/src/core/$1`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '@github/(.*)': `<rootDir>/src/github/$1`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '@tests/(.*)': `<rootDir>/tests/$1`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '@utils/(.*)': `<rootDir>/src/utils/$1`,
     },
 
@@ -190,6 +195,7 @@ const createProject = (type) => {
 
     // A map from regular expressions to paths to transformers
     transform: {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       '^.+\\.ts?$': `ts-jest`,
     },
 
@@ -216,28 +222,28 @@ const createProject = (type) => {
  */
 function getTestMatch(type) {
   return {
-    'integration-issues': [
+    integrationIssues: [
       `<rootDir>/tests/issues/**/*.spec.ts`,
       `<rootDir>/tests/issues/**/*.spec.tsx`,
       `<rootDir>/tests/issues/**/*.spec.js`,
     ],
-    'integration-issues-ci': [
+    integrationIssuesCi: [
       `<rootDir>/tests/issues/**/*.spec.ts`,
       `<rootDir>/tests/issues/**/*.spec.tsx`,
       `<rootDir>/tests/issues/**/*.spec.js`,
     ],
-    'integration-pull-requests': [
+    integrationPullRequests: [
       `<rootDir>/tests/pull-requests/**/*.spec.ts`,
       `<rootDir>/tests/pull-requests/**/*.spec.tsx`,
       `<rootDir>/tests/pull-requests/**/*.spec.js`,
     ],
-    'integration-pull-requests-ci': [
+    integrationPullRequestsCi: [
       `<rootDir>/tests/pull-requests/**/*.spec.ts`,
       `<rootDir>/tests/pull-requests/**/*.spec.tsx`,
       `<rootDir>/tests/pull-requests/**/*.spec.js`,
     ],
-    'unit': [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
-    'unit-ci': [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
+    unit: [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
+    unitCi: [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
   }[type];
 }
 
@@ -247,22 +253,22 @@ function getTestMatch(type) {
  */
 function getProjectColor(type) {
   return {
-    'integration-issues': `red`,
-    'integration-issues-ci': `red`,
-    'integration-pull-requests': `blue`,
-    'integration-pull-requests-ci': `blue`,
-    'unit': `green`,
-    'unit-ci': `green`,
+    integrationIssues: `red`,
+    integrationIssuesCi: `red`,
+    integrationPullRequests: `blue`,
+    integrationPullRequestsCi: `blue`,
+    unit: `green`,
+    unitCi: `green`,
   }[type];
 }
 
 module.exports = {
   projects: [
-    createProject(`integration-issues`),
-    createProject(`integration-issues-ci`),
-    createProject(`integration-pull-requests`),
-    createProject(`integration-pull-requests-ci`),
+    createProject(`integrationIssues`),
+    createProject(`integrationIssuesCi`),
+    createProject(`integrationPullRequests`),
+    createProject(`integrationPullRequestsCi`),
     createProject(`unit`),
-    createProject(`unit-ci`),
+    createProject(`unitCi`),
   ],
 };
