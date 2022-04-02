@@ -7,6 +7,7 @@ export enum EInputs {
   ISSUE_IGNORE_ANY_ASSIGNEES = `issue-ignore-any-assignees`,
   ISSUE_IGNORE_ALL_LABELS = `issue-ignore-all-labels`,
   ISSUE_IGNORE_ANY_LABELS = `issue-ignore-any-labels`,
+  ISSUE_IGNORE_ANY_MILESTONES = `issue-ignore-any-milestones`,
   ISSUE_IGNORE_ANY_PROJECT_CARDS = `issue-ignore-any-project-cards`,
   ISSUE_ADD_LABELS_AFTER_STALE = `issue-add-labels-after-stale`,
   ISSUE_ADD_LABELS_AFTER_CLOSE = `issue-add-labels-after-close`,
