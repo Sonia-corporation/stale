@@ -29,6 +29,7 @@ export abstract class AbstractIgnoreProcessor<
       this.hasAnyIgnoredAssignees$$() ||
       this.hasAllIgnoredProjectCards$$() ||
       this.hasAnyIgnoredProjectCards$$() ||
+      this.hasAnyIgnoredMilestones$$() ||
       this.hasIgnoredCreationDate$$()
     );
   }
@@ -77,4 +78,6 @@ export abstract class AbstractIgnoreProcessor<
   public abstract hasAnyIgnoredAssignees$$(): boolean;
 
   public abstract hasAnyIgnoredProjectCards$$(): boolean;
+
+  public abstract hasAnyIgnoredMilestones$$(): boolean;
 }

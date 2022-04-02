@@ -14,6 +14,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueIgnoreAllProjectCards: false,
   issueIgnoreAnyAssignees: [`issue-ignore-any-assignee-1`, `issue-ignore-any-assignee-2`],
   issueIgnoreAnyLabels: [`issue-ignore-any-label-1`, `issue-ignore-any-label-2`],
+  issueIgnoreAnyMilestones: [`issue-ignore-any-milestone-1`, `issue-ignore-any-milestone-2`],
   issueIgnoreAnyProjectCards: [`issue-ignore-any-project-card-1`, `issue-ignore-any-project-card-2`],
   issueIgnoreBeforeCreationDate: ``,
   issueLimitApiMutationsCount: -1,

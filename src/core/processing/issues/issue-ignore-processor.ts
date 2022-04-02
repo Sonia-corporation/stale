@@ -312,4 +312,30 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     return false;
   }
+
+  public hasAnyIgnoredMilestones$$(): boolean {
+    this.processor.logger.info(`Checking if this issue has one of the ignored milestones...`);
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+    const duplicatedMilestones: string[] = getDuplicates(
+      _.compact([this.processor.item.milestone?.title]),
+      issuesInputs.issueIgnoreAnyMilestones
+    );
+    const firstDuplicatedMilestone: string | undefined = _.head(duplicatedMilestones);
+
+    if (!_.isUndefined(firstDuplicatedMilestone)) {
+      this.processor.logger.info(
+        `Containing one of the ignored milestones`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedMilestone)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.info(`Not containing an ignored milestone. Continuing...`);
+
+    return false;
+  }
 }

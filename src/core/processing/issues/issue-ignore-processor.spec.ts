@@ -4,6 +4,7 @@ import { IssueIgnoreProcessor } from '@core/processing/issues/issue-ignore-proce
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
 import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
@@ -42,6 +43,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
       let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAnyIgnoredProjectCardsSpy: jest.SpyInstance;
+      let hasAnyIgnoredMilestonesSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
@@ -56,6 +58,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         hasAnyIgnoredProjectCardsSpy = jest
           .spyOn(issueIgnoreProcessor, `hasAnyIgnoredProjectCards$$`)
           .mockImplementation();
+        hasAnyIgnoredMilestonesSpy = jest.spyOn(issueIgnoreProcessor, `hasAnyIgnoredMilestones$$`).mockImplementation();
         hasAllIgnoredLabelsSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredLabels$$`).mockImplementation();
         hasAllIgnoredAssigneesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredAssignees$$`).mockImplementation();
         hasAllIgnoredProjectCardsSpy = jest
@@ -260,18 +263,18 @@ describe(`IssueIgnoreProcessor`, (): void => {
                       hasAnyIgnoredProjectCardsSpy.mockReturnValue(false);
                     });
 
-                    it(`should check if the issue should be ignored based on its creation date`, (): void => {
+                    it(`should check if the issue should ignore any milestones`, (): void => {
                       expect.assertions(2);
 
                       issueIgnoreProcessor.shouldIgnore();
 
-                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                      expect(hasAnyIgnoredMilestonesSpy).toHaveBeenCalledTimes(1);
+                      expect(hasAnyIgnoredMilestonesSpy).toHaveBeenCalledWith();
                     });
 
-                    describe(`when the issue should be ignored based on its creation date`, (): void => {
+                    describe(`when the issue should ignore any project milestones`, (): void => {
                       beforeEach((): void => {
-                        hasIgnoredCreationDateSpy.mockReturnValue(true);
+                        hasAnyIgnoredMilestonesSpy.mockReturnValue(true);
                       });
 
                       it(`should return true`, (): void => {
@@ -283,17 +286,46 @@ describe(`IssueIgnoreProcessor`, (): void => {
                       });
                     });
 
-                    describe(`when the issue should not be ignored based on its creation date`, (): void => {
+                    describe(`when the issue should not ignore any milestones`, (): void => {
                       beforeEach((): void => {
-                        hasIgnoredCreationDateSpy.mockReturnValue(false);
+                        hasAnyIgnoredMilestonesSpy.mockReturnValue(false);
                       });
 
-                      it(`should return false`, (): void => {
-                        expect.assertions(1);
+                      it(`should check if the issue should be ignored based on its creation date`, (): void => {
+                        expect.assertions(2);
 
-                        const result = issueIgnoreProcessor.shouldIgnore();
+                        issueIgnoreProcessor.shouldIgnore();
 
-                        expect(result).toBeFalse();
+                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                      });
+
+                      describe(`when the issue should be ignored based on its creation date`, (): void => {
+                        beforeEach((): void => {
+                          hasIgnoredCreationDateSpy.mockReturnValue(true);
+                        });
+
+                        it(`should return true`, (): void => {
+                          expect.assertions(1);
+
+                          const result = issueIgnoreProcessor.shouldIgnore();
+
+                          expect(result).toBeTrue();
+                        });
+                      });
+
+                      describe(`when the issue should not be ignored based on its creation date`, (): void => {
+                        beforeEach((): void => {
+                          hasIgnoredCreationDateSpy.mockReturnValue(false);
+                        });
+
+                        it(`should return false`, (): void => {
+                          expect.assertions(1);
+
+                          const result = issueIgnoreProcessor.shouldIgnore();
+
+                          expect(result).toBeFalse();
+                        });
                       });
                     });
                   });
@@ -1702,6 +1734,142 @@ describe(`IssueIgnoreProcessor`, (): void => {
           expect.assertions(1);
 
           const result = issueIgnoreProcessor.hasAnyIgnoredProjectCards$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAnyIgnoredMilestones$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueIgnoreAnyMilestones: [`ignored-milestone`],
+          })
+        );
+      });
+
+      it(`should log about checking if the issue has one of the ignored milestones`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue has one of the ignored milestones...`
+        );
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue has one of the ignored milestones`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            item: {
+              milestone: createHydratedMock<IGithubApiMilestone>({
+                title: `ignored-milestone`,
+              }),
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        });
+
+        it(`should log about the ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Containing one of the ignored milestones`,
+            `white-->`,
+            `value-ignored-milestone`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue does not have one of the ignored milestones`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            item: {
+              milestone: createHydratedMock<IGithubApiMilestone>({
+                title: `not-ignored-milestone`,
+              }),
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        });
+
+        it(`should log about not containing an ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored milestone. Continuing...`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the issue does not have a milestone`, (): void => {
+        beforeEach((): void => {
+          issueProcessor = createHydratedMock<IssueProcessor>({
+            item: {
+              milestone: undefined,
+            },
+          });
+          issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+          issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        });
+
+        it(`should log about not containing an ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored milestone. Continuing...`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
 
           expect(result).toBeFalse();
         });

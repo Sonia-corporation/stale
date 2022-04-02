@@ -351,6 +351,10 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     return false;
   }
 
+  public hasAnyIgnoredMilestones$$(): boolean {
+    return false;
+  }
+
   private _isDraft(): boolean {
     return this.processor.item.isDraft;
   }
