@@ -4,7 +4,7 @@
     <node-options value="--max_old_space_size=5000" />
     <jest-package value="$PROJECT_DIR$/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$" />
-    <jest-options value="--selectProjects integration-pull-requests" />
+    <jest-options value="--selectProjects integrationPullRequests" />
     <envs />
     <scope-kind value="ALL" />
     <method v="2" />

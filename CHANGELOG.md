@@ -6,6 +6,11 @@
 ### :rocket: Features
 
 * **input:** add new inputs to ignore any project cards ([#551](https://github.com/Sonia-corporation/stale/issues/551)) ([ba79907](https://github.com/Sonia-corporation/stale/commit/ba799071e7eff6cbe4d99cb2e30a2ef177d4bb93))
+  Add the `issue-ignore-any-project-cards` input.
+  Add the `pull-request-ignore-any-project-cards` input.
+  In addition of the existing input to ignore when a project card is present, now you can choose a white-list instead.
+  Any item process that belong to those project cards will be ignored.
+  Closes #165
 
 # [1.51.0](https://github.com/Sonia-corporation/stale/compare/1.50.0...1.51.0) (2022-02-20)
 

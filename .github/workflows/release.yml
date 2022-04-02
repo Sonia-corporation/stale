@@ -37,13 +37,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
+        uses: actions/setup-node@5b52f097d36d4b0b2f94ed6de710023fbb8b2236 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # renovate: tag=v2
+        uses: actions/cache@136d96b4aee02b1f0de3ba493b1d47135042d9c0 # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -81,13 +81,13 @@ jobs:
           # Since the previous job (Release) is doing a commit containing the new website changelog
           # We need to specify exactly the ref so that we are sure to load the last commit from the branch
           ref: master
-      - uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a # tag=v3
+      - uses: actions/setup-node@5b52f097d36d4b0b2f94ed6de710023fbb8b2236 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@937d24475381cd9c75ae6db12cb4e79714b926ed # renovate: tag=v2
+        uses: actions/cache@136d96b4aee02b1f0de3ba493b1d47135042d9c0 # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -141,7 +141,7 @@ jobs:
         run: echo 'The current tag is not the same after the release. A new tag has been created'
       - name: Create PR from master to develop
         if: needs.CurrentTag.outputs.CURRENT_TAG != steps.latest-tag.outputs.tag
-        uses: peter-evans/create-pull-request@18f7dc018cc2cd597073088f7c7591b9d1c02672 # tag=v3
+        uses: peter-evans/create-pull-request@f1a7646cead32c950d90344a4fb5d4e926972a8f # tag=v4
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(develop): merge master into develop due to new version ${{ steps.latest-tag.outputs.tag }}'
