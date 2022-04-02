@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[8582],{177:function(s){s.exports=JSON.parse('{"allTagsPath":"/stale/fr/blog/tags","slug":"/stale/fr/blog/tags/ignoring-process","name":"ignoring process","count":1,"permalink":"/stale/fr/blog/tags/ignoring-process"}')}}]);

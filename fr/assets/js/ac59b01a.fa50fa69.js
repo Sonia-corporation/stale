@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[5078],{9883:function(e){e.exports=JSON.parse('{"allTagsPath":"/stale/fr/blog/tags","slug":"/stale/fr/blog/tags/new-kind","name":"new kind","count":1,"permalink":"/stale/fr/blog/tags/new-kind"}')}}]);
