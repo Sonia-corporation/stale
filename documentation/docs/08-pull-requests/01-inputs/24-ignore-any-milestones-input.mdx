@@ -1,0 +1,35 @@
+---
+id: pull-request-ignore-any-milestones-input
+title: Ignore any pull request milestones input
+description: |
+  All the information you need to know about the ignore any pull request milestones input.
+  Including a detailed description and an example.
+tags:
+  - Pull requests
+  - Inputs
+  - Milestones
+---
+
+### Input {#input}
+
+Name: `pull-request-ignore-any-milestones`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This input will let you ignore the processing of the pull requests which have at least one of the milestone from this list.  
+This can be useful when you use milestones for triage.
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-ignore-any-milestones: |
+    milestone-x
+    milestone-y
+```

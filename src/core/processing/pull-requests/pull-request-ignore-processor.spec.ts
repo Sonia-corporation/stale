@@ -4,6 +4,7 @@ import { PullRequestIgnoreProcessor } from '@core/processing/pull-requests/pull-
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
+import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
 import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
@@ -40,6 +41,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
     describe(`shouldIgnore()`, (): void => {
       let isLockedSpy: jest.SpyInstance;
       let hasAnyIgnoredLabelsSpy: jest.SpyInstance;
+      let hasAnyIgnoredMilestonesSpy: jest.SpyInstance;
       let hasAnyIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAnyIgnoredProjectCardsSpy: jest.SpyInstance;
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
@@ -53,6 +55,9 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
 
         isLockedSpy = jest.spyOn(pullRequestIgnoreProcessor, `isLocked$$`).mockImplementation();
         hasAnyIgnoredLabelsSpy = jest.spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredLabels$$`).mockImplementation();
+        hasAnyIgnoredMilestonesSpy = jest
+          .spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredMilestones$$`)
+          .mockImplementation();
         hasAnyIgnoredAssigneesSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasAnyIgnoredAssignees$$`)
           .mockImplementation();
@@ -268,18 +273,18 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                       hasAnyIgnoredProjectCardsSpy.mockReturnValue(false);
                     });
 
-                    it(`should check if the pull request should ignore based on the creation date`, (): void => {
+                    it(`should check if the pull request has one of the ignored milestones`, (): void => {
                       expect.assertions(2);
 
                       pullRequestIgnoreProcessor.shouldIgnore();
 
-                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                      expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                      expect(hasAnyIgnoredMilestonesSpy).toHaveBeenCalledTimes(1);
+                      expect(hasAnyIgnoredMilestonesSpy).toHaveBeenCalledWith();
                     });
 
-                    describe(`when the pull request should ignore based on the creation date`, (): void => {
+                    describe(`when the pull request has one of the ignored milestones`, (): void => {
                       beforeEach((): void => {
-                        hasIgnoredCreationDateSpy.mockReturnValue(true);
+                        hasAnyIgnoredMilestonesSpy.mockReturnValue(true);
                       });
 
                       it(`should return true`, (): void => {
@@ -291,37 +296,23 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                       });
                     });
 
-                    describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                    describe(`when the pull request does not have one of the ignored milestones`, (): void => {
                       beforeEach((): void => {
-                        hasIgnoredCreationDateSpy.mockReturnValue(false);
+                        hasAnyIgnoredMilestonesSpy.mockReturnValue(false);
                       });
 
-                      it(`should check if the pull request is a draft`, (): void => {
+                      it(`should check if the pull request should ignore based on the creation date`, (): void => {
                         expect.assertions(2);
 
                         pullRequestIgnoreProcessor.shouldIgnore();
 
-                        expect(isDraftSpy).toHaveBeenCalledTimes(1);
-                        expect(isDraftSpy).toHaveBeenCalledWith();
+                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
                       });
 
-                      describe(`when the pull request is not a draft`, (): void => {
+                      describe(`when the pull request should ignore based on the creation date`, (): void => {
                         beforeEach((): void => {
-                          isDraftSpy.mockReturnValue(false);
-                        });
-
-                        it(`should return false`, (): void => {
-                          expect.assertions(1);
-
-                          const result = pullRequestIgnoreProcessor.shouldIgnore();
-
-                          expect(result).toBeFalse();
-                        });
-                      });
-
-                      describe(`when the pull request is a draft`, (): void => {
-                        beforeEach((): void => {
-                          isDraftSpy.mockReturnValue(true);
+                          hasIgnoredCreationDateSpy.mockReturnValue(true);
                         });
 
                         it(`should return true`, (): void => {
@@ -330,6 +321,49 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                           const result = pullRequestIgnoreProcessor.shouldIgnore();
 
                           expect(result).toBeTrue();
+                        });
+                      });
+
+                      describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                        beforeEach((): void => {
+                          hasIgnoredCreationDateSpy.mockReturnValue(false);
+                        });
+
+                        it(`should check if the pull request is a draft`, (): void => {
+                          expect.assertions(2);
+
+                          pullRequestIgnoreProcessor.shouldIgnore();
+
+                          expect(isDraftSpy).toHaveBeenCalledTimes(1);
+                          expect(isDraftSpy).toHaveBeenCalledWith();
+                        });
+
+                        describe(`when the pull request is not a draft`, (): void => {
+                          beforeEach((): void => {
+                            isDraftSpy.mockReturnValue(false);
+                          });
+
+                          it(`should return false`, (): void => {
+                            expect.assertions(1);
+
+                            const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                            expect(result).toBeFalse();
+                          });
+                        });
+
+                        describe(`when the pull request is a draft`, (): void => {
+                          beforeEach((): void => {
+                            isDraftSpy.mockReturnValue(true);
+                          });
+
+                          it(`should return true`, (): void => {
+                            expect.assertions(1);
+
+                            const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                            expect(result).toBeTrue();
+                          });
                         });
                       });
                     });
@@ -1959,6 +1993,152 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is a draft`);
             expect(result).toBeTrue();
           });
+        });
+      });
+    });
+
+    describe(`hasAnyIgnoredMilestones$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAnyMilestones: [`ignored-milestone`],
+            })
+          );
+      });
+
+      it(`should log about checking if the pull request has one of the ignored milestones`, (): void => {
+        expect.assertions(4);
+
+        pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request has one of the ignored milestones...`
+        );
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull request has one of the ignored milestones`, (): void => {
+        beforeEach((): void => {
+          pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+            item: {
+              milestone: createHydratedMock<IGithubApiMilestone>({
+                title: `ignored-milestone`,
+              }),
+            },
+          });
+          pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+          pullRequestProcessorLoggerInfoSpy = jest
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about the ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Containing one of the ignored milestones`,
+            `white-->`,
+            `value-ignored-milestone`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull request does not have one of the ignored milestones`, (): void => {
+        beforeEach((): void => {
+          pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+            item: {
+              milestone: createHydratedMock<IGithubApiMilestone>({
+                title: `not-ignored-milestone`,
+              }),
+            },
+          });
+          pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+          pullRequestProcessorLoggerInfoSpy = jest
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about not containing an ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored milestone. Continuing...`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the pull request does not have a milestone`, (): void => {
+        beforeEach((): void => {
+          pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+            item: {
+              milestone: undefined,
+            },
+          });
+          pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+          pullRequestProcessorLoggerInfoSpy = jest
+            .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+            .mockImplementation();
+        });
+
+        it(`should log about not containing an ignored milestone`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `Not containing an ignored milestone. Continuing...`
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIgnoreProcessor.hasAnyIgnoredMilestones$$();
+
+          expect(result).toBeFalse();
         });
       });
     });

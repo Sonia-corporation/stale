@@ -31,6 +31,7 @@ export enum EInputs {
   PULL_REQUEST_IGNORE_ALL_LABELS = `pull-request-ignore-all-labels`,
   PULL_REQUEST_IGNORE_DRAFT = `pull-request-ignore-draft`,
   PULL_REQUEST_IGNORE_ANY_LABELS = `pull-request-ignore-any-labels`,
+  PULL_REQUEST_IGNORE_ANY_MILESTONES = `pull-request-ignore-any-milestones`,
   PULL_REQUEST_IGNORE_ANY_PROJECT_CARDS = `pull-request-ignore-any-project-cards`,
   PULL_REQUEST_IGNORE_ALL_PROJECT_CARDS = `pull-request-ignore-all-project-cards`,
   PULL_REQUEST_IGNORE_BEFORE_CREATION_DATE = `pull-request-ignore-before-creation-date`,
