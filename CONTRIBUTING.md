@@ -174,6 +174,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the pull request has any of the ignored assignees and stop the processing if this is the case (coming from the `pull-request-ignore-any-assignees` input)
 - Check if the pull request has a project card and stop the processing if this is the case (coming from the `pull-request-ignore-all-project-cards` input)
 - Check if the pull request has any of the ignored project cards and stop the processing if this is the case (coming from the `pull-request-ignore-any-project-cards` input)
+- Check if the pull request has any of the ignored milestones and stop the processing if this is the case (coming from the `pull-request-ignore-any-milestones` input)
 - Check if the pull request creation date is before x date and stop the processing if this is the case (coming from the `pull-request-ignore-before-creation-date` input)
 - Check if the pull request is a draft and stop the processing if this is the case (coming from the `pull-request-ignore-draft` input)
 - Check if the input `pull-request-only-any-project-cards` contains some project cards. If this is the case and the pull request has at least one project card matching linked to it, the processing will continue, else the processing will stop.

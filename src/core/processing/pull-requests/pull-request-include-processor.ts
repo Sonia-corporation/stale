@@ -81,7 +81,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
       return true;
     }
 
-    this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
     const { totalCount } = this.processor.item.projectCards;
