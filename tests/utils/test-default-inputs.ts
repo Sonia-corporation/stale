@@ -35,6 +35,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestIgnoreAllProjectCards: false,
   pullRequestIgnoreAnyAssignees: [`pull-request-ignore-any-assignee-1`, `pull-request-ignore-any-assignee-2`],
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
+  pullRequestIgnoreAnyMilestones: [`pull-request-ignore-any-milestone-1`, `pull-request-ignore-any-milestone-2`],
   pullRequestIgnoreAnyProjectCards: [
     `pull-request-ignore-any-project-card-1`,
     `pull-request-ignore-any-project-card-2`,

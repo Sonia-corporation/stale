@@ -51,6 +51,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
         required: false,
       }),
       pullRequestIgnoreAnyLabels: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_LABELS, { required: false }),
+      pullRequestIgnoreAnyMilestones: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_MILESTONES, {
+        required: false,
+      }),
       pullRequestIgnoreAnyProjectCards: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_PROJECT_CARDS, {
         required: false,
       }),

@@ -198,7 +198,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       return true;
     }
 
-    this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
     const { totalCount } = this.processor.item.labels;
@@ -245,7 +245,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       return true;
     }
 
-    this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
     const { totalCount } = this.processor.item.assignees;
@@ -292,7 +292,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
       return true;
     }
 
-    this.processor.logger.debug(`Note: in case of pull request, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
     const { totalCount } = this.processor.item.projectCards;
@@ -352,6 +352,28 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
   }
 
   public hasAnyIgnoredMilestones$$(): boolean {
+    this.processor.logger.info(`Checking if this pull request has one of the ignored milestones...`);
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+    const duplicatedMilestones: string[] = getDuplicates(
+      _.compact([this.processor.item.milestone?.title]),
+      pullRequestsInputs.pullRequestIgnoreAnyMilestones
+    );
+    const firstDuplicatedMilestone: string | undefined = _.head(duplicatedMilestones);
+
+    if (!_.isUndefined(firstDuplicatedMilestone)) {
+      this.processor.logger.info(
+        `Containing one of the ignored milestones`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedMilestone)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+    this.processor.logger.info(`Not containing an ignored milestone. Continuing...`);
+
     return false;
   }
 
