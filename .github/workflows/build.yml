@@ -148,7 +148,7 @@ jobs:
       - name: Test
         run: npm run test:ci:coverage:integration:issues
       - name: Coverage
-        uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
+        uses: codecov/codecov-action@e3c560433a6cc60aec8812599b7844a7b4fa0d71 # tag=v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           version: ${{ env.CODECOV_VERSION }}
@@ -198,7 +198,7 @@ jobs:
       - name: Test
         run: npm run test:ci:coverage:integration:pull-requests
       - name: Coverage
-        uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
+        uses: codecov/codecov-action@e3c560433a6cc60aec8812599b7844a7b4fa0d71 # tag=v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           version: ${{ env.CODECOV_VERSION }}
@@ -248,7 +248,7 @@ jobs:
       - name: Test
         run: npm run test:ci:coverage:unit
       - name: Coverage
-        uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # renovate: tag=v2
+        uses: codecov/codecov-action@e3c560433a6cc60aec8812599b7844a7b4fa0d71 # tag=v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           version: ${{ env.CODECOV_VERSION }}
