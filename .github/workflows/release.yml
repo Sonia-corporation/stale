@@ -37,7 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846 # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@5b52f097d36d4b0b2f94ed6de710023fbb8b2236 # tag=v3
+        uses: actions/setup-node@56337c425554a6be30cdef71bf441f15be286854 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -81,7 +81,7 @@ jobs:
           # Since the previous job (Release) is doing a commit containing the new website changelog
           # We need to specify exactly the ref so that we are sure to load the last commit from the branch
           ref: master
-      - uses: actions/setup-node@5b52f097d36d4b0b2f94ed6de710023fbb8b2236 # tag=v3
+      - uses: actions/setup-node@56337c425554a6be30cdef71bf441f15be286854 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
