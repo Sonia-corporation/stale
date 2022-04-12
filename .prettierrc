@@ -1,4 +1,4 @@
-printWidth: 120
+printWidth: 140
 useTabs: false
 semi: true
 singleQuote: true
@@ -8,4 +8,4 @@ bracketSpacing: true
 arrowParens: always
 endOfLine: lf
 tabWidth: 2
-
+singleAttributePerLine: true
