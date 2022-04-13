@@ -40,6 +40,20 @@
       "@utils/*": ["src/utils/*"],
       "@tests/*": ["tests/*"]
     },
-    "jsx": "react"
+    "jsx": "react",
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "references": [
+      {
+        "path": "./tsconfig.app.json"
+      },
+      {
+        "path": "./tsconfig.spec.json"
+      },
+      {
+        "path": "./documentation/tsconfig.json"
+      }
+    ]
   }
 }
