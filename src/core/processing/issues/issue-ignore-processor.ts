@@ -338,4 +338,40 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     return false;
   }
+
+  public hasAllIgnoredMilestones$$(): boolean {
+    this.processor.logger.info(`Checking if all the milestones on this issue should be ignored...`);
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (!issuesInputs.issueIgnoreAllMilestones) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_MILESTONES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_MILESTONES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    if (this.processor.item.milestone) {
+      this.processor.logger.info(
+        `The issue has a milestone`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(this.processor.item.milestone.title)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(`The issue has no milestone. Continuing...`);
+
+    return false;
+  }
 }
