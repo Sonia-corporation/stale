@@ -1,5 +1,14 @@
 # Sonia stale action
 
+# [1.55.0](https://github.com/Sonia-corporation/stale/compare/1.54.0...1.55.0) (2022-04-13)
+
+
+### :rocket: Features
+
+* **issues:** add new input to ignore all milestones ([29d8724](https://github.com/Sonia-corporation/stale/commit/29d8724e65f314d4d0456af4f82fe9fd57231c5e)), closes [#519](https://github.com/Sonia-corporation/stale/issues/519)
+  Add the `issue-ignore-all-milestones` input.
+If an issue has a milestone, it will be ignored from the processing.
+
 # [1.54.0](https://github.com/Sonia-corporation/stale/compare/1.53.0...1.54.0) (2022-04-03)
 
 
