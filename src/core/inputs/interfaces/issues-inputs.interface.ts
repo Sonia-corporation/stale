@@ -10,6 +10,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueDaysBeforeStale: number;
   readonly issueIgnoreAllAssignees: boolean;
   readonly issueIgnoreAllLabels: boolean;
+  readonly issueIgnoreAllMilestones: boolean;
   readonly issueIgnoreAllProjectCards: boolean;
   readonly issueIgnoreAnyAssignees: string[];
   readonly issueIgnoreAnyLabels: string[];

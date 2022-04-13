@@ -47,6 +47,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
+      let hasAllIgnoredMilestonesSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
       let isDraftSpy: jest.SpyInstance;
 
@@ -70,6 +71,9 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           .mockImplementation();
         hasAllIgnoredProjectCardsSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasAllIgnoredProjectCards$$`)
+          .mockImplementation();
+        hasAllIgnoredMilestonesSpy = jest
+          .spyOn(pullRequestIgnoreProcessor, `hasAllIgnoredMilestones$$`)
           .mockImplementation();
         hasIgnoredCreationDateSpy = jest
           .spyOn(pullRequestIgnoreProcessor, `hasIgnoredCreationDate$$`)
@@ -301,18 +305,18 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                         hasAnyIgnoredMilestonesSpy.mockReturnValue(false);
                       });
 
-                      it(`should check if the pull request should ignore based on the creation date`, (): void => {
+                      it(`should check if the pull request should ignore all milestones`, (): void => {
                         expect.assertions(2);
 
                         pullRequestIgnoreProcessor.shouldIgnore();
 
-                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                        expect(hasAllIgnoredMilestonesSpy).toHaveBeenCalledTimes(1);
+                        expect(hasAllIgnoredMilestonesSpy).toHaveBeenCalledWith();
                       });
 
-                      describe(`when the pull request should ignore based on the creation date`, (): void => {
+                      describe(`when the pull request should ignore all milestones`, (): void => {
                         beforeEach((): void => {
-                          hasIgnoredCreationDateSpy.mockReturnValue(true);
+                          hasAllIgnoredMilestonesSpy.mockReturnValue(true);
                         });
 
                         it(`should return true`, (): void => {
@@ -324,37 +328,23 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                         });
                       });
 
-                      describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                      describe(`when the pull request should not ignore all milestones`, (): void => {
                         beforeEach((): void => {
-                          hasIgnoredCreationDateSpy.mockReturnValue(false);
+                          hasAllIgnoredMilestonesSpy.mockReturnValue(false);
                         });
 
-                        it(`should check if the pull request is a draft`, (): void => {
+                        it(`should check if the pull request should ignore based on the creation date`, (): void => {
                           expect.assertions(2);
 
                           pullRequestIgnoreProcessor.shouldIgnore();
 
-                          expect(isDraftSpy).toHaveBeenCalledTimes(1);
-                          expect(isDraftSpy).toHaveBeenCalledWith();
+                          expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                          expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
                         });
 
-                        describe(`when the pull request is not a draft`, (): void => {
+                        describe(`when the pull request should ignore based on the creation date`, (): void => {
                           beforeEach((): void => {
-                            isDraftSpy.mockReturnValue(false);
-                          });
-
-                          it(`should return false`, (): void => {
-                            expect.assertions(1);
-
-                            const result = pullRequestIgnoreProcessor.shouldIgnore();
-
-                            expect(result).toBeFalse();
-                          });
-                        });
-
-                        describe(`when the pull request is a draft`, (): void => {
-                          beforeEach((): void => {
-                            isDraftSpy.mockReturnValue(true);
+                            hasIgnoredCreationDateSpy.mockReturnValue(true);
                           });
 
                           it(`should return true`, (): void => {
@@ -363,6 +353,49 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
                             const result = pullRequestIgnoreProcessor.shouldIgnore();
 
                             expect(result).toBeTrue();
+                          });
+                        });
+
+                        describe(`when the pull request should not ignore based on the creation date`, (): void => {
+                          beforeEach((): void => {
+                            hasIgnoredCreationDateSpy.mockReturnValue(false);
+                          });
+
+                          it(`should check if the pull request is a draft`, (): void => {
+                            expect.assertions(2);
+
+                            pullRequestIgnoreProcessor.shouldIgnore();
+
+                            expect(isDraftSpy).toHaveBeenCalledTimes(1);
+                            expect(isDraftSpy).toHaveBeenCalledWith();
+                          });
+
+                          describe(`when the pull request is not a draft`, (): void => {
+                            beforeEach((): void => {
+                              isDraftSpy.mockReturnValue(false);
+                            });
+
+                            it(`should return false`, (): void => {
+                              expect.assertions(1);
+
+                              const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                              expect(result).toBeFalse();
+                            });
+                          });
+
+                          describe(`when the pull request is a draft`, (): void => {
+                            beforeEach((): void => {
+                              isDraftSpy.mockReturnValue(true);
+                            });
+
+                            it(`should return true`, (): void => {
+                              expect.assertions(1);
+
+                              const result = pullRequestIgnoreProcessor.shouldIgnore();
+
+                              expect(result).toBeTrue();
+                            });
                           });
                         });
                       });
