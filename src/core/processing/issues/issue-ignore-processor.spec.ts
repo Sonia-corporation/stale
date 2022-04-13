@@ -47,6 +47,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
       let hasAllIgnoredLabelsSpy: jest.SpyInstance;
       let hasAllIgnoredAssigneesSpy: jest.SpyInstance;
       let hasAllIgnoredProjectCardsSpy: jest.SpyInstance;
+      let hasAllIgnoredMilestonesSpy: jest.SpyInstance;
       let hasIgnoredCreationDateSpy: jest.SpyInstance;
 
       beforeEach((): void => {
@@ -64,6 +65,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         hasAllIgnoredProjectCardsSpy = jest
           .spyOn(issueIgnoreProcessor, `hasAllIgnoredProjectCards$$`)
           .mockImplementation();
+        hasAllIgnoredMilestonesSpy = jest.spyOn(issueIgnoreProcessor, `hasAllIgnoredMilestones$$`).mockImplementation();
         hasIgnoredCreationDateSpy = jest.spyOn(issueIgnoreProcessor, `hasIgnoredCreationDate$$`).mockImplementation();
       });
 
@@ -291,18 +293,18 @@ describe(`IssueIgnoreProcessor`, (): void => {
                         hasAnyIgnoredMilestonesSpy.mockReturnValue(false);
                       });
 
-                      it(`should check if the issue should be ignored based on its creation date`, (): void => {
+                      it(`should check if the issue should ignore all milestones`, (): void => {
                         expect.assertions(2);
 
                         issueIgnoreProcessor.shouldIgnore();
 
-                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
-                        expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                        expect(hasAllIgnoredMilestonesSpy).toHaveBeenCalledTimes(1);
+                        expect(hasAllIgnoredMilestonesSpy).toHaveBeenCalledWith();
                       });
 
-                      describe(`when the issue should be ignored based on its creation date`, (): void => {
+                      describe(`when the issue should ignore all milestones`, (): void => {
                         beforeEach((): void => {
-                          hasIgnoredCreationDateSpy.mockReturnValue(true);
+                          hasAllIgnoredMilestonesSpy.mockReturnValue(true);
                         });
 
                         it(`should return true`, (): void => {
@@ -314,17 +316,46 @@ describe(`IssueIgnoreProcessor`, (): void => {
                         });
                       });
 
-                      describe(`when the issue should not be ignored based on its creation date`, (): void => {
+                      describe(`when the issue should not ignore all milestones`, (): void => {
                         beforeEach((): void => {
-                          hasIgnoredCreationDateSpy.mockReturnValue(false);
+                          hasAllIgnoredMilestonesSpy.mockReturnValue(false);
                         });
 
-                        it(`should return false`, (): void => {
-                          expect.assertions(1);
+                        it(`should check if the issue should be ignored based on its creation date`, (): void => {
+                          expect.assertions(2);
 
-                          const result = issueIgnoreProcessor.shouldIgnore();
+                          issueIgnoreProcessor.shouldIgnore();
 
-                          expect(result).toBeFalse();
+                          expect(hasIgnoredCreationDateSpy).toHaveBeenCalledTimes(1);
+                          expect(hasIgnoredCreationDateSpy).toHaveBeenCalledWith();
+                        });
+
+                        describe(`when the issue should be ignored based on its creation date`, (): void => {
+                          beforeEach((): void => {
+                            hasIgnoredCreationDateSpy.mockReturnValue(true);
+                          });
+
+                          it(`should return true`, (): void => {
+                            expect.assertions(1);
+
+                            const result = issueIgnoreProcessor.shouldIgnore();
+
+                            expect(result).toBeTrue();
+                          });
+                        });
+
+                        describe(`when the issue should not be ignored based on its creation date`, (): void => {
+                          beforeEach((): void => {
+                            hasIgnoredCreationDateSpy.mockReturnValue(false);
+                          });
+
+                          it(`should return false`, (): void => {
+                            expect.assertions(1);
+
+                            const result = issueIgnoreProcessor.shouldIgnore();
+
+                            expect(result).toBeFalse();
+                          });
                         });
                       });
                     });
@@ -1872,6 +1903,152 @@ describe(`IssueIgnoreProcessor`, (): void => {
           const result = issueIgnoreProcessor.hasAnyIgnoredMilestones$$();
 
           expect(result).toBeFalse();
+        });
+      });
+    });
+
+    describe(`hasAllIgnoredMilestones$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIgnoreProcessor.processor.logger, `info`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueIgnoreAllMilestones: false,
+          })
+        );
+      });
+
+      it(`should log about checking if the issue should ignore all the milestones`, (): void => {
+        expect.assertions(4);
+
+        issueIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if all the milestones on this issue should be ignored...`
+        );
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the input to ignore issue with a milestone is disabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueIgnoreAllMilestones: false,
+            })
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(3);
+
+          const result = issueIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-milestones`,
+            `whiteBright-is disabled. Continuing...`
+          );
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the input to ignore issue with a milestone is enabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueIgnoreAllMilestones: true,
+            })
+          );
+        });
+
+        it(`should check if the issue has a milestone`, (): void => {
+          expect.assertions(4);
+
+          issueIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-ignore-all-milestones`,
+            `whiteBright-is enabled. Checking...`
+          );
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        });
+
+        describe(`when the issue has no milestone`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                milestone: undefined,
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue has no milestone. Continuing...`);
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has a milestone`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                milestone: createHydratedMock<IGithubApiMilestone>({
+                  title: `dummy-milestone`,
+                }),
+              },
+            });
+            issueIgnoreProcessor = new IssueIgnoreProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+            issuesInputsServiceGetInputsSpy = jest
+              .spyOn(IssuesInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IIssuesInputs>({
+                  issueIgnoreAllMilestones: true,
+                })
+              );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = issueIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The issue has a milestone`,
+              `white-->`,
+              `value-dummy-milestone`
+            );
+            expect(result).toBeTrue();
+          });
         });
       });
     });
