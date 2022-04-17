@@ -378,6 +378,38 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
   }
 
   public hasAllIgnoredMilestones$$(): boolean {
+    this.processor.logger.info(`Checking if all the milestones on this pull request should be ignored...`);
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (!pullRequestsInputs.pullRequestIgnoreAllMilestones) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_MILESTONES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_MILESTONES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    if (this.processor.item.milestone) {
+      this.processor.logger.info(
+        `The pull request has a milestone`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(this.processor.item.milestone.title)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(`The pull request has no milestone. Continuing...`);
+
     return false;
   }
 

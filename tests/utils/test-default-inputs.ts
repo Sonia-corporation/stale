@@ -33,6 +33,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestDeleteBranchAfterClose: false,
   pullRequestIgnoreAllAssignees: false,
   pullRequestIgnoreAllLabels: false,
+  pullRequestIgnoreAllMilestones: false,
   pullRequestIgnoreAllProjectCards: false,
   pullRequestIgnoreAnyAssignees: [`pull-request-ignore-any-assignee-1`, `pull-request-ignore-any-assignee-2`],
   pullRequestIgnoreAnyLabels: [`pull-request-ignore-any-label-1`, `pull-request-ignore-any-label-2`],
