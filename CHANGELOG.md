@@ -1,5 +1,20 @@
 # Sonia stale action
 
+# [1.56.0](https://github.com/Sonia-corporation/stale/compare/1.55.0...1.56.0) (2022-04-17)
+
+
+### :bug: Bug Fixes
+
+* **inputs:** allow to override the default values of the ignore any milestones inputs ([ca9de12](https://github.com/Sonia-corporation/stale/commit/ca9de1203373e65de5ec7c73e4897675c93c2b5a))
+  The configuration was missing from the action.yml.
+
+
+### :rocket: Features
+
+* **prs:** add new input to ignore all milestones ([a492a64](https://github.com/Sonia-corporation/stale/commit/a492a6464f02131744cd7be3f51f2de5d3121ef3)), closes [#520](https://github.com/Sonia-corporation/stale/issues/520)
+  Add the `pull-request-ignore-all-milestones` input.
+If a pull request has a milestone, it will be ignored from the processing.
+
 # [1.55.0](https://github.com/Sonia-corporation/stale/compare/1.54.0...1.55.0) (2022-04-13)
 
 
