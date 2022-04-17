@@ -189,6 +189,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those milestones (multiline).'
     required: false
     default: ''
+  pull-request-ignore-all-milestones:
+    description: 'Allow to ignore the processing of pull requests that contains any milestones.'
+    required: false
+    default: 'false'
 outputs:
   # Issues outputs
   processed-issues-count:

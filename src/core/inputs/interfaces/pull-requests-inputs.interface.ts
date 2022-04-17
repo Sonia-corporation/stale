@@ -11,6 +11,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestDeleteBranchAfterClose: boolean;
   readonly pullRequestIgnoreAllAssignees: boolean;
   readonly pullRequestIgnoreAllLabels: boolean;
+  readonly pullRequestIgnoreAllMilestones: boolean;
   readonly pullRequestIgnoreAllProjectCards: boolean;
   readonly pullRequestIgnoreAnyAssignees: string[];
   readonly pullRequestIgnoreAnyLabels: string[];

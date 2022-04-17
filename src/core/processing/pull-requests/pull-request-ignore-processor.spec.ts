@@ -2175,5 +2175,158 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         });
       });
     });
+
+    describe(`hasAllIgnoredMilestones$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllMilestones: false,
+            })
+          );
+      });
+
+      it(`should log about checking if the pull request should ignore all the milestones`, (): void => {
+        expect.assertions(4);
+
+        pullRequestIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if all the milestones on this pull request should be ignored...`
+        );
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the input to ignore pull request with a milestone is disabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllMilestones: false,
+            })
+          );
+        });
+
+        it(`should return false`, (): void => {
+          expect.assertions(3);
+
+          const result = pullRequestIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-ignore-all-milestones`,
+            `whiteBright-is disabled. Continuing...`
+          );
+          expect(result).toBeFalse();
+        });
+      });
+
+      describe(`when the input to ignore pull request with a milestone is enabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestIgnoreAllMilestones: true,
+            })
+          );
+        });
+
+        it(`should check if the pull request has a milestone`, (): void => {
+          expect.assertions(4);
+
+          pullRequestIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-ignore-all-milestones`,
+            `whiteBright-is enabled. Checking...`
+          );
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+        });
+
+        describe(`when the pull request has no milestone`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                milestone: undefined,
+              },
+            });
+            pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(3);
+
+            const result = pullRequestIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The pull request has no milestone. Continuing...`
+            );
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the pull request has a milestone`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                milestone: createHydratedMock<IGithubApiMilestone>({
+                  title: `dummy-milestone`,
+                }),
+              },
+            });
+            pullRequestIgnoreProcessor = new PullRequestIgnoreProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIgnoreProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestIgnoreAllMilestones: true,
+                })
+              );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(3);
+
+            const result = pullRequestIgnoreProcessor.hasAllIgnoredMilestones$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `The pull request has a milestone`,
+              `white-->`,
+              `value-dummy-milestone`
+            );
+            expect(result).toBeTrue();
+          });
+        });
+      });
+    });
   });
 });

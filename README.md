@@ -145,6 +145,7 @@ All the inputs that are used both for issues and pull requests.
 | [pull-request-only-any-project-cards](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-project-cards-input)           | Only allow the processing of pull requests that contains one of those project cards (multiline).                                                       |         |
 | [pull-request-only-any-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-milestones-input)                 | Only allow the processing of pull requests that contains one of those milestones (multiline).                                                          |         |
 | [pull-request-ignore-any-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-ignore-any-milestones-input)             | Allow to ignore the processing of pull requests that contains one of those milestones (multiline).                                                     |         |
+| [pull-request-ignore-all-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-ignore-all-milestones-input)             | Allow to ignore the processing of pull requests that contains any milestones.                                                                          | `false` |
 
 ## All the pull requests outputs
 
