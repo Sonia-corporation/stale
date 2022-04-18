@@ -2,6 +2,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { PullRequestIncludeProcessor } from '@core/processing/pull-requests/pull-request-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiMilestone } from '@github/api/milestones/interfaces/github-api-milestone.interface';
 import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
@@ -38,6 +39,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
     describe(`shouldInclude()`, (): void => {
       let shouldIncludeAnyWhiteListedProjectCardSpy: jest.SpyInstance;
       let shouldIncludeAnyWhiteListedMilestoneSpy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedAssigneeSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
@@ -47,6 +49,9 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           .mockImplementation();
         shouldIncludeAnyWhiteListedMilestoneSpy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedMilestone$$`)
+          .mockImplementation();
+        shouldIncludeAnyWhiteListedAssigneeSpy = jest
+          .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedAssignee$$`)
           .mockImplementation();
       });
 
@@ -78,12 +83,41 @@ describe(`PullRequestIncludeProcessor`, (): void => {
             shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(true);
           });
 
-          it(`should return true`, (): void => {
-            expect.assertions(1);
+          it(`should check if the pull request should be processed because she belongs to any of the white-listed assignee`, (): void => {
+            expect.assertions(2);
 
-            const result = pullRequestIncludeProcessor.shouldInclude();
+            pullRequestIncludeProcessor.shouldInclude();
 
-            expect(result).toBeTrue();
+            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledTimes(1);
+            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledWith();
+          });
+
+          describe(`when the pull request belongs to any of the white-listed assignee`, (): void => {
+            beforeEach((): void => {
+              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(true);
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldInclude();
+
+              expect(result).toBeTrue();
+            });
+          });
+
+          describe(`when the pull request does not belong to any of the white-listed assignee`, (): void => {
+            beforeEach((): void => {
+              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(false);
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldInclude();
+
+              expect(result).toBeFalse();
+            });
           });
         });
 
@@ -373,7 +407,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 );
             });
 
-            it(`should log a warning about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            it(`should log a warning about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
@@ -386,7 +420,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               );
             });
 
-            it(`should annotate about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            it(`should annotate about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
@@ -396,7 +430,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
                 {
                   file: `pull-request-include-processor.ts`,
-                  startLine: 76,
+                  startLine: 90,
                   title: `Warning`,
                 }
               );
@@ -617,7 +651,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 );
             });
 
-            it(`should log a warning about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            it(`should log a warning about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
@@ -630,7 +664,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               );
             });
 
-            it(`should annotate about finding too many labels on this pull request since the pagination is not handled`, (): void => {
+            it(`should annotate about finding too many project cards on this pull request since the pagination is not handled`, (): void => {
               expect.assertions(2);
 
               pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedProjectCard$$();
@@ -640,7 +674,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED,
                 {
                   file: `pull-request-include-processor.ts`,
-                  startLine: 76,
+                  startLine: 90,
                   title: `Warning`,
                 }
               );
@@ -1002,6 +1036,621 @@ describe(`PullRequestIncludeProcessor`, (): void => {
               expect.assertions(1);
 
               const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedMilestone$$();
+
+              expect(result).toBeTrue();
+            });
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyWhiteListedAssignee$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestProcessorLoggerWarningSpy: jest.SpyInstance;
+      let annotationsServiceWarningSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestProcessorLoggerWarningSpy = jest
+          .spyOn(pullRequestIncludeProcessor.processor.logger, `warning`)
+          .mockImplementation();
+        annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyAnyAssignees: [],
+            })
+          );
+      });
+
+      it(`should log about checking the pull-request-only-any-assignees input`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request should only be processed based on any of the associated assignees...`
+        );
+      });
+
+      it(`should get the pull request inputs`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull request-only-any-assignees input is empty`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyAnyAssignees: [],
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this pull request (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-any-assignees`,
+            `whiteBright-is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull-request-only-any-assignees input is not empty`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyAnyAssignees: [`dummy-card`],
+            })
+          );
+        });
+
+        it(`should log about checking if this pull request should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-any-assignees`,
+            `whiteBright-is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+          );
+        });
+
+        describe(`when the pull request has no assignee`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [],
+                  totalCount: 0,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-card`],
+                })
+              );
+          });
+
+          it(`should log about not containing any assignee (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any assignee. Skipping the processing of this pull request...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the pull request has at least one assignee`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee`,
+                    }),
+                  ],
+                  totalCount: 1,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-card`],
+                })
+              );
+          });
+
+          describe(`when none of the assignees match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-other-assignee`],
+                })
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-assignee on this pull request`,
+                `value-dummy-assignee`
+              );
+            });
+
+            it(`should log about not containing any common assignee (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required assignee. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when none of the assignees match and the pagination is higher than 20`, (): void => {
+            beforeEach((): void => {
+              pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+                item: {
+                  assignees: {
+                    nodes: [
+                      createHydratedMock<IGithubApiAssignee>({
+                        login: `dummy-assignee`,
+                      }),
+                    ],
+                    totalCount: 21,
+                  },
+                },
+              });
+              pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+              pullRequestProcessorLoggerInfoSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+                .mockImplementation();
+              pullRequestProcessorLoggerWarningSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `warning`)
+                .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+              pullRequestsInputsServiceGetInputsSpy = jest
+                .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+                .mockReturnValue(
+                  createHydratedMock<IPullRequestsInputs>({
+                    pullRequestOnlyAnyAssignees: [`dummy-other-assignee`],
+                  })
+                );
+            });
+
+            it(`should log a warning about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+                `Found`,
+                `value-21`,
+                `whiteBright-assignees attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+              );
+            });
+
+            it(`should annotate about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+                EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `pull-request-include-processor.ts`,
+                  startLine: 239,
+                  title: `Warning`,
+                }
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-assignee on this pull request`,
+                `value-dummy-assignee`
+              );
+            });
+
+            it(`should log about not containing any common assignee (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required assignee. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when at least one of the assignees match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-assignee`],
+                })
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-1`,
+                `whiteBright-assignee on this pull request`,
+                `value-dummy-assignee`
+              );
+            });
+
+            it(`should log about finding one assignee in common (continuing the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Containing one of the required assignee`,
+                `white-->`,
+                `value-dummy-assignee`
+              );
+            });
+
+            it(`should log continuing the processing`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `Continuing the processing for this pull request...`
+              );
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(result).toBeTrue();
+            });
+          });
+        });
+
+        describe(`when the pull request has two assignees`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-1`,
+                    }),
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-2`,
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+            pullRequestsInputsServiceGetInputsSpy = jest
+              .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+              .mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-card`],
+                })
+              );
+          });
+
+          describe(`when none of the assignees match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-other-assignee`],
+                })
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-assignees on this pull request`,
+                `value-dummy-assignee-1,dummy-assignee-2`
+              );
+            });
+
+            it(`should log about not containing any common assignee (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required assignee. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when none of the assignees match and the pagination is higher than 20`, (): void => {
+            beforeEach((): void => {
+              pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+                item: {
+                  assignees: {
+                    nodes: [
+                      createHydratedMock<IGithubApiAssignee>({
+                        login: `dummy-assignee-1`,
+                      }),
+                      createHydratedMock<IGithubApiAssignee>({
+                        login: `dummy-assignee-2`,
+                      }),
+                    ],
+                    totalCount: 21,
+                  },
+                },
+              });
+              pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+              pullRequestProcessorLoggerInfoSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+                .mockImplementation();
+              pullRequestProcessorLoggerWarningSpy = jest
+                .spyOn(pullRequestIncludeProcessor.processor.logger, `warning`)
+                .mockImplementation();
+              annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+              pullRequestsInputsServiceGetInputsSpy = jest
+                .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+                .mockReturnValue(
+                  createHydratedMock<IPullRequestsInputs>({
+                    pullRequestOnlyAnyAssignees: [`dummy-other-assignee`],
+                  })
+                );
+            });
+
+            it(`should log a warning about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledTimes(1);
+              expect(pullRequestProcessorLoggerWarningSpy).toHaveBeenCalledWith(
+                `Found`,
+                `value-21`,
+                `whiteBright-assignees attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+              );
+            });
+
+            it(`should annotate about finding too many assignees on this pull request since the pagination is not handled`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+              expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(
+                EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED,
+                {
+                  file: `pull-request-include-processor.ts`,
+                  startLine: 239,
+                  title: `Warning`,
+                }
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-assignees on this pull request`,
+                `value-dummy-assignee-1,dummy-assignee-2`
+              );
+            });
+
+            it(`should log about not containing any common assignee (skipping the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Not containing any of the required assignee. Skipping the processing of this pull request...`
+              );
+            });
+
+            it(`should return false`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(result).toBeFalse();
+            });
+          });
+
+          describe(`when at least one of the assignees match`, (): void => {
+            beforeEach((): void => {
+              pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+                createHydratedMock<IPullRequestsInputs>({
+                  pullRequestOnlyAnyAssignees: [`dummy-assignee-2`],
+                })
+              );
+            });
+
+            it(`should log the assignee names`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                3,
+                `Found`,
+                `value-2`,
+                `whiteBright-assignees on this pull request`,
+                `value-dummy-assignee-1,dummy-assignee-2`
+              );
+            });
+
+            it(`should log about finding one assignee in common (continuing the processing)`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                4,
+                `Containing one of the required assignee`,
+                `white-->`,
+                `value-dummy-assignee-2`
+              );
+            });
+
+            it(`should log continuing the processing`, (): void => {
+              expect.assertions(2);
+
+              pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
+
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(5);
+              expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+                5,
+                `Continuing the processing for this pull request...`
+              );
+            });
+
+            it(`should return true`, (): void => {
+              expect.assertions(1);
+
+              const result = pullRequestIncludeProcessor.shouldIncludeAnyWhiteListedAssignee$$();
 
               expect(result).toBeTrue();
             });

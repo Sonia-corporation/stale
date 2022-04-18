@@ -4,6 +4,7 @@ import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
+import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
@@ -95,7 +96,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
       );
       AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
         file: `issue-include-processor.ts`,
-        startLine: 76,
+        startLine: 87,
         title: `Warning`,
       });
     }
@@ -163,6 +164,90 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
     this.processor.logger.info(
       `Not containing any of the required milestone. Skipping the processing of this issue...`
     );
+
+    return false;
+  }
+
+  public shouldIncludeAnyWhiteListedAssignee$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed based on any of the associated assignees...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (_.isEmpty(issuesInputs.issueOnlyAnyAssignees)) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_ANY_ASSIGNEES),
+        LoggerFormatService.whiteBright(
+          `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+        )
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_ANY_ASSIGNEES),
+      LoggerFormatService.whiteBright(
+        `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+      )
+    );
+    const assignees: IGithubApiAssignee[] = this.processor.item.assignees.nodes;
+    const assigneesCount: number = assignees.length;
+    const assigneeNames: string[] = this._getAssigneeNames(assignees);
+
+    if (assigneesCount === 0) {
+      this.processor.logger.info(`Not containing any assignee. Skipping the processing of this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(assigneesCount),
+      LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this issue`),
+      LoggerService.value(assigneeNames)
+    );
+
+    const duplicatedAssigneeNames: string[] = getDuplicates(assigneeNames, issuesInputs.issueOnlyAnyAssignees);
+    const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssigneeNames);
+
+    if (!_.isUndefined(firstDuplicatedAssignee)) {
+      this.processor.logger.info(
+        `Containing one of the required assignee`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedAssignee)
+      );
+      this.processor.logger.info(`Continuing the processing for this issue...`);
+
+      return true;
+    }
+
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+
+    // @todo handle the pagination
+    const { totalCount } = this.processor.item.assignees;
+
+    if (totalCount > GithubApiIssuesService.assigneesPerIssue) {
+      this.processor.logger.warning(
+        `Found`,
+        LoggerService.value(_.toString(totalCount)),
+        LoggerFormatService.whiteBright(
+          `assignee${
+            totalCount > 1 ? `s` : ``
+          } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
+        )
+      );
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED, {
+        file: `issue-include-processor.ts`,
+        startLine: 233,
+        title: `Warning`,
+      });
+    }
+
+    this.processor.logger.info(`Not containing any of the required assignee. Skipping the processing of this issue...`);
 
     return false;
   }

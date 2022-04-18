@@ -100,6 +100,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-only-any-milestones](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-only-any-milestones-input)                 | Only allow the processing of issues that contains one of those milestones (multiline).                                                          |         |
 | [issue-ignore-any-milestones](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-ignore-any-milestones-input)             | Allow to ignore the processing of issues that contains one of those milestones (multiline).                                                     |         |
 | [issue-ignore-all-milestones](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-ignore-all-milestones-input)             | Allow to ignore the processing of issues that contains any milestones.                                                                          | `false` |
+| [issue-only-any-assignees](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-only-any-assignees-input)                   | Only allow the processing of issues that contains one of those assignees (multiline).                                                           |         |
 
 ## All the issues outputs
 
@@ -146,6 +147,7 @@ All the inputs that are used both for issues and pull requests.
 | [pull-request-only-any-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-milestones-input)                 | Only allow the processing of pull requests that contains one of those milestones (multiline).                                                          |         |
 | [pull-request-ignore-any-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-ignore-any-milestones-input)             | Allow to ignore the processing of pull requests that contains one of those milestones (multiline).                                                     |         |
 | [pull-request-ignore-all-milestones](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-ignore-all-milestones-input)             | Allow to ignore the processing of pull requests that contains any milestones.                                                                          | `false` |
+| [pull-request-only-any-assignees](https://sonia-corporation.github.io/stale/docs/pull-requests/inputs/pull-request-only-any-assignees-input)                   | Only allow the processing of pull requests that contains one of those assignees (multiline).                                                           |         |
 
 ## All the pull requests outputs
 
