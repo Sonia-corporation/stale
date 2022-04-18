@@ -1,5 +1,15 @@
 # Sonia stale action
 
+# [1.57.0](https://github.com/Sonia-corporation/stale/compare/1.56.0...1.57.0) (2022-04-18)
+
+
+### :rocket: Features
+
+* **inputs:** add new inputs to only process items with specific assignees ([2fc8bda](https://github.com/Sonia-corporation/stale/commit/2fc8bdaa2bf5d2031c2f9ca111b44322f67f0e4d)), closes [#559](https://github.com/Sonia-corporation/stale/issues/559)
+  Add the input `issue-only-any-assignees`.
+Add the input `pull-request-only-any-assignees`.
+You can use them to only process issues and PRs which have one of the specified assignee(s).
+
 # [1.56.0](https://github.com/Sonia-corporation/stale/compare/1.55.0...1.56.0) (2022-04-17)
 
 
