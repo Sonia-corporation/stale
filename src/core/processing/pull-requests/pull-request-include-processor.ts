@@ -3,6 +3,7 @@ import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-input
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
@@ -98,7 +99,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
       );
       AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
         file: `pull-request-include-processor.ts`,
-        startLine: 76,
+        startLine: 90,
         title: `Warning`,
       });
     }
@@ -165,6 +166,95 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.info(
       `Not containing any of the required milestone. Skipping the processing of this pull request...`
+    );
+
+    return false;
+  }
+
+  public shouldIncludeAnyWhiteListedAssignee$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this pull request should only be processed based on any of the associated assignees...`
+    );
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (_.isEmpty(pullRequestsInputs.pullRequestOnlyAnyAssignees)) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_ASSIGNEES),
+        LoggerFormatService.whiteBright(
+          `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
+        )
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_ASSIGNEES),
+      LoggerFormatService.whiteBright(
+        `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
+      )
+    );
+    const assignees: IGithubApiAssignee[] = this.processor.item.assignees.nodes;
+    const assigneesCount: number = assignees.length;
+    const assigneeNames: string[] = this._getAssigneeNames(assignees);
+
+    if (assigneesCount === 0) {
+      this.processor.logger.info(`Not containing any assignee. Skipping the processing of this pull request...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(assigneesCount),
+      LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this pull request`),
+      LoggerService.value(assigneeNames)
+    );
+
+    const duplicatedAssigneeNames: string[] = getDuplicates(
+      assigneeNames,
+      pullRequestsInputs.pullRequestOnlyAnyAssignees
+    );
+    const firstDuplicatedAssignee: string | undefined = _.head(duplicatedAssigneeNames);
+
+    if (!_.isUndefined(firstDuplicatedAssignee)) {
+      this.processor.logger.info(
+        `Containing one of the required assignee`,
+        LoggerFormatService.white(`->`),
+        LoggerService.value(firstDuplicatedAssignee)
+      );
+      this.processor.logger.info(`Continuing the processing for this pull request...`);
+
+      return true;
+    }
+
+    this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
+
+    // @todo handle the pagination
+    const { totalCount } = this.processor.item.assignees;
+
+    if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {
+      this.processor.logger.warning(
+        `Found`,
+        LoggerService.value(_.toString(totalCount)),
+        LoggerFormatService.whiteBright(
+          `assignee${
+            totalCount > 1 ? `s` : ``
+          } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
+        )
+      );
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_ASSIGNEES_PAGINATION_NOT_IMPLEMENTED, {
+        file: `pull-request-include-processor.ts`,
+        startLine: 239,
+        title: `Warning`,
+      });
+    }
+
+    this.processor.logger.info(
+      `Not containing any of the required assignee. Skipping the processing of this pull request...`
     );
 
     return false;

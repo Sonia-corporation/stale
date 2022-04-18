@@ -96,6 +96,10 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains any milestones.'
     required: false
     default: 'false'
+  issue-only-any-assignees:
+    description: 'Only allow the processing of issues that contains one of those assignees (multiline).'
+    required: false
+    default: ''
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
@@ -193,6 +197,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains any milestones.'
     required: false
     default: 'false'
+  pull-request-only-any-assignees:
+    description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
+    required: false
+    default: ''
 outputs:
   # Issues outputs
   processed-issues-count:
