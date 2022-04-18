@@ -1,0 +1,35 @@
+---
+id: issue-only-any-assignees-input
+title: Issue only any assignees input
+description: |
+  All the information you need to know about the issue only any assignees input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+  - Assignees
+---
+
+### Input {#input}
+
+Name: `issue-only-any-assignees`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This input will let you process only the issues that are linked to an assignee which is white-listed with this input.  
+This can be useful when you use the assignees for triage.
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-only-any-assignees: |
+    C0ZEN
+    maintainers
+```

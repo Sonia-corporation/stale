@@ -44,6 +44,7 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
       issueLimitApiQueriesCount: CoreInputsService.getNumberInput$$(EInputs.ISSUE_LIMIT_API_QUERIES_COUNT, {
         required: false,
       }),
+      issueOnlyAnyAssignees: core.getMultilineInput(EInputs.ISSUE_ONLY_ANY_ASSIGNEES, { required: false }),
       issueOnlyAnyMilestones: core.getMultilineInput(EInputs.ISSUE_ONLY_ANY_MILESTONES, { required: false }),
       issueOnlyAnyProjectCards: core.getMultilineInput(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS, { required: false }),
       issueProcessing: core.getBooleanInput(EInputs.ISSUE_PROCESSING, { required: false }),
