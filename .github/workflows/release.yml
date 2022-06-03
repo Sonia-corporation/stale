@@ -141,7 +141,7 @@ jobs:
         run: echo 'The current tag is not the same after the release. A new tag has been created'
       - name: Create PR from master to develop
         if: needs.CurrentTag.outputs.CURRENT_TAG != steps.latest-tag.outputs.tag
-        uses: peter-evans/create-pull-request@f094b77505fb89581e68a1163fbd2fffece39da1 # tag=v4
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 # tag=v4
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(develop): merge master into develop due to new version ${{ steps.latest-tag.outputs.tag }}'
