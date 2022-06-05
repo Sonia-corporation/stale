@@ -43,7 +43,7 @@ jobs:
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09 # tag=v3
+        uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -87,7 +87,7 @@ jobs:
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@48af2dc4a9e8278b89d7fa154b955c30c6aaab09 # tag=v3
+        uses: actions/cache@30f413bfed0a2bc738fdfd409e5a9e96b24545fd # tag=v3
         env:
           cache-name: cache-node-modules
         with:
