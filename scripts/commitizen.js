@@ -14,7 +14,7 @@ module.exports = {
   },
   skipQuestions: [`footer`],
   subjectLimit: 144,
-  // Any changes should also me made on the [semantic config](#/.github/semantic.yml)
+  // Any changes should also be made on the [semantic config](#/.github/workflows/semantic.yml)
   types: [
     {
       name: `feat:     A new feature`,

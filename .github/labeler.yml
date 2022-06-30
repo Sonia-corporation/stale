@@ -21,7 +21,6 @@
   - .github/config.yml
   - .github/issue_label_bot.yaml
   - .github/labeler.yml
-  - .github/semantic.yml
   - .codeclimate.yml
   - .renovaterc.json
 
