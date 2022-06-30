@@ -215,10 +215,6 @@
     "message": "Site web de l'action GitHub stale",
     "description": "Home page description"
   },
-  "theme.tags.tagsPageTitle": {
-    "message": "Tags",
-    "description": "The title of the tag list page"
-  },
   "theme.SearchBar.label": {
     "message": "Chercher",
     "description": "The ARIA label and placeholder for search button"
@@ -304,5 +300,17 @@
   },
   "theme.SearchBar.seeAll": {
     "message": "Voir tous {count} les résultats"
+  },
+  "theme.docs.breadcrumbs.home": {
+    "message": "Page d'accueil",
+    "description": "The ARIA label for the home page in the breadcrumbs"
+  },
+  "theme.docs.breadcrumbs.navAriaLabel": {
+    "message": "Fil d'Ariane",
+    "description": "The ARIA label for the breadcrumbs"
+  },
+  "theme.CodeBlock.wordWrapToggle": {
+    "message": "Activer/désactiver le retour à la ligne",
+    "description": "The title attribute for toggle word wrapping button of code block lines"
   }
 }
