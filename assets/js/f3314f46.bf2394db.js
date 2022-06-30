@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[8532],{4977:function(e){e.exports=JSON.parse('{"allTagsPath":"/stale/blog/tags","name":"inclusive criteria","count":1,"permalink":"/stale/blog/tags/inclusive-criteria"}')}}]);

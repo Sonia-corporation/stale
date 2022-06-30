@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[5744],{4370:e=>{e.exports=JSON.parse('{"label":"new ui","permalink":"/stale/fr/blog/tags/new-ui","allTagsPath":"/stale/fr/blog/tags","count":1}')}}]);

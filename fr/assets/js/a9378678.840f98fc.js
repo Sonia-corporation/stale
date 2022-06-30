@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[6716],{9626:a=>{a.exports=JSON.parse('{"label":"sonia corporation","permalink":"/stale/fr/blog/tags/sonia-corporation","allTagsPath":"/stale/fr/blog/tags","count":1}')}}]);

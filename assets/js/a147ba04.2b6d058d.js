@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[8054],{9411:t=>{t.exports=JSON.parse('{"label":"input","permalink":"/stale/blog/tags/input","allTagsPath":"/stale/blog/tags","count":1}')}}]);
