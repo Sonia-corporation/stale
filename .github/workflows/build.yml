@@ -4,7 +4,7 @@
 name: Build
 env:
   CODECOV_VERSION: 'v0.1.15'
-  NODE_VERSION: '14.17.6'
+  NODE_VERSION: '16.15.1'
 on:
   push:
     branches:
