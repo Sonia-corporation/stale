@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check labels
         id: check_labels
-        uses: shioyang/check-pr-labels-on-push-action@6902edf856909c50ff1d69b2cd7dc0d82f1061b6 # renovate: tag=v1.0.3
+        uses: shioyang/check-pr-labels-on-push-action@174cb067f027b73715c117fbe904c5a6cf8e6caa # tag=v1.0.4
         with:
           github-token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           labels: '["merge-into-master :crown:"]'
@@ -30,7 +30,7 @@ jobs:
     needs: [HasLabel]
     steps:
       - name: Checkout master
-        uses: actions/checkout@dcd71f646680f2efd8db4afa5ad64fdcba30e748 # tag=v3
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
         with:
           ref: master
       - name: Reset branch
@@ -47,7 +47,7 @@ jobs:
         run: echo 'The PR should not be created'
       - name: Create PR from develop to master
         if: needs.HasLabel.outputs.HAS_LABEL == 'true'
-        uses: peter-evans/create-pull-request@bd72e1b7922d417764d27d30768117ad7da78a0e # tag=v4
+        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 # tag=v4
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(master): merge develop into master'
