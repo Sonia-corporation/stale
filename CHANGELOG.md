@@ -1,5 +1,13 @@
 # Sonia stale action
 
+## [1.57.1](https://github.com/Sonia-corporation/stale/compare/1.57.0...1.57.1) (2022-06-30)
+
+
+### :bug: Bug Fixes
+
+* **deps:** update dependency prism-react-renderer to v1.3.3 ([#686](https://github.com/Sonia-corporation/stale/issues/686)) ([873bda5](https://github.com/Sonia-corporation/stale/commit/873bda5366f01b74c5b65d4ee07bdc31cd4d1f1c))
+  Co-authored-by: Renovate Bot <bot@renovateapp.com>
+
 # [1.57.0](https://github.com/Sonia-corporation/stale/compare/1.56.0...1.57.0) (2022-04-18)
 
 
