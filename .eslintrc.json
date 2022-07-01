@@ -46,8 +46,6 @@
     }
   },
   "rules": {
-    "jest/prefer-comparison-matcher": "error",
-    "jest/prefer-equality-matcher": "error",
     "@typescript-eslint/no-inferrable-types": "off",
     "no-restricted-imports": [
       "error",
@@ -485,6 +483,9 @@
       "files": ["*.spec.ts", "*.spec.tsx"],
       "extends": ["plugin:jest/style", "plugin:jest/all"],
       "rules": {
+        "jest/prefer-hooks-on-top": "error",
+        "jest/prefer-comparison-matcher": "error",
+        "jest/prefer-equality-matcher": "error",
         "jest/max-nested-describe": "off",
         "@typescript-eslint/prefer-readonly-parameter-types": "off",
         "jest/prefer-expect-resolves": "error",
