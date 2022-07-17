@@ -127,7 +127,7 @@
     "commitizen": "4.2.4",
     "concurrently": "7.2.2",
     "cross-env": "7.0.3",
-    "cz-customizable": "6.9.0",
+    "cz-customizable": "6.9.1",
     "cz-customizable-ghooks": "2.0.0",
     "eslint": "8.19.0",
     "eslint-config-google": "0.14.0",
