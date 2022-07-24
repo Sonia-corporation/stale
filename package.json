@@ -125,7 +125,7 @@
     "all-contributors-cli": "6.20.0",
     "chalk": "4.1.2",
     "commitizen": "4.2.5",
-    "concurrently": "7.2.2",
+    "concurrently": "7.3.0",
     "cross-env": "7.0.3",
     "cz-customizable": "6.9.1",
     "cz-customizable-ghooks": "2.0.0",
