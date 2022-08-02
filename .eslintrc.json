@@ -483,6 +483,7 @@
       "files": ["*.spec.ts", "*.spec.tsx"],
       "extends": ["plugin:jest/style", "plugin:jest/all"],
       "rules": {
+        "jest/max-expects": "off",
         "jest/prefer-hooks-on-top": "error",
         "jest/prefer-comparison-matcher": "error",
         "jest/prefer-equality-matcher": "error",
