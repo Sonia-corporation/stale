@@ -19,7 +19,7 @@
     "generate-changelog": "node ./scripts/generate-changelog.js"
   },
   "engines": {
-    "node": "16.15.1",
+    "node": "16.16.0",
     "npm": "8.13.2"
   },
   "dependencies": {
