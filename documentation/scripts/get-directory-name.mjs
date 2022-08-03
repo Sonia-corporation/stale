@@ -1,4 +1,4 @@
-const PATH = require(`path`);
+import PATH from 'path';
 
 /**
  * @description
@@ -6,8 +6,6 @@ const PATH = require(`path`);
  * @param {Readonly<string>} path The path to look into
  * @returns {string} The name of the last directory from the given path
  */
-function getDirectoryName(path) {
+export function getDirectoryName(path) {
   return PATH.basename(PATH.resolve(path));
 }
-
-module.exports.getDirectoryName = getDirectoryName;

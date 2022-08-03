@@ -31,7 +31,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "typescript-sort-keys", "jest", "prettier", "progress", "jsdoc", "import", "typescript-sort-keys"],
   "settings": {
-    "import/extensions": [".js", ".ts", ".tsx"],
+    "import/extensions": [".js", ".ts", ".tsx", ".mjs"],
     "import/parsers": {
       "@typescript-eslint/parser": [".ts"]
     },
@@ -47,12 +47,7 @@
   },
   "rules": {
     "@typescript-eslint/no-inferrable-types": "off",
-    "no-restricted-imports": [
-      "error",
-      {
-        "patterns": [".*"]
-      }
-    ],
+    "no-restricted-imports": ["error"],
     "progress/activate": 1,
     "@typescript-eslint/member-ordering": [
       "error",
@@ -459,7 +454,7 @@
   },
   "overrides": [
     {
-      "files": ["*.js"],
+      "files": ["*.js", "*.mjs"],
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "import/no-commonjs": "off"

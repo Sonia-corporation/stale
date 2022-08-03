@@ -1,17 +1,24 @@
-const CHALK = require(`./chalk`);
-const MOMENT = require(`moment-timezone`);
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const _ = require(`lodash`);
+import * as CHALK from './chalk.mjs';
+import _ from 'lodash';
+import MOMENT from 'moment-timezone';
+
 const LOG_PREFIX = `● `;
+const LOG_TYPE_PREFIX_MAP = {
+  debug: () => CHALK.debug(LOG_PREFIX),
+  error: () => CHALK.error(LOG_PREFIX),
+  log: () => CHALK.log(LOG_PREFIX),
+  success: () => CHALK.success(LOG_PREFIX),
+  warning: () => CHALK.warning(LOG_PREFIX),
+};
 
 /**
  * @description
  * Format the given log type
- * @param {Readonly<string>} logType The type of logger message
+ * @param {Readonly<'error' | 'warning' | 'success' | 'log' | 'debug'>} logType The type of logger message
  * @returns {string} Return the formatted log type
  */
 function getLogTypePrefix(logType) {
-  return CHALK[logType](LOG_PREFIX);
+  return LOG_TYPE_PREFIX_MAP[logType];
 }
 
 /**
@@ -34,11 +41,9 @@ function getContext(scope) {
  * @param {Readonly<string>} scope The scope (usually the file name)
  * @param {Readonly<string>} message The message to log
  */
-function error(scope, message) {
+export function error(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`error`))}${getContext(scope)}${_.toString(message)}`);
 }
-
-module.exports.error = error;
 
 /**
  * @description
@@ -46,11 +51,9 @@ module.exports.error = error;
  * @param {Readonly<string>} scope The scope (usually the file name)
  * @param {Readonly<string>} message The message to log
  */
-function warning(scope, message) {
+export function warning(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`warning`))}${getContext(scope)}${_.toString(message)}`);
 }
-
-module.exports.warning = warning;
 
 /**
  * @description
@@ -58,11 +61,9 @@ module.exports.warning = warning;
  * @param {Readonly<string>} scope The scope (usually the file name)
  * @param {Readonly<string>} message The message to log
  */
-function success(scope, message) {
+export function success(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`success`))}${getContext(scope)}${_.toString(message)}`);
 }
-
-module.exports.success = success;
 
 /**
  * @description
@@ -70,11 +71,9 @@ module.exports.success = success;
  * @param {Readonly<string>} scope The scope (usually the file name)
  * @param {Readonly<string>} message The message to log
  */
-function log(scope, message) {
+export function log(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`log`))}${getContext(scope)}${_.toString(message)}`);
 }
-
-module.exports.log = log;
 
 /**
  * @description
@@ -82,8 +81,6 @@ module.exports.log = log;
  * @param {Readonly<string>} scope The scope (usually the file name)
  * @param {Readonly<string>} message The message to log
  */
-function debug(scope, message) {
+export function debug(scope, message) {
   console.log(`${_.toString(getLogTypePrefix(`debug`))}${getContext(scope)}${_.toString(message)}`);
 }
-
-module.exports.debug = debug;

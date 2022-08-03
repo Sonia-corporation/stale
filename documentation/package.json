@@ -16,7 +16,7 @@
     "write-heading-ids:changelog": "docusaurus write-heading-ids . docs/15-changelog.md",
     "typecheck": "tsc",
     "generate-files": "npm run generate-changelog",
-    "generate-changelog": "node ./scripts/generate-changelog.js"
+    "generate-changelog": "node scripts/generate-changelog.mjs"
   },
   "engines": {
     "node": "16.15.1",
