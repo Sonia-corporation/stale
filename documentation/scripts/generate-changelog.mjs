@@ -1,11 +1,11 @@
-const CHALK = require(`./chalk`);
-const FS = require(`fs-extra`);
-const LOGGER = require(`./logger`);
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const _ = require(`lodash`);
-const { getDirectoryName } = require(`./get-directory-name`);
+import * as CHALK from './chalk.mjs';
+import { getDirectoryName } from './get-directory-name.mjs';
+import * as LOGGER from './logger.mjs';
+import FS from 'fs-extra';
+import _ from 'lodash';
+import { execSync } from 'child_process';
+
 const CONTEXT = `generate-changelog`;
-const { execSync } = require(`child_process`);
 const CHANGELOG_PATH = `documentation/docs/15-changelog.md`;
 
 /**

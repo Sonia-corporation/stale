@@ -73,8 +73,8 @@
     "test:ci:coverage:unit": "jest --bail=1 --ci --maxWorkers 2 --silent --collect-coverage --selectProjects unitCi",
     "test:clear-cache": "jest --clear-cache",
     "\n# LINT SCRIPTS:": "",
-    "lint:ts": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet **/*.{js,ts}",
-    "lint:ts:ci": "eslint --quiet **/*.{js,ts}",
+    "lint:ts": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet **/*.{js,ts,mjs}",
+    "lint:ts:ci": "eslint --quiet **/*.{js,ts,mjs}",
     "lint:ts:hook": "eslint --fix --fix-type suggestion,layout,problem --cache --cache-location .eslintcache --quiet",
     "lint:other": "prettier --write --ignore-unknown **/*.{md,json,yml,html}",
     "lint:other:this": "prettier --write --ignore-unknown",
@@ -97,7 +97,7 @@
     "commit-msg": "cross-env LOGGING_LEVEL=debug cz-customizable-ghooks",
     "post-commit": "git update-index --again",
     "install-git-hooks": "husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks",
-    "postversion": "node ./scripts/prepare-release.js"
+    "postversion": "node scripts/prepare-release.mjs"
   },
   "dependencies": {
     "@actions/core": "1.9.0",
@@ -123,7 +123,7 @@
     "@typescript-eslint/parser": "5.30.7",
     "@vercel/ncc": "0.34.0",
     "all-contributors-cli": "6.20.0",
-    "chalk": "4.1.2",
+    "chalk": "5.0.1",
     "commitizen": "4.2.5",
     "concurrently": "7.3.0",
     "cross-env": "7.0.3",

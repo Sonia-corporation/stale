@@ -5,7 +5,7 @@
  * @description
  * Return the Jest configuration for a given project
  * @param {Readonly<string>} type The project type
- * @returns {Object} The Jest configuration
+ * @returns {object} The Jest configuration
  */
 const createProject = (type) => {
   return {
@@ -86,7 +86,7 @@ const createProject = (type) => {
     // modulePathIgnorePatterns: [],
 
     // An array of file extensions your modules use
-    moduleFileExtensions: [`js`, `ts`, `tsx`],
+    moduleFileExtensions: [`js`, `ts`, `tsx`, `mjs`],
 
     // A map from regular expressions to module names that allow to stub out resources with a single module
     moduleNameMapper: {
@@ -226,24 +226,38 @@ function getTestMatch(type) {
       `<rootDir>/tests/issues/**/*.spec.ts`,
       `<rootDir>/tests/issues/**/*.spec.tsx`,
       `<rootDir>/tests/issues/**/*.spec.js`,
+      `<rootDir>/tests/issues/**/*.spec.mjs`,
     ],
     integrationIssuesCi: [
       `<rootDir>/tests/issues/**/*.spec.ts`,
       `<rootDir>/tests/issues/**/*.spec.tsx`,
       `<rootDir>/tests/issues/**/*.spec.js`,
+      `<rootDir>/tests/issues/**/*.spec.mjs`,
     ],
     integrationPullRequests: [
       `<rootDir>/tests/pull-requests/**/*.spec.ts`,
       `<rootDir>/tests/pull-requests/**/*.spec.tsx`,
       `<rootDir>/tests/pull-requests/**/*.spec.js`,
+      `<rootDir>/tests/pull-requests/**/*.spec.mjs`,
     ],
     integrationPullRequestsCi: [
       `<rootDir>/tests/pull-requests/**/*.spec.ts`,
       `<rootDir>/tests/pull-requests/**/*.spec.tsx`,
       `<rootDir>/tests/pull-requests/**/*.spec.js`,
+      `<rootDir>/tests/pull-requests/**/*.spec.mjs`,
     ],
-    unit: [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
-    unitCi: [`<rootDir>/src/**/*.spec.ts`, `<rootDir>/src/**/*.spec.tsx`, `<rootDir>/src/**/*.spec.js`],
+    unit: [
+      `<rootDir>/src/**/*.spec.ts`,
+      `<rootDir>/src/**/*.spec.tsx`,
+      `<rootDir>/src/**/*.spec.js`,
+      `<rootDir>/src/**/*.spec.mjs`,
+    ],
+    unitCi: [
+      `<rootDir>/src/**/*.spec.ts`,
+      `<rootDir>/src/**/*.spec.tsx`,
+      `<rootDir>/src/**/*.spec.js`,
+      `<rootDir>/src/**/*.spec.mjs`,
+    ],
   }[type];
 }
 

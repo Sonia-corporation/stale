@@ -11,10 +11,12 @@
 'test :test_tube:':
   - src/**/*.spec.ts
   - src/**/*.spec.js
+  - src/**/*.spec.mjs
   - tests/**
   - documentation/**/*.spec.ts
   - documentation/**/*.spec.tsx
   - documentation/**/*.spec.js
+  - documentation/**/*.spec.mjs
 
 'CI :robot:':
   - .github/workflows/**
