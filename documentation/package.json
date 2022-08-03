@@ -20,7 +20,7 @@
   },
   "engines": {
     "node": "16.16.0",
-    "npm": "8.13.2"
+    "npm": "8.16.0"
   },
   "dependencies": {
     "@docusaurus/core": "2.0.1",
