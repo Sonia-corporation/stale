@@ -4,6 +4,6 @@
     <file url="file://$PROJECT_DIR$" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/documentation" libraries="{Node.js Core}" />
     <file url="file://$PROJECT_DIR$/node_modules" libraries="{Node.js Core}" />
-    <file url="PROJECT" libraries="{actions, jest, lodash, luxon, terminal-link, ts-auto-mock, types}" />
+    <file url="PROJECT" libraries="{actions, jest, jest-mock, lodash, luxon, terminal-link, ts-auto-mock, types}" />
   </component>
 </project>
