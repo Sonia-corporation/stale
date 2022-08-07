@@ -11,7 +11,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import faker from 'faker';
 import _ from 'lodash';
 import { createHydratedMock } from 'ts-auto-mock';
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
+import MockedObjectDeep = jest.MockedObjectDeep;
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);

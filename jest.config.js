@@ -57,6 +57,11 @@ const createProject = (type) => {
     // Make calling deprecated APIs throw helpful error messages
     errorOnDeprecated: true,
 
+    // Setting this value (enableGlobally) to "true" allows the use of fake timers for functions such as "setTimeout"
+    fakeTimers: {
+      enableGlobally: true,
+    },
+
     // Force coverage collection from ignored files using an array of glob patterns
     // forceCoverageMatch: [],
 
@@ -185,13 +190,7 @@ const createProject = (type) => {
     // This option allows use of a custom test runner
     // testRunner: "jasmine2",
 
-    // This option sets the URL for the jsdom environment. It is reflected in properties such as location.href
-    // testURL: "http://localhost",
-
     testTimeout: 5000,
-
-    // Setting this value to "fake" allows the use of fake timers for functions such as "setTimeout"
-    timers: `fake`,
 
     // A map from regular expressions to paths to transformers
     transform: {
