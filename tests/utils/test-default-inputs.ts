@@ -23,6 +23,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueOnlyAnyAssignees: [],
   issueOnlyAnyMilestones: [],
   issueOnlyAnyProjectCards: [],
+  issueOnlyWithAssignees: false,
   issueProcessing: true,
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,

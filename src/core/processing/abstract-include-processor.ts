@@ -23,7 +23,8 @@ export abstract class AbstractIncludeProcessor<
     return (
       this.shouldIncludeAnyWhiteListedProjectCard$$() &&
       this.shouldIncludeAnyWhiteListedMilestone$$() &&
-      this.shouldIncludeAnyWhiteListedAssignee$$()
+      this.shouldIncludeAnyWhiteListedAssignee$$() &&
+      this.shouldIncludeAnyAssignee$$()
     );
   }
 
@@ -40,4 +41,6 @@ export abstract class AbstractIncludeProcessor<
   public abstract shouldIncludeAnyWhiteListedMilestone$$(): boolean;
 
   public abstract shouldIncludeAnyWhiteListedAssignee$$(): boolean;
+
+  public abstract shouldIncludeAnyAssignee$$(): boolean;
 }

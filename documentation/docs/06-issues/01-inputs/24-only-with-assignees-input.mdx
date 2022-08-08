@@ -1,0 +1,33 @@
+---
+id: issue-only-with-assignees-input
+title: Issue only with assignees input
+description: |
+  All the information you need to know about the issue only with assignees input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+  - Assignees
+---
+
+### Input {#input}
+
+Name: `issue-only-with-assignees`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This input will let you process only the issues that are linked to at least one assignee.  
+This can be useful when you use the assignees for triage.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-only-with-assignees: true
+```
