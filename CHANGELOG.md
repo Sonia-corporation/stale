@@ -1,5 +1,19 @@
 # Sonia stale action
 
+# [1.58.0](https://github.com/Sonia-corporation/stale/compare/1.57.1...1.58.0) (2022-08-09)
+
+
+### :bug: Bug Fixes
+
+* **deps:** update dependency @actions/core to v1.9.0 ([9dfeb7a](https://github.com/Sonia-corporation/stale/commit/9dfeb7ac1848bbd369344f121a0b28801bf1aa33))
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-only-with-assignees` ([#772](https://github.com/Sonia-corporation/stale/issues/772)) ([aeebf82](https://github.com/Sonia-corporation/stale/commit/aeebf82a18d2a7a606f8cda5c34299ca6242f00d))
+* **prs:** add new input `pull-request-only-with-assignees` ([#775](https://github.com/Sonia-corporation/stale/issues/775)) ([63d69b0](https://github.com/Sonia-corporation/stale/commit/63d69b057f15ba38cbc8ec998aaec2a66e702dc5)), closes [#313](https://github.com/Sonia-corporation/stale/issues/313)
+  This new input allows to only process pull requests containing at least one assignee.
+
 ## [1.57.1](https://github.com/Sonia-corporation/stale/compare/1.57.0...1.57.1) (2022-06-30)
 
 

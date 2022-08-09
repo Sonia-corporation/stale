@@ -1,6 +1,6 @@
 import * as CHALK from './chalk.mjs';
-import { getDirectoryName } from 'scripts/get-directory-name.mjs';
-import * as LOGGER from 'scripts/logger.mjs';
+import { getDirectoryName } from './get-directory-name.mjs';
+import * as LOGGER from './logger.mjs';
 import { execSync } from 'child_process';
 
 const CONTEXT = `prepare-release`;
