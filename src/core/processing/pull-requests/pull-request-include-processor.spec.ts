@@ -37,21 +37,25 @@ describe(`PullRequestIncludeProcessor`, (): void => {
     });
 
     describe(`shouldInclude()`, (): void => {
-      let shouldIncludeAnyWhiteListedProjectCardSpy: jest.SpyInstance;
-      let shouldIncludeAnyWhiteListedMilestoneSpy: jest.SpyInstance;
-      let shouldIncludeAnyWhiteListedAssigneeSpy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedProjectCard$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedMilestone$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedAssignee$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyAssignee$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
 
-        shouldIncludeAnyWhiteListedProjectCardSpy = jest
+        shouldIncludeAnyWhiteListedProjectCard$$Spy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedProjectCard$$`)
           .mockImplementation();
-        shouldIncludeAnyWhiteListedMilestoneSpy = jest
+        shouldIncludeAnyWhiteListedMilestone$$Spy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedMilestone$$`)
           .mockImplementation();
-        shouldIncludeAnyWhiteListedAssigneeSpy = jest
+        shouldIncludeAnyWhiteListedAssignee$$Spy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyWhiteListedAssignee$$`)
+          .mockImplementation();
+        shouldIncludeAnyAssignee$$Spy = jest
+          .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyAssignee$$`)
           .mockImplementation();
       });
 
@@ -60,13 +64,13 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
         pullRequestIncludeProcessor.shouldInclude();
 
-        expect(shouldIncludeAnyWhiteListedProjectCardSpy).toHaveBeenCalledTimes(1);
-        expect(shouldIncludeAnyWhiteListedProjectCardSpy).toHaveBeenCalledWith();
+        expect(shouldIncludeAnyWhiteListedProjectCard$$Spy).toHaveBeenCalledTimes(1);
+        expect(shouldIncludeAnyWhiteListedProjectCard$$Spy).toHaveBeenCalledWith();
       });
 
       describe(`when the pull request belongs to any of the white-listed project card`, (): void => {
         beforeEach((): void => {
-          shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(true);
+          shouldIncludeAnyWhiteListedProjectCard$$Spy.mockReturnValue(true);
         });
 
         it(`should check if the pull request should be processed because she belongs to any of the white-listed milestone`, (): void => {
@@ -74,13 +78,13 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
           pullRequestIncludeProcessor.shouldInclude();
 
-          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledTimes(1);
-          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledWith();
+          expect(shouldIncludeAnyWhiteListedMilestone$$Spy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeAnyWhiteListedMilestone$$Spy).toHaveBeenCalledWith();
         });
 
         describe(`when the pull request belongs to any of the white-listed milestone`, (): void => {
           beforeEach((): void => {
-            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(true);
+            shouldIncludeAnyWhiteListedMilestone$$Spy.mockReturnValue(true);
           });
 
           it(`should check if the pull request should be processed because she belongs to any of the white-listed assignee`, (): void => {
@@ -88,27 +92,56 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
             pullRequestIncludeProcessor.shouldInclude();
 
-            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledTimes(1);
-            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledWith();
+            expect(shouldIncludeAnyWhiteListedAssignee$$Spy).toHaveBeenCalledTimes(1);
+            expect(shouldIncludeAnyWhiteListedAssignee$$Spy).toHaveBeenCalledWith();
           });
 
           describe(`when the pull request belongs to any of the white-listed assignee`, (): void => {
             beforeEach((): void => {
-              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(true);
+              shouldIncludeAnyWhiteListedAssignee$$Spy.mockReturnValue(true);
             });
 
-            it(`should return true`, (): void => {
-              expect.assertions(1);
+            it(`should check if the pull request should be processed because she has at least one of assignee`, (): void => {
+              expect.assertions(2);
 
-              const result = pullRequestIncludeProcessor.shouldInclude();
+              pullRequestIncludeProcessor.shouldInclude();
 
-              expect(result).toBeTrue();
+              expect(shouldIncludeAnyAssignee$$Spy).toHaveBeenCalledTimes(1);
+              expect(shouldIncludeAnyAssignee$$Spy).toHaveBeenCalledWith();
+            });
+
+            describe(`when the pull request has at least one assignee`, (): void => {
+              beforeEach((): void => {
+                shouldIncludeAnyAssignee$$Spy.mockReturnValue(true);
+              });
+
+              it(`should return true`, (): void => {
+                expect.assertions(1);
+
+                const result = pullRequestIncludeProcessor.shouldInclude();
+
+                expect(result).toBeTrue();
+              });
+            });
+
+            describe(`when the pull request has no assignee`, (): void => {
+              beforeEach((): void => {
+                shouldIncludeAnyAssignee$$Spy.mockReturnValue(false);
+              });
+
+              it(`should return false`, (): void => {
+                expect.assertions(1);
+
+                const result = pullRequestIncludeProcessor.shouldInclude();
+
+                expect(result).toBeFalse();
+              });
             });
           });
 
           describe(`when the pull request does not belong to any of the white-listed assignee`, (): void => {
             beforeEach((): void => {
-              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(false);
+              shouldIncludeAnyWhiteListedAssignee$$Spy.mockReturnValue(false);
             });
 
             it(`should return false`, (): void => {
@@ -123,7 +156,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
         describe(`when the pull request does not belong to any of the white-listed milestone`, (): void => {
           beforeEach((): void => {
-            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(false);
+            shouldIncludeAnyWhiteListedMilestone$$Spy.mockReturnValue(false);
           });
 
           it(`should return false`, (): void => {
@@ -138,7 +171,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
       describe(`when the pull request does not belong to any of the white-listed project card`, (): void => {
         beforeEach((): void => {
-          shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(false);
+          shouldIncludeAnyWhiteListedProjectCard$$Spy.mockReturnValue(false);
         });
 
         it(`should return false`, (): void => {
@@ -1654,6 +1687,257 @@ describe(`PullRequestIncludeProcessor`, (): void => {
 
               expect(result).toBeTrue();
             });
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyAssignee$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithAssignees: false,
+            })
+          );
+      });
+
+      it(`should log about checking the pull-request-only-with-assignees input`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request should only be processed when having at least one associated assignee...`
+        );
+      });
+
+      it(`should get the pull request inputs`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull-request-only-with-assignees input is disabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithAssignees: false,
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this pull request (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-assignees`,
+            `whiteBright-is disabled. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull-request-only-with-assignees input is enabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithAssignees: true,
+            })
+          );
+        });
+
+        it(`should log about checking if this pull request should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-assignees`,
+            `whiteBright-is enabled. Checking...`
+          );
+        });
+
+        describe(`when the pull request has no assignee`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [],
+                  totalCount: 0,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about not containing any assignee (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any assignee. Skipping the processing of this pull request...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the pull request has at least one assignee`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee`,
+                    }),
+                  ],
+                  totalCount: 1,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some assignees (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-1`,
+              `whiteBright-assignee on this pull request`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this pull request...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the pull request has two assignees`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-1`,
+                    }),
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-2`,
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some assignees (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-2`,
+              `whiteBright-assignees on this pull request`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this pull request...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
           });
         });
       });
