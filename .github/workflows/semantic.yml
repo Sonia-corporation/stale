@@ -1,0 +1,29 @@
+name: 'Semantic Pull Request'
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+jobs:
+  main:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@91682d013dea3ff257520b9b68c9cb93ced4fe9b # tag=v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Any changes should also be made on the [commitizen script](#/scripts/commitizen.js)
+          types: |
+            feat
+            fix
+            style
+            refactor
+            perf
+            test
+            build
+            docs
+            chore
+          requireScope: false
+          wip: true

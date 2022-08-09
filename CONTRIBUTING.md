@@ -144,6 +144,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the input `issue-only-any-project-cards` contains some project cards. If this is the case and the issue has at least one project card matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-any-milestones` contains some milestones. If this is the case and the issue has at least one milestone matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-any-assignees` contains some assignees. If this is the case and the issue has at least one assignee matching linked to it, the processing will continue, else the processing will stop.
+- Check if the input `issue-only-with-assignees` contains some assignees. If this is the case and the issue has at least one assignee linked to it, the processing will continue, else the processing will stop.
 - Check if the issue has already a stale state (stale label)
   - If the issue has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
@@ -183,6 +184,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the input `pull-request-only-any-project-cards` contains some project cards. If this is the case and the pull request has at least one project card matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-any-milestones` contains some milestones. If this is the case and the pull request has at least one milestone matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-any-assignees` contains some assignees. If this is the case and the pull request has at least one assignee matching linked to it, the processing will continue, else the processing will stop.
+- Check if the input `pull-request-only-with-assignees` contains some assignees. If this is the case and the pull request has at least one assignee linked to it, the processing will continue, else the processing will stop.
 - Check if the pull request has already a stale state (stale label)
   - If the pull request has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing

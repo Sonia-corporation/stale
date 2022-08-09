@@ -96,6 +96,7 @@
 *.htm           text diff=html
 *.html          text diff=html
 *.js            text
+*.mjs           text
 *.jsp           text
 *.jspf          text
 *.jspx          text
@@ -146,6 +147,7 @@
 *.inc             text
 *.ini             text
 *.js              text
+*.mjs             text
 *.json            text
 *.jsx             text
 *.less            text

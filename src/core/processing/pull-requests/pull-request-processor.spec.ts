@@ -13,7 +13,7 @@ import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/gith
 import * as CreateLinkModule from '@utils/links/create-link';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
-import { MockedObjectDeep } from 'ts-jest/dist/utils/testing';
+import MockedObjectDeep = jest.MockedObjectDeep;
 
 jest.mock(`@utils/loggers/logger.service`);
 jest.mock(`@utils/loggers/logger-format.service`);

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "types": [],
     "allowJs": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,

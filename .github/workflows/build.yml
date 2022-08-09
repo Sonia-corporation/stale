@@ -4,7 +4,7 @@
 name: Build
 env:
   CODECOV_VERSION: 'v0.1.15'
-  NODE_VERSION: '16.15.1'
+  NODE_VERSION: '16.16.0'
 on:
   push:
     branches:
@@ -32,13 +32,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -66,13 +66,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -90,7 +90,7 @@ jobs:
           npm ci
       - name: Cache Jest
         id: cache-jest
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-jest-cc
         with:
@@ -113,13 +113,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -137,7 +137,7 @@ jobs:
           npm ci
       - name: Cache Jest
         id: cache-jest
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-jest-integration-issues
         with:
@@ -163,13 +163,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -187,7 +187,7 @@ jobs:
           npm ci
       - name: Cache Jest
         id: cache-jest
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-jest-integration-pull-requests
         with:
@@ -213,13 +213,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -237,7 +237,7 @@ jobs:
           npm ci
       - name: Cache Jest
         id: cache-jest
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-jest-unit
         with:
@@ -263,13 +263,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:
@@ -305,13 +305,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@eeb10cff27034e7acf239c5d29f62154018672fd # tag=v3
+        uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@c3f1317a9e7b1ef106c153ac8c0f00fed3ddbc0d # tag=v3
+        uses: actions/cache@f4278025ab0f432ce369118909e46deec636f50c # tag=v3
         env:
           cache-name: cache-node-modules
         with:

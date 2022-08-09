@@ -11,17 +11,18 @@
 'test :test_tube:':
   - src/**/*.spec.ts
   - src/**/*.spec.js
+  - src/**/*.spec.mjs
   - tests/**
   - documentation/**/*.spec.ts
   - documentation/**/*.spec.tsx
   - documentation/**/*.spec.js
+  - documentation/**/*.spec.mjs
 
 'CI :robot:':
   - .github/workflows/**
   - .github/config.yml
   - .github/issue_label_bot.yaml
   - .github/labeler.yml
-  - .github/semantic.yml
   - .codeclimate.yml
   - .renovaterc.json
 

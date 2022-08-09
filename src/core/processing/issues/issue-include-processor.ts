@@ -251,4 +251,46 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     return false;
   }
+
+  public shouldIncludeAnyAssignee$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed when having at least one associated assignee...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (!issuesInputs.issueOnlyWithAssignees) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_WITH_ASSIGNEES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_WITH_ASSIGNEES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+    const assignees: IGithubApiAssignee[] = this.processor.item.assignees.nodes;
+    const assigneesCount: number = assignees.length;
+
+    if (assigneesCount === 0) {
+      this.processor.logger.info(`Not containing any assignee. Skipping the processing of this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(assigneesCount),
+      LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this issue`)
+    );
+
+    this.processor.logger.info(`Continuing the processing for this issue...`);
+
+    return true;
+  }
 }

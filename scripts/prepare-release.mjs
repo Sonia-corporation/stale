@@ -1,7 +1,8 @@
-const { execSync } = require(`child_process`);
-const CHALK = require(`./chalk`);
-const LOGGER = require(`./logger`);
-const { getDirectoryName } = require(`./get-directory-name`);
+import * as CHALK from './chalk.mjs';
+import { getDirectoryName } from 'scripts/get-directory-name.mjs';
+import * as LOGGER from 'scripts/logger.mjs';
+import { execSync } from 'child_process';
+
 const CONTEXT = `prepare-release`;
 
 navigateToDocumentation();

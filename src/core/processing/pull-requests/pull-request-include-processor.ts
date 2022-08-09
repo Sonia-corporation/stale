@@ -259,4 +259,46 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     return false;
   }
+
+  public shouldIncludeAnyAssignee$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this pull request should only be processed when having at least one associated assignee...`
+    );
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (!pullRequestsInputs.pullRequestOnlyWithAssignees) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_ASSIGNEES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_ASSIGNEES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+    const assignees: IGithubApiAssignee[] = this.processor.item.assignees.nodes;
+    const assigneesCount: number = assignees.length;
+
+    if (assigneesCount === 0) {
+      this.processor.logger.info(`Not containing any assignee. Skipping the processing of this pull request...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(assigneesCount),
+      LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this pull request`)
+    );
+
+    this.processor.logger.info(`Continuing the processing for this pull request...`);
+
+    return true;
+  }
 }

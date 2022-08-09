@@ -31,7 +31,7 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint", "typescript-sort-keys", "jest", "prettier", "progress", "jsdoc", "import", "typescript-sort-keys"],
   "settings": {
-    "import/extensions": [".js", ".ts", ".tsx"],
+    "import/extensions": [".js", ".ts", ".tsx", ".mjs"],
     "import/parsers": {
       "@typescript-eslint/parser": [".ts"]
     },
@@ -46,15 +46,8 @@
     }
   },
   "rules": {
-    "jest/prefer-comparison-matcher": "error",
-    "jest/prefer-equality-matcher": "error",
     "@typescript-eslint/no-inferrable-types": "off",
-    "no-restricted-imports": [
-      "error",
-      {
-        "patterns": [".*"]
-      }
-    ],
+    "no-restricted-imports": ["error"],
     "progress/activate": 1,
     "@typescript-eslint/member-ordering": [
       "error",
@@ -461,7 +454,7 @@
   },
   "overrides": [
     {
-      "files": ["*.js"],
+      "files": ["*.js", "*.mjs"],
       "rules": {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "import/no-commonjs": "off"
@@ -485,6 +478,10 @@
       "files": ["*.spec.ts", "*.spec.tsx"],
       "extends": ["plugin:jest/style", "plugin:jest/all"],
       "rules": {
+        "jest/max-expects": "off",
+        "jest/prefer-hooks-on-top": "error",
+        "jest/prefer-comparison-matcher": "error",
+        "jest/prefer-equality-matcher": "error",
         "jest/max-nested-describe": "off",
         "@typescript-eslint/prefer-readonly-parameter-types": "off",
         "jest/prefer-expect-resolves": "error",

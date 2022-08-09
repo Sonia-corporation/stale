@@ -100,6 +100,10 @@ inputs:
     description: 'Only allow the processing of issues that contains one of those assignees (multiline).'
     required: false
     default: ''
+  issue-only-with-assignees:
+    description: 'Only allow the processing of issues that contains at least one assignee.'
+    required: false
+    default: 'false'
   # Pull request inputs
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
@@ -201,6 +205,10 @@ inputs:
     description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
     required: false
     default: ''
+  pull-request-only-with-assignees:
+    description: 'Only allow the processing of pull requests that contains at least one assignee.'
+    required: false
+    default: 'false'
 outputs:
   # Issues outputs
   processed-issues-count:
