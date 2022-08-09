@@ -1,0 +1,33 @@
+---
+id: pull-request-only-with-assignees-input
+title: Pull request only with assignees input
+description: |
+  All the information you need to know about the pull request only with assignees input.
+  Including a detailed description and an example.
+tags:
+  - Pull requests
+  - Inputs
+  - Assignees
+---
+
+### Input {#input}
+
+Name: `pull-request-only-with-assignees`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This input will let you process only the pull requests that are linked to at least one assignee.  
+This can be useful when you use the assignees for triage.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-only-with-assignees: true
+```

@@ -205,6 +205,10 @@ inputs:
     description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
     required: false
     default: ''
+  pull-request-only-with-assignees:
+    description: 'Only allow the processing of pull requests that contains at least one assignee.'
+    required: false
+    default: 'false'
 outputs:
   # Issues outputs
   processed-issues-count:

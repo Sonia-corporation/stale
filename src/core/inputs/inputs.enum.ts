@@ -43,6 +43,7 @@ export enum EInputs {
   PULL_REQUEST_LIMIT_API_MUTATIONS_COUNT = `pull-request-limit-api-mutations-count`,
   PULL_REQUEST_LIMIT_API_QUERIES_COUNT = `pull-request-limit-api-queries-count`,
   PULL_REQUEST_ONLY_ANY_MILESTONES = `pull-request-only-any-milestones`,
+  PULL_REQUEST_ONLY_WITH_ASSIGNEES = `pull-request-only-with-assignees`,
   PULL_REQUEST_ONLY_ANY_ASSIGNEES = `pull-request-only-any-assignees`,
   PULL_REQUEST_ONLY_ANY_PROJECT_CARDS = `pull-request-only-any-project-cards`,
   PULL_REQUEST_PROCESSING = `pull-request-processing`,

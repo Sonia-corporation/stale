@@ -87,6 +87,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestOnlyAnyProjectCards: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_PROJECT_CARDS, {
         required: false,
       }),
+      pullRequestOnlyWithAssignees: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_ASSIGNEES, {
+        required: false,
+      }),
       pullRequestProcessing: core.getBooleanInput(EInputs.PULL_REQUEST_PROCESSING, { required: false }),
       pullRequestStaleComment: core.getInput(EInputs.PULL_REQUEST_STALE_COMMENT, { required: false }),
       pullRequestStaleLabel: core.getInput(EInputs.PULL_REQUEST_STALE_LABEL, { required: false }),
