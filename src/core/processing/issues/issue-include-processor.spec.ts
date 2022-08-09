@@ -37,21 +37,25 @@ describe(`IssueIncludeProcessor`, (): void => {
     });
 
     describe(`shouldInclude()`, (): void => {
-      let shouldIncludeAnyWhiteListedProjectCardSpy: jest.SpyInstance;
-      let shouldIncludeAnyWhiteListedMilestoneSpy: jest.SpyInstance;
-      let shouldIncludeAnyWhiteListedAssigneeSpy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedProjectCard$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedMilestone$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyWhiteListedAssignee$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyAssignee$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
 
-        shouldIncludeAnyWhiteListedProjectCardSpy = jest
+        shouldIncludeAnyWhiteListedProjectCard$$Spy = jest
           .spyOn(issueIncludeProcessor, `shouldIncludeAnyWhiteListedProjectCard$$`)
           .mockImplementation();
-        shouldIncludeAnyWhiteListedMilestoneSpy = jest
+        shouldIncludeAnyWhiteListedMilestone$$Spy = jest
           .spyOn(issueIncludeProcessor, `shouldIncludeAnyWhiteListedMilestone$$`)
           .mockImplementation();
-        shouldIncludeAnyWhiteListedAssigneeSpy = jest
+        shouldIncludeAnyWhiteListedAssignee$$Spy = jest
           .spyOn(issueIncludeProcessor, `shouldIncludeAnyWhiteListedAssignee$$`)
+          .mockImplementation();
+        shouldIncludeAnyAssignee$$Spy = jest
+          .spyOn(issueIncludeProcessor, `shouldIncludeAnyAssignee$$`)
           .mockImplementation();
       });
 
@@ -60,13 +64,13 @@ describe(`IssueIncludeProcessor`, (): void => {
 
         issueIncludeProcessor.shouldInclude();
 
-        expect(shouldIncludeAnyWhiteListedProjectCardSpy).toHaveBeenCalledTimes(1);
-        expect(shouldIncludeAnyWhiteListedProjectCardSpy).toHaveBeenCalledWith();
+        expect(shouldIncludeAnyWhiteListedProjectCard$$Spy).toHaveBeenCalledTimes(1);
+        expect(shouldIncludeAnyWhiteListedProjectCard$$Spy).toHaveBeenCalledWith();
       });
 
       describe(`when the issue belongs to any of the white-listed project card`, (): void => {
         beforeEach((): void => {
-          shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(true);
+          shouldIncludeAnyWhiteListedProjectCard$$Spy.mockReturnValue(true);
         });
 
         it(`should check if the issue should be processed because she belongs to any of the white-listed milestone`, (): void => {
@@ -74,13 +78,13 @@ describe(`IssueIncludeProcessor`, (): void => {
 
           issueIncludeProcessor.shouldInclude();
 
-          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledTimes(1);
-          expect(shouldIncludeAnyWhiteListedMilestoneSpy).toHaveBeenCalledWith();
+          expect(shouldIncludeAnyWhiteListedMilestone$$Spy).toHaveBeenCalledTimes(1);
+          expect(shouldIncludeAnyWhiteListedMilestone$$Spy).toHaveBeenCalledWith();
         });
 
         describe(`when the issue belongs to any of the white-listed milestone`, (): void => {
           beforeEach((): void => {
-            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(true);
+            shouldIncludeAnyWhiteListedMilestone$$Spy.mockReturnValue(true);
           });
 
           it(`should check if the issue should be processed because she belongs to any of the white-listed assignee`, (): void => {
@@ -88,27 +92,56 @@ describe(`IssueIncludeProcessor`, (): void => {
 
             issueIncludeProcessor.shouldInclude();
 
-            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledTimes(1);
-            expect(shouldIncludeAnyWhiteListedAssigneeSpy).toHaveBeenCalledWith();
+            expect(shouldIncludeAnyWhiteListedAssignee$$Spy).toHaveBeenCalledTimes(1);
+            expect(shouldIncludeAnyWhiteListedAssignee$$Spy).toHaveBeenCalledWith();
           });
 
           describe(`when the issue belongs to any of the white-listed assignee`, (): void => {
             beforeEach((): void => {
-              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(true);
+              shouldIncludeAnyWhiteListedAssignee$$Spy.mockReturnValue(true);
             });
 
-            it(`should return true`, (): void => {
-              expect.assertions(1);
+            it(`should check if the issue should be processed because she has at least one of assignee`, (): void => {
+              expect.assertions(2);
 
-              const result = issueIncludeProcessor.shouldInclude();
+              issueIncludeProcessor.shouldInclude();
 
-              expect(result).toBeTrue();
+              expect(shouldIncludeAnyAssignee$$Spy).toHaveBeenCalledTimes(1);
+              expect(shouldIncludeAnyAssignee$$Spy).toHaveBeenCalledWith();
+            });
+
+            describe(`when the issue has at least one assignee`, (): void => {
+              beforeEach((): void => {
+                shouldIncludeAnyAssignee$$Spy.mockReturnValue(true);
+              });
+
+              it(`should return true`, (): void => {
+                expect.assertions(1);
+
+                const result = issueIncludeProcessor.shouldInclude();
+
+                expect(result).toBeTrue();
+              });
+            });
+
+            describe(`when the issue has no assignee`, (): void => {
+              beforeEach((): void => {
+                shouldIncludeAnyAssignee$$Spy.mockReturnValue(false);
+              });
+
+              it(`should return false`, (): void => {
+                expect.assertions(1);
+
+                const result = issueIncludeProcessor.shouldInclude();
+
+                expect(result).toBeFalse();
+              });
             });
           });
 
           describe(`when the issue does not belong to any of the white-listed assignee`, (): void => {
             beforeEach((): void => {
-              shouldIncludeAnyWhiteListedAssigneeSpy.mockReturnValue(false);
+              shouldIncludeAnyWhiteListedAssignee$$Spy.mockReturnValue(false);
             });
 
             it(`should return false`, (): void => {
@@ -123,7 +156,7 @@ describe(`IssueIncludeProcessor`, (): void => {
 
         describe(`when the issue does not belong to any of the white-listed milestone`, (): void => {
           beforeEach((): void => {
-            shouldIncludeAnyWhiteListedMilestoneSpy.mockReturnValue(false);
+            shouldIncludeAnyWhiteListedMilestone$$Spy.mockReturnValue(false);
           });
 
           it(`should return false`, (): void => {
@@ -138,7 +171,7 @@ describe(`IssueIncludeProcessor`, (): void => {
 
       describe(`when the issue does not belong to any of the white-listed project card`, (): void => {
         beforeEach((): void => {
-          shouldIncludeAnyWhiteListedProjectCardSpy.mockReturnValue(false);
+          shouldIncludeAnyWhiteListedProjectCard$$Spy.mockReturnValue(false);
         });
 
         it(`should return false`, (): void => {
@@ -1642,6 +1675,253 @@ describe(`IssueIncludeProcessor`, (): void => {
 
               expect(result).toBeTrue();
             });
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyAssignee$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIncludeProcessor.processor.logger, `info`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueOnlyWithAssignees: false,
+          })
+        );
+      });
+
+      it(`should log about checking the issue-only-with-assignees input`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue should only be processed when having at least one associated assignee...`
+        );
+      });
+
+      it(`should get the issue inputs`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue-only-with-assignees input is disabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyWithAssignees: false,
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this issue (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-with-assignees`,
+            `whiteBright-is disabled. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue-only-with-assignees input is enabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyWithAssignees: true,
+            })
+          );
+        });
+
+        it(`should log about checking if this issue should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-with-assignees`,
+            `whiteBright-is enabled. Checking...`
+          );
+        });
+
+        describe(`when the issue has no assignee`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                assignees: {
+                  nodes: [],
+                  totalCount: 0,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about not containing any assignee (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any assignee. Skipping the processing of this issue...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has at least one assignee`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee`,
+                    }),
+                  ],
+                  totalCount: 1,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some assignees (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-1`,
+              `whiteBright-assignee on this issue`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this issue...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the issue has two assignees`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                assignees: {
+                  nodes: [
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-1`,
+                    }),
+                    createHydratedMock<IGithubApiAssignee>({
+                      login: `dummy-assignee-2`,
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some assignees (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-2`,
+              `whiteBright-assignees on this issue`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this issue...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
           });
         });
       });

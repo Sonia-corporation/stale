@@ -259,4 +259,8 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     return false;
   }
+
+  public shouldIncludeAnyAssignee$$(): boolean {
+    return true;
+  }
 }

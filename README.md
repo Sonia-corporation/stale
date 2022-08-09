@@ -101,6 +101,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-ignore-any-milestones](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-ignore-any-milestones-input)             | Allow to ignore the processing of issues that contains one of those milestones (multiline).                                                     |         |
 | [issue-ignore-all-milestones](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-ignore-all-milestones-input)             | Allow to ignore the processing of issues that contains any milestones.                                                                          | `false` |
 | [issue-only-any-assignees](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-only-any-assignees-input)                   | Only allow the processing of issues that contains one of those assignees (multiline).                                                           |         |
+| [issue-only-with-assignees](https://sonia-corporation.github.io/stale/docs/issues/inputs/issue-only-wih-assignees-input)                  | Only allow the processing of issues that contains at least one assignee.                                                                        | `false` |
 
 ## All the issues outputs
 
