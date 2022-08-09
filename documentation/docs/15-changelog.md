@@ -11,10 +11,6 @@ tags:
 
 # [1.58.0](https://github.com/Sonia-corporation/stale/compare/1.57.1...1.58.0) (2022-08-09)
 
-### :bug: Bug Fixes {#bug-bug-fixes}
-
-- **deps:** update dependency @actions/core to v1.9.0 ([9dfeb7a](https://github.com/Sonia-corporation/stale/commit/9dfeb7ac1848bbd369344f121a0b28801bf1aa33))
-
 ### :rocket: Features {#rocket-features}
 
 - **issues:** add new input `issue-only-with-assignees` ([#772](https://github.com/Sonia-corporation/stale/issues/772)) ([aeebf82](https://github.com/Sonia-corporation/stale/commit/aeebf82a18d2a7a606f8cda5c34299ca6242f00d))
@@ -23,7 +19,7 @@ tags:
 
 ## [1.57.1](https://github.com/Sonia-corporation/stale/compare/1.57.0...1.57.1) (2022-06-30) {#1571-2022-06-30}
 
-### :bug: Bug Fixes {#bug-bug-fixes-1}
+### :bug: Bug Fixes {#bug-bug-fixes}
 
 - **deps:** update dependency prism-react-renderer to v1.3.3 ([#686](https://github.com/Sonia-corporation/stale/issues/686)) ([873bda5](https://github.com/Sonia-corporation/stale/commit/873bda5366f01b74c5b65d4ee07bdc31cd4d1f1c))
   Co-authored-by: Renovate Bot <bot@renovateapp.com>
@@ -39,7 +35,7 @@ tags:
 
 # [1.56.0](https://github.com/Sonia-corporation/stale/compare/1.55.0...1.56.0) (2022-04-17)
 
-### :bug: Bug Fixes {#bug-bug-fixes-2}
+### :bug: Bug Fixes {#bug-bug-fixes-1}
 
 - **inputs:** allow to override the default values of the ignore any milestones inputs ([ca9de12](https://github.com/Sonia-corporation/stale/commit/ca9de1203373e65de5ec7c73e4897675c93c2b5a))
   The configuration was missing from the action.yml.
@@ -117,7 +113,7 @@ tags:
 
 - **cache:** mention in the docs where and why there is some cache ([9ce0445](https://github.com/Sonia-corporation/stale/commit/9ce0445fd2573fa9a720fa3fa8f08108f62286d2))
 
-### :bug: Bug Fixes {#bug-bug-fixes-3}
+### :bug: Bug Fixes {#bug-bug-fixes-2}
 
 - **logs:** avoid showing a success log on error while fetching a label ([26c07bf](https://github.com/Sonia-corporation/stale/commit/26c07bf1b29236d5b00bf9776dfb0b725e5c10bd)), closes [#507](https://github.com/Sonia-corporation/stale/issues/507)
   When a label could not be found, a log saying the label was loaded was display.
@@ -144,7 +140,7 @@ tags:
 
 # [1.46.0](https://github.com/Sonia-corporation/stale/compare/1.45.0...1.46.0) (2022-02-13)
 
-### :bug: Bug Fixes {#bug-bug-fixes-4}
+### :bug: Bug Fixes {#bug-bug-fixes-3}
 
 - **logs:** hide the sub-statistics when the count is 0 ([13e2bb1](https://github.com/Sonia-corporation/stale/commit/13e2bb1608d6e3ea014ad079a8a3193cfdc7438d)), closes [#477](https://github.com/Sonia-corporation/stale/issues/477)
   It will simply avoid polluting the logs with empty counts.
@@ -199,14 +195,14 @@ tags:
 
 - **fix:** correctly highlight the examples ([c6fe0d0](https://github.com/Sonia-corporation/stale/commit/c6fe0d022e5e88548136a0d6b870fef192c3d8cf)), closes [#439](https://github.com/Sonia-corporation/stale/issues/439)
 
-### :bug: Bug Fixes {#bug-bug-fixes-5}
+### :bug: Bug Fixes {#bug-bug-fixes-4}
 
 - **deps:** update dependency prism-react-renderer to v1.3.1 ([#425](https://github.com/Sonia-corporation/stale/issues/425)) ([f4eae39](https://github.com/Sonia-corporation/stale/commit/f4eae3925b8e696997e11c65e8e3fa45b75cfac8))
   Co-authored-by: Renovate Bot <bot@renovateapp.com>
 
 ## [1.43.1](https://github.com/Sonia-corporation/stale/compare/1.43.0...1.43.1) (2022-02-09) {#1431-2022-02-09}
 
-### :bug: Bug Fixes {#bug-bug-fixes-6}
+### :bug: Bug Fixes {#bug-bug-fixes-5}
 
 - **logs:** properly count the number of processed items within all batches in the logs ([8a17a18](https://github.com/Sonia-corporation/stale/commit/8a17a18df755c446c48ddf8f719bd5afcaedd6be)), closes [#431](https://github.com/Sonia-corporation/stale/issues/431)
   Only the first batch was taken into consideration.
@@ -220,7 +216,7 @@ tags:
 
 ## [1.42.1](https://github.com/Sonia-corporation/stale/compare/1.42.0...1.42.1) (2022-02-09) {#1421-2022-02-09}
 
-### :bug: Bug Fixes {#bug-bug-fixes-7}
+### :bug: Bug Fixes {#bug-bug-fixes-6}
 
 - **annotations:** format properly the errors annotations ([13bcd6a](https://github.com/Sonia-corporation/stale/commit/13bcd6a9f70ca44159bbab7e5a8bec78872caaca)), closes [#422](https://github.com/Sonia-corporation/stale/issues/422)
 - **annotations:** format properly the warning annotations ([469609c](https://github.com/Sonia-corporation/stale/commit/469609ce0f074aef3929af01c523ff371267474b)), closes [#422](https://github.com/Sonia-corporation/stale/issues/422)
@@ -300,7 +296,7 @@ tags:
 
 # [1.34.0](https://github.com/Sonia-corporation/stale/compare/1.33.1...1.34.0) (2022-01-29)
 
-### :bug: Bug Fixes {#bug-bug-fixes-8}
+### :bug: Bug Fixes {#bug-bug-fixes-7}
 
 - **deps:** update docusaurus monorepo to v2.0.0-beta.15 (patch) ([#358](https://github.com/Sonia-corporation/stale/issues/358)) ([5bfd537](https://github.com/Sonia-corporation/stale/commit/5bfd537ce39437b0e833ebff60ed7013c8bae109))
   Co-authored-by: Renovate Bot <bot@renovateapp.com>
@@ -322,13 +318,13 @@ tags:
 
 ## [1.33.1](https://github.com/Sonia-corporation/stale/compare/1.33.0...1.33.1) (2022-01-24) {#1331-2022-01-24}
 
-### :bug: Bug Fixes {#bug-bug-fixes-9}
+### :bug: Bug Fixes {#bug-bug-fixes-8}
 
 - **outputs:** expose the outputs as expected ([10e9657](https://github.com/Sonia-corporation/stale/commit/10e965716d3791ca98d8e3907bcea478cc42bf99)), closes [#351](https://github.com/Sonia-corporation/stale/issues/351)
 
 # [1.33.0](https://github.com/Sonia-corporation/stale/compare/1.32.0...1.33.0) (2022-01-24)
 
-### :bug: Bug Fixes {#bug-bug-fixes-10}
+### :bug: Bug Fixes {#bug-bug-fixes-9}
 
 - **draft:** only convert to draft when the dry-run is disabled ([67cc535](https://github.com/Sonia-corporation/stale/commit/67cc535beca61bf80bfc7ca4e5ced1d3006abc97)), closes [#346](https://github.com/Sonia-corporation/stale/issues/346)
 
@@ -346,7 +342,7 @@ tags:
 - **website:** change some references of inputs to link to the website ([11f2e62](https://github.com/Sonia-corporation/stale/commit/11f2e62deffea25dd7abe2f0a493d60475286e29))
   Also apply the changes in the readme
 
-### :bug: Bug Fixes {#bug-bug-fixes-11}
+### :bug: Bug Fixes {#bug-bug-fixes-10}
 
 - **deps:** update dependency @mdx-js/react to v1.6.22 ([c624394](https://github.com/Sonia-corporation/stale/commit/c6243941e201e0d2fa4f1c462dd57030150efde0))
 - **deps:** update react monorepo to v17.0.2 ([ad3fc8f](https://github.com/Sonia-corporation/stale/commit/ad3fc8f22103d6f37373f6a295481a19c34a402c))
@@ -390,7 +386,7 @@ tags:
 
 ## [1.27.1](https://github.com/Sonia-corporation/stale/compare/1.27.0...1.27.1) (2022-01-12) {#1271-2022-01-12}
 
-### :bug: Bug Fixes {#bug-bug-fixes-12}
+### :bug: Bug Fixes {#bug-bug-fixes-11}
 
 - **stale:** add in last the stale label to avoid removing the stale the next run ([cb7257d](https://github.com/Sonia-corporation/stale/commit/cb7257daf0d10d778ed05f36f31c2c62fa6fc2a8))
   add the stale comment and the extra labels before adding the stale label
@@ -421,7 +417,7 @@ tags:
 
 ## [1.25.1](https://github.com/Sonia-corporation/stale/compare/1.25.0...1.25.1) (2022-01-01) {#1251-2022-01-01}
 
-### :bug: Bug Fixes {#bug-bug-fixes-13}
+### :bug: Bug Fixes {#bug-bug-fixes-12}
 
 - **processing:** fix an issue with infinite batches processing ([218f164](https://github.com/Sonia-corporation/stale/commit/218f1641633388297bc4302bec4ad71048e89848))
   if the number of issues or pull requests to process was higher than 20, the processing was ending up in a infinity loop
@@ -449,7 +445,7 @@ tags:
 
 # [1.23.0](https://github.com/Sonia-corporation/stale/compare/1.22.0...1.23.0) (2021-12-11)
 
-### :bug: Bug Fixes {#bug-bug-fixes-14}
+### :bug: Bug Fixes {#bug-bug-fixes-13}
 
 - **deps:** update dependency luxon to v2.2.0 ([03b420a](https://github.com/Sonia-corporation/stale/commit/03b420a8d0f4a9a8f5f8843a9ca744208f71ae46))
 
@@ -563,7 +559,7 @@ tags:
 
 ## [1.6.1](https://github.com/Sonia-corporation/stale/compare/1.6.0...1.6.1) (2021-11-13) {#161-2021-11-13}
 
-### :bug: Bug Fixes {#bug-bug-fixes-15}
+### :bug: Bug Fixes {#bug-bug-fixes-14}
 
 - **dry-run:** ignore the stale label addition in dry-run mode ([8fe45d2](https://github.com/Sonia-corporation/stale/commit/8fe45d291f6b2eb9ad9d5a295df2000f64b6d682))
 
@@ -594,7 +590,7 @@ tags:
 
 # [1.3.0](https://github.com/Sonia-corporation/stale/compare/1.2.0...1.3.0) (2021-11-07)
 
-### :bug: Bug Fixes {#bug-bug-fixes-16}
+### :bug: Bug Fixes {#bug-bug-fixes-15}
 
 - **issue:** display the issue link in purple ([a8f4687](https://github.com/Sonia-corporation/stale/commit/a8f4687ed016117b8a8c2902e6f2d2584d1aad06))
 - **log:** display the proper end of tree symbol when logging the inputs ([0b53d66](https://github.com/Sonia-corporation/stale/commit/0b53d66576d032bf8ea9dd0ce99e5a3cc1b2c768))
