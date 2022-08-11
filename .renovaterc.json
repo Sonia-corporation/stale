@@ -40,7 +40,7 @@
   "semanticCommits": "enabled",
   "ignoreUnstable": true,
   "respectLatest": true,
-  "enabledManagers": ["npm", "github-actions"],
+  "enabledManagers": ["npm", "github-actions", "nvm"],
   "npm": {
     "enabled": true,
     "fileMatch": ["package.json", "documentation/package.json"]
