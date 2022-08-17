@@ -47,7 +47,7 @@ jobs:
         run: echo 'The PR should not be created'
       - name: Create PR from develop to master
         if: needs.HasLabel.outputs.HAS_LABEL == 'true'
-        uses: peter-evans/create-pull-request@923ad837f191474af6b1721408744feb989a4c27 # tag=v4
+        uses: peter-evans/create-pull-request@20dac2ed4875a1a8422d233a68f69088637446df # tag=v4
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(master): merge develop into master'
