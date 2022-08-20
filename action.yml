@@ -12,6 +12,7 @@ inputs:
     required: false
     default: 'false'
   # Issues inputs
+  ## Labels
   issue-stale-label:
     description: 'The label that will be added to the issue when it is stale.'
     required: false
@@ -24,6 +25,7 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains one of those labels (multiline).'
     required: false
     default: ''
+  ## Assignees
   issue-ignore-all-assignees:
     description: 'Allow to ignore the processing of issues that contains any assignees.'
     required: false
@@ -32,6 +34,15 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains one of those assignees (multiline).'
     required: false
     default: ''
+  issue-only-with-assignees:
+    description: 'Only allow the processing of issues that contains at least one assignee.'
+    required: false
+    default: 'false'
+  issue-only-any-assignees:
+    description: 'Only allow the processing of issues that contains one of those assignees (multiline).'
+    required: false
+    default: ''
+  ## Project cards
   issue-ignore-all-project-cards:
     description: 'Allow to ignore the processing of issues that contains any project cards.'
     required: false
@@ -40,38 +51,50 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains one of those project cards (multiline).'
     required: false
     default: ''
-  issue-ignore-before-creation-date:
-    description: 'Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
+  issue-only-any-project-cards:
+    description: 'Only allow the processing of issues that contains one of those project cards (multiline).'
     required: false
     default: ''
+  ## Milestones
+  issue-ignore-all-milestones:
+    description: 'Allow to ignore the processing of issues that contains any milestones.'
+    required: false
+    default: 'false'
+  issue-ignore-any-milestones:
+    description: 'Allow to ignore the processing of issues that contains one of those milestones (multiline).'
+    required: false
+    default: ''
+  issue-only-any-milestones:
+    description: 'Only allow the processing of issues that contains one of those milestones (multiline).'
+    required: false
+    default: ''
+  ## Comments
+  issue-stale-comment:
+    description: 'The comment that will be sent once the issue is stale (keep empty to not send a comment).'
+    required: false
+    default: ''
+  issue-close-comment:
+    description: 'The comment that will be sent once the issue is close (keep empty to not send a comment).'
+    required: false
+    default: ''
+  ## Durations
   issue-days-before-stale:
     description: 'The number of days until the issue is considered as stale.'
     required: false
     default: '30'
-  issue-stale-comment:
-    description: 'The comment that will be sent once the issue is stale (keep empty to not send a comment).'
+  issue-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the issue (multiline).'
     required: false
     default: ''
   issue-days-before-close:
     description: 'The number of days until a stale issue is considered as closed.'
     required: false
     default: '10'
-  issue-close-comment:
-    description: 'The comment that will be sent once the issue is close (keep empty to not send a comment).'
-    required: false
-    default: ''
-  issue-add-labels-after-stale:
-    description: 'A list of labels added when the processing stale the issue (multiline).'
-    required: false
-    default: ''
   issue-add-labels-after-close:
     description: 'A list of labels added when the processing close the issue (multiline).'
     required: false
     default: ''
-  issue-processing:
-    description: 'Allow to process the issues.'
-    required: false
-    default: 'true'
+  ## Limiters
   issue-limit-api-queries-count:
     description: 'Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).'
     required: false
@@ -80,31 +103,17 @@ inputs:
     description: 'Limit the quantity of API mutations calls performed during the processing of issues (-1 for unlimited).'
     required: false
     default: '-1'
-  issue-only-any-project-cards:
-    description: 'Only allow the processing of issues that contains one of those project cards (multiline).'
+  issue-ignore-before-creation-date:
+    description: 'Allow to ignore the processing of issues that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
     default: ''
-  issue-only-any-milestones:
-    description: 'Only allow the processing of issues that contains one of those milestones (multiline).'
+  ## Others
+  issue-processing:
+    description: 'Allow to process the issues.'
     required: false
-    default: ''
-  issue-ignore-any-milestones:
-    description: 'Allow to ignore the processing of issues that contains one of those milestones (multiline).'
-    required: false
-    default: ''
-  issue-ignore-all-milestones:
-    description: 'Allow to ignore the processing of issues that contains any milestones.'
-    required: false
-    default: 'false'
-  issue-only-any-assignees:
-    description: 'Only allow the processing of issues that contains one of those assignees (multiline).'
-    required: false
-    default: ''
-  issue-only-with-assignees:
-    description: 'Only allow the processing of issues that contains at least one assignee.'
-    required: false
-    default: 'false'
+    default: 'true'
   # Pull request inputs
+  ## Labels
   pull-request-stale-label:
     description: 'The label that will be added to the pull request when it is stale.'
     required: false
@@ -117,6 +126,7 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those labels (multiline).'
     required: false
     default: ''
+  ## Assignees
   pull-request-ignore-all-assignees:
     description: 'Allow to ignore the processing of pull requests that contains any assignees.'
     required: false
@@ -125,6 +135,15 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those assignees (multiline).'
     required: false
     default: ''
+  pull-request-only-with-assignees:
+    description: 'Only allow the processing of pull requests that contains at least one assignee.'
+    required: false
+    default: 'false'
+  pull-request-only-any-assignees:
+    description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
+    required: false
+    default: ''
+  ## Project cards
   pull-request-ignore-all-project-cards:
     description: 'Allow to ignore the processing of pull requests that contains any project cards.'
     required: false
@@ -133,50 +152,54 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those project cards (multiline).'
     required: false
     default: ''
-  pull-request-ignore-before-creation-date:
-    description: 'Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
+  pull-request-only-any-project-cards:
+    description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
     required: false
     default: ''
-  pull-request-ignore-draft:
-    description: 'Allow to ignore the processing of pull requests that are drafts.'
+  ## Milestones
+  pull-request-ignore-all-milestones:
+    description: 'Allow to ignore the processing of pull requests that contains any milestones.'
     required: false
     default: 'false'
+  pull-request-ignore-any-milestones:
+    description: 'Allow to ignore the processing of pull requests that contains one of those milestones (multiline).'
+    required: false
+    default: ''
+  pull-request-only-any-milestones:
+    description: 'Only allow the processing of pull requests that contains one of those milestones (multiline).'
+    required: false
+    default: ''
+  ## Comments
+  pull-request-stale-comment:
+    description: 'The comment that will be sent once the pull request is stale (keep empty to not send a comment).'
+    required: false
+    default: ''
+  pull-request-close-comment:
+    description: 'The comment that will be sent once the pull request is close (keep empty to not send a comment).'
+    required: false
+    default: ''
+  ## Durations
   pull-request-days-before-stale:
     description: 'The number of days until the pull request is considered as stale.'
     required: false
     default: '30'
-  pull-request-stale-comment:
-    description: 'The comment that will be sent once the pull request is stale (keep empty to not send a comment).'
+  pull-request-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the pull request (multiline).'
     required: false
     default: ''
   pull-request-days-before-close:
     description: 'The number of days until a stale pull request is considered as closed.'
     required: false
     default: '10'
-  pull-request-close-comment:
-    description: 'The comment that will be sent once the pull request is close (keep empty to not send a comment).'
+  pull-request-add-labels-after-close:
+    description: 'A list of labels added when the processing close the pull request (multiline).'
     required: false
     default: ''
   pull-request-delete-branch-after-close:
     description: 'Delete the branch when the processing close the pull request.'
     required: false
     default: 'false'
-  pull-request-add-labels-after-stale:
-    description: 'A list of labels added when the processing stale the pull request (multiline).'
-    required: false
-    default: ''
-  pull-request-add-labels-after-close:
-    description: 'A list of labels added when the processing close the pull request (multiline).'
-    required: false
-    default: ''
-  pull-request-processing:
-    description: 'Allow to process the pull requests.'
-    required: false
-    default: 'true'
-  pull-request-to-draft-instead-of-stale:
-    description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
-    required: false
-    default: 'false'
+  ## Limiters
   pull-request-limit-api-queries-count:
     description: 'Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).'
     required: false
@@ -185,28 +208,21 @@ inputs:
     description: 'Limit the quantity of API mutations calls performed during the processing of pull requests (-1 for unlimited).'
     required: false
     default: '-1'
-  pull-request-only-any-project-cards:
-    description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
+  pull-request-ignore-before-creation-date:
+    description: 'Allow to ignore the processing of pull requests that were created before this date (ISO 8601, see https://moment.github.io/luxon/#/parsing?id=iso-8601).'
     required: false
     default: ''
-  pull-request-only-any-milestones:
-    description: 'Only allow the processing of pull requests that contains one of those milestones (multiline).'
-    required: false
-    default: ''
-  pull-request-ignore-any-milestones:
-    description: 'Allow to ignore the processing of pull requests that contains one of those milestones (multiline).'
-    required: false
-    default: ''
-  pull-request-ignore-all-milestones:
-    description: 'Allow to ignore the processing of pull requests that contains any milestones.'
+  pull-request-ignore-draft:
+    description: 'Allow to ignore the processing of pull requests that are drafts.'
     required: false
     default: 'false'
-  pull-request-only-any-assignees:
-    description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
+  ## Others
+  pull-request-processing:
+    description: 'Allow to process the pull requests.'
     required: false
-    default: ''
-  pull-request-only-with-assignees:
-    description: 'Only allow the processing of pull requests that contains at least one assignee.'
+    default: 'true'
+  pull-request-to-draft-instead-of-stale:
+    description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
     required: false
     default: 'false'
 outputs:
