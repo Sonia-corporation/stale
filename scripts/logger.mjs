@@ -18,7 +18,7 @@ const LOG_TYPE_PREFIX_MAP = {
  * @returns {string} Return the formatted log type
  */
 function getLogTypePrefix(logType) {
-  return LOG_TYPE_PREFIX_MAP[logType];
+  return LOG_TYPE_PREFIX_MAP[logType]();
 }
 
 /**
