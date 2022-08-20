@@ -13,7 +13,8 @@ tags:
 
 ### :rocket: Features {#rocket-features}
 
-- **issues:** add new input `issue-only-with-assignees` ([#772](https://github.com/Sonia-corporation/stale/issues/772)) ([aeebf82](https://github.com/Sonia-corporation/stale/commit/aeebf82a18d2a7a606f8cda5c34299ca6242f00d))
+- **issues:** add new input `issue-only-with-assignees` ([#772](https://github.com/Sonia-corporation/stale/issues/772)) ([aeebf82](https://github.com/Sonia-corporation/stale/commit/aeebf82a18d2a7a606f8cda5c34299ca6242f00d)), closes [#313](https://github.com/Sonia-corporation/stale/issues/313)
+  This new input allows to only process issues containing at least one assignee.
 - **prs:** add new input `pull-request-only-with-assignees` ([#775](https://github.com/Sonia-corporation/stale/issues/775)) ([63d69b0](https://github.com/Sonia-corporation/stale/commit/63d69b057f15ba38cbc8ec998aaec2a66e702dc5)), closes [#313](https://github.com/Sonia-corporation/stale/issues/313)
   This new input allows to only process pull requests containing at least one assignee.
 
