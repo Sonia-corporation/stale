@@ -1,5 +1,13 @@
 # Sonia stale action
 
+# [1.59.0](https://github.com/Sonia-corporation/stale/compare/1.58.0...1.59.0) (2022-08-20)
+
+
+### :books: Documentation
+
+* **readme:** reorder the inputs lists ([312c253](https://github.com/Sonia-corporation/stale/commit/312c25312e7d7232b154d7c13bd317aae01ccb94))
+* **website:** reorder the inputs lists ([8ad142f](https://github.com/Sonia-corporation/stale/commit/8ad142fd2d897a01655d28353c5914dbf1724b23)), closes [#802](https://github.com/Sonia-corporation/stale/issues/802)
+
 # [1.58.0](https://github.com/Sonia-corporation/stale/compare/1.57.1...1.58.0) (2022-08-09)
 
 
