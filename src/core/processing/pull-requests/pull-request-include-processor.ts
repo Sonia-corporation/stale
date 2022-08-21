@@ -301,4 +301,8 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     return true;
   }
+
+  public shouldIncludeAnyProjectCard$$(): boolean {
+    return true;
+  }
 }

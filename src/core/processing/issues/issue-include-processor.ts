@@ -293,4 +293,46 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     return true;
   }
+
+  public shouldIncludeAnyProjectCard$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed when having at least one associated project card...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (!issuesInputs.issueOnlyWithProjectCards) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECT_CARDS),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECT_CARDS),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
+    const projectCardsCount: number = projectCards.length;
+
+    if (projectCardsCount === 0) {
+      this.processor.logger.info(`Not containing any project card. Skipping the processing of this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(projectCardsCount),
+      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this issue`)
+    );
+
+    this.processor.logger.info(`Continuing the processing for this issue...`);
+
+    return true;
+  }
 }

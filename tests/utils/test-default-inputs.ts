@@ -24,6 +24,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueOnlyAnyMilestones: [],
   issueOnlyAnyProjectCards: [],
   issueOnlyWithAssignees: false,
+  issueOnlyWithProjectCards: false,
   issueProcessing: true,
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,

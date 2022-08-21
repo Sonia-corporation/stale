@@ -41,6 +41,7 @@ describe(`IssueIncludeProcessor`, (): void => {
       let shouldIncludeAnyWhiteListedMilestone$$Spy: jest.SpyInstance;
       let shouldIncludeAnyWhiteListedAssignee$$Spy: jest.SpyInstance;
       let shouldIncludeAnyAssignee$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyProjectCard$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
@@ -56,6 +57,9 @@ describe(`IssueIncludeProcessor`, (): void => {
           .mockImplementation();
         shouldIncludeAnyAssignee$$Spy = jest
           .spyOn(issueIncludeProcessor, `shouldIncludeAnyAssignee$$`)
+          .mockImplementation();
+        shouldIncludeAnyProjectCard$$Spy = jest
+          .spyOn(issueIncludeProcessor, `shouldIncludeAnyProjectCard$$`)
           .mockImplementation();
       });
 
@@ -115,12 +119,41 @@ describe(`IssueIncludeProcessor`, (): void => {
                 shouldIncludeAnyAssignee$$Spy.mockReturnValue(true);
               });
 
-              it(`should return true`, (): void => {
-                expect.assertions(1);
+              it(`should check if the issue should be processed because she has at least one of project card`, (): void => {
+                expect.assertions(2);
 
-                const result = issueIncludeProcessor.shouldInclude();
+                issueIncludeProcessor.shouldInclude();
 
-                expect(result).toBeTrue();
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledTimes(1);
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledWith();
+              });
+
+              describe(`when the issue has at least one project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(true);
+                });
+
+                it(`should return true`, (): void => {
+                  expect.assertions(1);
+
+                  const result = issueIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeTrue();
+                });
+              });
+
+              describe(`when the issue has no project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(false);
+                });
+
+                it(`should return false`, (): void => {
+                  expect.assertions(1);
+
+                  const result = issueIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeFalse();
+                });
               });
             });
 
@@ -1920,6 +1953,253 @@ describe(`IssueIncludeProcessor`, (): void => {
             expect.assertions(1);
 
             const result = issueIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyProjectCard$$()`, (): void => {
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueProcessor = createHydratedMock<IssueProcessor>();
+        issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueIncludeProcessor.processor.logger, `info`).mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>({
+            issueOnlyWithProjectCards: false,
+          })
+        );
+      });
+
+      it(`should log about checking the issue-only-with-project-cards input`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this issue should only be processed when having at least one associated project card...`
+        );
+      });
+
+      it(`should get the issue inputs`, (): void => {
+        expect.assertions(2);
+
+        issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the issue-only-with-project-cards input is disabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyWithProjectCards: false,
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this issue (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-with-project-cards`,
+            `whiteBright-is disabled. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the issue-only-with-project-cards input is enabled`, (): void => {
+        beforeEach((): void => {
+          issuesInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IIssuesInputs>({
+              issueOnlyWithProjectCards: true,
+            })
+          );
+        });
+
+        it(`should log about checking if this issue should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-issue-only-with-project-cards`,
+            `whiteBright-is enabled. Checking...`
+          );
+        });
+
+        describe(`when the issue has no project card`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [],
+                  totalCount: 0,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about not containing any project card (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any project card. Skipping the processing of this issue...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the issue has at least one project card`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project` },
+                    }),
+                  ],
+                  totalCount: 1,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some project cards (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-1`,
+              `whiteBright-project card on this issue`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this issue...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the issue has two project cards`, (): void => {
+          beforeEach((): void => {
+            issueProcessor = createHydratedMock<IssueProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project-1` },
+                    }),
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project-2` },
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            issueIncludeProcessor = new IssueIncludeProcessor(issueProcessor);
+
+            issueProcessorLoggerInfoSpy = jest
+              .spyOn(issueIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some project cards (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-2`,
+              `whiteBright-project cards on this issue`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this issue...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = issueIncludeProcessor.shouldIncludeAnyProjectCard$$();
 
             expect(result).toBeTrue();
           });

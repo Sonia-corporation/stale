@@ -41,6 +41,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
       let shouldIncludeAnyWhiteListedMilestone$$Spy: jest.SpyInstance;
       let shouldIncludeAnyWhiteListedAssignee$$Spy: jest.SpyInstance;
       let shouldIncludeAnyAssignee$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyProjectCard$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
@@ -56,6 +57,9 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           .mockImplementation();
         shouldIncludeAnyAssignee$$Spy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyAssignee$$`)
+          .mockImplementation();
+        shouldIncludeAnyProjectCard$$Spy = jest
+          .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyProjectCard$$`)
           .mockImplementation();
       });
 
@@ -115,12 +119,41 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 shouldIncludeAnyAssignee$$Spy.mockReturnValue(true);
               });
 
-              it(`should return true`, (): void => {
-                expect.assertions(1);
+              it(`should check if the pull request should be processed because she has at least one of project card`, (): void => {
+                expect.assertions(2);
 
-                const result = pullRequestIncludeProcessor.shouldInclude();
+                pullRequestIncludeProcessor.shouldInclude();
 
-                expect(result).toBeTrue();
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledTimes(1);
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledWith();
+              });
+
+              describe(`when the pull request has at least one project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(true);
+                });
+
+                it(`should return true`, (): void => {
+                  expect.assertions(1);
+
+                  const result = pullRequestIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeTrue();
+                });
+              });
+
+              describe(`when the pull request has no project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(false);
+                });
+
+                it(`should return false`, (): void => {
+                  expect.assertions(1);
+
+                  const result = pullRequestIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeFalse();
+                });
               });
             });
 
