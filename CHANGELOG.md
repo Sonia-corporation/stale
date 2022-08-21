@@ -1,5 +1,15 @@
 # Sonia stale action
 
+# [1.60.0](https://github.com/Sonia-corporation/stale/compare/1.59.0...1.60.0) (2022-08-21)
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-only-with-project-cards` ([2c4290e](https://github.com/Sonia-corporation/stale/commit/2c4290ecdfcd438258f2482ae40fc882381433e4)), closes [#807](https://github.com/Sonia-corporation/stale/issues/807)
+  This new input allows to only process issues containing at least one project card.
+* **prs:** add new input `pull-request-only-with-project-cards` ([2ff0851](https://github.com/Sonia-corporation/stale/commit/2ff085195288adbf55c40d809f602601eee19484)), closes [#807](https://github.com/Sonia-corporation/stale/issues/807)
+  This new input allows to only process pull requests containing at least one project card.
+
 # [1.59.0](https://github.com/Sonia-corporation/stale/compare/1.58.0...1.59.0) (2022-08-20)
 
 
