@@ -301,4 +301,46 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     return true;
   }
+
+  public shouldIncludeAnyProjectCard$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this pull request should only be processed when having at least one associated project card...`
+    );
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (!pullRequestsInputs.pullRequestOnlyWithProjectCards) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
+    const projectCardsCount: number = projectCards.length;
+
+    if (projectCardsCount === 0) {
+      this.processor.logger.info(`Not containing any project card. Skipping the processing of this pull request...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(
+      `Found`,
+      LoggerService.value(projectCardsCount),
+      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this pull request`)
+    );
+
+    this.processor.logger.info(`Continuing the processing for this pull request...`);
+
+    return true;
+  }
 }

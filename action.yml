@@ -51,6 +51,10 @@ inputs:
     description: 'Allow to ignore the processing of issues that contains one of those project cards (multiline).'
     required: false
     default: ''
+  issue-only-with-project-cards:
+    description: 'Only allow the processing of issues that contains at least one project card.'
+    required: false
+    default: 'false'
   issue-only-any-project-cards:
     description: 'Only allow the processing of issues that contains one of those project cards (multiline).'
     required: false
@@ -152,6 +156,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those project cards (multiline).'
     required: false
     default: ''
+  pull-request-only-with-project-cards:
+    description: 'Only allow the processing of pull requests that contains at least one project card.'
+    required: false
+    default: 'false'
   pull-request-only-any-project-cards:
     description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
     required: false
