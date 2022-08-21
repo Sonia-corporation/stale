@@ -53,6 +53,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestOnlyAnyMilestones: [],
   pullRequestOnlyAnyProjectCards: [],
   pullRequestOnlyWithAssignees: false,
+  pullRequestOnlyWithProjectCards: false,
   pullRequestProcessing: true,
   pullRequestStaleComment: `stale-comment`,
   pullRequestStaleLabel: `stale`,
