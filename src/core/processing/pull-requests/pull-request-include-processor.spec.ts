@@ -41,6 +41,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
       let shouldIncludeAnyWhiteListedMilestone$$Spy: jest.SpyInstance;
       let shouldIncludeAnyWhiteListedAssignee$$Spy: jest.SpyInstance;
       let shouldIncludeAnyAssignee$$Spy: jest.SpyInstance;
+      let shouldIncludeAnyProjectCard$$Spy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
@@ -56,6 +57,9 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           .mockImplementation();
         shouldIncludeAnyAssignee$$Spy = jest
           .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyAssignee$$`)
+          .mockImplementation();
+        shouldIncludeAnyProjectCard$$Spy = jest
+          .spyOn(pullRequestIncludeProcessor, `shouldIncludeAnyProjectCard$$`)
           .mockImplementation();
       });
 
@@ -115,12 +119,41 @@ describe(`PullRequestIncludeProcessor`, (): void => {
                 shouldIncludeAnyAssignee$$Spy.mockReturnValue(true);
               });
 
-              it(`should return true`, (): void => {
-                expect.assertions(1);
+              it(`should check if the pull request should be processed because she has at least one of project card`, (): void => {
+                expect.assertions(2);
 
-                const result = pullRequestIncludeProcessor.shouldInclude();
+                pullRequestIncludeProcessor.shouldInclude();
 
-                expect(result).toBeTrue();
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledTimes(1);
+                expect(shouldIncludeAnyProjectCard$$Spy).toHaveBeenCalledWith();
+              });
+
+              describe(`when the pull request has at least one project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(true);
+                });
+
+                it(`should return true`, (): void => {
+                  expect.assertions(1);
+
+                  const result = pullRequestIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeTrue();
+                });
+              });
+
+              describe(`when the pull request has no project card`, (): void => {
+                beforeEach((): void => {
+                  shouldIncludeAnyProjectCard$$Spy.mockReturnValue(false);
+                });
+
+                it(`should return false`, (): void => {
+                  expect.assertions(1);
+
+                  const result = pullRequestIncludeProcessor.shouldInclude();
+
+                  expect(result).toBeFalse();
+                });
               });
             });
 
@@ -1936,6 +1969,257 @@ describe(`PullRequestIncludeProcessor`, (): void => {
             expect.assertions(1);
 
             const result = pullRequestIncludeProcessor.shouldIncludeAnyAssignee$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+      });
+    });
+
+    describe(`shouldIncludeAnyProjectCards$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithAssignees: false,
+            })
+          );
+      });
+
+      it(`should log about checking the pull-request-only-with-project-cards input`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request should only be processed when having at least one associated project card...`
+        );
+      });
+
+      it(`should get the pull request inputs`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull-request-only-with-project-cards input is disabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithProjectCards: false,
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this pull request (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-project-cards`,
+            `whiteBright-is disabled. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull-request-only-with-project-cards input is enabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithProjectCards: true,
+            })
+          );
+        });
+
+        it(`should log about checking if this pull request should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-project-cards`,
+            `whiteBright-is enabled. Checking...`
+          );
+        });
+
+        describe(`when the pull request has no project card`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [],
+                  totalCount: 0,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about not containing any project card (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any project card. Skipping the processing of this pull request...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the pull request has at least one project card`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project` },
+                    }),
+                  ],
+                  totalCount: 1,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some project cards (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-1`,
+              `whiteBright-project card on this pull request`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this pull request...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+
+        describe(`when the pull request has two project cards`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                projectCards: {
+                  nodes: [
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project-1` },
+                    }),
+                    createHydratedMock<IGithubApiProjectCard>({
+                      project: { name: `dummy-project-2` },
+                    }),
+                  ],
+                  totalCount: 2,
+                },
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding some project cards (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found`,
+              `value-2`,
+              `whiteBright-project cards on this pull request`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this pull request...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyProjectCard$$();
 
             expect(result).toBeTrue();
           });
