@@ -296,9 +296,12 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
       LoggerService.value(assigneesCount),
       LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this pull request`)
     );
-
     this.processor.logger.info(`Continuing the processing for this pull request...`);
 
+    return true;
+  }
+
+  public shouldIncludeAnyMilestone$$(): boolean {
     return true;
   }
 
@@ -338,7 +341,6 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
       LoggerService.value(projectCardsCount),
       LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this pull request`)
     );
-
     this.processor.logger.info(`Continuing the processing for this pull request...`);
 
     return true;

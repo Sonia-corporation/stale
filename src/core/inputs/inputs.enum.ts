@@ -19,6 +19,7 @@ export enum EInputs {
   ISSUE_LIMIT_API_QUERIES_COUNT = `issue-limit-api-queries-count`,
   ISSUE_ONLY_ANY_ASSIGNEES = `issue-only-any-assignees`,
   ISSUE_ONLY_WITH_ASSIGNEES = `issue-only-with-assignees`,
+  ISSUE_ONLY_WITH_MILESTONES = `issue-only-with-milestones`,
   ISSUE_ONLY_WITH_PROJECT_CARDS = `issue-only-with-project-cards`,
   ISSUE_ONLY_ANY_MILESTONES = `issue-only-any-milestones`,
   ISSUE_ONLY_ANY_PROJECT_CARDS = `issue-only-any-project-cards`,

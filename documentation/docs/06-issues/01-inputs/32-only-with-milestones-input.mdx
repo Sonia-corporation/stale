@@ -1,0 +1,33 @@
+---
+id: issue-only-with-milestones-input
+title: Issue only with milestones input
+description: |
+  All the information you need to know about the issue only with milestones input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+  - Milestones
+---
+
+### Input {#input}
+
+Name: `issue-only-with-milestones`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This input will let you process only the issues that are linked to at least one milestone.  
+This can be useful when you use the milestones for triage.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-only-with-milestones: true
+```
