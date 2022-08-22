@@ -288,7 +288,43 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
       LoggerService.value(assigneesCount),
       LoggerFormatService.whiteBright(`assignee${assigneesCount > 1 ? `s` : ``} on this issue`)
     );
+    this.processor.logger.info(`Continuing the processing for this issue...`);
 
+    return true;
+  }
+
+  public shouldIncludeAnyMilestone$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this issue should only be processed when having at least one associated milestone...`
+    );
+
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    if (!issuesInputs.issueOnlyWithMilestones) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.ISSUE_ONLY_WITH_MILESTONES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.ISSUE_ONLY_WITH_MILESTONES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+
+    const { milestone } = this.processor.item;
+
+    if (!milestone) {
+      this.processor.logger.info(`Not containing any milestone. Skipping the processing of this issue...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(`Found a milestone on this issue`);
     this.processor.logger.info(`Continuing the processing for this issue...`);
 
     return true;
@@ -330,7 +366,6 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
       LoggerService.value(projectCardsCount),
       LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this issue`)
     );
-
     this.processor.logger.info(`Continuing the processing for this issue...`);
 
     return true;
