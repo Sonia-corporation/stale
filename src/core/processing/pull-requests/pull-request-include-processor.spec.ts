@@ -2009,6 +2009,188 @@ describe(`PullRequestIncludeProcessor`, (): void => {
       });
     });
 
+    describe(`shouldIncludeAnyMilestone$$()`, (): void => {
+      let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        pullRequestProcessor = createHydratedMock<PullRequestProcessor>();
+        pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+        pullRequestProcessorLoggerInfoSpy = jest
+          .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+          .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithAssignees: false,
+            })
+          );
+      });
+
+      it(`should log about checking the pull-request-only-with-milestones input`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `Checking if this pull request should only be processed when having at least one associated milestone...`
+        );
+      });
+
+      it(`should get the pull request inputs`, (): void => {
+        expect.assertions(2);
+
+        pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+        expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+      });
+
+      describe(`when the pull-request-only-with-milestones input is disabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithMilestones: false,
+            })
+          );
+        });
+
+        it(`should log about continuing the processing for this pull request (the feature is not enabled)`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-milestones`,
+            `whiteBright-is disabled. Continuing...`
+          );
+        });
+
+        it(`should return true`, (): void => {
+          expect.assertions(1);
+
+          const result = pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+          expect(result).toBeTrue();
+        });
+      });
+
+      describe(`when the pull-request-only-with-milestones input is enabled`, (): void => {
+        beforeEach((): void => {
+          pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>({
+              pullRequestOnlyWithMilestones: true,
+            })
+          );
+        });
+
+        it(`should log about checking if this pull request should be processed or ignored based on this input`, (): void => {
+          expect.assertions(2);
+
+          pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `The input`,
+            `input-pull-request-only-with-milestones`,
+            `whiteBright-is enabled. Checking...`
+          );
+        });
+
+        describe(`when the pull request has no milestone`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                milestone: undefined,
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about not containing any milestone (skipping the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Not containing any milestone. Skipping the processing of this pull request...`
+            );
+          });
+
+          it(`should return false`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+            expect(result).toBeFalse();
+          });
+        });
+
+        describe(`when the pull request has at least one milestone`, (): void => {
+          beforeEach((): void => {
+            pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
+              item: {
+                milestone: createHydratedMock<IGithubApiMilestone>({
+                  id: `dummy-milestone`,
+                }),
+              },
+            });
+            pullRequestIncludeProcessor = new PullRequestIncludeProcessor(pullRequestProcessor);
+
+            pullRequestProcessorLoggerInfoSpy = jest
+              .spyOn(pullRequestIncludeProcessor.processor.logger, `info`)
+              .mockImplementation();
+          });
+
+          it(`should log about finding a milestone (continuing the processing)`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              3,
+              `Found a milestone on this pull request`
+            );
+          });
+
+          it(`should log continuing the processing`, (): void => {
+            expect.assertions(2);
+
+            pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(4);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+              4,
+              `Continuing the processing for this pull request...`
+            );
+          });
+
+          it(`should return true`, (): void => {
+            expect.assertions(1);
+
+            const result = pullRequestIncludeProcessor.shouldIncludeAnyMilestone$$();
+
+            expect(result).toBeTrue();
+          });
+        });
+      });
+    });
+
     describe(`shouldIncludeAnyProjectCards$$()`, (): void => {
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
       let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;

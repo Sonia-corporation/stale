@@ -302,6 +302,38 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
   }
 
   public shouldIncludeAnyMilestone$$(): boolean {
+    this.processor.logger.info(
+      `Checking if this pull request should only be processed when having at least one associated milestone...`
+    );
+
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    if (!pullRequestsInputs.pullRequestOnlyWithMilestones) {
+      this.processor.logger.info(
+        `The input`,
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_MILESTONES),
+        LoggerFormatService.whiteBright(`is disabled. Continuing...`)
+      );
+
+      return true;
+    }
+
+    this.processor.logger.info(
+      `The input`,
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_MILESTONES),
+      LoggerFormatService.whiteBright(`is enabled. Checking...`)
+    );
+    const { milestone } = this.processor.item;
+
+    if (!milestone) {
+      this.processor.logger.info(`Not containing any milestone. Skipping the processing of this pull request...`);
+
+      return false;
+    }
+
+    this.processor.logger.info(`Found a milestone on this pull request`);
+    this.processor.logger.info(`Continuing the processing for this pull request...`);
+
     return true;
   }
 

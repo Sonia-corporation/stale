@@ -177,6 +177,10 @@ inputs:
     description: 'Allow to ignore the processing of pull requests that contains one of those milestones (multiline).'
     required: false
     default: ''
+  pull-request-only-with-milestones:
+    description: 'Only allow the processing of pull requests that contains at least one milestone.'
+    required: false
+    default: 'false'
   pull-request-only-any-milestones:
     description: 'Only allow the processing of pull requests that contains one of those milestones (multiline).'
     required: false

@@ -90,6 +90,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestOnlyWithAssignees: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_ASSIGNEES, {
         required: false,
       }),
+      pullRequestOnlyWithMilestones: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_MILESTONES, {
+        required: false,
+      }),
       pullRequestOnlyWithProjectCards: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS, {
         required: false,
       }),
