@@ -23,6 +23,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueOnlyAnyMilestones: string[];
   readonly issueOnlyAnyProjectCards: string[];
   readonly issueOnlyWithAssignees: boolean;
+  readonly issueOnlyWithMilestones: boolean;
   readonly issueOnlyWithProjectCards: boolean;
   readonly issueProcessing: boolean;
   readonly issueStaleComment: IComment | '';
