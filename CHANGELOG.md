@@ -1,5 +1,15 @@
 # Sonia stale action
 
+# [1.61.0](https://github.com/Sonia-corporation/stale/compare/1.60.0...1.61.0) (2022-08-22)
+
+
+### :rocket: Features
+
+* **issues:** add new input `issue-only-with-milestones` ([8083fa8](https://github.com/Sonia-corporation/stale/commit/8083fa8d48c7fbda723f89a03bac77ba0fcf1b52)), closes [#808](https://github.com/Sonia-corporation/stale/issues/808)
+  This new input allows to only process issues containing at least one milestone.
+* **prs:** add new input `pull-request-only-with-milestones` ([d9e240f](https://github.com/Sonia-corporation/stale/commit/d9e240f41a76a6405b593932e12cde7bd5f57b67)), closes [#808](https://github.com/Sonia-corporation/stale/issues/808)
+  This new input allows to only process pull requests containing at least one milestone.
+
 # [1.60.0](https://github.com/Sonia-corporation/stale/compare/1.59.0...1.60.0) (2022-08-21)
 
 
