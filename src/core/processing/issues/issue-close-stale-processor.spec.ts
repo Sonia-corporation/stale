@@ -1,4 +1,5 @@
 import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
 import { IssuesInputsService } from '@core/inputs/issues-inputs.service';
@@ -74,6 +75,7 @@ describe(`IssueCloseStaleProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let issueCommentsProcessorProcessCloseCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
+      let issuesInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
@@ -101,6 +103,11 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         processToAddExtraLabelsSpy = jest
           .spyOn(issueCloseStaleProcessor, `processToAddExtraLabels$$`)
           .mockImplementation();
+        issuesInputsServiceGetInputsSpy = jest.spyOn(IssuesInputsService.getInstance(), `getInputs`).mockReturnValue(
+          createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+            issueCloseReason: ECloseReason.NOT_PLANNED,
+          })
+        );
       });
 
       it(`should check if the dry-run mode is enabled`, async (): Promise<void> => {
@@ -123,16 +130,52 @@ describe(`IssueCloseStaleProcessor`, (): void => {
           );
         });
 
-        it(`should close the issue`, async (): Promise<void> => {
-          expect.assertions(5);
+        describe(`when the input "issue-close-reason" is set to completed`, (): void => {
+          beforeEach((): void => {
+            issuesInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+                issueCloseReason: ECloseReason.COMPLETED,
+              })
+            );
+          });
 
-          await issueCloseStaleProcessor.close();
+          it(`should close the issue with the completed reason`, async (): Promise<void> => {
+            expect.assertions(7);
 
-          expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledTimes(1);
-          expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledWith(issueId);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The issue was closed`);
-          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue is now closed`);
+            await issueCloseStaleProcessor.close();
+
+            expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+            expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledWith(issueId, ECloseReason.COMPLETED);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The issue was closed`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue is now closed`);
+          });
+        });
+
+        describe(`when the input "issue-close-reason" is set to not planned`, (): void => {
+          beforeEach((): void => {
+            issuesInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IIssuesInputs>(<IIssuesInputs>{
+                issueCloseReason: ECloseReason.NOT_PLANNED,
+              })
+            );
+          });
+
+          it(`should close the issue with the not planned reason`, async (): Promise<void> => {
+            expect.assertions(7);
+
+            await issueCloseStaleProcessor.close();
+
+            expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(issuesInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+            expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssuesServiceCloseIssueSpy).toHaveBeenCalledWith(issueId, ECloseReason.NOT_PLANNED);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The issue was closed`);
+            expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The issue is now closed`);
+          });
         });
 
         it(`should try to add a close comment`, async (): Promise<void> => {
@@ -164,10 +207,11 @@ describe(`IssueCloseStaleProcessor`, (): void => {
         });
 
         it(`should not close the issue`, async (): Promise<void> => {
-          expect.assertions(4);
+          expect.assertions(5);
 
           await issueCloseStaleProcessor.close();
 
+          expect(issuesInputsServiceGetInputsSpy).not.toHaveBeenCalled();
           expect(githubApiIssuesServiceCloseIssueSpy).not.toHaveBeenCalled();
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

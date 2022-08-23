@@ -7,6 +7,7 @@ description: |
 tags:
   - Pull requests
   - Inputs
+  - Closing
 ---
 
 ### Input {#input}
@@ -25,6 +26,14 @@ The number of days is calculated based on the stale date (the stale label creati
 
 Assuming that a pull request is stale since 9 days and this input is configured to close after 10 days.  
 The pull request will be closed tomorrow if no update occur until then.
+
+:::info
+
+You can also specify the reason for closing this pull request by using the [close reason input](pull-request-close-reason-input),
+add labels onto it by using the [add labels after close input](pull-request-add-labels-after-close-input)
+and add a comment to explain why it was closed by using the [close comment input](pull-request-close-comment-input).
+
+:::
 
 ### Example {#example}
 

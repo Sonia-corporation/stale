@@ -1,4 +1,5 @@
 import { CommonInputsService } from '@core/inputs/common-inputs.service';
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
@@ -72,6 +73,7 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
       let commonInputsServiceGetInputsSpy: jest.SpyInstance;
       let pullRequestCommentsProcessorProcessCloseCommentSpy: jest.SpyInstance;
       let processToAddExtraLabelsSpy: jest.SpyInstance;
+      let pullRequestsInputsServiceGetInputsSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
@@ -99,6 +101,13 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         processToAddExtraLabelsSpy = jest
           .spyOn(pullRequestCloseStaleProcessor, `processToAddExtraLabels$$`)
           .mockImplementation();
+        pullRequestsInputsServiceGetInputsSpy = jest
+          .spyOn(PullRequestsInputsService.getInstance(), `getInputs`)
+          .mockReturnValue(
+            createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
+              pullRequestCloseReason: ECloseReason.NOT_PLANNED,
+            })
+          );
       });
 
       it(`should check if the dry-run mode is enabled`, async (): Promise<void> => {
@@ -121,16 +130,58 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
           );
         });
 
-        it(`should close the pull request`, async (): Promise<void> => {
-          expect.assertions(5);
+        describe(`when the input "issue-close-reason" is set to completed`, (): void => {
+          beforeEach((): void => {
+            pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
+                pullRequestCloseReason: ECloseReason.COMPLETED,
+              })
+            );
+          });
 
-          await pullRequestCloseStaleProcessor.close();
+          it(`should close the pull request with the completed reason`, async (): Promise<void> => {
+            expect.assertions(7);
 
-          expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledTimes(1);
-          expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledWith(pullRequestId);
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The pull request was closed`);
-          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is now closed`);
+            await pullRequestCloseStaleProcessor.close();
+
+            expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+            expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledWith(
+              pullRequestId,
+              ECloseReason.COMPLETED
+            );
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The pull request was closed`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is now closed`);
+          });
+        });
+
+        describe(`when the input "issue-close-reason" is set to not planned`, (): void => {
+          beforeEach((): void => {
+            pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
+              createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
+                pullRequestCloseReason: ECloseReason.NOT_PLANNED,
+              })
+            );
+          });
+
+          it(`should close the pull request with the not planned reason`, async (): Promise<void> => {
+            expect.assertions(7);
+
+            await pullRequestCloseStaleProcessor.close();
+
+            expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledTimes(1);
+            expect(pullRequestsInputsServiceGetInputsSpy).toHaveBeenCalledWith();
+            expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiPullRequestsServiceClosePullRequestSpy).toHaveBeenCalledWith(
+              pullRequestId,
+              ECloseReason.NOT_PLANNED
+            );
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(2, `The pull request was closed`);
+            expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `The pull request is now closed`);
+          });
         });
 
         it(`should try to add a close comment`, async (): Promise<void> => {
@@ -162,10 +213,11 @@ describe(`PullRequestCloseStaleProcessor`, (): void => {
         });
 
         it(`should not close the pull request`, async (): Promise<void> => {
-          expect.assertions(4);
+          expect.assertions(5);
 
           await pullRequestCloseStaleProcessor.close();
 
+          expect(pullRequestsInputsServiceGetInputsSpy).not.toHaveBeenCalled();
           expect(githubApiPullRequestsServiceClosePullRequestSpy).not.toHaveBeenCalled();
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(3);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

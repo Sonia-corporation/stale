@@ -1,7 +1,9 @@
 import { AbstractInputsService } from '@core/inputs/abstract-inputs.service';
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IIssuesInputs } from '@core/inputs/interfaces/issues-inputs.interface';
+import { getParsedCloseReason } from '@utils/close/get-parsed-close-reason';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
@@ -27,6 +29,12 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
       issueAddLabelsAfterClose: core.getMultilineInput(EInputs.ISSUE_ADD_LABELS_AFTER_CLOSE, { required: false }),
       issueAddLabelsAfterStale: core.getMultilineInput(EInputs.ISSUE_ADD_LABELS_AFTER_STALE, { required: false }),
       issueCloseComment: core.getInput(EInputs.ISSUE_CLOSE_COMMENT, { required: false }),
+      issueCloseReason: CoreInputsService.getEnumInput$$(
+        EInputs.ISSUE_CLOSE_REASON,
+        getParsedCloseReason,
+        ECloseReason.NOT_PLANNED,
+        { required: false }
+      ),
       issueDaysBeforeClose: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_CLOSE, { required: false }),
       issueDaysBeforeStale: CoreInputsService.getNumberInput$$(EInputs.ISSUE_DAYS_BEFORE_STALE, { required: false }),
       issueIgnoreAllAssignees: core.getBooleanInput(EInputs.ISSUE_IGNORE_ALL_ASSIGNEES, { required: false }),
