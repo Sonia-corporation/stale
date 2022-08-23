@@ -1,38 +1,6 @@
 # Sonia stale action
 
-# [1.62.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...1.62.0) (2022-08-23)
-
-
-### :rocket: Features
-
-* **close-reason:** add new inputs `issue-close-reason` and `pull-request-close-reason` ([d813b45](https://github.com/Sonia-corporation/stale/commit/d813b4544f8731bf2f480dec6ebbcfb1462d0c47)), closes [#779](https://github.com/Sonia-corporation/stale/issues/779)
-  Those inputs allow you to specify the reason for closing an item.
-
-
-### BREAKING CHANGES
-
-* **close-reason:** The close reason will now be by default 'NOT_PLANNED' instead of 'COMPLETED' since it makes more sense.
-If you want to change the new default behavior, you can use these inputs:
-issue-close-reason: 'completed'
-pull-request-close-reason: 'completed'
-
-# [1.62.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...1.62.0) (2022-08-23)
-
-
-### :rocket: Features
-
-* **close-reason:** add new inputs `issue-close-reason` and `pull-request-close-reason` ([d813b45](https://github.com/Sonia-corporation/stale/commit/d813b4544f8731bf2f480dec6ebbcfb1462d0c47)), closes [#779](https://github.com/Sonia-corporation/stale/issues/779)
-  Those inputs allow you to specify the reason for closing an item.
-
-
-### BREAKING CHANGES
-
-* **close-reason:** The close reason will now be by default 'NOT_PLANNED' instead of 'COMPLETED' since it makes more sense.
-If you want to change the new default behavior, you can use these inputs:
-issue-close-reason: 'completed'
-pull-request-close-reason: 'completed'
-
-# [1.62.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...1.62.0) (2022-08-23)
+# [2.0.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...2.0.0) (2022-08-23)
 
 
 ### :rocket: Features
