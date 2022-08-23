@@ -1,3 +1,4 @@
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IAllInputs } from '@core/inputs/types/all-inputs';
 import faker from 'faker';
 
@@ -7,6 +8,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueAddLabelsAfterClose: [],
   issueAddLabelsAfterStale: [],
   issueCloseComment: `close-comment`,
+  issueCloseReason: ECloseReason.NOT_PLANNED,
   issueDaysBeforeClose: 10,
   issueDaysBeforeStale: 30,
   issueIgnoreAllAssignees: false,
@@ -32,6 +34,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestAddLabelsAfterClose: [],
   pullRequestAddLabelsAfterStale: [],
   pullRequestCloseComment: `close-comment`,
+  pullRequestCloseReason: ECloseReason.NOT_PLANNED,
   pullRequestDaysBeforeClose: 10,
   pullRequestDaysBeforeStale: 30,
   pullRequestDeleteBranchAfterClose: false,

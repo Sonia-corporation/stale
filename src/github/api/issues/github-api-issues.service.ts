@@ -1,3 +1,4 @@
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
@@ -10,6 +11,7 @@ import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-ge
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationErrorIssue } from '@utils/annotations/enums/annotation-error-issue.enum';
+import { closeReasonToGithubApi } from '@utils/close/close-reason-to-github-api';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -78,15 +80,18 @@ export class GithubApiIssuesService {
     this.issueProcessor = issueProcessor;
   }
 
-  public closeIssue(issueId: Readonly<IUuid>): Promise<void> | never {
+  public closeIssue(issueId: Readonly<IUuid>, reason: Readonly<ECloseReason>): Promise<void> | never {
     this.issueProcessor.logger.info(
       `Closing the issue`,
-      `${LoggerService.value(issueId)}${LoggerFormatService.whiteBright(`...`)}`
+      LoggerService.value(issueId),
+      LoggerFormatService.whiteBright(`(reason:`),
+      `${LoggerService.value(reason)}${LoggerFormatService.whiteBright(`)...`)}`
     );
 
     return OctokitService.getOctokit()
       .graphql<unknown>(GITHUB_API_CLOSE_ISSUE_MUTATION, {
         issueId,
+        reason: closeReasonToGithubApi(reason),
       })
       .then((): void => {
         IssuesStatisticsService.getInstance().increaseCalledApiIssuesMutationsCount();

@@ -1,3 +1,4 @@
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IInputs } from '@core/inputs/types/inputs';
 import { IIso8601Date } from '@utils/dates/iso-8601';
 import { IComment } from '@utils/types/comment';
@@ -6,6 +7,7 @@ export interface IIssuesInputs extends IInputs {
   readonly issueAddLabelsAfterClose: string[];
   readonly issueAddLabelsAfterStale: string[];
   readonly issueCloseComment: IComment | '';
+  readonly issueCloseReason: ECloseReason;
   readonly issueDaysBeforeClose: number;
   readonly issueDaysBeforeStale: number;
   readonly issueIgnoreAllAssignees: boolean;

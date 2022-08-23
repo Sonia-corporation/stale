@@ -3,6 +3,7 @@ import { IInput } from '@core/inputs/types/input';
 import { IInputs } from '@core/inputs/types/inputs';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { isFiniteNumber } from '@utils/numbers/is-finite-number';
@@ -30,7 +31,7 @@ export class CoreInputsService {
     return CoreInputsService;
   }
 
-  public static getNumberInput$$(input: Readonly<EInputs>, options?: Readonly<InputOptions>): number {
+  public static getNumberInput$$(input: Readonly<EInputs>, options?: Readonly<InputOptions>): number | never {
     const inputValue: string = core.getInput(input, options);
     const value: number = _.parseInt(inputValue);
 
@@ -51,5 +52,36 @@ export class CoreInputsService {
     }
 
     return value;
+  }
+
+  public static getEnumInput$$<TEnum>(
+    input: Readonly<EInputs>,
+    parser: (value: TEnum | string) => TEnum | undefined,
+    fallback: Readonly<TEnum>,
+    options?: Readonly<InputOptions>
+  ): TEnum {
+    const inputValue: TEnum | string = core.getInput(input, options);
+
+    // The parser should check if the value belong to the enum
+    // If not, it should return undefined and this method will use the fallback value instead
+    if (!parser(inputValue)) {
+      LoggerService.warning(
+        `Wrong value given to the input`,
+        LoggerService.value(input),
+        LoggerFormatService.white(`->`),
+        LoggerService.value(inputValue)
+      );
+      AnnotationsService.warning(EAnnotationWarningIssue.WRONG_INPUT_VALUE, {
+        file: `core-inputs.service.ts`,
+        startLine: 57,
+        title: `Warning`,
+      });
+      LoggerService.info(`Falling back instead to`, LoggerService.value(_.toString(fallback)));
+
+      return fallback;
+    }
+
+    // @todo find a way to get rid of this type hack
+    return inputValue as unknown as TEnum;
   }
 }

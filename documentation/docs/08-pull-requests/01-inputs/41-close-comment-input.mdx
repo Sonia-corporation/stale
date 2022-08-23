@@ -8,6 +8,7 @@ tags:
   - Pull requests
   - Inputs
   - Comments
+  - Closing
 ---
 
 ### Input {#input}
@@ -21,9 +22,17 @@ Default value: `''`
 This input will let you define the comment that will be added on the pull requests when they are closed after being stale for too long during the processing.  
 This can be useful if you wish to improve the communication and the process on how to handle an unwanted closed pull request.
 
+:::note
+
+You can also specify the reason for closing this pull request by using the [close reason input](pull-request-close-reason-input),
+add labels onto it by using the [add labels after close input](pull-request-add-labels-after-close-input)
+and define the number of days before closing it by using the [days before close input](pull-request-days-before-close-input).
+
+:::
+
 ### Example {#example}
 
-```yml {6}
+```yml {6-7}
 # ...
 name: Stale
 id: stale

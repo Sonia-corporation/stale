@@ -151,7 +151,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
   - If the issue has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
     - Else, check if issue last update is older than X days (coming from `issue-days-before-close`)
-      - If it is old, close the issue
+      - If it is old, close the issue (using the close reason coming from `issue-close-reason`)
       - Check if the action should also add a comment (coming from the `issue-close-comment` input)
         - When the input value is not empty, add a comment
       - Check if the action should also add extra labels (coming from the `issue-add-labels-after-close` input)
@@ -193,7 +193,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
   - If the pull request has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
     - Else, check if pull request last update is older than X days (coming from `pull-request-days-before-close`)
-      - If it is old, close the pull request
+      - If it is old, close the pull request (using the close reason coming from `pull-request-close-reason`)
       - Check if the action should also add a comment (coming from the `pull-request-close-comment` input)
         - When the input value is not empty, add a comment
       - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-close` input)

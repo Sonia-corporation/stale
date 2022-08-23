@@ -7,5 +7,6 @@
  * @returns {TKey[]} The list of keys
  */
 export function getEnumKeys<TEnum extends object, TKey extends keyof TEnum = keyof TEnum>(object: TEnum): TKey[] {
+  // @todo find a way to get rid of this type hack
   return Object.keys(object).filter((key: Readonly<string>): boolean => Number.isNaN(+key)) as TKey[];
 }

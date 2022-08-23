@@ -26,7 +26,9 @@ export class IssueCloseStaleProcessor extends AbstractCloseStaleProcessor<IssueP
   }
 
   protected _closeItem(itemId: Readonly<IUuid>): Promise<void> {
-    return this.githubApiIssuesService$$.closeIssue(itemId);
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    return this.githubApiIssuesService$$.closeIssue(itemId, issuesInputs.issueCloseReason);
   }
 
   protected _processCloseComment(): Promise<void> {

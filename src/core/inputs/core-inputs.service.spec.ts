@@ -1,9 +1,12 @@
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IInputs } from '@core/inputs/types/inputs';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { getParsedCloseReason } from '@utils/close/get-parsed-close-reason';
 import { LoggerService } from '@utils/loggers/logger.service';
+import { ICloseReason } from '@utils/types/close-reason';
 import * as core from '@actions/core';
 import { InputOptions } from '@actions/core';
 import { DateTime } from 'luxon';
@@ -386,6 +389,22 @@ describe(`CoreInputsService`, (): void => {
           coreGetInputSpy.mockReturnValue(value);
         });
 
+        it(`should not log an error`, (): void => {
+          expect.assertions(1);
+
+          CoreInputsService.getNumberInput$$(input, options);
+
+          expect(loggerServiceErrorSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not log an error annotation`, (): void => {
+          expect.assertions(1);
+
+          CoreInputsService.getNumberInput$$(input, options);
+
+          expect(annotationsServiceErrorSpy).not.toHaveBeenCalled();
+        });
+
         it(`should return the input value parsed as a number`, (): void => {
           expect.assertions(1);
 
@@ -396,9 +415,153 @@ describe(`CoreInputsService`, (): void => {
       }
     );
   });
+
+  describe(`getEnumInput$$()`, (): void => {
+    let input: EInputs;
+    let options: InputOptions;
+
+    let coreGetInputSpy: jest.SpyInstance;
+    let loggerServiceWarningSpy: jest.SpyInstance;
+    let loggerServiceInfoSpy: jest.SpyInstance;
+    let annotationsServiceWarningSpy: jest.SpyInstance;
+
+    beforeEach((): void => {
+      input = EInputs.ISSUE_CLOSE_REASON;
+      options = createHydratedMock<InputOptions>();
+
+      coreGetInputSpy = jest.spyOn(core, `getInput`).mockReturnValue(`0`);
+      loggerServiceWarningSpy = jest.spyOn(LoggerService, `warning`).mockImplementation();
+      loggerServiceInfoSpy = jest.spyOn(LoggerService, `info`).mockImplementation();
+      annotationsServiceWarningSpy = jest.spyOn(AnnotationsService, `warning`).mockImplementation();
+    });
+
+    it(`should get the value related to the given input`, (): void => {
+      expect.assertions(2);
+
+      CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+      expect(coreGetInputSpy).toHaveBeenCalledTimes(1);
+      expect(coreGetInputSpy).toHaveBeenCalledWith(input, options);
+    });
+
+    describe.each([``, `yolo`])(
+      `when the value of the input does not belong to the enum (%s)`,
+      (value: ICloseReason): void => {
+        beforeEach((): void => {
+          coreGetInputSpy.mockReturnValue(value);
+        });
+
+        it(`should log a warning`, (): void => {
+          expect.assertions(2);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(loggerServiceWarningSpy).toHaveBeenCalledTimes(1);
+          expect(loggerServiceWarningSpy).toHaveBeenCalledWith(
+            `Wrong value given to the input`,
+            `value-${input}`,
+            `white-->`,
+            `value-${value}`
+          );
+        });
+
+        it(`should log a warning annotation`, (): void => {
+          expect.assertions(2);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(annotationsServiceWarningSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceWarningSpy).toHaveBeenCalledWith(EAnnotationError.WRONG_INPUT_VALUE, {
+            file: `core-inputs.service.ts`,
+            startLine: 57,
+            title: `Warning`,
+          });
+        });
+
+        it(`should log the fallback value`, (): void => {
+          expect.assertions(2);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(1);
+          expect(loggerServiceInfoSpy).toHaveBeenCalledWith(
+            `Falling back instead to`,
+            `value-${ECloseReason.NOT_PLANNED}`
+          );
+        });
+
+        it(`should return the fallback value instead (${ECloseReason.NOT_PLANNED})`, (): void => {
+          expect.assertions(1);
+
+          const result = CoreInputsService.getEnumInput$$(
+            input,
+            getParsedCloseReason,
+            ECloseReason.NOT_PLANNED,
+            options
+          );
+
+          expect(result).toStrictEqual(ECloseReason.NOT_PLANNED);
+        });
+      }
+    );
+
+    describe.each`
+      value
+      ${ECloseReason.COMPLETED}
+      ${ECloseReason.NOT_PLANNED}
+    `(
+      `when the value of the input belong to the enum (ECloseReason) ($value)`,
+      ({ value }: IGetEnumInputMatrix): void => {
+        beforeEach((): void => {
+          coreGetInputSpy.mockReturnValue(value);
+        });
+
+        it(`should not log a warning`, (): void => {
+          expect.assertions(1);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(loggerServiceWarningSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not log a warning annotation`, (): void => {
+          expect.assertions(1);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(annotationsServiceWarningSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should not log the fallback value`, (): void => {
+          expect.assertions(1);
+
+          CoreInputsService.getEnumInput$$(input, getParsedCloseReason, ECloseReason.NOT_PLANNED, options);
+
+          expect(loggerServiceInfoSpy).not.toHaveBeenCalled();
+        });
+
+        it(`should return the same input value`, (): void => {
+          expect.assertions(1);
+
+          const result = CoreInputsService.getEnumInput$$(
+            input,
+            getParsedCloseReason,
+            ECloseReason.NOT_PLANNED,
+            options
+          );
+
+          expect(result).toStrictEqual(value);
+        });
+      }
+    );
+  });
 });
 
 interface IGetNumberInputMatrix {
   parsedValue: number;
   value: string;
+}
+
+interface IGetEnumInputMatrix {
+  value: ECloseReason;
 }
