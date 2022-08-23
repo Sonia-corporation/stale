@@ -249,7 +249,7 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
 
   /**
    * @description
-   * Crate the SUT
+   * Create the SUT
    * You can pass the parameters to override the default inputs
    * @param {Readonly<Partial<ICommonInputs & IIssuesInputs>>} inputs The override inputs
    */

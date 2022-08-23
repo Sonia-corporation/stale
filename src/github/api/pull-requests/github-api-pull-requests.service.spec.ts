@@ -1,5 +1,7 @@
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
+import { EGitHubApiCloseReason } from '@github/api/close/enums/github-api-close-reason.enum';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
@@ -386,23 +388,78 @@ describe(`GithubApiPullRequestsService`, (): void => {
           .mockImplementation();
       });
 
-      it(`should close the pull request`, async (): Promise<void> => {
-        expect.assertions(7);
+      describe(`when the reason to close is not specified`, (): void => {
+        it(`should close the pull request with the not planned reason`, async (): Promise<void> => {
+          expect.assertions(7);
 
-        await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-          new Error(`graphql error`)
-        );
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
 
-        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
-          `Closing the pull request`,
-          `value-${pullRequestId}whiteBright-...`
-        );
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
-        expect(graphqlMock).toHaveBeenCalledTimes(1);
-        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_PULL_REQUEST_MUTATION, {
-          pullRequestId,
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the pull request`,
+            `value-${pullRequestId}`,
+            `whiteBright-(reason:`,
+            `value-not plannedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_PULL_REQUEST_MUTATION, {
+            pullRequestId,
+            reason: EGitHubApiCloseReason.NOT_PLANNED,
+          });
+        });
+      });
+
+      describe(`when the reason to close is completed`, (): void => {
+        it(`should close the pull request with the completed reason`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.COMPLETED)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the pull request`,
+            `value-${pullRequestId}`,
+            `whiteBright-(reason:`,
+            `value-completedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_PULL_REQUEST_MUTATION, {
+            pullRequestId,
+            reason: EGitHubApiCloseReason.COMPLETED,
+          });
+        });
+      });
+
+      describe(`when the reason to close is not planned`, (): void => {
+        it(`should close the pull request with the not planned reason`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the pull request`,
+            `value-${pullRequestId}`,
+            `whiteBright-(reason:`,
+            `value-not plannedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_PULL_REQUEST_MUTATION, {
+            pullRequestId,
+            reason: EGitHubApiCloseReason.NOT_PLANNED,
+          });
         });
       });
 
@@ -414,9 +471,9 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
         });
@@ -424,9 +481,9 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
@@ -438,9 +495,9 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should annotate about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorPullRequest.FAILED_CLOSE, {
@@ -453,9 +510,9 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should rethrow`, async (): Promise<void> => {
           expect.assertions(1);
 
-          await expect(githubApiPullRequestsService.closePullRequest(pullRequestId)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED)
+          ).rejects.toThrow(new Error(`graphql error`));
         });
       });
 
@@ -467,7 +524,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiPullRequestsService.closePullRequest(pullRequestId);
+          await githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED);
 
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();
@@ -476,7 +533,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
         it(`should log about the success of the closing`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiPullRequestsService.closePullRequest(pullRequestId);
+          await githubApiPullRequestsService.closePullRequest(pullRequestId, ECloseReason.NOT_PLANNED);
 
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(

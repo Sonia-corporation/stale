@@ -1,5 +1,7 @@
+import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
+import { EGitHubApiCloseReason } from '@github/api/close/enums/github-api-close-reason.enum';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
@@ -374,21 +376,78 @@ describe(`GithubApiIssuesService`, (): void => {
           .mockImplementation();
       });
 
-      it(`should close the issue`, async (): Promise<void> => {
-        expect.assertions(7);
+      describe(`when the reason to close is not specified`, (): void => {
+        it(`should close the issue with the not planned reason`, async (): Promise<void> => {
+          expect.assertions(7);
 
-        await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
-        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
-          `Closing the issue`,
-          `value-${issueId}whiteBright-...`
-        );
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
-        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
-        expect(graphqlMock).toHaveBeenCalledTimes(1);
-        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_ISSUE_MUTATION, {
-          issueId,
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the issue`,
+            `value-${issueId}`,
+            `whiteBright-(reason:`,
+            `value-not plannedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_ISSUE_MUTATION, {
+            issueId,
+            reason: EGitHubApiCloseReason.NOT_PLANNED,
+          });
+        });
+      });
+
+      describe(`when the reason to close is completed`, (): void => {
+        it(`should close the issue with the completed reason`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.COMPLETED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the issue`,
+            `value-${issueId}`,
+            `whiteBright-(reason:`,
+            `value-completedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_ISSUE_MUTATION, {
+            issueId,
+            reason: EGitHubApiCloseReason.COMPLETED,
+          });
+        });
+      });
+
+      describe(`when the reason to close is not planned`, (): void => {
+        it(`should close the issue with the not planned reason`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Closing the issue`,
+            `value-${issueId}`,
+            `whiteBright-(reason:`,
+            `value-not plannedwhiteBright-)...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_CLOSE_ISSUE_MUTATION, {
+            issueId,
+            reason: EGitHubApiCloseReason.NOT_PLANNED,
+          });
         });
       });
 
@@ -400,7 +459,9 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
         });
@@ -408,7 +469,9 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(`Failed to close the issue`, `value-${issueId}`);
@@ -417,7 +480,9 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should annotate about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationErrorIssue.FAILED_CLOSE, {
@@ -430,7 +495,9 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should rethrow`, async (): Promise<void> => {
           expect.assertions(1);
 
-          await expect(githubApiIssuesService.closeIssue(issueId)).rejects.toThrow(new Error(`graphql error`));
+          await expect(githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
         });
       });
 
@@ -442,7 +509,7 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssuesService.closeIssue(issueId);
+          await githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED);
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
@@ -451,7 +518,7 @@ describe(`GithubApiIssuesService`, (): void => {
         it(`should log about the success of the closing`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssuesService.closeIssue(issueId);
+          await githubApiIssuesService.closeIssue(issueId, ECloseReason.NOT_PLANNED);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
