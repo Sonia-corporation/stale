@@ -2,11 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://sonia-corporation.github.io/stale/fr/blog</id>
     <title>Sonia stale action Blog</title>
-    <updated>2022-02-12T00:00:00.000Z</updated>
+    <updated>2022-08-24T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://sonia-corporation.github.io/stale/fr/blog"/>
     <subtitle>Sonia stale action Blog</subtitle>
     <icon>https://sonia-corporation.github.io/stale/fr/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[The new documentation URL is here!]]></title>
+        <id>migrate-to-vercel</id>
+        <link href="https://sonia-corporation.github.io/stale/fr/blog/migrate-to-vercel"/>
+        <updated>2022-08-24T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The documentation deployment changed from using the GitHub pages to using Vercel.
+It's time for you to use the new URL: https://sonia-stale-action.vercel.app.
+]]></summary>
+        <content type="html"><![CDATA[<p>It was time to say goodbye to the <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub pages</a> and embrace instead <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a>.<br>
+<!-- -->The documentation is now accessible from this <a href="https://sonia-stale-action.vercel.app" target="_blank" rel="noopener noreferrer">URL</a>.</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="why">Why?<a class="hash-link" href="#why" title="Lien direct vers le titre">​</a></h2><p>The documentation was not easily testable on a Pull Request.<br>
+<!-- -->With <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a>, each GitHub branch will have a dedicated documentation deployment.<br>
+<!-- -->This will help us guarantee that it's always working as expected.</p><p>It will also be way faster for us to create a new release, because the documentation creation will be completely asynchronous.</p><p>On top of that, <a href="https://vercel.com" target="_blank" rel="noopener noreferrer">Vercel</a> has many more features that we will also discover/configure later on.<br>
+<!-- -->We also added <a href="https://sentry.io" target="_blank" rel="noopener noreferrer">Sentry</a> as part of the documentation to track eventual errors that you may come across.</p><div class="theme-admonition theme-admonition-info alert alert--info admonition_LlT9"><div class="admonitionHeading_tbUL"><span class="admonitionIcon_kALy"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>info</div><div class="admonitionContent_S0QG"><p>Even if we changed in all places the links from the <a href="https://sonia-corporation.github.io/stale/" target="_blank" rel="noopener noreferrer">GitHub pages</a> to <a href="https://sonia-stale-action.vercel.app" target="_blank" rel="noopener noreferrer">Vercel</a>, we will continue to deploy the documentation there.<br>
+<!-- -->We may create a redirection in the future though.</p></div></div>]]></content>
+        <author>
+            <name>Geoffrey "C0ZEN" Testelin</name>
+            <uri>https://github.com/C0ZEN</uri>
+        </author>
+        <category label="documentation" term="documentation"/>
+        <category label="url" term="url"/>
+        <category label="github pages" term="github pages"/>
+        <category label="vercel" term="vercel"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[The new UI is here!]]></title>
         <id>new-ui</id>
