@@ -48,7 +48,8 @@
 
 ## Documentation
 
-To have in-depth documentation and examples, see the [documentation website](https://sonia-stale-action.vercel.app).
+To have in-depth documentation and examples, see the [documentation website](https://sonia-stale-action.vercel.app).  
+The documentation website is also available as a [GitHub page,](https://sonia-corporation.github.io/stale/) but we deprecated it.
 
 ## Default configuration
 

@@ -1,0 +1,33 @@
+---
+slug: migrate-to-vercel
+title: The new documentation URL is here!
+description: |
+  The documentation deployment changed from using the GitHub pages to using Vercel.
+  It's time for you to use the new URL: https://sonia-stale-action.vercel.app.
+authors: [C0ZEN]
+tags: [documentation, url, github pages, vercel]
+hide_table_of_contents: false
+---
+
+It was time to say goodbye to the [GitHub pages](https://pages.github.com) and embrace instead [Vercel](https://vercel.com).  
+The documentation is now accessible from this [URL](https://sonia-stale-action.vercel.app).
+
+<!--truncate-->
+
+## Why? {#why}
+
+The documentation was not easily testable on a Pull Request.  
+With [Vercel](https://vercel.com), each GitHub branch will have a dedicated documentation deployment.  
+This will help us guarantee that it's always working as expected.
+
+It will also be way faster for us to create a new release, because the documentation creation will be completely asynchronous.
+
+On top of that, [Vercel](https://vercel.com) has many more features that we will also discover/configure later on.  
+We also added [Sentry](https://sentry.io) as part of the documentation to track eventual errors that you may come across.
+
+:::info
+
+Even if we changed in all places the links from the [GitHub pages](https://sonia-corporation.github.io/stale/) to [Vercel](https://sonia-stale-action.vercel.app), we will continue to deploy the documentation there.  
+We may create a redirection in the future though.
+
+:::
