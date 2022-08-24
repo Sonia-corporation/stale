@@ -1,5 +1,16 @@
 # Sonia stale action
 
+# [2.1.0](https://github.com/Sonia-corporation/stale/compare/2.0.0...2.1.0) (2022-08-24)
+
+### :books: Documentation
+
+- **blog:** add a new blog entry to explain the migration to Vercel ([33cad40](https://github.com/Sonia-corporation/stale/commit/33cad400b720c26848d03360d7559b384cfb0ece)), closes [#842](https://github.com/Sonia-corporation/stale/issues/842)
+- **website:** configure Sentry ([b221ce4](https://github.com/Sonia-corporation/stale/commit/b221ce4945f3971057220b6845f52da25a99efe4)), closes [#843](https://github.com/Sonia-corporation/stale/issues/843)
+- **changelog:** improve the readability of the changelog ([cd5cc09](https://github.com/Sonia-corporation/stale/commit/cd5cc097623f877210355196e6e3320f9ed0a9bb)), closes [#836](https://github.com/Sonia-corporation/stale/issues/836)
+  Add more blank lines.
+- **website:** replace all the website links to the new one ([9251f7f](https://github.com/Sonia-corporation/stale/commit/9251f7fa4e10558dd2c710f401d7549300bf999b)), closes [#842](https://github.com/Sonia-corporation/stale/issues/842)
+  From GitHub pages to Vercel.
+
 # [2.0.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...2.0.0) (2022-08-23)
 
 ### :rocket: Features
@@ -16,19 +27,17 @@
 
 # [1.62.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...1.62.0) (2022-08-23)
 
-
 ### :rocket: Features
 
-* **close-reason:** add new inputs `issue-close-reason` and `pull-request-close-reason` ([d813b45](https://github.com/Sonia-corporation/stale/commit/d813b4544f8731bf2f480dec6ebbcfb1462d0c47)), closes [#779](https://github.com/Sonia-corporation/stale/issues/779)
+- **close-reason:** add new inputs `issue-close-reason` and `pull-request-close-reason` ([d813b45](https://github.com/Sonia-corporation/stale/commit/d813b4544f8731bf2f480dec6ebbcfb1462d0c47)), closes [#779](https://github.com/Sonia-corporation/stale/issues/779)
   Those inputs allow you to specify the reason for closing an item.
-
 
 ### BREAKING CHANGES
 
-* **close-reason:** The close reason will now be by default 'NOT_PLANNED' instead of 'COMPLETED' since it makes more sense.
-If you want to change the new default behavior, you can use these inputs:
-issue-close-reason: 'completed'
-pull-request-close-reason: 'completed'
+- **close-reason:** The close reason will now be by default 'NOT_PLANNED' instead of 'COMPLETED' since it makes more sense.
+  If you want to change the new default behavior, you can use these inputs:
+  issue-close-reason: 'completed'
+  pull-request-close-reason: 'completed'
 
 # [1.61.0](https://github.com/Sonia-corporation/stale/compare/1.60.0...1.61.0) (2022-08-22)
 
