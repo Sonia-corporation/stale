@@ -9,7 +9,11 @@
       "node_modules/@types/",
       "types",
       "documentation/node_modules/@types",
-      "documentation/node_modules/@types/"
+      "documentation/node_modules/@types/",
+      "documentation/node_modules/@docusaurus",
+      "documentation/node_modules/@docusaurus/",
+      "documentation/node_modules/@sentry",
+      "documentation/node_modules/@sentry/"
     ],
     "baseUrl": ".",
     "rootDir": ".",

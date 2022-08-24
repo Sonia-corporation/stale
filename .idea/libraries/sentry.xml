@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="sentry" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/documentation/node_modules/@sentry" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/documentation/node_modules/@sentry" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

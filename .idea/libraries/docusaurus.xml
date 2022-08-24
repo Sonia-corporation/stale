@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="docusaurus" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/documentation/node_modules/@docusaurus" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/documentation/node_modules/@docusaurus" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
