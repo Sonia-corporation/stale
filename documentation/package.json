@@ -5,6 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start --config docusaurus.github.config.js ",
+    "start:vercel": "docusaurus start --config docusaurus.vercel.config.js ",
     "start:french": "npm run start -- --locale fr",
     "build": "npm run generate-files && docusaurus build --config docusaurus.github.config.js",
     "build:vercel": "npm run generate-files && docusaurus build --config docusaurus.vercel.config.js",
@@ -29,6 +30,8 @@
     "@docusaurus/preset-classic": "2.0.1",
     "@docusaurus/theme-search-algolia": "2.0.1",
     "@mdx-js/react": "1.6.22",
+    "@sentry/browser": "7.11.1",
+    "@sentry/tracing": "7.11.1",
     "clsx": "1.2.1",
     "prism-react-renderer": "1.3.5",
     "react": "17.0.2",
