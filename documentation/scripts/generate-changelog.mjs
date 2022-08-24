@@ -3,10 +3,12 @@ import { getDirectoryName } from './get-directory-name.mjs';
 import * as LOGGER from './logger.mjs';
 import FS from 'fs-extra';
 import _ from 'lodash';
+import XREG_EXP from 'xregexp';
 import { execSync } from 'child_process';
 
 const CONTEXT = `generate-changelog`;
-const CHANGELOG_PATH = `documentation/docs/15-changelog.md`;
+const CHANGELOG_PATH = `CHANGELOG.md`;
+const DOCUMENTATION_CHANGELOG_PATH = `documentation/docs/15-changelog.md`;
 
 /**
  * @description
@@ -18,13 +20,19 @@ async function initialize() {
 
   navigateToRoot();
 
+  LOGGER.debug(CONTEXT, CHALK.text(`Linting the original changelog...`));
+  execSync(`npm run lint:other:this -- ${CHANGELOG_PATH}`, {
+    stdio: `inherit`,
+  });
+  LOGGER.success(CONTEXT, CHALK.text(`Original changelog linted`));
+
   const originalChangelog = await loadOriginalChangelog();
   const documentationChangelog = await loadDocumentationChangelog();
 
   await mergeOriginalIntoDocumentationChangelog(originalChangelog, documentationChangelog);
 
   LOGGER.debug(CONTEXT, CHALK.text(`Linting the documentation changelog...`));
-  execSync(`npm run lint:other:this -- ${CHANGELOG_PATH}`, {
+  execSync(`npm run lint:other:this -- ${DOCUMENTATION_CHANGELOG_PATH}`, {
     stdio: `inherit`,
   });
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog linted`));
@@ -48,7 +56,7 @@ async function initialize() {
 async function loadOriginalChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the original changelog...`));
 
-  const changelog = await FS.readFile(`CHANGELOG.md`, `utf-8`);
+  const changelog = await FS.readFile(CHANGELOG_PATH, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Original changelog loaded`));
 
@@ -63,7 +71,7 @@ async function loadOriginalChangelog() {
 async function loadDocumentationChangelog() {
   LOGGER.debug(CONTEXT, CHALK.text(`Loading the documentation changelog...`));
 
-  const changelog = await FS.readFile(CHANGELOG_PATH, `utf-8`);
+  const changelog = await FS.readFile(DOCUMENTATION_CHANGELOG_PATH, `utf-8`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog loaded`));
 
@@ -79,7 +87,7 @@ async function loadDocumentationChangelog() {
 async function updateDocumentationChangelog(content) {
   LOGGER.debug(CONTEXT, CHALK.text(`Updating the documentation changelog...`));
 
-  await FS.writeFile(CHANGELOG_PATH, content);
+  await FS.writeFile(DOCUMENTATION_CHANGELOG_PATH, content);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog updated`));
 }
@@ -114,9 +122,10 @@ function replaceDocumentationChangelogContent(originalChangelog, documentationCh
   LOGGER.debug(CONTEXT, CHALK.text(`Replacing the content of the documentation changelog...`));
 
   const frontMatter = getFrontMatter(documentationChangelog);
-  let newContent = `${frontMatter}${originalChangelog}`;
+  let newContent = replaceTitle(originalChangelog);
 
-  newContent = replaceTitle(newContent);
+  newContent = formatBreakOfLines(newContent);
+  newContent = `${frontMatter}${newContent}`;
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog content replaced`));
 
@@ -150,6 +159,26 @@ function replaceTitle(content) {
   const newContent = _.replace(content, `# Sonia stale action`, `# Changelog`);
 
   LOGGER.success(CONTEXT, CHALK.text(`Documentation changelog title replaced to "Changelog"`));
+
+  return newContent;
+}
+
+/**
+ * @param {Readonly<string>} content The updated documentation changelog
+ * @returns {string} The documentation changelog with the formatted break of lines
+ */
+function formatBreakOfLines(content) {
+  LOGGER.debug(CONTEXT, CHALK.text(`Formatting the break of lines...`));
+
+  // eslint-disable-next-line new-cap
+  const regexpCommitType = XREG_EXP(`(?<commit>^- \\*\\*.*)(?<eol>\\n)(?<description>  \\w+)`, `gim`);
+  let newContent = XREG_EXP.replace(content, regexpCommitType, `$<commit>  $<eol>$<description>`, `all`);
+  // eslint-disable-next-line new-cap
+  const regexpBodySentence = XREG_EXP(`(?<sentence>  .+)(?<eol>\\n)`, `gim`);
+
+  newContent = XREG_EXP.replace(newContent, regexpBodySentence, `$<sentence>  $<eol>`, `all`);
+
+  LOGGER.success(CONTEXT, CHALK.text(`Break of lines formatted`));
 
   return newContent;
 }
