@@ -4,8 +4,8 @@
   <ShortName>Sonia stale action</ShortName>
   <Description>Search Sonia stale action</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://sonia-corporation.github.io/stale/fr/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://sonia-corporation.github.io/stale/fr/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://sonia-corporation.github.io/stale/fr/opensearch.xml" />
-  <moz:SearchForm>https://sonia-corporation.github.io/stale/fr/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://sonia-corporation.github.io/stale/stale/fr/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://sonia-corporation.github.io/stale/stale/fr/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://sonia-corporation.github.io/stale/stale/fr/opensearch.xml" />
+  <moz:SearchForm>https://sonia-corporation.github.io/stale/stale/fr/</moz:SearchForm>
 </OpenSearchDescription>
