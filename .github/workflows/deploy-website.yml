@@ -39,3 +39,7 @@ jobs:
           publish_dir: ./documentation/build
           user_name: ${{ secrets.GIT_COMMITTER_NAME }}
           user_email: ${{ secrets.GIT_COMMITTER_EMAIL }}
+      - name: Deploy to Vercel
+        run: |
+          npm run build:docs:vercel
+          npm run deploy:vercel:prod

@@ -9,3 +9,4 @@ coverage
 reports
 documentation/.docusaurus
 documentation/build
+.vercel

@@ -51,3 +51,5 @@ token.json
 .DS_Store
 Thumbs.db
 
+
+.vercel

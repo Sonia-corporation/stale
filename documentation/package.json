@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start --config docusaurus.github.config.js ",
-    "start:vercel": "docusaurus start --config docusaurus.vercel.config.js ",
+    "start": "docusaurus start --config docusaurus.github.config.js",
+    "start:vercel": "docusaurus start --config docusaurus.vercel.config.js",
     "start:french": "npm run start -- --locale fr",
     "build": "npm run generate-files && docusaurus build --config docusaurus.github.config.js",
     "build:vercel": "npm run generate-files && docusaurus build --config docusaurus.vercel.config.js",
