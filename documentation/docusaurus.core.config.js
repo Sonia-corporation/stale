@@ -142,7 +142,7 @@ const config = {
     }),
   title: `Sonia stale action`,
   trailingSlash: false,
-  url: `https://sonia-corporation.github.io`,
+  url: `https://sonia-stale-action.vercel.app`,
 };
 
 module.exports = config;
