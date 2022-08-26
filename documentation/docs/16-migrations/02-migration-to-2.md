@@ -10,11 +10,11 @@ tags:
 
 # Migration from v1 to v2
 
-## Migration
+## Migration {#migration}
 
 From [v1](https://github.com/Sonia-corporation/stale/releases/tag/1.61.0) to [v2](https://github.com/Sonia-corporation/stale/releases/tag/2.0.0).
 
-### Close reason 🍬
+### Close reason 🍬 {#close-reason}
 
 These two new inputs were introduced:
 

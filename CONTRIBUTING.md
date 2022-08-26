@@ -119,6 +119,7 @@ So please, check everything before creating a pull request.
 You may also need to run the translations scripts (from the documentation package).  
 You can do that by running `npm run write-translations` and `npm run write-translations:french`.
 
+Note that the CI build step will perform a difference check and will be considered as failing if one is found.  
 Note that we also have a [blog](https://sonia-stale-action.vercel.app/blog) so don't hesitate to suggest a new entry, or create a new [ticket](https://github.com/Sonia-corporation/stale/issues/new?assignees=C0ZEN&labels=blog-request+%3Anewspaper%3A&template=blog_article.md&title=%5BBLOG%5D+).
 
 ### GitHub API
