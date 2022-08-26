@@ -41,5 +41,6 @@ jobs:
           user_email: ${{ secrets.GIT_COMMITTER_EMAIL }}
       - name: Deploy to Vercel
         run: |
-          npm run build:docs:vercel
-          npm run deploy:vercel:prod
+          npm run vercel:pull -- --token ${{ secrets.VERCEL_LOGIN }}
+          npm run build:docs:vercel -- --token ${{ secrets.VERCEL_LOGIN }}
+          npm run deploy:vercel:prod -- --token ${{ secrets.VERCEL_LOGIN }}
