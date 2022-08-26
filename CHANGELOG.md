@@ -1,5 +1,25 @@
 # Sonia stale action
 
+# [2.2.0](https://github.com/Sonia-corporation/stale/compare/2.1.0...2.2.0) (2022-08-26)
+
+### :books: Documentation
+
+- **website:** add a new page to explain the migration from v1 to v2 ([dea3137](https://github.com/Sonia-corporation/stale/commit/dea313770d682d78c412310248f8da9423617a65)), closes [#837](https://github.com/Sonia-corporation/stale/issues/837)
+- **footer:** change the link of the changelog ([930afa0](https://github.com/Sonia-corporation/stale/commit/930afa0998a8de5dbae914613ae53a1ee1a0c252)), closes [#864](https://github.com/Sonia-corporation/stale/issues/864)
+  The new one will directly navigate to the docs changelog instead of the GitHub changelog.
+- **inputs:** reorder the added labels after close or stale ([256463d](https://github.com/Sonia-corporation/stale/commit/256463d85ec720f8af801cbb043db71034a419f8)), closes [#839](https://github.com/Sonia-corporation/stale/issues/839)
+
+# [2.1.0](https://github.com/Sonia-corporation/stale/compare/2.0.0...2.1.0) (2022-08-24)
+
+### :books: Documentation
+
+- **blog:** add a new blog entry to explain the migration to Vercel ([33cad40](https://github.com/Sonia-corporation/stale/commit/33cad400b720c26848d03360d7559b384cfb0ece)), closes [#842](https://github.com/Sonia-corporation/stale/issues/842)
+- **website:** configure Sentry ([b221ce4](https://github.com/Sonia-corporation/stale/commit/b221ce4945f3971057220b6845f52da25a99efe4)), closes [#843](https://github.com/Sonia-corporation/stale/issues/843)
+- **changelog:** improve the readability of the changelog ([cd5cc09](https://github.com/Sonia-corporation/stale/commit/cd5cc097623f877210355196e6e3320f9ed0a9bb)), closes [#836](https://github.com/Sonia-corporation/stale/issues/836)
+  Add more blank lines.
+- **website:** replace all the website links to the new one ([9251f7f](https://github.com/Sonia-corporation/stale/commit/9251f7fa4e10558dd2c710f401d7549300bf999b)), closes [#842](https://github.com/Sonia-corporation/stale/issues/842)
+  From GitHub pages to Vercel.
+
 # [2.0.0](https://github.com/Sonia-corporation/stale/compare/1.61.0...2.0.0) (2022-08-23)
 
 ### :rocket: Features
