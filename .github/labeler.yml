@@ -7,6 +7,7 @@
   - LICENSE
   - PULL_REQUEST_TEMPLATE.md
   - README.md
+  - documentation/**
 
 'test :test_tube:':
   - src/**/*.spec.ts
