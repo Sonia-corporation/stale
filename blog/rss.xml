@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
         <title>Sonia stale action Blog</title>
-        <link>https://sonia-corporation.github.io/stale/stale/blog</link>
+        <link>https://sonia-corporation.github.io/stale/blog</link>
         <description>Sonia stale action Blog</description>
         <lastBuildDate>Wed, 24 Aug 2022 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
@@ -10,7 +10,7 @@
         <language>en</language>
         <item>
             <title><![CDATA[The new documentation URL is here!]]></title>
-            <link>https://sonia-corporation.github.io/stale/stale/blog/migrate-to-vercel</link>
+            <link>https://sonia-corporation.github.io/stale/blog/migrate-to-vercel</link>
             <guid>migrate-to-vercel</guid>
             <pubDate>Wed, 24 Aug 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[The documentation deployment changed from using the GitHub pages to using Vercel.
@@ -29,7 +29,7 @@ It's time for you to use the new URL: https://sonia-stale-action.vercel.app.
         </item>
         <item>
             <title><![CDATA[The new UI is here!]]></title>
-            <link>https://sonia-corporation.github.io/stale/stale/blog/new-ui</link>
+            <link>https://sonia-corporation.github.io/stale/blog/new-ui</link>
             <guid>new-ui</guid>
             <pubDate>Sat, 12 Feb 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[The UI of this action changed from blue to pink.
@@ -46,7 +46,7 @@ The name was also updated to reflect that this action belongs to the Sonia corpo
         </item>
         <item>
             <title><![CDATA[The first inclusive filter input is here!]]></title>
-            <link>https://sonia-corporation.github.io/stale/stale/blog/first-inclusive-input</link>
+            <link>https://sonia-corporation.github.io/stale/blog/first-inclusive-input</link>
             <guid>first-inclusive-input</guid>
             <pubDate>Fri, 11 Feb 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[This stale action now contains the first input of the genre: an inclusive filter!
@@ -66,7 +66,7 @@ This will change how the ignoring process can be leverage to process only items 
         </item>
         <item>
             <title><![CDATA[Welcome!]]></title>
-            <link>https://sonia-corporation.github.io/stale/stale/blog/welcome</link>
+            <link>https://sonia-corporation.github.io/stale/blog/welcome</link>
             <guid>welcome</guid>
             <pubDate>Thu, 20 Jan 2022 00:00:00 GMT</pubDate>
             <description><![CDATA[Welcome to the very first version of the Website!
