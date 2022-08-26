@@ -101,7 +101,7 @@
     "post-commit": "git update-index --again",
     "install-git-hooks": "husky install && shx rm -rf .git/hooks && shx ln -s ../.husky .git/hooks",
     "postversion": "node scripts/prepare-release.mjs",
-    "vercel:pull": "vercel pull"
+    "vercel:pull": "vercel pull --yes"
   },
   "dependencies": {
     "@actions/core": "1.9.1",
