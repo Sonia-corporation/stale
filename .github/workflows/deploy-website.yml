@@ -39,8 +39,15 @@ jobs:
           publish_dir: ./documentation/build
           user_name: ${{ secrets.GIT_COMMITTER_NAME }}
           user_email: ${{ secrets.GIT_COMMITTER_EMAIL }}
-      - name: Deploy to Vercel
+      - name: Deploy to Vercel (production)
+        if: ${{ github.ref == 'refs/heads/master' }}
         run: |
-          npm run vercel:pull -- --token ${{ secrets.VERCEL_LOGIN }}
+          npm run vercel:pull:ci -- --environment=production --token ${{ secrets.VERCEL_LOGIN }}
           npm run build:docs:vercel -- --token ${{ secrets.VERCEL_LOGIN }}
-          npm run deploy:vercel:prod -- --token ${{ secrets.VERCEL_LOGIN }}
+          npm run deploy:vercel -- --token ${{ secrets.VERCEL_LOGIN }}
+      - name: Deploy to Vercel (preview)
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          npm run vercel:pull:ci -- --environment=preview --token ${{ secrets.VERCEL_LOGIN }}
+          npm run build:docs:vercel -- --token ${{ secrets.VERCEL_LOGIN }}
+          npm run deploy:vercel -- --token ${{ secrets.VERCEL_LOGIN }}
