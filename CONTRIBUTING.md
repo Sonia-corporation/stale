@@ -107,8 +107,19 @@ The rest of the commit message is then used for this.
 
 Everytime you alter the code base, the action may change.  
 To trigger some possible mistakes as soon as possible, it's preferable to always build the action before creating a commit.  
+You can do that by running `npm run build`.
+
 Note that the CI build step will perform a difference check and will be considered as failing if one is found.  
 Also, the local version of this stale action is tested also in the CI in every single branch in a dry-run mode.
+
+### Website
+
+It's very important for us to keep a documentation and a [website](https://sonia-stale-action.vercel.app/docs/introduction) up-to-date.  
+So please, check everything before creating a pull request.  
+You may also need to run the translations scripts (from the documentation package).  
+You can do that by running `npm run write-translations` and `npm run write-translations:french`.
+
+Note that we also have a [blog](https://sonia-stale-action.vercel.app/blog) so don't hesitate to suggest a new entry, or create a new [ticket](https://github.com/Sonia-corporation/stale/issues/new?assignees=C0ZEN&labels=blog-request+%3Anewspaper%3A&template=blog_article.md&title=%5BBLOG%5D+).
 
 ### GitHub API
 
