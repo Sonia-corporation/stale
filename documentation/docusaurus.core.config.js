@@ -93,7 +93,7 @@ const config = {
           {
             items: [
               {
-                href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
+                href: `/docs/changelog`,
                 label: `Changelog`,
               },
               {

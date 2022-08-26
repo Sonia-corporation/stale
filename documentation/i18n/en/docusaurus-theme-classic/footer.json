@@ -11,9 +11,29 @@
     "message": "More",
     "description": "The title of the footer links column with title=More in the footer"
   },
+  "link.item.label.Introduction": {
+    "message": "Introduction",
+    "description": "The label of footer link with label=Introduction linking to /docs/introduction"
+  },
+  "link.item.label.Getting started": {
+    "message": "Getting started",
+    "description": "The label of footer link with label=Getting started linking to /docs/getting-started/workflow-creation"
+  },
+  "link.item.label.Examples": {
+    "message": "Examples",
+    "description": "The label of footer link with label=Examples linking to /docs/examples/stale-with-comments-except-if-assigned-example"
+  },
   "link.item.label.New issue": {
     "message": "New issue",
     "description": "The label of footer link with label=New issue linking to https://github.com/Sonia-corporation/stale/issues/new/choose"
+  },
+  "link.item.label.Troubleshooting": {
+    "message": "Troubleshooting",
+    "description": "The label of footer link with label=Troubleshooting linking to /docs/troubleshooting"
+  },
+  "link.item.label.Need help?": {
+    "message": "Need help?",
+    "description": "The label of footer link with label=Need help? linking to /docs/need-help"
   },
   "link.item.label.Changelog": {
     "message": "Changelog",
@@ -30,25 +50,5 @@
   "copyright": {
     "message": "Copyright © 2022 Stale, Sonia Corporation. Built with Docusaurus.",
     "description": "The footer copyright"
-  },
-  "link.item.label.Examples": {
-    "message": "Exemples",
-    "description": "The label of footer link with label=Examples linking to /docs/examples/stale-with-comments-except-if-assigned-example"
-  },
-  "link.item.label.Introduction": {
-    "message": "Introduction",
-    "description": "The label of footer link with label=Introduction linking to /docs/introduction"
-  },
-  "link.item.label.Getting started": {
-    "message": "Pour bien commencé",
-    "description": "The label of footer link with label=Getting started linking to /docs/getting-started/workflow-creation"
-  },
-  "link.item.label.Need help?": {
-    "message": "Besoin d'aide ?",
-    "description": "The label of footer link with label=Need help? linking to /docs/need-help"
-  },
-  "link.item.label.Troubleshooting": {
-    "message": "Dépannage",
-    "description": "The label of footer link with label=Troubleshooting linking to /docs/troubleshooting"
   }
 }

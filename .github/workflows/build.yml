@@ -340,6 +340,19 @@ jobs:
             echo "docs has changed. Run the npm script build locally to generate the missing build files; and then push the changes."
             exit 1
           fi
+      - name: Generate missing English translations
+        run: |
+          cd documentation
+          npm run write-translations
+      - name: Check for missing English translations
+        id: verify-website-english-changed-files
+        run: |
+          cd documentation
+          if [ "$(git diff --ignore-space-at-eol i18n/en/ | wc -l)" -gt "0" ]; then
+            git diff
+            echo "en i18n has changed. Run the npm script write-translations locally to generate the missing English translations."
+            exit 1
+          fi
       - name: Generate missing French translations
         run: |
           cd documentation
