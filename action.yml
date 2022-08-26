@@ -90,18 +90,10 @@ inputs:
     description: 'The number of days until the issue is considered as stale.'
     required: false
     default: '30'
-  issue-add-labels-after-stale:
-    description: 'A list of labels added when the processing stale the issue (multiline).'
-    required: false
-    default: ''
   issue-days-before-close:
     description: 'The number of days until a stale issue is considered as closed.'
     required: false
     default: '10'
-  issue-add-labels-after-close:
-    description: 'A list of labels added when the processing close the issue (multiline).'
-    required: false
-    default: ''
   ## Limiters
   issue-limit-api-queries-count:
     description: 'Limit the quantity of API queries calls performed during the processing of issues (-1 for unlimited).'
@@ -124,6 +116,14 @@ inputs:
     description: 'The reason when closing an issue (completed or not planned).'
     required: false
     default: 'not planned'
+  issue-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the issue (multiline).'
+    required: false
+    default: ''
+  issue-add-labels-after-close:
+    description: 'A list of labels added when the processing close the issue (multiline).'
+    required: false
+    default: ''
   # Pull request inputs
   ## Labels
   pull-request-stale-label:
@@ -203,22 +203,10 @@ inputs:
     description: 'The number of days until the pull request is considered as stale.'
     required: false
     default: '30'
-  pull-request-add-labels-after-stale:
-    description: 'A list of labels added when the processing stale the pull request (multiline).'
-    required: false
-    default: ''
   pull-request-days-before-close:
     description: 'The number of days until a stale pull request is considered as closed.'
     required: false
     default: '10'
-  pull-request-add-labels-after-close:
-    description: 'A list of labels added when the processing close the pull request (multiline).'
-    required: false
-    default: ''
-  pull-request-delete-branch-after-close:
-    description: 'Delete the branch when the processing close the pull request.'
-    required: false
-    default: 'false'
   ## Limiters
   pull-request-limit-api-queries-count:
     description: 'Limit the quantity of API queries calls performed during the processing of pull requests (-1 for unlimited).'
@@ -245,8 +233,20 @@ inputs:
     description: 'The reason when closing a pull request (completed or not planned).'
     required: false
     default: 'not planned'
+  pull-request-add-labels-after-stale:
+    description: 'A list of labels added when the processing stale the pull request (multiline).'
+    required: false
+    default: ''
+  pull-request-add-labels-after-close:
+    description: 'A list of labels added when the processing close the pull request (multiline).'
+    required: false
+    default: ''
   pull-request-to-draft-instead-of-stale:
     description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
+    required: false
+    default: 'false'
+  pull-request-delete-branch-after-close:
+    description: 'Delete the branch when the processing close the pull request.'
     required: false
     default: 'false'
 outputs:

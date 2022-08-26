@@ -31,7 +31,7 @@ Once you changed something for the default version (English), you can create the
 
 You can test the French version by running `npm run start:french`.
 
-You must also run `npm run write-translations:french` to update the translation files and add your additional translations if needed.
+You must also run `npm run write-translations` and `npm run write-translations:french` to update the translation files and add your additional translations if needed.
 
 See also [the i18n documentation](https://docusaurus.io/docs/i18n/introduction) for further help.
 

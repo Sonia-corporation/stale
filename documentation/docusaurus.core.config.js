@@ -93,7 +93,7 @@ const config = {
           {
             items: [
               {
-                href: `https://github.com/Sonia-corporation/stale/blob/develop/CHANGELOG.md`,
+                href: `/docs/changelog`,
                 label: `Changelog`,
               },
               {
@@ -142,7 +142,7 @@ const config = {
     }),
   title: `Sonia stale action`,
   trailingSlash: false,
-  url: `https://sonia-corporation.github.io`,
+  url: `https://sonia-stale-action.vercel.app`,
 };
 
 module.exports = config;
