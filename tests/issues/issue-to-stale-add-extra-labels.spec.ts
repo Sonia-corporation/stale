@@ -1,10 +1,10 @@
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 
-describe(`Issue to stale extra labels`, (): void => {
+describe(`Issue to stale add extra labels`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  describe(`when the issue should not have extra labels when stale`, (): void => {
+  describe(`when the issue should not have extra labels added when stale`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
         issueAddLabelsAfterStale: [],
@@ -54,7 +54,7 @@ describe(`Issue to stale extra labels`, (): void => {
       });
     });
 
-    it(`should stale the issue and add the extra labels`, async (): Promise<void> => {
+    it(`should stale the issue and add the extra label`, async (): Promise<void> => {
       expect.assertions(11);
 
       await issueSut.process();
@@ -122,7 +122,7 @@ describe(`Issue to stale extra labels`, (): void => {
 
     describe(`when the issue should add three more labels when stale`, (): void => {
       beforeEach((): void => {
-        issueSut.setExtraStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
+        issueSut.setExtraAddedStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
       });
 
       it(`should stale the issue and not add some extra labels`, async (): Promise<void> => {

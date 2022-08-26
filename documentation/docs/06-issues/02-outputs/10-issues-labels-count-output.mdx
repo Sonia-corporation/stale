@@ -1,0 +1,31 @@
+---
+id: issues-labels-count-output
+title: Issues labels count output
+description: |
+  All the information you need to know about the issues labels count output.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Outputs
+---
+
+### Output {#output}
+
+Name: `issues-labels-count`  
+Type: `number`
+
+### Description {#description}
+
+This output will expose the number of issues labels mutated (added or removed).
+
+### Example {#example}
+
+```yml {6-7}
+# ...
+steps:
+  - name: Stale
+    id: stale
+    uses: sonia-corporation/stale@latest
+  - name: Count
+    run: echo "${{ steps.Stale.outputs.issues-labels-count }}"
+```

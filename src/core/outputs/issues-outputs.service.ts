@@ -14,8 +14,10 @@ const MAP: { [key in keyof typeof EIssuesOutputs]: () => number } = {
   CALLED_API_ISSUES_QUERIES_COUNT: (): number => IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount,
   CLOSE_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().closedIssuesCount,
   IGNORED_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().ignoredIssuesCount,
+  ISSUES_LABELS_COUNT: (): number => IssuesStatisticsService.getInstance().calledApiIssuesCount,
   PROCESSED_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().processedIssuesCount,
   REMOVE_STALE_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().removeStaleIssuesCount,
+  REMOVED_ISSUES_LABELS_COUNT: (): number => IssuesStatisticsService.getInstance().removedIssuesLabelsCount,
   STALE_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().staleIssuesCount,
   UNALTERED_ISSUES_COUNT: (): number => IssuesStatisticsService.getInstance().unalteredIssuesCount,
 };

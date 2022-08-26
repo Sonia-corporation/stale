@@ -42,6 +42,10 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   public unalteredIssuesCount: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
 
+  public get issuesLabelsCount(): number {
+    return this.addedIssuesLabelsCount + this.removedIssuesLabelsCount;
+  }
+
   public get calledApiIssuesCount(): number {
     return this.calledApiIssuesQueriesCount + this.calledApiIssuesMutationsCount;
   }

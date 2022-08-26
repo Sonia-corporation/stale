@@ -267,8 +267,12 @@ outputs:
     description: 'The number of issues closed.'
   added-issues-comments-count:
     description: 'The number of added issues comments.'
+  issues-labels-count:
+    description: 'The number of issues labels mutated (added or removed).'
   added-issues-labels-count:
     description: 'The number of added issues labels.'
+  removed-issues-labels-count:
+    description: 'The number of removed issues labels.'
   called-api-issues-count:
     description: 'The number of GitHub API calls performed for the issues.'
   called-api-issues-queries-count:
