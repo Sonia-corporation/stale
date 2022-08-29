@@ -29,6 +29,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   issueOnlyWithMilestones: false,
   issueOnlyWithProjectCards: false,
   issueProcessing: true,
+  issueRemoveLabelsAfterStale: [],
   issueStaleComment: `stale-comment`,
   issueStaleLabel: `stale`,
   pullRequestAddLabelsAfterClose: [],

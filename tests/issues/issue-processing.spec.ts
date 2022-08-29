@@ -16,7 +16,7 @@ describe(`Issue processing`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -34,7 +34,7 @@ describe(`Issue processing`, (): void => {
       });
 
       it(`should not process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

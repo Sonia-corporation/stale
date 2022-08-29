@@ -22,7 +22,7 @@ describe(`Issue to stale comment`, (): void => {
     });
 
     it(`should stale the issue and add a stale comment`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -55,7 +55,7 @@ describe(`Issue to stale comment`, (): void => {
     });
 
     it(`should stale the issue and not add a stale comment`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

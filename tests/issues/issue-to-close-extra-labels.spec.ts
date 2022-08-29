@@ -56,7 +56,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -120,7 +120,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -185,7 +185,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -255,7 +255,7 @@ describe(`Issue to close extra labels`, (): void => {
       });
 
       it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

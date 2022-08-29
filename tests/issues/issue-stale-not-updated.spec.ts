@@ -55,7 +55,7 @@ describe(`Issue stale not updated`, (): void => {
     });
 
     it(`should close the issue`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

@@ -56,7 +56,7 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and add a close comment`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -120,7 +120,7 @@ describe(`Issue to close comment`, (): void => {
     });
 
     it(`should close the issue and not add a close comment`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

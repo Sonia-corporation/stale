@@ -22,7 +22,7 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should stale the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -54,7 +54,7 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should not stale the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -83,7 +83,7 @@ describe(`Custom days before issue stale`, (): void => {
       });
 
       it(`should not stale the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

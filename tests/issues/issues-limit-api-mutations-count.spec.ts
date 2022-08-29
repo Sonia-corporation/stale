@@ -19,7 +19,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -47,7 +47,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -76,7 +76,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -100,7 +100,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process all the issues`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -138,7 +138,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should only process the first issue (due to the mutation to add the stale comment and label)`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -170,7 +170,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -194,7 +194,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process all the issues`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -232,7 +232,7 @@ describe(`Issues limit API mutations calls count`, (): void => {
       });
 
       it(`should process the tow issues (due to the mutation to add the stale comments and labels)`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

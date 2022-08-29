@@ -24,7 +24,7 @@ describe(`Issue with all project cards ignored`, (): void => {
       });
 
       it(`should not ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -48,7 +48,7 @@ describe(`Issue with all project cards ignored`, (): void => {
       });
 
       it(`should ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

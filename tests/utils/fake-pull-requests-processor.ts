@@ -272,7 +272,7 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakePullRequestsProcessor} The class
    */
-  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+  public setExtraAddedStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       pullRequestAddLabelsAfterStale: labels,

@@ -107,7 +107,7 @@ export abstract class AbstractFakeProcessor {
 
   public abstract expect(statistics: Readonly<Partial<Record<string, number>>>): void;
 
-  public abstract setExtraStaleLabels(labels: ReadonlyArray<string>): AbstractFakeProcessor;
+  public abstract setExtraAddedStaleLabels(labels: ReadonlyArray<string>): AbstractFakeProcessor;
 
   public abstract enableProcessing(): AbstractFakeProcessor;
 

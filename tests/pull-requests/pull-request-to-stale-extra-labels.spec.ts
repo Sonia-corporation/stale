@@ -122,7 +122,7 @@ describe(`Pull request to stale extra labels`, (): void => {
 
     describe(`when the pull request should add three more labels when stale`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.setExtraStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
+        pullRequestSut.setExtraAddedStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
       });
 
       it(`should stale the pull request and not add some extra labels`, async (): Promise<void> => {

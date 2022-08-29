@@ -50,17 +50,30 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
     return this.githubApiPullRequestLabelsService$$.fetchLabelByName(labelName);
   }
 
-  protected _getExtraLabelsName(): string[] {
+  protected _getExtraLabelsToAddName(): string[] {
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     return pullRequestsInputs.pullRequestAddLabelsAfterStale;
+  }
+
+  protected _getExtraLabelsToRemoveName(): string[] {
+    // @todo
+    return [];
   }
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiPullRequestLabelsService$$.addLabels(targetId, labelsId);
   }
 
+  protected async _removeExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    await this.githubApiPullRequestLabelsService$$.removeLabels(targetId, labelsId);
+  }
+
   protected _increaseAddedLabelsCountStatistic(count: Readonly<number> = 1): void {
     PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsLabelsCount(count);
+  }
+
+  protected _increaseRemovedLabelsCountStatistic(_count: Readonly<number> = 1): void {
+    // @todo
   }
 }

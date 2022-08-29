@@ -14,6 +14,7 @@ import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/git
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
+import { GITHUB_API_REMOVE_LABELS_MUTATION } from '@github/api/labels/constants/github-api-remove-labels-mutation';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
@@ -219,6 +220,9 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
+    [GITHUB_API_REMOVE_LABELS_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
     [GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY](): Promise<IGithubApiTimelineItemsIssueLabeledEvents> {
       return Promise.resolve(
         createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
@@ -268,10 +272,25 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakeIssuesProcessor} The class
    */
-  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+  public setExtraAddedStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       issueAddLabelsAfterStale: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to remove on the issue when it is stale
+   * @param {ReadonlyArray<string>} labels The labels to remove
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public setExtraRemoveStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueRemoveLabelsAfterStale: labels,
     });
 
     return this;
@@ -386,6 +405,9 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
       statistics.addedIssuesCommentsCount ?? 0
     );
     expect(IssuesStatisticsService.getInstance().addedIssuesLabelsCount).toBe(statistics.addedIssuesLabelsCount ?? 0);
+    expect(IssuesStatisticsService.getInstance().removedIssuesLabelsCount).toBe(
+      statistics.removedIssuesLabelsCount ?? 0
+    );
     expect(IssuesStatisticsService.getInstance().alreadyStaleIssuesCount).toBe(statistics.alreadyStaleIssuesCount ?? 0);
     expect(IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount).toBe(
       statistics.calledApiIssuesMutationsCount ?? 0

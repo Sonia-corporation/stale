@@ -11,4 +11,5 @@ export enum EAnnotationError {
   FAILED_ADDING_LABEL = `Failed to add the label!`,
   FAILED_ADDING_LABELS = `Failed to add the labels!`,
   FAILED_REMOVING_LABEL = `Failed to remove the label!`,
+  FAILED_REMOVING_LABELS = `Failed to remove the labels!`,
 }
