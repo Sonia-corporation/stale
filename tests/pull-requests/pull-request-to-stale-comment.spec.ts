@@ -22,7 +22,7 @@ describe(`Pull request to stale comment`, (): void => {
     });
 
     it(`should stale the pull request and add a stale comment`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -55,7 +55,7 @@ describe(`Pull request to stale comment`, (): void => {
     });
 
     it(`should stale the pull request and not add a stale comment`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

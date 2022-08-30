@@ -4,6 +4,7 @@ export type IIssuesStatistics = Pick<
   IssuesStatisticsService,
   | 'calledApiIssuesQueriesCount'
   | 'addedIssuesLabelsCount'
+  | 'removedIssuesLabelsCount'
   | 'closedIssuesCount'
   | 'addedIssuesCommentsCount'
   | 'processedIssuesCount'

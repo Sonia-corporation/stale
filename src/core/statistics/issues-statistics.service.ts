@@ -10,7 +10,9 @@ type IStat =
   | 'Unaltered issues'
   | 'Closed issues'
   | 'Added issues comments'
+  | 'Issues labels'
   | 'Added issues labels'
+  | 'Removed issues labels'
   | 'Called API issues'
   | 'Called API issues queries'
   | 'Called API issues mutations';
@@ -28,6 +30,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
 
   public addedIssuesCommentsCount: number = 0;
   public addedIssuesLabelsCount: number = 0;
+  public removedIssuesLabelsCount: number = 0;
   public alreadyStaleIssuesCount: number = 0;
   public calledApiIssuesMutationsCount: number = 0;
   public calledApiIssuesQueriesCount: number = 0;
@@ -38,6 +41,10 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   public staleIssuesCount: number = 0;
   public unalteredIssuesCount: number = 0;
   protected readonly _statisticsName: 'issues' = `issues`;
+
+  public get issuesLabelsCount(): number {
+    return this.addedIssuesLabelsCount + this.removedIssuesLabelsCount;
+  }
 
   public get calledApiIssuesCount(): number {
     return this.calledApiIssuesQueriesCount + this.calledApiIssuesMutationsCount;
@@ -51,6 +58,7 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
   public initialize(): IssuesStatisticsService {
     this.addedIssuesCommentsCount = 0;
     this.addedIssuesLabelsCount = 0;
+    this.removedIssuesLabelsCount = 0;
     this.alreadyStaleIssuesCount = 0;
     this.calledApiIssuesMutationsCount = 0;
     this.calledApiIssuesQueriesCount = 0;
@@ -127,6 +135,13 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
     return this;
   }
 
+  public increaseRemovedIssuesLabelsCount(count: Readonly<number> = 1): IssuesStatisticsService {
+    this.removedIssuesLabelsCount += count;
+    this._logIncreaseCount(`Removed issues labels count statistic increased by`, count, this.removedIssuesLabelsCount);
+
+    return this;
+  }
+
   public increaseCalledApiIssuesQueriesCount(): IssuesStatisticsService {
     this.calledApiIssuesQueriesCount++;
     this._logIncreaseCount(
@@ -159,7 +174,12 @@ export class IssuesStatisticsService extends AbstractStatisticsService<IStat> {
       .set(`Remove stale issues`, this.removeStaleIssuesCount)
       .set(`Closed issues`, this.closedIssuesCount)
       .set(`Added issues comments`, this.addedIssuesCommentsCount)
-      .set(`Added issues labels`, this.addedIssuesLabelsCount)
+      .set(
+        `Issues labels`,
+        new Map<IStat, number>()
+          .set(`Added issues labels`, this.addedIssuesLabelsCount)
+          .set(`Removed issues labels`, this.removedIssuesLabelsCount)
+      )
       .set(
         `Called API issues`,
         new Map<IStat, number>()

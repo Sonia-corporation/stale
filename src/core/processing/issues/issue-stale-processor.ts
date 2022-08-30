@@ -50,17 +50,31 @@ export class IssueStaleProcessor extends AbstractStaleProcessor<IssueProcessor> 
     return this.githubApiIssueLabelsService$$.fetchLabelByName(labelName);
   }
 
-  protected _getExtraLabelsName(): string[] {
+  protected _getExtraLabelsToAddName(): string[] {
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
     return issuesInputs.issueAddLabelsAfterStale;
+  }
+
+  protected _getExtraLabelsToRemoveName(): string[] {
+    const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
+
+    return issuesInputs.issueRemoveLabelsAfterStale;
   }
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiIssueLabelsService$$.addLabels(targetId, labelsId);
   }
 
+  protected async _removeExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    await this.githubApiIssueLabelsService$$.removeLabels(targetId, labelsId);
+  }
+
   protected _increaseAddedLabelsCountStatistic(count: Readonly<number> = 1): void {
     IssuesStatisticsService.getInstance().increaseAddedIssuesLabelsCount(count);
+  }
+
+  protected _increaseRemovedLabelsCountStatistic(count: Readonly<number> = 1): void {
+    IssuesStatisticsService.getInstance().increaseRemovedIssuesLabelsCount(count);
   }
 }

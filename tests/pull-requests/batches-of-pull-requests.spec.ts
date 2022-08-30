@@ -16,7 +16,7 @@ describe(`Batch of pull requests`, (): void => {
     });
 
     it(`should not process the pull requests`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -76,7 +76,7 @@ describe(`Batch of pull requests`, (): void => {
     });
 
     it(`should not remove the stale state on the pull requests`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -147,7 +147,7 @@ describe(`Batch of pull requests`, (): void => {
     });
 
     it(`should not remove the stale state on the pull requests`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

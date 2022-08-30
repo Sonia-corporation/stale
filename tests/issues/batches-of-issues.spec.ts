@@ -16,7 +16,7 @@ describe(`Batch of issues`, (): void => {
     });
 
     it(`should not process the issues`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -76,7 +76,7 @@ describe(`Batch of issues`, (): void => {
     });
 
     it(`should not remove the stale state on the issues`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -147,7 +147,7 @@ describe(`Batch of issues`, (): void => {
     });
 
     it(`should not remove the stale state on the issues`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

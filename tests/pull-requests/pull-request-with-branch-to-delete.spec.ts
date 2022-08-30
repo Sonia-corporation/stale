@@ -61,7 +61,7 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -82,7 +82,7 @@ describe(`Pull request with branch to delete`, (): void => {
       });
 
       it(`should close the pull request and delete the related branch`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -148,7 +148,7 @@ describe(`Pull request with branch to delete`, (): void => {
     });
 
     it(`should close the pull request without deleting the related branch`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

@@ -24,7 +24,7 @@ describe(`Pull request only with project card`, (): void => {
       });
 
       it(`should ignore the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -52,7 +52,7 @@ describe(`Pull request only with project card`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -84,7 +84,7 @@ describe(`Pull request only with project card`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -112,7 +112,7 @@ describe(`Pull request only with project card`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

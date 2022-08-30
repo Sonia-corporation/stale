@@ -4,7 +4,7 @@ import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-proce
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Pull request to close extra labels`, (): void => {
+describe(`Pull request to close add extra labels`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
   describe(`when the pull request should not have extra labels when closed`, (): void => {
@@ -56,7 +56,7 @@ describe(`Pull request to close extra labels`, (): void => {
     });
 
     it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -120,7 +120,7 @@ describe(`Pull request to close extra labels`, (): void => {
     });
 
     it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -185,7 +185,7 @@ describe(`Pull request to close extra labels`, (): void => {
     });
 
     it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -255,7 +255,7 @@ describe(`Pull request to close extra labels`, (): void => {
       });
 
       it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

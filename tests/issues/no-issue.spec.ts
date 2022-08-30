@@ -9,7 +9,7 @@ describe(`No issue`, (): void => {
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

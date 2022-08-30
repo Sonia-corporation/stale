@@ -19,7 +19,7 @@ describe(`Issues limit API queries calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -47,7 +47,7 @@ describe(`Issues limit API queries calls count`, (): void => {
       });
 
       it(`should not process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -74,7 +74,7 @@ describe(`Issues limit API queries calls count`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -98,7 +98,7 @@ describe(`Issues limit API queries calls count`, (): void => {
       });
 
       it(`should process all the issues`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -136,7 +136,7 @@ describe(`Issues limit API queries calls count`, (): void => {
       });
 
       it(`should only process the first issue (due to the query to fetch the stale label)`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

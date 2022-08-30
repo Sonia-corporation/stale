@@ -21,7 +21,7 @@ describe(`Pull request any of the required milestone`, (): void => {
       });
 
       it(`should ignore the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -44,7 +44,7 @@ describe(`Pull request any of the required milestone`, (): void => {
       });
 
       it(`should ignore the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -67,7 +67,7 @@ describe(`Pull request any of the required milestone`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

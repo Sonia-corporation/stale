@@ -60,16 +60,17 @@ describe(`IssuesOutputsAnnotationsService`, (): void => {
         IssuesStatisticsService.getInstance().closedIssuesCount = 7;
         IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 8;
         IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 9;
-        IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 10;
-        IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 11;
+        IssuesStatisticsService.getInstance().removedIssuesLabelsCount = 10;
+        IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 11;
+        IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 12;
       });
 
       it(`should log the issues outputs annotations`, (): void => {
-        expect.assertions(13);
+        expect.assertions(15);
 
         service.noticeAllOutputs();
 
-        expect(coreNoticeSpy).toHaveBeenCalledTimes(12);
+        expect(coreNoticeSpy).toHaveBeenCalledTimes(14);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale issues: 5`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored issues: 2`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered issues: 3`);
@@ -78,10 +79,12 @@ describe(`IssuesOutputsAnnotationsService`, (): void => {
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(6, `Remove stale issues: 6`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Closed issues: 7`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Added issues comments: 8`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added issues labels: 9`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Called api issues: 21`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Called api issues queries: 10`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api issues mutations: 11`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Issues labels: 19`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Added issues labels: 9`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Removed issues labels: 10`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api issues: 23`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(13, `Called api issues queries: 11`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(14, `Called api issues mutations: 12`);
       });
     });
 
@@ -96,6 +99,7 @@ describe(`IssuesOutputsAnnotationsService`, (): void => {
         IssuesStatisticsService.getInstance().closedIssuesCount = 0;
         IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 0;
         IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 0;
+        IssuesStatisticsService.getInstance().removedIssuesLabelsCount = 0;
         IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 0;
         IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 0;
       });

@@ -18,7 +18,7 @@ describe(`Issue with ignored milestone`, (): void => {
     });
 
     it(`should ignore the issue`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

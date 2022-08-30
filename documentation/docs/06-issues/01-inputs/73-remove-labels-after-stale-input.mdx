@@ -1,0 +1,42 @@
+---
+id: issue-remove-labels-after-stale-input
+title: Remove issue labels after stale input
+description: |
+  All the information you need to know about the remove issue labels after stale input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+  - Labels
+---
+
+### Input {#input}
+
+Name: `issue-remove-labels-after-stale`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This input will let you remove extra labels when the processing stale the issues.  
+This can be useful if you wish to easily remove extra labels to improve your triage post-stale.
+
+:::caution
+
+The labels must be real labels, existing inside your repository list of labels (_github.com/your-organization/your-repository/labels_).  
+If not, the GitHub API will throw an error.
+
+:::
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-remove-labels-after-stale: |
+    triage
+    new
+```

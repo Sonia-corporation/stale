@@ -55,7 +55,7 @@ describe(`Issue stale not updated`, (): void => {
     });
 
     it(`should close the issue`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

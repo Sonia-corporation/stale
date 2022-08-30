@@ -6,6 +6,7 @@ import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/git
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
+import { GITHUB_API_REMOVE_LABELS_MUTATION } from '@github/api/labels/constants/github-api-remove-labels-mutation';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
@@ -72,7 +73,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(`Failed to fetch the labels matching`, LoggerService.value(labelName));
         AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 74,
+          startLine: 72,
           title: `Error`,
         });
 
@@ -104,7 +105,7 @@ export abstract class AbstractGithubApiLabelsService<
           this.processor.logger.error(`Could not fetch the label`, LoggerService.value(labelName));
           AnnotationsService.error(EAnnotationError.COULD_NOT_FETCH_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 102,
+            startLine: 104,
             title: `Error`,
           });
           this.processor.logger.debug(`Are you sure it exists in your repository?`);
@@ -122,7 +123,7 @@ export abstract class AbstractGithubApiLabelsService<
         this.processor.logger.error(`Failed to fetch the label`, LoggerService.value(labelName));
         AnnotationsService.error(EAnnotationError.FAILED_FETCHING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 118,
+          startLine: 122,
           title: `Error`,
         });
 
@@ -161,7 +162,7 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 157,
+          startLine: 156,
           title: `Error`,
         });
 
@@ -200,7 +201,7 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_ADDING_LABELS, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 196,
+          startLine: 195,
           title: `Error`,
         });
 
@@ -239,7 +240,46 @@ export abstract class AbstractGithubApiLabelsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_REMOVING_LABEL, {
           file: `abstract-github-api-labels.service.ts`,
-          startLine: 235,
+          startLine: 234,
+          title: `Error`,
+        });
+
+        throw error;
+      });
+  }
+
+  public removeLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> | never {
+    this.processor.logger.info(
+      `Removing the labels`,
+      LoggerService.value(labelsId),
+      LoggerFormatService.whiteBright(`on the ${this.type}`),
+      `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(GITHUB_API_REMOVE_LABELS_MUTATION, {
+        id: targetId,
+        labelsId,
+      })
+      .then((): void => {
+        this._increaseCalledApiMutationsCount();
+        this.processor.logger.info(
+          LoggerFormatService.green(`Labels`),
+          LoggerService.value(labelsId),
+          LoggerFormatService.green(`removed to the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        this.processor.logger.error(
+          `Failed to remove the labels`,
+          LoggerService.value(labelsId),
+          LoggerFormatService.red(`on the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+        AnnotationsService.error(EAnnotationError.FAILED_REMOVING_LABELS, {
+          file: `abstract-github-api-labels.service.ts`,
+          startLine: 273,
           title: `Error`,
         });
 

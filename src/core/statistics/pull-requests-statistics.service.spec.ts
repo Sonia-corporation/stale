@@ -30,6 +30,21 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
   });
 
+  describe(`get pullRequestsLabelsCount`, (): void => {
+    beforeEach((): void => {
+      service.addedPullRequestsLabelsCount = faker.datatype.number();
+      service.removedPullRequestsLabelsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the extra added and removed pull requests labels`, (): void => {
+      expect.assertions(1);
+
+      const result = service.pullRequestsLabelsCount;
+
+      expect(result).toBe(service.addedPullRequestsLabelsCount + service.removedPullRequestsLabelsCount);
+    });
+  });
+
   describe(`get calledApiPullRequestsCount`, (): void => {
     beforeEach((): void => {
       service.calledApiPullRequestsQueriesCount = faker.datatype.number();
@@ -47,7 +62,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
 
   describe(`initialize()`, (): void => {
     it(`should reset all the statistics to 0`, (): void => {
-      expect.assertions(13);
+      expect.assertions(14);
       service.processedPullRequestsCount = 1;
       service.ignoredPullRequestsCount = 1;
       service.unalteredPullRequestsCount = 1;
@@ -58,6 +73,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       service.deletedPullRequestsBranchesCount = 1;
       service.addedPullRequestsCommentsCount = 1;
       service.addedPullRequestsLabelsCount = 1;
+      service.removedPullRequestsLabelsCount = 1;
       service.draftPullRequestsCount = 1;
       service.calledApiPullRequestsQueriesCount = 1;
       service.calledApiPullRequestsMutationsCount = 1;
@@ -74,6 +90,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect(service.deletedPullRequestsBranchesCount).toBe(0);
       expect(service.addedPullRequestsCommentsCount).toBe(0);
       expect(service.addedPullRequestsLabelsCount).toBe(0);
+      expect(service.removedPullRequestsLabelsCount).toBe(0);
       expect(service.draftPullRequestsCount).toBe(0);
       expect(service.calledApiPullRequestsQueriesCount).toBe(0);
       expect(service.calledApiPullRequestsMutationsCount).toBe(0);
@@ -270,7 +287,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
     });
 
     describe.each([0, 1, 2])(`when a specific count is given`, (count: number): void => {
-      it(`should increase the added pull requests comments count by the given count`, (): void => {
+      it(`should increase the added pull requests labels count by the given count`, (): void => {
         expect.assertions(1);
         service.addedPullRequestsLabelsCount = 0;
 
@@ -284,6 +301,36 @@ describe(`PullRequestsStatisticsService`, (): void => {
       expect.assertions(1);
 
       const result = service.increaseAddedPullRequestsLabelsCount();
+
+      expect(result).toStrictEqual(service);
+    });
+  });
+
+  describe(`increaseRemovedPullRequestsLabelsCount()`, (): void => {
+    it(`should increase the removed pull requests labels count`, (): void => {
+      expect.assertions(1);
+      service.removedPullRequestsLabelsCount = 0;
+
+      service.increaseRemovedPullRequestsLabelsCount();
+
+      expect(service.removedPullRequestsLabelsCount).toBe(1);
+    });
+
+    describe.each([0, 1, 2])(`when a specific count is given`, (count: number): void => {
+      it(`should increase the removed pull requests labels count by the given count`, (): void => {
+        expect.assertions(1);
+        service.removedPullRequestsLabelsCount = 0;
+
+        service.increaseRemovedPullRequestsLabelsCount(count);
+
+        expect(service.removedPullRequestsLabelsCount).toBe(count);
+      });
+    });
+
+    it(`should return the service`, (): void => {
+      expect.assertions(1);
+
+      const result = service.increaseRemovedPullRequestsLabelsCount();
 
       expect(result).toStrictEqual(service);
     });
@@ -378,6 +425,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 0;
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
+        service.removedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
         service.calledApiPullRequestsQueriesCount = 0;
         service.calledApiPullRequestsMutationsCount = 0;
@@ -404,6 +452,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 0;
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
+        service.removedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
         service.calledApiPullRequestsQueriesCount = 0;
         service.calledApiPullRequestsMutationsCount = 0;
@@ -435,17 +484,18 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 7;
         service.addedPullRequestsCommentsCount = 8;
         service.addedPullRequestsLabelsCount = 9;
-        service.draftPullRequestsCount = 10;
-        service.calledApiPullRequestsQueriesCount = 11;
-        service.calledApiPullRequestsMutationsCount = 12;
+        service.removedPullRequestsLabelsCount = 10;
+        service.draftPullRequestsCount = 11;
+        service.calledApiPullRequestsQueriesCount = 12;
+        service.calledApiPullRequestsMutationsCount = 13;
       });
 
       it(`should log the statistics`, (): void => {
-        expect.assertions(14);
+        expect.assertions(16);
 
         service.logsAllStatistics();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(13);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(15);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
@@ -497,32 +547,83 @@ describe(`PullRequestsStatisticsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           9,
           `white-├──`,
-          `whiteBright-Added pull requests labels    `,
-          `value-9`
+          `whiteBright-Pull requests labels          `,
+          `value-19`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           10,
-          `white-├──`,
-          `whiteBright-Draft pull requests           `,
-          `value-10`
+          `white-│   ├──`,
+          `whiteBright-Added pull requests labels  `,
+          `value-9`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           11,
-          `white-└──`,
-          `whiteBright-Called API pull requests      `,
-          `value-23`
+          `white-│   └──`,
+          `whiteBright-Removed pull requests labels`,
+          `value-10`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           12,
-          `white-    ├──`,
-          `whiteBright-Called API pull requests queries  `,
+          `white-├──`,
+          `whiteBright-Draft pull requests           `,
           `value-11`
         );
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           13,
+          `white-└──`,
+          `whiteBright-Called API pull requests      `,
+          `value-25`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          14,
+          `white-    ├──`,
+          `whiteBright-Called API pull requests queries  `,
+          `value-12`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          15,
           `white-    └──`,
           `whiteBright-Called API pull requests mutations`,
-          `value-12`
+          `value-13`
+        );
+      });
+    });
+
+    describe(`when there is one added extra pull requests label count statistic`, (): void => {
+      beforeEach((): void => {
+        service.processedPullRequestsCount = 0;
+        service.ignoredPullRequestsCount = 0;
+        service.unalteredPullRequestsCount = 0;
+        service.stalePullRequestsCount = 0;
+        service.alreadyStalePullRequestsCount = 0;
+        service.removeStalePullRequestsCount = 0;
+        service.closedPullRequestsCount = 0;
+        service.deletedPullRequestsBranchesCount = 0;
+        service.addedPullRequestsCommentsCount = 0;
+        service.addedPullRequestsLabelsCount = 1;
+        service.removedPullRequestsLabelsCount = 0;
+        service.draftPullRequestsCount = 0;
+        service.calledApiPullRequestsQueriesCount = 0;
+        service.calledApiPullRequestsMutationsCount = 0;
+      });
+
+      it(`should log the called added extra pull requests labels count statistic but not the remove extra pull requests labels count statistic`, (): void => {
+        expect.assertions(3);
+
+        service.logsAllStatistics();
+
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(2);
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          1,
+          `white-└──`,
+          `whiteBright-Pull requests labels`,
+          `value-1`
+        );
+        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
+          2,
+          `white-    └──`,
+          `whiteBright-Added pull requests labels`,
+          `value-1`
         );
       });
     });
@@ -539,6 +640,7 @@ describe(`PullRequestsStatisticsService`, (): void => {
         service.deletedPullRequestsBranchesCount = 0;
         service.addedPullRequestsCommentsCount = 0;
         service.addedPullRequestsLabelsCount = 0;
+        service.removedPullRequestsLabelsCount = 0;
         service.draftPullRequestsCount = 0;
         service.calledApiPullRequestsQueriesCount = 1;
         service.calledApiPullRequestsMutationsCount = 0;
