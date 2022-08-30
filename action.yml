@@ -272,7 +272,7 @@ outputs:
   added-issues-comments-count:
     description: 'The number of added issues comments.'
   issues-labels-count:
-    description: 'The number of issues labels mutated (added or removed).'
+    description: 'The number of mutated issues labels (added or removed).'
   added-issues-labels-count:
     description: 'The number of added issues labels.'
   removed-issues-labels-count:
@@ -302,8 +302,12 @@ outputs:
     description: 'The number of deleted pull requests branches closed.'
   added-pull-requests-comments-count:
     description: 'The number of added pull requests comments.'
+  pull-requests-labels-count:
+    description: 'The number of mutated pull requests labels (added or removed).'
   added-pull-requests-labels-count:
     description: 'The number of added pull requests labels.'
+  removed-pull-requests-labels-count:
+    description: 'The number of removed pull requests labels.'
   draft-pull-requests-count:
     description: 'The number of pull requests converted to draft.'
   called-api-pull-requests-count:
