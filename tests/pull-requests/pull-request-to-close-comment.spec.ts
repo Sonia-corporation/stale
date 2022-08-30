@@ -56,7 +56,7 @@ describe(`Pull request to close comment`, (): void => {
     });
 
     it(`should close the pull request and add a close comment`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -120,7 +120,7 @@ describe(`Pull request to close comment`, (): void => {
     });
 
     it(`should close the pull request and not add a close comment`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

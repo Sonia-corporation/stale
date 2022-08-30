@@ -21,7 +21,7 @@ describe(`Issue only with milestone`, (): void => {
       });
 
       it(`should ignore the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -44,7 +44,7 @@ describe(`Issue only with milestone`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -73,7 +73,7 @@ describe(`Issue only with milestone`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -96,7 +96,7 @@ describe(`Issue only with milestone`, (): void => {
       });
 
       it(`should process the issue`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

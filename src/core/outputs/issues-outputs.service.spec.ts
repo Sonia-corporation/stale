@@ -51,7 +51,7 @@ describe(`IssuesOutputsService`, (): void => {
     });
 
     it(`should set the statistics outputs`, (): void => {
-      expect.assertions(13);
+      expect.assertions(15);
       IssuesStatisticsService.getInstance().processedIssuesCount = 1;
       IssuesStatisticsService.getInstance().ignoredIssuesCount = 1;
       IssuesStatisticsService.getInstance().unalteredIssuesCount = 1;
@@ -61,12 +61,13 @@ describe(`IssuesOutputsService`, (): void => {
       IssuesStatisticsService.getInstance().closedIssuesCount = 1;
       IssuesStatisticsService.getInstance().addedIssuesCommentsCount = 1;
       IssuesStatisticsService.getInstance().addedIssuesLabelsCount = 1;
+      IssuesStatisticsService.getInstance().removedIssuesLabelsCount = 1;
       IssuesStatisticsService.getInstance().calledApiIssuesQueriesCount = 1;
       IssuesStatisticsService.getInstance().calledApiIssuesMutationsCount = 1;
 
       service.setOutputs();
 
-      expect(coreSetOutputSpy).toHaveBeenCalledTimes(12);
+      expect(coreSetOutputSpy).toHaveBeenCalledTimes(14);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(1, EIssuesOutputs.ALREADY_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(2, EIssuesOutputs.IGNORED_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(3, EIssuesOutputs.UNALTERED_ISSUES_COUNT, 1);
@@ -75,10 +76,12 @@ describe(`IssuesOutputsService`, (): void => {
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(6, EIssuesOutputs.REMOVE_STALE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(7, EIssuesOutputs.CLOSE_ISSUES_COUNT, 1);
       expect(coreSetOutputSpy).toHaveBeenNthCalledWith(8, EIssuesOutputs.ADDED_ISSUES_COMMENTS_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(9, EIssuesOutputs.ADDED_ISSUES_LABELS_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(10, EIssuesOutputs.CALLED_API_ISSUES_COUNT, 2);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(11, EIssuesOutputs.CALLED_API_ISSUES_QUERIES_COUNT, 1);
-      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(12, EIssuesOutputs.CALLED_API_ISSUES_MUTATIONS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(9, EIssuesOutputs.ISSUES_LABELS_COUNT, 2);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(10, EIssuesOutputs.ADDED_ISSUES_LABELS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(11, EIssuesOutputs.REMOVED_ISSUES_LABELS_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(12, EIssuesOutputs.CALLED_API_ISSUES_COUNT, 2);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(13, EIssuesOutputs.CALLED_API_ISSUES_QUERIES_COUNT, 1);
+      expect(coreSetOutputSpy).toHaveBeenNthCalledWith(14, EIssuesOutputs.CALLED_API_ISSUES_MUTATIONS_COUNT, 1);
     });
 
     it(`should log about the end of the issues output setup`, (): void => {

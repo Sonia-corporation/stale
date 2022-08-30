@@ -16,7 +16,7 @@ describe(`Pull request processing`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -34,7 +34,7 @@ describe(`Pull request processing`, (): void => {
       });
 
       it(`should not process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

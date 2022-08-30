@@ -64,7 +64,7 @@ describe(`Issue with close reason`, (): void => {
       });
 
       it(`should close the issue with the completed reason`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 
@@ -135,7 +135,7 @@ describe(`Issue with close reason`, (): void => {
       });
 
       it(`should close the issue with the not planned reason`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

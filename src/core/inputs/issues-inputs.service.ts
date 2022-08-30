@@ -59,6 +59,7 @@ export class IssuesInputsService extends AbstractInputsService<IIssuesInputs> {
       issueOnlyWithMilestones: core.getBooleanInput(EInputs.ISSUE_ONLY_WITH_MILESTONES, { required: false }),
       issueOnlyWithProjectCards: core.getBooleanInput(EInputs.ISSUE_ONLY_WITH_PROJECT_CARDS, { required: false }),
       issueProcessing: core.getBooleanInput(EInputs.ISSUE_PROCESSING, { required: false }),
+      issueRemoveLabelsAfterStale: core.getMultilineInput(EInputs.ISSUE_REMOVE_LABELS_AFTER_STALE, { required: false }),
       issueStaleComment: core.getInput(EInputs.ISSUE_STALE_COMMENT, { required: false }),
       issueStaleLabel: core.getInput(EInputs.ISSUE_STALE_LABEL, { required: false }),
     };

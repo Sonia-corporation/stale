@@ -90,6 +90,11 @@
       "groupName": "Semantic release dependencies",
       "matchPackagePatterns": ["^@semantic-release/", "^semantic-release$"],
       "matchUpdateTypes": ["major"]
+    },
+    {
+      "groupName": "Jest major",
+      "matchPackagePatterns": ["^@types/jest$", "^jest$", "^jest-mock$", "^ts-jest$"],
+      "matchUpdateTypes": ["major"]
     }
   ]
 }

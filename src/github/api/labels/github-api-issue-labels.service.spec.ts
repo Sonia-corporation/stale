@@ -5,6 +5,7 @@ import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/git
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
+import { GITHUB_API_REMOVE_LABELS_MUTATION } from '@github/api/labels/constants/github-api-remove-labels-mutation';
 import { GithubApiIssueLabelsService } from '@github/api/labels/github-api-issue-labels.service';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
@@ -130,7 +131,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
             {
               file: `abstract-github-api-labels.service.ts`,
-              startLine: 74,
+              startLine: 72,
               title: `Error`,
             }
           );
@@ -219,7 +220,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               EAnnotationError.FAILED_FETCHING_LABELS_MATCHING_SEARCH,
               {
                 file: `abstract-github-api-labels.service.ts`,
-                startLine: 74,
+                startLine: 72,
                 title: `Error`,
               }
             );
@@ -497,7 +498,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
             expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
             expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_FETCHING_LABEL, {
               file: `abstract-github-api-labels.service.ts`,
-              startLine: 118,
+              startLine: 122,
               title: `Error`,
             });
           });
@@ -573,7 +574,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
               expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
               expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.COULD_NOT_FETCH_LABEL, {
                 file: `abstract-github-api-labels.service.ts`,
-                startLine: 102,
+                startLine: 104,
                 title: `Error`,
               });
             });
@@ -833,7 +834,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 157,
+            startLine: 156,
             title: `Error`,
           });
         });
@@ -971,7 +972,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_LABELS, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 196,
+            startLine: 195,
             title: `Error`,
           });
         });
@@ -1109,7 +1110,7 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_REMOVING_LABEL, {
             file: `abstract-github-api-labels.service.ts`,
-            startLine: 235,
+            startLine: 234,
             title: `Error`,
           });
         });
@@ -1157,6 +1158,144 @@ describe(`GithubApiIssueLabelsService`, (): void => {
           expect.assertions(2);
 
           await githubApiIssueLabelsService.removeLabel(issueId, labelId);
+
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();
+        });
+      });
+    });
+
+    describe(`removeLabels()`, (): void => {
+      let issueId: IUuid;
+      let labelsId: IUuid[];
+      let graphqlMock: jest.Mock;
+
+      let issueProcessorLoggerInfoSpy: jest.SpyInstance;
+      let issueProcessorLoggerErrorSpy: jest.SpyInstance;
+      let annotationsServiceErrorSpy: jest.SpyInstance;
+      let octokitServiceGetOctokitSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy: jest.SpyInstance;
+
+      beforeEach((): void => {
+        issueId = faker.datatype.uuid();
+        labelsId = [faker.datatype.uuid(), faker.datatype.uuid()];
+        graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
+        githubApiIssueLabelsService = new GithubApiIssueLabelsService(issueProcessor);
+
+        issueProcessorLoggerInfoSpy = jest.spyOn(issueProcessor.logger, `info`).mockImplementation();
+        issueProcessorLoggerErrorSpy = jest.spyOn(issueProcessor.logger, `error`).mockImplementation();
+        annotationsServiceErrorSpy = jest.spyOn(AnnotationsService, `error`).mockImplementation();
+        octokitServiceGetOctokitSpy = jest.spyOn(OctokitService, `getOctokit`).mockReturnValue({
+          // @ts-ignore
+          graphql: graphqlMock,
+        });
+        issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy = jest
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseCalledApiIssuesMutationsCount`)
+          .mockImplementation();
+      });
+
+      it(`should remove the labels on the issue`, async (): Promise<void> => {
+        expect.assertions(7);
+
+        await expect(githubApiIssueLabelsService.removeLabels(issueId, labelsId)).rejects.toThrow(
+          new Error(`graphql error`)
+        );
+
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+        expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+          `Removing the labels`,
+          `value-${labelsId[0]},${labelsId[1]}`,
+          `whiteBright-on the issue`,
+          `value-${issueId}whiteBright-...`
+        );
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+        expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+        expect(graphqlMock).toHaveBeenCalledTimes(1);
+        expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_REMOVE_LABELS_MUTATION, {
+          id: issueId,
+          labelsId,
+        });
+      });
+
+      describe(`when the labels failed to be removed`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockRejectedValue(new Error(`graphql error`));
+        });
+
+        it(`should log about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssueLabelsService.removeLabels(issueId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
+            `Failed to remove the labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
+            `red-on the issue`,
+            `value-${issueId}`
+          );
+        });
+
+        it(`should annotate about the error`, async (): Promise<void> => {
+          expect.assertions(3);
+
+          await expect(githubApiIssueLabelsService.removeLabels(issueId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
+          expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_REMOVING_LABELS, {
+            file: `abstract-github-api-labels.service.ts`,
+            startLine: 273,
+            title: `Error`,
+          });
+        });
+
+        it(`should rethrow`, async (): Promise<void> => {
+          expect.assertions(1);
+
+          await expect(githubApiIssueLabelsService.removeLabels(issueId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+        });
+
+        it(`should not increase the statistic regarding the API issues mutations calls`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(githubApiIssueLabelsService.removeLabels(issueId, labelsId)).rejects.toThrow(
+            new Error(`graphql error`)
+          );
+
+          expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
+        });
+      });
+
+      describe(`when the labels were successfully removed`, (): void => {
+        beforeEach((): void => {
+          graphqlMock.mockResolvedValue({});
+        });
+
+        it(`should log about the success of the removal`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiIssueLabelsService.removeLabels(issueId, labelsId);
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
+            2,
+            `green-Labels`,
+            `value-${labelsId[0]},${labelsId[1]}`,
+            `green-removed to the issue`,
+            `value-${issueId}`
+          );
+        });
+
+        it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await githubApiIssueLabelsService.removeLabels(issueId, labelsId);
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();

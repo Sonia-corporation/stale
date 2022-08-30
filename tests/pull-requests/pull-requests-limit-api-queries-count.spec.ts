@@ -19,7 +19,7 @@ describe(`Pull requests limit API queries calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -47,7 +47,7 @@ describe(`Pull requests limit API queries calls count`, (): void => {
       });
 
       it(`should not process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -74,7 +74,7 @@ describe(`Pull requests limit API queries calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -98,7 +98,7 @@ describe(`Pull requests limit API queries calls count`, (): void => {
       });
 
       it(`should process all the pull requests`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -136,7 +136,7 @@ describe(`Pull requests limit API queries calls count`, (): void => {
       });
 
       it(`should only process the first pull request (due to the query to fetch the stale label)`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

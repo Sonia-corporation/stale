@@ -12,6 +12,7 @@ export type IPullRequestsStatistics = Pick<
   | 'addedPullRequestsCommentsCount'
   | 'deletedPullRequestsBranchesCount'
   | 'addedPullRequestsLabelsCount'
+  | 'removedPullRequestsLabelsCount'
   | 'draftPullRequestsCount'
   | 'calledApiPullRequestsMutationsCount'
   | 'calledApiPullRequestsQueriesCount'

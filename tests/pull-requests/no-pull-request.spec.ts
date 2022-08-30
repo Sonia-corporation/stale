@@ -9,7 +9,7 @@ describe(`No pull request`, (): void => {
     });
 
     it(`should do nothing`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

@@ -30,11 +30,17 @@ const MAP: { [key in keyof typeof EIssuesOutputs]: () => void } = {
   IGNORED_ISSUES_COUNT(): void {
     noticeCount(`Ignored issues`, IssuesStatisticsService.getInstance().ignoredIssuesCount);
   },
+  ISSUES_LABELS_COUNT(): void {
+    noticeCount(`Issues labels`, IssuesStatisticsService.getInstance().issuesLabelsCount);
+  },
   PROCESSED_ISSUES_COUNT(): void {
     noticeCount(`Processed issues`, IssuesStatisticsService.getInstance().processedIssuesCount);
   },
   REMOVE_STALE_ISSUES_COUNT(): void {
     noticeCount(`Remove stale issues`, IssuesStatisticsService.getInstance().removeStaleIssuesCount);
+  },
+  REMOVED_ISSUES_LABELS_COUNT(): void {
+    noticeCount(`Removed issues labels`, IssuesStatisticsService.getInstance().removedIssuesLabelsCount);
   },
   STALE_ISSUES_COUNT(): void {
     noticeCount(`Stale issues`, IssuesStatisticsService.getInstance().staleIssuesCount);

@@ -23,8 +23,11 @@ const MAP: { [key in keyof typeof EPullRequestsOutputs]: () => number } = {
   DRAFT_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().draftPullRequestsCount,
   IGNORED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().ignoredPullRequestsCount,
   PROCESSED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().processedPullRequestsCount,
+  PULL_REQUESTS_LABELS_COUNT: (): number => PullRequestsStatisticsService.getInstance().pullRequestsLabelsCount,
   REMOVE_STALE_PULL_REQUESTS_COUNT: (): number =>
     PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount,
+  REMOVED_PULL_REQUESTS_LABELS_COUNT: (): number =>
+    PullRequestsStatisticsService.getInstance().removedPullRequestsLabelsCount,
   STALE_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().stalePullRequestsCount,
   UNALTERED_PULL_REQUESTS_COUNT: (): number => PullRequestsStatisticsService.getInstance().unalteredPullRequestsCount,
 };

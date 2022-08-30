@@ -64,17 +64,18 @@ describe(`PullRequestsOutputsAnnotationsService`, (): void => {
         PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount = 8;
         PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount = 9;
         PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount = 10;
-        PullRequestsStatisticsService.getInstance().draftPullRequestsCount = 11;
-        PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount = 12;
-        PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount = 13;
+        PullRequestsStatisticsService.getInstance().removedPullRequestsLabelsCount = 11;
+        PullRequestsStatisticsService.getInstance().draftPullRequestsCount = 12;
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount = 13;
+        PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount = 14;
       });
 
       it(`should log the pull requests outputs annotations`, (): void => {
-        expect.assertions(15);
+        expect.assertions(17);
 
         service.noticeAllOutputs();
 
-        expect(coreNoticeSpy).toHaveBeenCalledTimes(14);
+        expect(coreNoticeSpy).toHaveBeenCalledTimes(16);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(1, `Already stale pull requests: 5`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(2, `Ignored pull requests: 2`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(3, `Unaltered pull requests: 3`);
@@ -84,11 +85,13 @@ describe(`PullRequestsOutputsAnnotationsService`, (): void => {
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(7, `Closed pull requests: 7`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(8, `Deleted pull requests branches: 8`);
         expect(coreNoticeSpy).toHaveBeenNthCalledWith(9, `Added pull requests comments: 9`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Added pull requests labels: 10`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Draft pull requests: 11`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Called api pull requests: 25`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(13, `Called api pull requests queries: 12`);
-        expect(coreNoticeSpy).toHaveBeenNthCalledWith(14, `Called api pull requests mutations: 13`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(10, `Pull requests labels: 21`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(11, `Added pull requests labels: 10`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(12, `Removed pull requests labels: 11`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(13, `Draft pull requests: 12`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(14, `Called api pull requests: 27`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(15, `Called api pull requests queries: 13`);
+        expect(coreNoticeSpy).toHaveBeenNthCalledWith(16, `Called api pull requests mutations: 14`);
       });
     });
 
@@ -104,6 +107,7 @@ describe(`PullRequestsOutputsAnnotationsService`, (): void => {
         PullRequestsStatisticsService.getInstance().deletedPullRequestsBranchesCount = 0;
         PullRequestsStatisticsService.getInstance().addedPullRequestsCommentsCount = 0;
         PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount = 0;
+        PullRequestsStatisticsService.getInstance().removedPullRequestsLabelsCount = 0;
         PullRequestsStatisticsService.getInstance().draftPullRequestsCount = 0;
         PullRequestsStatisticsService.getInstance().calledApiPullRequestsQueriesCount = 0;
         PullRequestsStatisticsService.getInstance().calledApiPullRequestsMutationsCount = 0;

@@ -4,10 +4,10 @@ import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Issue to close extra labels`, (): void => {
+describe(`Issue to close add extra labels`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  describe(`when the issue should not have extra labels when closed`, (): void => {
+  describe(`when the issue should not have extra labels added when closed`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
         issueAddLabelsAfterClose: [],
@@ -56,7 +56,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -120,7 +120,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -185,7 +185,7 @@ describe(`Issue to close extra labels`, (): void => {
     });
 
     it(`should close the issue and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 
@@ -255,7 +255,7 @@ describe(`Issue to close extra labels`, (): void => {
       });
 
       it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(11);
+        expect.assertions(12);
 
         await issueSut.process();
 

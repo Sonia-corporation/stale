@@ -21,7 +21,7 @@ describe(`Pull request to stale`, (): void => {
     });
 
     it(`should stale the pull request`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

@@ -55,7 +55,7 @@ describe(`Issue stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the issue`, async (): Promise<void> => {
-      expect.assertions(11);
+      expect.assertions(12);
 
       await issueSut.process();
 

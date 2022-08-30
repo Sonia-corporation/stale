@@ -54,8 +54,17 @@ const MAP: { [key in keyof typeof EPullRequestsOutputs]: () => void } = {
   PROCESSED_PULL_REQUESTS_COUNT(): void {
     noticeCount(`Processed pull requests`, PullRequestsStatisticsService.getInstance().processedPullRequestsCount);
   },
+  PULL_REQUESTS_LABELS_COUNT(): void {
+    noticeCount(`Pull requests labels`, PullRequestsStatisticsService.getInstance().pullRequestsLabelsCount);
+  },
   REMOVE_STALE_PULL_REQUESTS_COUNT(): void {
     noticeCount(`Remove stale pull requests`, PullRequestsStatisticsService.getInstance().removeStalePullRequestsCount);
+  },
+  REMOVED_PULL_REQUESTS_LABELS_COUNT(): void {
+    noticeCount(
+      `Removed pull requests labels`,
+      PullRequestsStatisticsService.getInstance().removedPullRequestsLabelsCount
+    );
   },
   STALE_PULL_REQUESTS_COUNT(): void {
     noticeCount(`Stale pull requests`, PullRequestsStatisticsService.getInstance().stalePullRequestsCount);

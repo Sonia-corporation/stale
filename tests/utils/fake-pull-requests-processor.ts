@@ -11,6 +11,7 @@ import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/git
 import { GITHUB_API_LABEL_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-label-by-name-query';
 import { GITHUB_API_LABELS_BY_NAME_QUERY } from '@github/api/labels/constants/github-api-labels-by-name-query';
 import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/github-api-remove-label-mutation';
+import { GITHUB_API_REMOVE_LABELS_MUTATION } from '@github/api/labels/constants/github-api-remove-labels-mutation';
 import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get-label.interface';
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
@@ -223,6 +224,9 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
+    [GITHUB_API_REMOVE_LABELS_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
     [GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY](): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> {
       return Promise.resolve(
         createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>({
@@ -272,10 +276,25 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakePullRequestsProcessor} The class
    */
-  public setExtraStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+  public setExtraAddedStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       pullRequestAddLabelsAfterStale: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to remove on the pull request when it is stale
+   * @param {ReadonlyArray<string>} labels The labels to remove
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public setExtraRemovedStaleLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestRemoveLabelsAfterStale: labels,
     });
 
     return this;
@@ -419,6 +438,9 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
     );
     expect(PullRequestsStatisticsService.getInstance().addedPullRequestsLabelsCount).toBe(
       statistics.addedPullRequestsLabelsCount ?? 0
+    );
+    expect(PullRequestsStatisticsService.getInstance().removedPullRequestsLabelsCount).toBe(
+      statistics.removedPullRequestsLabelsCount ?? 0
     );
     expect(PullRequestsStatisticsService.getInstance().alreadyStalePullRequestsCount).toBe(
       statistics.alreadyStalePullRequestsCount ?? 0

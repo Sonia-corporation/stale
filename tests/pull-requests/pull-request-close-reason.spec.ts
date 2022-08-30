@@ -64,7 +64,7 @@ describe(`Pull request to close`, (): void => {
       });
 
       it(`should close the pull request with the completed reason`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -135,7 +135,7 @@ describe(`Pull request to close`, (): void => {
       });
 
       it(`should close the pull request with the not planned reason`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
