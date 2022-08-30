@@ -30,6 +30,21 @@ describe(`IssuesStatisticsService`, (): void => {
     });
   });
 
+  describe(`get issuesLabelsCount`, (): void => {
+    beforeEach((): void => {
+      service.addedIssuesLabelsCount = faker.datatype.number();
+      service.removedIssuesLabelsCount = faker.datatype.number();
+    });
+
+    it(`should return the sum of the extra added and removed issues labels`, (): void => {
+      expect.assertions(1);
+
+      const result = service.issuesLabelsCount;
+
+      expect(result).toBe(service.addedIssuesLabelsCount + service.removedIssuesLabelsCount);
+    });
+  });
+
   describe(`get calledApiIssuesCount`, (): void => {
     beforeEach((): void => {
       service.calledApiIssuesQueriesCount = faker.datatype.number();
