@@ -55,7 +55,7 @@ describe(`Pull request stale and updated`, (): void => {
     });
 
     it(`should remove the stale state on the pull request`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

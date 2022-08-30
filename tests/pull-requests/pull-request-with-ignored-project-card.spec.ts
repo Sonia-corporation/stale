@@ -25,7 +25,7 @@ describe(`Pull request with ignored project card`, (): void => {
     });
 
     it(`should ignore the pull request`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

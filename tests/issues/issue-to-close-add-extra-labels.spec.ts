@@ -1,20 +1,20 @@
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiTimelineItemsPullRequestLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-pull-request-labeled-events.interface';
-import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
+import { IGithubApiTimelineItemsIssueLabeledEvents } from '@github/api/timeline-items/interfaces/github-api-timeline-items-issue-labeled-events.interface';
+import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Pull request to close extra labels`, (): void => {
-  let pullRequestSut: FakePullRequestsProcessor;
+describe(`Issue to close add extra labels`, (): void => {
+  let issueSut: FakeIssuesProcessor;
 
-  describe(`when the pull request should not have extra labels when closed`, (): void => {
+  describe(`when the issue should not have extra labels added when closed`, (): void => {
     beforeEach((): void => {
-      pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [],
-        pullRequestDaysBeforeClose: 10,
-        pullRequestDaysBeforeStale: 30,
+      issueSut = new FakeIssuesProcessor({
+        issueAddLabelsAfterClose: [],
+        issueDaysBeforeClose: 10,
+        issueDaysBeforeStale: 30,
       })
-        .addPullRequest({
+        .addIssue({
           labels: {
             nodes: [
               createHydratedMock<IGithubApiLabel>({
@@ -28,12 +28,12 @@ describe(`Pull request to close extra labels`, (): void => {
             includeOffset: false,
           }), // No update since last stale
         })
-        .mockTimelineItemsPullRequestLabeledEventQuery(
-          (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
             Promise.resolve(
-              createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>({
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                 repository: {
-                  pullRequest: {
+                  issue: {
                     timelineItems: {
                       filteredCount: 1,
                       nodes: [
@@ -55,30 +55,30 @@ describe(`Pull request to close extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+    it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
+      expect.assertions(12);
 
-      await pullRequestSut.process();
+      await issueSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 2,
-        calledApiPullRequestsQueriesCount: 2,
-        closedPullRequestsCount: 1,
-        processedPullRequestsCount: 1,
+      issueSut.expect({
+        addedIssuesCommentsCount: 1,
+        alreadyStaleIssuesCount: 1,
+        calledApiIssuesMutationsCount: 2,
+        calledApiIssuesQueriesCount: 2,
+        closedIssuesCount: 1,
+        processedIssuesCount: 1,
       });
     });
   });
 
-  describe(`when the pull request should add one more label when closed`, (): void => {
+  describe(`when the issue should add one more label when closed`, (): void => {
     beforeEach((): void => {
-      pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [`extra-close-label`],
-        pullRequestDaysBeforeClose: 10,
-        pullRequestDaysBeforeStale: 30,
+      issueSut = new FakeIssuesProcessor({
+        issueAddLabelsAfterClose: [`extra-close-label`],
+        issueDaysBeforeClose: 10,
+        issueDaysBeforeStale: 30,
       })
-        .addPullRequest({
+        .addIssue({
           labels: {
             nodes: [
               createHydratedMock<IGithubApiLabel>({
@@ -92,12 +92,12 @@ describe(`Pull request to close extra labels`, (): void => {
             includeOffset: false,
           }), // No update since last stale
         })
-        .mockTimelineItemsPullRequestLabeledEventQuery(
-          (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
             Promise.resolve(
-              createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>({
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                 repository: {
-                  pullRequest: {
+                  issue: {
                     timelineItems: {
                       filteredCount: 1,
                       nodes: [
@@ -119,31 +119,31 @@ describe(`Pull request to close extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+    it(`should close the issue and add the extra labels`, async (): Promise<void> => {
+      expect.assertions(12);
 
-      await pullRequestSut.process();
+      await issueSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 1,
-        alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 3,
-        closedPullRequestsCount: 1,
-        processedPullRequestsCount: 1,
+      issueSut.expect({
+        addedIssuesCommentsCount: 1,
+        addedIssuesLabelsCount: 1,
+        alreadyStaleIssuesCount: 1,
+        calledApiIssuesMutationsCount: 3,
+        calledApiIssuesQueriesCount: 3,
+        closedIssuesCount: 1,
+        processedIssuesCount: 1,
       });
     });
   });
 
-  describe(`when the pull request should add three more labels when closed`, (): void => {
+  describe(`when the issue should add three more labels when closed`, (): void => {
     beforeEach((): void => {
-      pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
-        pullRequestDaysBeforeClose: 10,
-        pullRequestDaysBeforeStale: 30,
+      issueSut = new FakeIssuesProcessor({
+        issueAddLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
+        issueDaysBeforeClose: 10,
+        issueDaysBeforeStale: 30,
       })
-        .addPullRequest({
+        .addIssue({
           labels: {
             nodes: [
               createHydratedMock<IGithubApiLabel>({
@@ -157,12 +157,12 @@ describe(`Pull request to close extra labels`, (): void => {
             includeOffset: false,
           }), // No update since last stale
         })
-        .mockTimelineItemsPullRequestLabeledEventQuery(
-          (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
             Promise.resolve(
-              createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>({
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                 repository: {
-                  pullRequest: {
+                  issue: {
                     timelineItems: {
                       filteredCount: 1,
                       nodes: [
@@ -184,31 +184,31 @@ describe(`Pull request to close extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+    it(`should close the issue and add the extra labels`, async (): Promise<void> => {
+      expect.assertions(12);
 
-      await pullRequestSut.process();
+      await issueSut.process();
 
-      pullRequestSut.expect({
-        addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 3,
-        alreadyStalePullRequestsCount: 1,
-        calledApiPullRequestsMutationsCount: 3,
-        calledApiPullRequestsQueriesCount: 5,
-        closedPullRequestsCount: 1,
-        processedPullRequestsCount: 1,
+      issueSut.expect({
+        addedIssuesCommentsCount: 1,
+        addedIssuesLabelsCount: 3,
+        alreadyStaleIssuesCount: 1,
+        calledApiIssuesMutationsCount: 3,
+        calledApiIssuesQueriesCount: 5,
+        closedIssuesCount: 1,
+        processedIssuesCount: 1,
       });
     });
   });
 
   describe(`when the dry-run is enabled`, (): void => {
     beforeEach((): void => {
-      pullRequestSut = new FakePullRequestsProcessor({
+      issueSut = new FakeIssuesProcessor({
         dryRun: true,
         issueDaysBeforeClose: 10,
-        pullRequestDaysBeforeStale: 30,
+        issueDaysBeforeStale: 30,
       })
-        .addPullRequest({
+        .addIssue({
           labels: {
             nodes: [
               createHydratedMock<IGithubApiLabel>({
@@ -222,12 +222,12 @@ describe(`Pull request to close extra labels`, (): void => {
             includeOffset: false,
           }), // No update since last stale
         })
-        .mockTimelineItemsPullRequestLabeledEventQuery(
-          (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
+        .mockTimelineItemsIssueLabeledEventQuery(
+          (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
             Promise.resolve(
-              createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvents>({
+              createHydratedMock<IGithubApiTimelineItemsIssueLabeledEvents>({
                 repository: {
-                  pullRequest: {
+                  issue: {
                     timelineItems: {
                       filteredCount: 1,
                       nodes: [
@@ -249,23 +249,23 @@ describe(`Pull request to close extra labels`, (): void => {
         );
     });
 
-    describe(`when the pull request should add three more labels when closed`, (): void => {
+    describe(`when the issue should add three more labels when closes`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.setExtraCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
+        issueSut.setExtraCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
       });
 
-      it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(13);
+      it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
+        expect.assertions(12);
 
-        await pullRequestSut.process();
+        await issueSut.process();
 
-        pullRequestSut.expect({
-          addedPullRequestsCommentsCount: 1,
-          addedPullRequestsLabelsCount: 3,
-          alreadyStalePullRequestsCount: 1,
-          calledApiPullRequestsQueriesCount: 2,
-          closedPullRequestsCount: 1,
-          processedPullRequestsCount: 1,
+        issueSut.expect({
+          addedIssuesCommentsCount: 1,
+          addedIssuesLabelsCount: 3,
+          alreadyStaleIssuesCount: 1,
+          calledApiIssuesQueriesCount: 2,
+          closedIssuesCount: 1,
+          processedIssuesCount: 1,
         });
       });
     });

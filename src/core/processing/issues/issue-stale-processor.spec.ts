@@ -126,6 +126,7 @@ describe(`IssueStaleProcessor`, (): void => {
       let processToAddExtraLabelsSpy: jest.SpyInstance;
       let processToRemoveExtraLabelsSpy: jest.SpyInstance;
       let issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy: jest.SpyInstance;
+      let issuesStatisticsServiceIncreaseRemovedIssuesLabelsCountSpy: jest.SpyInstance;
 
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
@@ -169,6 +170,9 @@ describe(`IssueStaleProcessor`, (): void => {
           .mockImplementation();
         issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy = jest
           .spyOn(IssuesStatisticsService.getInstance(), `increaseAddedIssuesLabelsCount`)
+          .mockImplementation();
+        issuesStatisticsServiceIncreaseRemovedIssuesLabelsCountSpy = jest
+          .spyOn(IssuesStatisticsService.getInstance(), `increaseRemovedIssuesLabelsCount`)
           .mockImplementation();
       });
 
@@ -279,6 +283,16 @@ describe(`IssueStaleProcessor`, (): void => {
 
           expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).not.toHaveBeenCalled();
         });
+
+        it(`should not increase the number of removed labels count statistic`, async (): Promise<void> => {
+          expect.assertions(2);
+
+          await expect(issueStaleProcessor.stale()).rejects.toThrow(
+            `Could not find the stale label ${issueStaleLabel}`
+          );
+
+          expect(issuesStatisticsServiceIncreaseRemovedIssuesLabelsCountSpy).not.toHaveBeenCalled();
+        });
       });
 
       describe(`when the label could be found`, (): void => {
@@ -320,6 +334,14 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
             expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
+          });
+
+          it(`should not increase the number of removed labels count statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await issueStaleProcessor.stale();
+
+            expect(issuesStatisticsServiceIncreaseRemovedIssuesLabelsCountSpy).not.toHaveBeenCalled();
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {
@@ -382,6 +404,14 @@ describe(`IssueStaleProcessor`, (): void => {
 
             expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledTimes(1);
             expect(issuesStatisticsServiceIncreaseAddedIssuesLabelsCountSpy).toHaveBeenCalledWith(1);
+          });
+
+          it(`should not increase the number of removed labels count statistic`, async (): Promise<void> => {
+            expect.assertions(1);
+
+            await issueStaleProcessor.stale();
+
+            expect(issuesStatisticsServiceIncreaseRemovedIssuesLabelsCountSpy).not.toHaveBeenCalled();
           });
 
           it(`should try to add a stale comment on the issue`, async (): Promise<void> => {

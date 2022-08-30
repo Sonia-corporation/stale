@@ -11,7 +11,7 @@ describe(`Locked pull request`, (): void => {
     });
 
     it(`should ignore the pull request`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -35,7 +35,7 @@ describe(`Locked pull request`, (): void => {
     });
 
     it(`should ignore the pull requests`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

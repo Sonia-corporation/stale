@@ -19,7 +19,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -47,7 +47,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -76,7 +76,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -100,7 +100,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process all the pull requests`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -138,7 +138,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should only process the first pull request (due to the mutation to add the stale comment and label)`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -170,7 +170,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -194,7 +194,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process all the pull requests`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -232,7 +232,7 @@ describe(`Pull requests limit API mutations calls count`, (): void => {
       });
 
       it(`should process the tow pull requests (due to the mutation to add the stale comments and labels)`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

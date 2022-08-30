@@ -56,7 +56,7 @@ describe(`Pull request to close`, (): void => {
     });
 
     it(`should close the pull request`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 

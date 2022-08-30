@@ -30,6 +30,7 @@ export enum EInputs {
   ISSUE_STALE_LABEL = `issue-stale-label`,
   PULL_REQUEST_ADD_LABELS_AFTER_CLOSE = `pull-request-add-labels-after-close`,
   PULL_REQUEST_ADD_LABELS_AFTER_STALE = `pull-request-add-labels-after-stale`,
+  PULL_REQUEST_REMOVE_LABELS_AFTER_STALE = `pull-request-remove-labels-after-stale`,
   PULL_REQUEST_CLOSE_COMMENT = `pull-request-close-comment`,
   PULL_REQUEST_CLOSE_REASON = `pull-request-close-reason`,
   PULL_REQUEST_DAYS_BEFORE_CLOSE = `pull-request-days-before-close`,

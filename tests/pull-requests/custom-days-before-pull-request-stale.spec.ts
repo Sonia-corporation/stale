@@ -22,7 +22,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should stale the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -54,7 +54,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should not stale the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
@@ -83,7 +83,7 @@ describe(`Custom days before pull request stale`, (): void => {
       });
 
       it(`should not stale the pull request`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 

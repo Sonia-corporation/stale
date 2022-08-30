@@ -61,6 +61,7 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestOnlyWithMilestones: false,
   pullRequestOnlyWithProjectCards: false,
   pullRequestProcessing: true,
+  pullRequestRemoveLabelsAfterStale: [],
   pullRequestStaleComment: `stale-comment`,
   pullRequestStaleLabel: `stale`,
   pullRequestToDraftInsteadOfStale: false,

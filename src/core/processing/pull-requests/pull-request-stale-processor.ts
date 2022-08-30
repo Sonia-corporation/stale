@@ -57,8 +57,9 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
   }
 
   protected _getExtraLabelsToRemoveName(): string[] {
-    // @todo
-    return [];
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    return pullRequestsInputs.pullRequestRemoveLabelsAfterStale;
   }
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
@@ -73,7 +74,7 @@ export class PullRequestStaleProcessor extends AbstractStaleProcessor<PullReques
     PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsLabelsCount(count);
   }
 
-  protected _increaseRemovedLabelsCountStatistic(_count: Readonly<number> = 1): void {
-    // @todo
+  protected _increaseRemovedLabelsCountStatistic(count: Readonly<number> = 1): void {
+    PullRequestsStatisticsService.getInstance().increaseRemovedPullRequestsLabelsCount(count);
   }
 }

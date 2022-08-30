@@ -224,6 +224,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
         - When the input value is not empty, add a comment
       - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-stale` input)
         - When the input value is filled list, add the listed labels
+      - Check if the action should also remove extra labels (coming from the `pull-request-remove-labels-after-stale` input)
+        - When the input value is filled list, remove the listed labels
       - Add a label to stale (coming from the `pull-request-stale-label` input, ignored in `dry-run` mode)
 - When the batch was processed, go to the next one and proceed again
 

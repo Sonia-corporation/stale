@@ -1,10 +1,10 @@
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import { DateTime } from 'luxon';
 
-describe(`Pull request to stale extra labels`, (): void => {
+describe(`Pull request to stale add extra labels`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when the pull request should not have extra labels when stale`, (): void => {
+  describe(`when the pull request should not have extra labels added when stale`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
         pullRequestAddLabelsAfterStale: [],
@@ -22,7 +22,7 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and not add some extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -55,7 +55,7 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -88,7 +88,7 @@ describe(`Pull request to stale extra labels`, (): void => {
     });
 
     it(`should stale the pull request and add the extra labels`, async (): Promise<void> => {
-      expect.assertions(13);
+      expect.assertions(14);
 
       await pullRequestSut.process();
 
@@ -126,7 +126,7 @@ describe(`Pull request to stale extra labels`, (): void => {
       });
 
       it(`should stale the pull request and not add some extra labels`, async (): Promise<void> => {
-        expect.assertions(13);
+        expect.assertions(14);
 
         await pullRequestSut.process();
 
