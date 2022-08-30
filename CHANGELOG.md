@@ -1,5 +1,26 @@
 # Sonia stale action
 
+# [2.3.0](https://github.com/Sonia-corporation/stale/compare/2.2.0...2.3.0) (2022-08-30)
+
+### :books: Documentation
+
+- **statistics:** fix a typo in wording in the statistics website page ([dfb9e38](https://github.com/Sonia-corporation/stale/commit/dfb9e38cd98f4c5caf8067be6140ea090c20375b))
+
+### :bug: Bug Fixes
+
+- **deps:** update dependency luxon to v3.0.2 ([820407e](https://github.com/Sonia-corporation/stale/commit/820407e3e61038a97cf71a4f0bfe13ea1a53c53d))
+
+### :rocket: Features
+
+- **issues:** add new input `issue-remove-labels-after-stale` ([65979f7](https://github.com/Sonia-corporation/stale/commit/65979f7bf5a503002d1245b03aad5dc492494a9f)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+  This new input will let you remove some label(s) when the stale occur on issues.
+- **prs:** add new input `pull-request-remove-labels-after-stale` ([f7890b1](https://github.com/Sonia-corporation/stale/commit/f7890b192fef83a560a61a17a9a03be2c57340dd)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+  This new input will let you remove some label(s) when the stale occur on pull requests.
+- **outputs:** add new outputs `removed-issues-labels-count` and `issues-labels-count` ([1b9ae0b](https://github.com/Sonia-corporation/stale/commit/1b9ae0bf0b99d1e455d6b8d027da6abcae6c4d0e)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+- **outputs:** add new outputs `removed-pull-requests-labels-count` and `pull-requests-labels-count` ([ff3f686](https://github.com/Sonia-corporation/stale/commit/ff3f6868695cdcc20038100e26adf966db2476f7)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+- **stats:** add new stats about the removed issues labels ([929efa7](https://github.com/Sonia-corporation/stale/commit/929efa7997e4a339a8778d094f3923361b66f0b6)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+- **stats:** add new stats about the removed pull requests labels ([ccf4e1b](https://github.com/Sonia-corporation/stale/commit/ccf4e1b2f8cc38eb4de981d3766b51dde6f70e67)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)
+
 # [2.2.0](https://github.com/Sonia-corporation/stale/compare/2.1.0...2.2.0) (2022-08-26)
 
 ### :books: Documentation
