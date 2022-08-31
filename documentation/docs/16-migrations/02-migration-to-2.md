@@ -32,7 +32,7 @@ Every issue were closed with the default value in GitHub, which is `COMPLETED`.
 Every issue will now be closed with `NOT_PLANNED` as the default value.  
 To change the behavior back to the previous one, you can configure your action as follows:
 
-```yml {6-7}
+```yml {6}
 # ...
 name: Stale
 id: stale
