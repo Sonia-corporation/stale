@@ -1,4 +1,3 @@
-import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IInputs } from '@core/inputs/types/inputs';
 import { IIso8601Date } from '@utils/dates/iso-8601';
 import { IComment } from '@utils/types/comment';
@@ -7,7 +6,6 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestAddLabelsAfterClose: string[];
   readonly pullRequestAddLabelsAfterStale: string[];
   readonly pullRequestCloseComment: IComment | '';
-  readonly pullRequestCloseReason: ECloseReason;
   readonly pullRequestDaysBeforeClose: number;
   readonly pullRequestDaysBeforeStale: number;
   readonly pullRequestDeleteBranchAfterClose: boolean;

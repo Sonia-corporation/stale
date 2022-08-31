@@ -30,9 +30,7 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
   }
 
   protected _closeItem(itemId: Readonly<IUuid>): Promise<void> {
-    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
-
-    return this.githubApiPullRequestsService$$.closePullRequest(itemId, pullRequestsInputs.pullRequestCloseReason);
+    return this.githubApiPullRequestsService$$.closePullRequest(itemId);
   }
 
   protected _getItemId(): IUuid {

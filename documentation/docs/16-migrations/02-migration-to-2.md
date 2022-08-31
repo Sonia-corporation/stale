@@ -16,21 +16,20 @@ From [v1](https://github.com/Sonia-corporation/stale/releases/tag/1.61.0) to [v2
 
 ### Close reason 🍬 {#close-reason}
 
-These two new inputs were introduced:
+One new input was introduced:
 
 - [issue-close-reason](../issues/inputs/issue-close-reason-input)
-- [pull-request-close-reason](../pull-requests/inputs/pull-request-close-reason-input)
 
-They will allow you to define what is the reason when an issue or a pull request is closed.  
+It will allow you to define what is the reason when an issue is closed.  
 This new feature is possible following the [May 19, 2022, update](https://github.blog/changelog/2022-05-19-the-new-github-issues-may-19th-update/#%F0%9F%95%B5%F0%9F%8F%BD%E2%99%80%EF%B8%8F-issue-closed-reasons) for the GitHub issues.
 
 **Before:**
 
-Every issue and pull request were closed with the default value in GitHub, which is `COMPLETED`.
+Every issue were closed with the default value in GitHub, which is `COMPLETED`.
 
 **After:**
 
-Every issue and pull request will now be closed with `NOT_PLANNED` as the default value.  
+Every issue will now be closed with `NOT_PLANNED` as the default value.  
 To change the behavior back to the previous one, you can configure your action as follows:
 
 ```yml {6-7}
@@ -40,12 +39,11 @@ id: stale
 uses: sonia-corporation/stale@latest
 with:
   issue-close-reason: 'not planned'
-  pull-request-close-reason: 'not planned'
 ```
 
 :::info
 
-We decided to actually change the default value, because it makes more sense for most users to consider a close issue or pull request as not planned.  
+We decided to actually change the default value, because it makes more sense for most users to consider a closed issue as not planned.  
 Like suggested by GitHub, they consider this value as a stale reason, which is actually why you are here. 😉
 
 :::
