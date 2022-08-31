@@ -233,10 +233,6 @@ inputs:
     description: 'Allow to process the pull requests.'
     required: false
     default: 'true'
-  pull-request-close-reason:
-    description: 'The reason when closing a pull request (completed or not planned).'
-    required: false
-    default: 'not planned'
   pull-request-add-labels-after-stale:
     description: 'A list of labels added when the processing stale the pull request (multiline).'
     required: false

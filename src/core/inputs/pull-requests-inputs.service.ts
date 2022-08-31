@@ -1,9 +1,7 @@
 import { AbstractInputsService } from '@core/inputs/abstract-inputs.service';
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
-import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { EInputs } from '@core/inputs/inputs.enum';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
-import { getParsedCloseReason } from '@utils/close/get-parsed-close-reason';
 import * as core from '@actions/core';
 import _ from 'lodash';
 
@@ -33,12 +31,6 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
         required: false,
       }),
       pullRequestCloseComment: core.getInput(EInputs.PULL_REQUEST_CLOSE_COMMENT, { required: false }),
-      pullRequestCloseReason: CoreInputsService.getEnumInput$$(
-        EInputs.PULL_REQUEST_CLOSE_REASON,
-        getParsedCloseReason,
-        ECloseReason.NOT_PLANNED,
-        { required: false }
-      ),
       pullRequestDaysBeforeClose: CoreInputsService.getNumberInput$$(EInputs.PULL_REQUEST_DAYS_BEFORE_CLOSE, {
         required: false,
       }),
