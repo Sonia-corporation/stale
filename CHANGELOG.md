@@ -1,5 +1,12 @@
 # Sonia stale action
 
+## [2.3.2](https://github.com/Sonia-corporation/stale/compare/2.3.1...2.3.2) (2022-08-31)
+
+### :bug: Bug Fixes
+
+- **prs:** remove the input `pull-request-close-reason` ([bfde171](https://github.com/Sonia-corporation/stale/commit/bfde171ac542d865fd4d1de61f615f6b2e867abe)), closes [#890](https://github.com/Sonia-corporation/stale/issues/890)
+  The GitHub API do not actually propose such feature.
+
 ## [2.3.1](https://github.com/Sonia-corporation/stale/compare/2.3.0...2.3.1) (2022-08-31)
 
 ### :bug: Bug Fixes
