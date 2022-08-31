@@ -35,7 +35,6 @@ export const TEST_DEFAULT_INPUTS: IAllInputs = {
   pullRequestAddLabelsAfterClose: [],
   pullRequestAddLabelsAfterStale: [],
   pullRequestCloseComment: `close-comment`,
-  pullRequestCloseReason: ECloseReason.NOT_PLANNED,
   pullRequestDaysBeforeClose: 10,
   pullRequestDaysBeforeStale: 30,
   pullRequestDeleteBranchAfterClose: false,

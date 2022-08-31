@@ -1,4 +1,3 @@
-import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
@@ -12,7 +11,6 @@ import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationErrorPullRequest } from '@utils/annotations/enums/annotation-error-pull-request.enum';
-import { closeReasonToGithubApi } from '@utils/close/close-reason-to-github-api';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
@@ -81,18 +79,16 @@ export class GithubApiPullRequestsService {
     this.pullRequestProcessor = pullRequestProcessor;
   }
 
-  public closePullRequest(pullRequestId: Readonly<IUuid>, reason: Readonly<ECloseReason>): Promise<void> | never {
+  public closePullRequest(pullRequestId: Readonly<IUuid>): Promise<void> | never {
     this.pullRequestProcessor.logger.info(
       `Closing the pull request`,
       LoggerService.value(pullRequestId),
-      LoggerFormatService.whiteBright(`(reason:`),
-      `${LoggerService.value(reason)}${LoggerFormatService.whiteBright(`)...`)}`
+      LoggerFormatService.whiteBright(`...`)
     );
 
     return OctokitService.getOctokit()
       .graphql<unknown>(GITHUB_API_CLOSE_PULL_REQUEST_MUTATION, {
         pullRequestId,
-        reason: closeReasonToGithubApi(reason),
       })
       .then((): void => {
         PullRequestsStatisticsService.getInstance().increaseCalledApiPullRequestsMutationsCount();

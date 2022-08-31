@@ -1,8 +1,6 @@
 import { CoreInputsService } from '@core/inputs/core-inputs.service';
-import { ECloseReason } from '@core/inputs/enums/close-reason.enum';
 import { IPullRequestsInputs } from '@core/inputs/interfaces/pull-requests-inputs.interface';
 import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.service';
-import { getParsedCloseReason } from '@utils/close/get-parsed-close-reason';
 import { LoggerService } from '@utils/loggers/logger.service';
 import * as core from '@actions/core';
 import { DateTime } from 'luxon';
@@ -77,14 +75,12 @@ describe(`PullRequestsInputsService`, (): void => {
     let coreGetBooleanInputSpy: jest.SpyInstance;
     let coreGetMultilineInputSpy: jest.SpyInstance;
     let coreInputsServiceGetNumberInputSpy: jest.SpyInstance;
-    let coreInputsServiceGetEnumInputSpy: jest.SpyInstance;
 
     beforeEach((): void => {
       service.inputs$$ = createHydratedMock<IPullRequestsInputs>(<IPullRequestsInputs>{
         pullRequestAddLabelsAfterClose: [`extra-added-close-label-1`, `extra-added-close-label-2`],
         pullRequestAddLabelsAfterStale: [`extra-added-stale-label-1`, `extra-added-stale-label-2`],
         pullRequestCloseComment: `pull-request-close-comment`,
-        pullRequestCloseReason: ECloseReason.COMPLETED,
         pullRequestDaysBeforeClose: 10,
         pullRequestDaysBeforeStale: 30,
         pullRequestDeleteBranchAfterClose: true,
@@ -121,9 +117,6 @@ describe(`PullRequestsInputsService`, (): void => {
         .spyOn(core, `getMultilineInput`)
         .mockImplementation((name: string): string[] => [`dummy-${name}-1`, `dummy-${name}-2`]);
       coreInputsServiceGetNumberInputSpy = jest.spyOn(CoreInputsService, `getNumberInput$$`).mockReturnValue(666);
-      coreInputsServiceGetEnumInputSpy = jest
-        .spyOn(CoreInputsService, `getEnumInput$$`)
-        .mockImplementation((_name: string, _callback: unknown, fallback: unknown): unknown => fallback);
     });
 
     it(`should get the pull-request-add-labels-after-close input, parse it and set it`, (): void => {
@@ -164,22 +157,6 @@ describe(`PullRequestsInputsService`, (): void => {
       expect(coreGetInputSpy).toHaveBeenCalledTimes(4);
       expect(coreGetInputSpy).toHaveBeenNthCalledWith(1, `pull-request-close-comment`, { required: false });
       expect(service.inputs$$?.pullRequestCloseComment).toBe(`dummy-pull-request-close-comment`);
-    });
-
-    it(`should get the pull-request-close-reason input, parse it and set it`, (): void => {
-      expect.assertions(3);
-
-      service.setInputs();
-
-      expect(coreInputsServiceGetEnumInputSpy).toHaveBeenCalledTimes(1);
-      expect(coreInputsServiceGetEnumInputSpy).toHaveBeenNthCalledWith(
-        1,
-        `pull-request-close-reason`,
-        getParsedCloseReason,
-        ECloseReason.NOT_PLANNED,
-        { required: false }
-      );
-      expect(service.inputs$$?.pullRequestCloseReason).toBe(ECloseReason.NOT_PLANNED);
     });
 
     it(`should get the pull-request-days-before-close input, parse it and set it`, (): void => {
@@ -529,7 +506,6 @@ describe(`PullRequestsInputsService`, (): void => {
           `dummy-pull-request-add-labels-after-stale-2`,
         ],
         pullRequestCloseComment: `dummy-pull-request-close-comment`,
-        pullRequestCloseReason: ECloseReason.NOT_PLANNED,
         pullRequestDaysBeforeClose: 666,
         pullRequestDaysBeforeStale: 666,
         pullRequestDeleteBranchAfterClose: false,
@@ -612,7 +588,6 @@ describe(`PullRequestsInputsService`, (): void => {
           pullRequestAddLabelsAfterClose: [`dummy-extra-added-close-label-1`, `dummy-extra-added-close-label-2`],
           pullRequestAddLabelsAfterStale: [`dummy-extra-added-stale-label-1`, `dummy-extra-added-stale-label-2`],
           pullRequestCloseComment: `dummy-pull-request-close-comment`,
-          pullRequestCloseReason: ECloseReason.NOT_PLANNED,
           pullRequestDaysBeforeClose: 666,
           pullRequestDaysBeforeStale: 666,
           pullRequestDeleteBranchAfterClose: false,
@@ -649,14 +624,14 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           1,
           `white-├──`,
           `input-pull-request-add-labels-after-close`,
           `value-dummy-extra-added-close-label-1,dummy-extra-added-close-label-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(1, `pull-request-add-labels-after-close`);
       });
 
@@ -665,14 +640,14 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           2,
           `white-├──`,
           `input-pull-request-add-labels-after-stale`,
           `value-dummy-extra-added-stale-label-1,dummy-extra-added-stale-label-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(2, `pull-request-add-labels-after-stale`);
       });
 
@@ -681,31 +656,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           3,
           `white-├──`,
           `input-pull-request-close-comment`,
           `value-dummy-pull-request-close-comment`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(3, `pull-request-close-comment`);
-      });
-
-      it(`should log the pull request close reason input`, (): void => {
-        expect.assertions(4);
-
-        service.logInputs();
-
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          4,
-          `white-├──`,
-          `input-pull-request-close-reason`,
-          `value-not planned`
-        );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(4, `pull-request-close-reason`);
       });
 
       it(`should log the pull request days before close input`, (): void => {
@@ -713,15 +672,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          5,
+          4,
           `white-├──`,
           `input-pull-request-days-before-close`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(5, `pull-request-days-before-close`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(4, `pull-request-days-before-close`);
       });
 
       it(`should log the pull request days before stale input`, (): void => {
@@ -729,15 +688,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          6,
+          5,
           `white-├──`,
           `input-pull-request-days-before-stale`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(6, `pull-request-days-before-stale`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(5, `pull-request-days-before-stale`);
       });
 
       it(`should log the pull request delete branch after close input`, (): void => {
@@ -745,15 +704,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          7,
+          6,
           `white-├──`,
           `input-pull-request-delete-branch-after-close`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(7, `pull-request-delete-branch-after-close`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(6, `pull-request-delete-branch-after-close`);
       });
 
       it(`should log the pull request ignore all assignees input`, (): void => {
@@ -761,15 +720,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          8,
+          7,
           `white-├──`,
           `input-pull-request-ignore-all-assignees`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `pull-request-ignore-all-assignees`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(7, `pull-request-ignore-all-assignees`);
       });
 
       it(`should log the pull request ignore all labels input`, (): void => {
@@ -777,15 +736,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          9,
+          8,
           `white-├──`,
           `input-pull-request-ignore-all-labels`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `pull-request-ignore-all-labels`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `pull-request-ignore-all-labels`);
       });
 
       it(`should log the pull request ignore all milestones input`, (): void => {
@@ -793,15 +752,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          10,
+          9,
           `white-├──`,
           `input-pull-request-ignore-all-milestones`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `pull-request-ignore-all-milestones`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `pull-request-ignore-all-milestones`);
       });
 
       it(`should log the pull request ignore all project cards input`, (): void => {
@@ -809,15 +768,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          11,
+          10,
           `white-├──`,
           `input-pull-request-ignore-all-project-cards`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(11, `pull-request-ignore-all-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `pull-request-ignore-all-project-cards`);
       });
 
       it(`should log the pull request ignore any assignees input`, (): void => {
@@ -825,15 +784,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          12,
+          11,
           `white-├──`,
           `input-pull-request-ignore-any-assignees`,
           `value-dummy-assignee-1,dummy-assignee-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(12, `pull-request-ignore-any-assignees`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(11, `pull-request-ignore-any-assignees`);
       });
 
       it(`should log the pull request ignore any labels input`, (): void => {
@@ -841,15 +800,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          13,
+          12,
           `white-├──`,
           `input-pull-request-ignore-any-labels`,
           `value-dummy-label-1,dummy-label-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(13, `pull-request-ignore-any-labels`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(12, `pull-request-ignore-any-labels`);
       });
 
       it(`should log the pull request ignore any milestones input`, (): void => {
@@ -857,15 +816,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          14,
+          13,
           `white-├──`,
           `input-pull-request-ignore-any-milestones`,
           `value-dummy-milestone-1,dummy-milestone-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `pull-request-ignore-any-milestones`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(13, `pull-request-ignore-any-milestones`);
       });
 
       it(`should log the pull request ignore any project cards input`, (): void => {
@@ -873,15 +832,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          15,
+          14,
           `white-├──`,
           `input-pull-request-ignore-any-project-cards`,
           `value-dummy-project-card-1,dummy-project-card-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(15, `pull-request-ignore-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `pull-request-ignore-any-project-cards`);
       });
 
       it(`should log the pull request ignore before creation date input`, (): void => {
@@ -889,15 +848,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          16,
+          15,
           `white-├──`,
           `input-pull-request-ignore-before-creation-date`,
           `value-2020-01-01T00:00:00.000`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(16, `pull-request-ignore-before-creation-date`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(15, `pull-request-ignore-before-creation-date`);
       });
 
       it(`should log the pull request ignore draft input`, (): void => {
@@ -905,15 +864,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          17,
+          16,
           `white-├──`,
           `input-pull-request-ignore-draft`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(17, `pull-request-ignore-draft`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(16, `pull-request-ignore-draft`);
       });
 
       it(`should log the pull request limit api mutations count input`, (): void => {
@@ -921,15 +880,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          18,
+          17,
           `white-├──`,
           `input-pull-request-limit-api-mutations-count`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(18, `pull-request-limit-api-mutations-count`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(17, `pull-request-limit-api-mutations-count`);
       });
 
       it(`should log the pull request limit api queries count input`, (): void => {
@@ -937,15 +896,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          19,
+          18,
           `white-├──`,
           `input-pull-request-limit-api-queries-count`,
           `value-666`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(19, `pull-request-limit-api-queries-count`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(18, `pull-request-limit-api-queries-count`);
       });
 
       it(`should log the pull request only any assignees input`, (): void => {
@@ -953,15 +912,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          20,
+          19,
           `white-├──`,
           `input-pull-request-only-any-assignees`,
           `value-assignee-1,assignee-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(20, `pull-request-only-any-assignees`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(19, `pull-request-only-any-assignees`);
       });
 
       it(`should log the pull request only any milestones input`, (): void => {
@@ -969,15 +928,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          21,
+          20,
           `white-├──`,
           `input-pull-request-only-any-milestones`,
           `value-milestone-1,milestone-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(21, `pull-request-only-any-milestones`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(20, `pull-request-only-any-milestones`);
       });
 
       it(`should log the pull request only any project cards input`, (): void => {
@@ -985,15 +944,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          22,
+          21,
           `white-├──`,
           `input-pull-request-only-any-project-cards`,
           `value-project-card-1,project-card-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(22, `pull-request-only-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(21, `pull-request-only-any-project-cards`);
       });
 
       it(`should log the pull request only with assignees input`, (): void => {
@@ -1001,15 +960,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          23,
+          22,
           `white-├──`,
           `input-pull-request-only-with-assignees`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(23, `pull-request-only-with-assignees`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(22, `pull-request-only-with-assignees`);
       });
 
       it(`should log the pull request only with milestones input`, (): void => {
@@ -1017,15 +976,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          24,
+          23,
           `white-├──`,
           `input-pull-request-only-with-milestones`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(24, `pull-request-only-with-milestones`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(23, `pull-request-only-with-milestones`);
       });
 
       it(`should log the pull request only with project cards input`, (): void => {
@@ -1033,15 +992,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          25,
+          24,
           `white-├──`,
           `input-pull-request-only-with-project-cards`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(25, `pull-request-only-with-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(24, `pull-request-only-with-project-cards`);
       });
 
       it(`should log the pull request processing input`, (): void => {
@@ -1049,15 +1008,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          26,
+          25,
           `white-├──`,
           `input-pull-request-processing`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(26, `pull-request-processing`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(25, `pull-request-processing`);
       });
 
       it(`should log the pull request remove labels after stale input`, (): void => {
@@ -1065,15 +1024,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          27,
+          26,
           `white-├──`,
           `input-pull-request-remove-labels-after-stale`,
           `value-dummy-extra-removed-stale-label-1,dummy-extra-removed-stale-label-2`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(27, `pull-request-remove-labels-after-stale`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(26, `pull-request-remove-labels-after-stale`);
       });
 
       it(`should log the pull request stale comment input`, (): void => {
@@ -1081,15 +1040,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          28,
+          27,
           `white-├──`,
           `input-pull-request-stale-comment`,
           `value-dummy-pull-request-stale-comment`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(28, `pull-request-stale-comment`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(27, `pull-request-stale-comment`);
       });
 
       it(`should log the pull request stale label input`, (): void => {
@@ -1097,15 +1056,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          29,
+          28,
           `white-├──`,
           `input-pull-request-stale-label`,
           `value-dummy-pull-request-stale-label`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(29, `pull-request-stale-label`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(28, `pull-request-stale-label`);
       });
 
       it(`should log the pull request to draft instead of stale input`, (): void => {
@@ -1113,15 +1072,15 @@ describe(`PullRequestsInputsService`, (): void => {
 
         service.logInputs();
 
-        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(30);
+        expect(loggerServiceInfoSpy).toHaveBeenCalledTimes(29);
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
-          30,
+          29,
           `white-└──`,
           `input-pull-request-to-draft-instead-of-stale`,
           `value-false`
         );
-        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(30, `pull-request-to-draft-instead-of-stale`);
+        expect(loggerServiceInputSpy).toHaveBeenCalledTimes(29);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(29, `pull-request-to-draft-instead-of-stale`);
       });
     });
 
