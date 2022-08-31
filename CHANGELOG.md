@@ -1,5 +1,12 @@
 # Sonia stale action
 
+## [2.3.1](https://github.com/Sonia-corporation/stale/compare/2.3.0...2.3.1) (2022-08-31)
+
+### :bug: Bug Fixes
+
+- **issues:** fix closing issues bug due to the close reason feature ([98fa64b](https://github.com/Sonia-corporation/stale/commit/98fa64b093dda62527546fab0eb7ab1fd219b684)), closes [#886](https://github.com/Sonia-corporation/stale/issues/886)
+  This issue is present since the version 2.0.0.
+
 # [2.3.0](https://github.com/Sonia-corporation/stale/compare/2.2.0...2.3.0) (2022-08-30)
 
 ### :books: Documentation
