@@ -28,7 +28,7 @@ export abstract class AbstractLogger {
   }
 
   public error(...message: ReadonlyArray<string>): AbstractLogger {
-    LoggerService.error(this.getPrefix$$(), LoggerFormatService.whiteBright(_.join(message, ` `)));
+    LoggerService.error(this.getPrefix$$(), LoggerFormatService.red(_.join(message, ` `)));
 
     return this;
   }

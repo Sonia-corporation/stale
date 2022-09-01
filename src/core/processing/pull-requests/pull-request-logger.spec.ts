@@ -96,7 +96,7 @@ describe(`PullRequestLogger`, (): void => {
         pullRequestLogger.error(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`blue-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`blue-[#8]`, `red-dummy message 1 dummy message 2`);
       });
     });
 
