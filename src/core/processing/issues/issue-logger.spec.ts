@@ -93,7 +93,7 @@ describe(`IssueLogger`, (): void => {
         issueLogger.error(`dummy message 1`, `dummy message 2`);
 
         expect(loggerServiceErrorSpy).toHaveBeenCalledTimes(1);
-        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`red-[#8]`, `whiteBright-dummy message 1 dummy message 2`);
+        expect(loggerServiceErrorSpy).toHaveBeenCalledWith(`red-[#8]`, `red-dummy message 1 dummy message 2`);
       });
     });
 
