@@ -23,6 +23,7 @@ export abstract class AbstractCloseStaleProcessor<
 
     await this._processCloseComment();
     await this.processToAddExtraLabels$$();
+    await this.processToRemoveExtraLabels$$();
 
     this.processor.logger.info(`The ${this.type} is now closed`);
   }

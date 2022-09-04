@@ -41,17 +41,29 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
     return this.githubApiPullRequestLabelsService$$.fetchLabelByName(labelName);
   }
 
-  protected _getExtraLabelsName(): string[] {
+  protected _getExtraLabelsToAddName(): string[] {
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
     return pullRequestsInputs.pullRequestAddLabelsAfterClose;
+  }
+
+  protected _getExtraLabelsToRemoveName(): string[] {
+    return [];
   }
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
     await this.githubApiPullRequestLabelsService$$.addLabels(targetId, labelsId);
   }
 
+  protected async _removeExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {
+    await this.githubApiPullRequestLabelsService$$.removeLabels(targetId, labelsId);
+  }
+
   protected _increaseAddedLabelsCountStatistic(count: Readonly<number>): void {
     PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsLabelsCount(count);
+  }
+
+  protected _increaseRemovedLabelsCountStatistic(count: Readonly<number>): void {
+    PullRequestsStatisticsService.getInstance().increaseRemovedPullRequestsLabelsCount(count);
   }
 }

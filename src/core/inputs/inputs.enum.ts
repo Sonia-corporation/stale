@@ -3,6 +3,7 @@ export enum EInputs {
   DRY_RUN = `dry-run`,
   ISSUE_ADD_LABELS_AFTER_CLOSE = `issue-add-labels-after-close`,
   ISSUE_ADD_LABELS_AFTER_STALE = `issue-add-labels-after-stale`,
+  ISSUE_REMOVE_LABELS_AFTER_CLOSE = `issue-remove-labels-after-close`,
   ISSUE_REMOVE_LABELS_AFTER_STALE = `issue-remove-labels-after-stale`,
   ISSUE_CLOSE_COMMENT = `issue-close-comment`,
   ISSUE_CLOSE_REASON = `issue-close-reason`,

@@ -128,6 +128,10 @@ inputs:
     description: 'A list of labels added when the processing close the issue (multiline).'
     required: false
     default: ''
+  issue-remove-labels-after-close:
+    description: 'A list of labels removed when the processing close the issue (multiline).'
+    required: false
+    default: ''
   # Pull request inputs
   ## Labels
   pull-request-stale-label:

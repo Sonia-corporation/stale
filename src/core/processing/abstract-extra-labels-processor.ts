@@ -21,7 +21,7 @@ export abstract class AbstractExtraLabelsProcessor<
   public async processToAddExtraLabels$$(): Promise<void> {
     this.processor.logger.info(`Checking if more labels should be added...`);
 
-    const labelsToAdd: string[] = this._getExtraLabelsName();
+    const labelsToAdd: string[] = this._getExtraLabelsToAddName();
 
     if (labelsToAdd.length === 0) {
       this.processor.logger.info(`No extra label to add. Continuing...`);
@@ -56,6 +56,46 @@ export abstract class AbstractExtraLabelsProcessor<
     }
 
     this._increaseAddedLabelsCountStatistic(labels.length);
+  }
+
+  public async processToRemoveExtraLabels$$(): Promise<void> {
+    this.processor.logger.info(`Checking if more labels should be removed...`);
+
+    const labelsToRemove: string[] = this._getExtraLabelsToRemoveName();
+
+    if (labelsToRemove.length === 0) {
+      this.processor.logger.info(`No extra label to remove. Continuing...`);
+
+      return;
+    }
+
+    this.processor.logger.info(
+      LoggerService.value(labelsToRemove.length),
+      LoggerFormatService.whiteBright(`label${labelsToRemove.length > 1 ? `s` : ``} should be removed`)
+    );
+    this.processor.logger.info(
+      `Fetching the extra label${labelsToRemove.length > 1 ? `s` : ``}`,
+      LoggerService.value(_.join(labelsToRemove, `, `)),
+      LoggerFormatService.whiteBright(`to remove on this ${this.type}...`)
+    );
+
+    const labels: IGithubApiLabel[] = await this._fetchLabels(labelsToRemove);
+    const commonInputs: ICommonInputs = CommonInputsService.getInstance().getInputs();
+
+    if (!commonInputs.dryRun) {
+      await this._removeExtraLabels(this._getItemId(), this._getLabelsId(labels));
+
+      this.processor.logger.info(
+        LoggerService.value(labelsToRemove.length),
+        LoggerFormatService.whiteBright(`extra label${labelsToRemove.length > 1 ? `s` : ``} removed`)
+      );
+    } else {
+      this.processor.logger.info(
+        `The extra label${labelsToRemove.length > 1 ? `s were` : ` was`} not removed due to the dry-run mode`
+      );
+    }
+
+    this._increaseRemovedLabelsCountStatistic(labels.length);
   }
 
   private _fetchLabels(labelsName: ReadonlyArray<string>): Promise<IGithubApiLabel[]> {
@@ -95,9 +135,15 @@ export abstract class AbstractExtraLabelsProcessor<
 
   protected abstract _fetchLabelByName(labelName: Readonly<string>): Promise<IGithubApiLabel | null>;
 
-  protected abstract _getExtraLabelsName(): string[];
+  protected abstract _getExtraLabelsToAddName(): string[];
+
+  protected abstract _getExtraLabelsToRemoveName(): string[];
 
   protected abstract _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void>;
 
+  protected abstract _removeExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void>;
+
   protected abstract _increaseAddedLabelsCountStatistic(count: Readonly<number>): void;
+
+  protected abstract _increaseRemovedLabelsCountStatistic(count: Readonly<number>): void;
 }

@@ -115,6 +115,7 @@ All the inputs that are used both for issues and pull requests.
 | [issue-add-labels-after-stale](https://sonia-stale-action.vercel.app/docs/issues/inputs/issue-add-labels-after-stale-input)           | A list of labels added when the processing stale the issue (multiline).                                                                         |               |
 | [issue-remove-labels-after-stale](https://sonia-stale-action.vercel.app/docs/issues/inputs/issue-remove-labels-after-stale-input)     | A list of labels removed when the processing stale the issue (multiline).                                                                       |               |
 | [issue-add-labels-after-close](https://sonia-stale-action.vercel.app/docs/issues/inputs/issue-add-labels-after-close-input)           | A list of labels added when the processing close the issue (multiline).                                                                         |               |
+| [issue-remove-labels-after-close](https://sonia-stale-action.vercel.app/docs/issues/inputs/issue-remove-labels-after-close-input)     | A list of labels removed when the processing close the issue (multiline).                                                                       |               |
 
 ## All the issues outputs
 

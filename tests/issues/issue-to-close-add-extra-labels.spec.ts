@@ -251,7 +251,7 @@ describe(`Issue to close add extra labels`, (): void => {
 
     describe(`when the issue should add three more labels when closes`, (): void => {
       beforeEach((): void => {
-        issueSut.setExtraCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
+        issueSut.setExtraAddedCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
       });
 
       it(`should close the issue and not add some extra labels`, async (): Promise<void> => {

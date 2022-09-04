@@ -113,5 +113,5 @@ export abstract class AbstractFakeProcessor {
 
   public abstract disableProcessing(): AbstractFakeProcessor;
 
-  public abstract setExtraCloseLabels(labels: ReadonlyArray<string>): AbstractFakeProcessor;
+  public abstract setExtraAddedCloseLabels(labels: ReadonlyArray<string>): AbstractFakeProcessor;
 }

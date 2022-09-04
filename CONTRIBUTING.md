@@ -168,6 +168,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
         - When the input value is not empty, add a comment
       - Check if the action should also add extra labels (coming from the `issue-add-labels-after-close` input)
         - When the input value is filled list, add the listed labels
+      - Check if the action should also remove extra labels (coming from the `issue-remove-labels-after-close` input)
+        - When the input value is filled list, remove the listed labels
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Check if the action should also add a comment (coming from the `issue-stale-comment` input)

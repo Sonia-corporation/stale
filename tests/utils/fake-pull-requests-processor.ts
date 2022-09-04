@@ -362,7 +362,7 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakePullRequestsProcessor} The class
    */
-  public setExtraCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+  public setExtraAddedCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       pullRequestAddLabelsAfterClose: labels,
