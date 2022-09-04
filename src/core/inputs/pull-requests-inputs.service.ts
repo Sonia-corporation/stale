@@ -97,6 +97,9 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
         required: false,
       }),
       pullRequestProcessing: core.getBooleanInput(EInputs.PULL_REQUEST_PROCESSING, { required: false }),
+      pullRequestRemoveLabelsAfterClose: core.getMultilineInput(EInputs.PULL_REQUEST_REMOVE_LABELS_AFTER_CLOSE, {
+        required: false,
+      }),
       pullRequestRemoveLabelsAfterStale: core.getMultilineInput(EInputs.PULL_REQUEST_REMOVE_LABELS_AFTER_STALE, {
         required: false,
       }),

@@ -28,6 +28,7 @@ export interface IPullRequestsInputs extends IInputs {
   readonly pullRequestOnlyWithMilestones: boolean;
   readonly pullRequestOnlyWithProjectCards: boolean;
   readonly pullRequestProcessing: boolean;
+  readonly pullRequestRemoveLabelsAfterClose: string[];
   readonly pullRequestRemoveLabelsAfterStale: string[];
   readonly pullRequestStaleComment: IComment | '';
   readonly pullRequestStaleLabel: string;

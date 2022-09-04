@@ -20,10 +20,6 @@
 
 - **statistics:** fix a typo in wording in the statistics website page ([dfb9e38](https://github.com/Sonia-corporation/stale/commit/dfb9e38cd98f4c5caf8067be6140ea090c20375b))
 
-### :bug: Bug Fixes
-
-- **deps:** update dependency luxon to v3.0.2 ([820407e](https://github.com/Sonia-corporation/stale/commit/820407e3e61038a97cf71a4f0bfe13ea1a53c53d))
-
 ### :rocket: Features
 
 - **issues:** add new input `issue-remove-labels-after-stale` ([65979f7](https://github.com/Sonia-corporation/stale/commit/65979f7bf5a503002d1245b03aad5dc492494a9f)), closes [#858](https://github.com/Sonia-corporation/stale/issues/858)

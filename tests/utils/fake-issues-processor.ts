@@ -287,7 +287,7 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to remove
    * @returns {FakeIssuesProcessor} The class
    */
-  public setExtraRemoveStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+  public setExtraRemovedStaleLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       issueRemoveLabelsAfterStale: labels,
@@ -330,10 +330,25 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakeIssuesProcessor} The class
    */
-  public setExtraCloseLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+  public setExtraAddedCloseLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       issueAddLabelsAfterClose: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to remove on the issue when it is closed
+   * @param {ReadonlyArray<string>} labels The labels to remove
+   * @returns {FakeIssuesProcessor} The class
+   */
+  public setExtraRemovedCloseLabels(labels: ReadonlyArray<string>): FakeIssuesProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      issueRemoveLabelsAfterClose: labels,
     });
 
     return this;

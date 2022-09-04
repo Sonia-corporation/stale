@@ -53,6 +53,12 @@ const config = {
         contextualSearch: true,
         indexName: `github-stale-action`,
       },
+      docs: {
+        sidebar: {
+          autoCollapseCategories: true,
+          hideable: true,
+        },
+      },
       footer: {
         copyright: `Copyright © ${new Date().getFullYear()} Stale, Sonia Corporation. Built with Docusaurus.`,
         links: [
