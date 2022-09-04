@@ -124,7 +124,7 @@ describe(`Issue to stale remove extra labels`, (): void => {
 
     describe(`when the issue should remove three more labels when stale`, (): void => {
       beforeEach((): void => {
-        issueSut.setExtraRemoveStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
+        issueSut.setExtraRemovedStaleLabels([`extra-stale-label-1`, `extra-stale-label-2`, `extra-stale-label-3`]);
       });
 
       it(`should stale the issue and not remove the extra labels`, async (): Promise<void> => {

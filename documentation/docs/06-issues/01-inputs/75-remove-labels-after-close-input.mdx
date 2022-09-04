@@ -1,8 +1,8 @@
 ---
-id: issue-add-labels-after-close-input
-title: Add issue labels after close input
+id: issue-remove-labels-after-close-input
+title: Remove issue labels after close input
 description: |
-  All the information you need to know about the add issue labels after close input.
+  All the information you need to know about the remove issue labels after close input.
   Including a detailed description and an example.
 tags:
   - Issues
@@ -13,14 +13,14 @@ tags:
 
 ### Input {#input}
 
-Name: `issue-add-labels-after-close`  
+Name: `issue-remove-labels-after-close`  
 Type: `string[]`  
 Default value: `[]`
 
 ### Description {#description}
 
-This input will let you add extra labels when the processing close the issues.  
-This can be useful if you wish to easily add extra labels to improve your triage post-closing.
+This input will let you remove extra labels when the processing close the issues.  
+This can be useful if you wish to easily remove extra labels to improve your triage post-closing.
 
 :::caution
 
@@ -33,7 +33,7 @@ If not, the GitHub API will throw an error.
 
 You can also specify the reason for closing this issue by using the [close reason input](issue-close-reason-input),
 add a comment to explain why it was closed by using the [close comment input](issue-close-comment-input),
-remove labels onto it by using the [remove labels after close input](issue-remove-labels-after-close-input)
+add labels onto it by using the [add labels after close input](issue-add-labels-after-close-input)
 and define the number of days before closing it by using the [days before close input](issue-days-before-close-input).
 
 :::
@@ -46,7 +46,7 @@ name: Stale
 id: stale
 uses: sonia-corporation/stale@latest
 with:
-  issue-add-labels-after-close: |
-    do not reopen
-    please-create if needed
+  issue-remove-labels-after-close: |
+    new author feedback
+    closing soon!
 ```

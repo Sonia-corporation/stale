@@ -362,10 +362,25 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
    * @param {ReadonlyArray<string>} labels The labels to add
    * @returns {FakePullRequestsProcessor} The class
    */
-  public setExtraCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+  public setExtraAddedCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
     this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
       ...this._inputs,
       pullRequestAddLabelsAfterClose: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
+   * Define the labels to remove on the pull request when it is closed
+   * @param {ReadonlyArray<string>} labels The labels to remove
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public setExtraRemovedCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestRemoveLabelsAfterClose: labels,
     });
 
     return this;

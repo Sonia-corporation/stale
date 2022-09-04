@@ -4,15 +4,15 @@ import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Issue to close add extra labels`, (): void => {
+describe(`Issue to close remove extra labels`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  describe(`when the issue should not have extra labels added when closed`, (): void => {
+  describe(`when the issue should not have extra labels removed when closed`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueAddLabelsAfterClose: [],
         issueDaysBeforeClose: 10,
         issueDaysBeforeStale: 30,
+        issueRemoveLabelsAfterClose: [],
       })
         .addIssue({
           labels: {
@@ -55,7 +55,7 @@ describe(`Issue to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
+    it(`should close the issue and not remove some extra labels`, async (): Promise<void> => {
       expect.assertions(12);
 
       await issueSut.process();
@@ -71,12 +71,12 @@ describe(`Issue to close add extra labels`, (): void => {
     });
   });
 
-  describe(`when the issue should add one more label when closed`, (): void => {
+  describe(`when the issue should remove one more label when closed`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueAddLabelsAfterClose: [`extra-close-label`],
         issueDaysBeforeClose: 10,
         issueDaysBeforeStale: 30,
+        issueRemoveLabelsAfterClose: [`extra-close-label`],
       })
         .addIssue({
           labels: {
@@ -119,29 +119,29 @@ describe(`Issue to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the issue and add the extra labels`, async (): Promise<void> => {
+    it(`should close the issue and remove the extra labels`, async (): Promise<void> => {
       expect.assertions(12);
 
       await issueSut.process();
 
       issueSut.expect({
         addedIssuesCommentsCount: 1,
-        addedIssuesLabelsCount: 1,
         alreadyStaleIssuesCount: 1,
         calledApiIssuesMutationsCount: 3,
         calledApiIssuesQueriesCount: 3,
         closedIssuesCount: 1,
         processedIssuesCount: 1,
+        removedIssuesLabelsCount: 1,
       });
     });
   });
 
-  describe(`when the issue should add three more labels when closed`, (): void => {
+  describe(`when the issue should remove three more labels when closed`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueAddLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
         issueDaysBeforeClose: 10,
         issueDaysBeforeStale: 30,
+        issueRemoveLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
       })
         .addIssue({
           labels: {
@@ -184,19 +184,19 @@ describe(`Issue to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the issue and add the extra labels`, async (): Promise<void> => {
+    it(`should close the issue and remove the extra labels`, async (): Promise<void> => {
       expect.assertions(12);
 
       await issueSut.process();
 
       issueSut.expect({
         addedIssuesCommentsCount: 1,
-        addedIssuesLabelsCount: 3,
         alreadyStaleIssuesCount: 1,
         calledApiIssuesMutationsCount: 3,
         calledApiIssuesQueriesCount: 5,
         closedIssuesCount: 1,
         processedIssuesCount: 1,
+        removedIssuesLabelsCount: 3,
       });
     });
   });
@@ -249,23 +249,23 @@ describe(`Issue to close add extra labels`, (): void => {
         );
     });
 
-    describe(`when the issue should add three more labels when closes`, (): void => {
+    describe(`when the issue should remove three more labels when closes`, (): void => {
       beforeEach((): void => {
-        issueSut.setExtraAddedCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
+        issueSut.setExtraRemovedCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
       });
 
-      it(`should close the issue and not add some extra labels`, async (): Promise<void> => {
+      it(`should close the issue and not remove some extra labels`, async (): Promise<void> => {
         expect.assertions(12);
 
         await issueSut.process();
 
         issueSut.expect({
           addedIssuesCommentsCount: 1,
-          addedIssuesLabelsCount: 3,
           alreadyStaleIssuesCount: 1,
           calledApiIssuesQueriesCount: 2,
           closedIssuesCount: 1,
           processedIssuesCount: 1,
+          removedIssuesLabelsCount: 3,
         });
       });
     });

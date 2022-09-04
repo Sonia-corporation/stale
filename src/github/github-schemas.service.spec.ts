@@ -48,7 +48,7 @@ describe(`GithubSchemasService`, (): void => {
         1,
         `Processing`,
         `value-15`,
-        `whiteBright-GitHub schemas...`
+        `whiteBright-GitHub schemas to find potential errors...`
       );
     });
 
@@ -89,7 +89,7 @@ describe(`GithubSchemasService`, (): void => {
         GithubSchemasService.initialize();
 
         expect(loggerServiceDebugSpy).toHaveBeenCalledTimes(2);
-        expect(loggerServiceDebugSpy).toHaveBeenNthCalledWith(2, `All GitHub schemas processed`);
+        expect(loggerServiceDebugSpy).toHaveBeenNthCalledWith(2, `All GitHub schemas processed without finding error`);
       });
 
       it(`should not exit the action`, (): void => {

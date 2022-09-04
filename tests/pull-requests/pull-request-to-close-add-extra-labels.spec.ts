@@ -7,7 +7,7 @@ import { createHydratedMock } from 'ts-auto-mock';
 describe(`Pull request to close add extra labels`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when the pull request should not have extra labels when closed`, (): void => {
+  describe(`when the pull request should not have extra labels added when closed`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
         pullRequestAddLabelsAfterClose: [],
@@ -251,7 +251,7 @@ describe(`Pull request to close add extra labels`, (): void => {
 
     describe(`when the pull request should add three more labels when closed`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.setExtraCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
+        pullRequestSut.setExtraAddedCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
       });
 
       it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
