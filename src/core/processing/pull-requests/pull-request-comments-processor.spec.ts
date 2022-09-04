@@ -6,6 +6,8 @@ import { PullRequestCommentsProcessor } from '@core/processing/pull-requests/pul
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestCommentsService } from '@github/api/comments/github-api-pull-request-comments.service';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -187,7 +189,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           });
 
           it(`should add the stale comment on the pull request`, async (): Promise<void> => {
-            expect.assertions(4);
+            expect.assertions(6);
 
             await pullRequestCommentsProcessor.processStaleComment();
 
@@ -199,6 +201,14 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             );
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the stale comment...`);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Stale comment added`);
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).toHaveBeenCalledWith(
+              pullRequestId,
+              `dummy-comment`,
+              {
+                commentType: ECommentType.STALE,
+              } as ICommentHeaderOptions
+            );
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {
@@ -364,7 +374,7 @@ describe(`PullRequestCommentsProcessor`, (): void => {
           });
 
           it(`should add the close comment on the pull request`, async (): Promise<void> => {
-            expect.assertions(4);
+            expect.assertions(6);
 
             await pullRequestCommentsProcessor.processCloseComment();
 
@@ -376,6 +386,14 @@ describe(`PullRequestCommentsProcessor`, (): void => {
             );
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the close comment...`);
             expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Close comment added`);
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiPullRequestCommentsServiceAddCommentSpy).toHaveBeenCalledWith(
+              pullRequestId,
+              `dummy-comment`,
+              {
+                commentType: ECommentType.CLOSE,
+              } as ICommentHeaderOptions
+            );
           });
 
           it(`should increase the added pull requests comments count by 1`, async (): Promise<void> => {

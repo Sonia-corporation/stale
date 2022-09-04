@@ -166,7 +166,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
     - Else, check if issue last update is older than X days (coming from `issue-days-before-close`)
       - If it is old, close the issue (using the close reason coming from `issue-close-reason`)
       - Check if the action should also add a comment (coming from the `issue-close-comment` input)
-        - When the input value is not empty, add a comment
+        - When the input value is not empty, add a comment (with a special header)
       - Check if the action should also add extra labels (coming from the `issue-add-labels-after-close` input)
         - When the input value is filled list, add the listed labels
       - Check if the action should also remove extra labels (coming from the `issue-remove-labels-after-close` input)
@@ -174,7 +174,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue last update is older than X days (coming from the `issue-days-before-stale`)
 - If the issue last update is older than X days (coming from the `issue-days-before-stale`)
   - Check if the action should also add a comment (coming from the `issue-stale-comment` input)
-    - When the input value is not empty, add a comment
+    - When the input value is not empty, add a comment (with a special header)
   - Check if the action should also add extra labels (coming from the `issue-add-labels-after-stale` input)
     - When the input value is filled list, add the listed labels
   - Check if the action should also remove extra labels (coming from the `issue-remove-labels-after-stale` input)
@@ -212,7 +212,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
     - Else, check if pull request last update is older than X days (coming from `pull-request-days-before-close`)
       - If it is old, close the pull request
       - Check if the action should also add a comment (coming from the `pull-request-close-comment` input)
-        - When the input value is not empty, add a comment
+        - When the input value is not empty, add a comment (with a special header)
       - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-close` input)
         - When the input value is filled list, add the listed labels
       - Check if the action should also remove extra labels (coming from the `pull-request-remove-labels-after-close` input)
@@ -226,7 +226,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
       - Convert to draft and stop the processing
     - If the draft mode is disabled
       - Check if the action should also add a comment (coming from the `pull-request-stale-comment` input)
-        - When the input value is not empty, add a comment
+        - When the input value is not empty, add a comment (with a special header)
       - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-stale` input)
         - When the input value is filled list, add the listed labels
       - Check if the action should also remove extra labels (coming from the `pull-request-remove-labels-after-stale` input)

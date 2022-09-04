@@ -5,10 +5,20 @@ import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { LoggerFormatService } from '@utils/loggers/logger-format.service';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
+
+const COMMENT_EOL = `\r\n`;
+const COMMENT_HEADER_START = `<!-- SONIA-STALE-COMMENT-HEADER:START -->${COMMENT_EOL}`;
+const COMMENT_HEADER_END = `<!-- SONIA-STALE-COMMENT-HEADER:END -->${COMMENT_EOL}${COMMENT_EOL}`;
+const COMMENT_TYPE_MAP: Record<ECommentType, IComment> = {
+  [ECommentType.CLOSE]: `<!-- Close comment -->${COMMENT_EOL}`,
+  [ECommentType.STALE]: `<!-- Stale comment -->${COMMENT_EOL}`,
+};
 
 export abstract class AbstractGithubApiCommentsService<
   TProcessor extends IssueProcessor | PullRequestProcessor
@@ -17,7 +27,11 @@ export abstract class AbstractGithubApiCommentsService<
     super(processor);
   }
 
-  public addComment(targetId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void> | never {
+  public addComment(
+    targetId: Readonly<IUuid>,
+    comment: Readonly<IComment>,
+    commentHeaderOptions: Readonly<ICommentHeaderOptions>
+  ): Promise<void> | never {
     this.processor.logger.info(
       `Adding the comment`,
       LoggerService.value(comment),
@@ -27,7 +41,7 @@ export abstract class AbstractGithubApiCommentsService<
 
     return OctokitService.getOctokit()
       .graphql<unknown>(GITHUB_API_ADD_COMMENT_MUTATION, {
-        comment,
+        comment: this._addCommentHeader(comment, commentHeaderOptions),
         id: targetId,
       })
       .then((): void => {
@@ -54,6 +68,22 @@ export abstract class AbstractGithubApiCommentsService<
 
         throw error;
       });
+  }
+
+  private _addCommentHeader(comment: Readonly<IComment>, options: Readonly<ICommentHeaderOptions>): IComment {
+    return `${this._createCommentHeader(options)}${comment}`;
+  }
+
+  private _createCommentHeader(options: Readonly<ICommentHeaderOptions>): IComment {
+    return `${COMMENT_HEADER_START}${this._getHeaderOptions(options)}${COMMENT_HEADER_END}`;
+  }
+
+  private _getHeaderOptions(options: Readonly<ICommentHeaderOptions>): IComment {
+    let headerOptions: IComment = ``;
+
+    headerOptions += COMMENT_TYPE_MAP[options.commentType];
+
+    return headerOptions;
   }
 
   protected abstract _increaseCalledApiMutationsCount(): void;

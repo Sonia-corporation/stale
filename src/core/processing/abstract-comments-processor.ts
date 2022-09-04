@@ -2,6 +2,8 @@ import { CommonInputsService } from '@core/inputs/common-inputs.service';
 import { ICommonInputs } from '@core/inputs/interfaces/common-inputs.interface';
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { LoggerService } from '@utils/loggers/logger.service';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import { IComment } from '@utils/types/comment';
@@ -31,7 +33,9 @@ export abstract class AbstractCommentsProcessor<
     if (!commonInputs.dryRun) {
       this.processor.logger.info(`Adding the stale comment...`);
 
-      await this._addComment(this._getItemId(), staleComment);
+      await this._addComment(this._getItemId(), staleComment, {
+        commentType: ECommentType.STALE,
+      });
     }
 
     this._increaseAddedCommentsCountStatistic();
@@ -55,7 +59,9 @@ export abstract class AbstractCommentsProcessor<
     if (!commonInputs.dryRun) {
       this.processor.logger.info(`Adding the close comment...`);
 
-      await this._addComment(this._getItemId(), closeComment);
+      await this._addComment(this._getItemId(), closeComment, {
+        commentType: ECommentType.CLOSE,
+      });
     }
 
     this._increaseAddedCommentsCountStatistic();
@@ -64,7 +70,11 @@ export abstract class AbstractCommentsProcessor<
 
   protected abstract _getItemId(): IUuid;
 
-  protected abstract _addComment(itemId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void>;
+  protected abstract _addComment(
+    itemId: Readonly<IUuid>,
+    comment: Readonly<IComment>,
+    commentHeaderOptions: Readonly<ICommentHeaderOptions>
+  ): Promise<void>;
 
   protected abstract _getCloseComment(): IComment | '';
 

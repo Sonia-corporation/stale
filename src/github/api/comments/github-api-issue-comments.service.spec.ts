@@ -5,6 +5,8 @@ import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-i
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -40,6 +42,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
     describe(`addComment()`, (): void => {
       let issueId: IUuid;
       let comment: IComment;
+      let commentHeaderOptions: ICommentHeaderOptions;
       let graphqlMock: jest.Mock;
 
       let issueProcessorLoggerInfoSpy: jest.SpyInstance;
@@ -51,6 +54,9 @@ describe(`GithubApiIssueCommentsService`, (): void => {
       beforeEach((): void => {
         issueId = faker.datatype.uuid();
         comment = faker.random.words();
+        commentHeaderOptions = {
+          commentType: ECommentType.STALE,
+        };
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
         githubApiIssueCommentsService = new GithubApiIssueCommentsService(issueProcessor);
 
@@ -66,10 +72,10 @@ describe(`GithubApiIssueCommentsService`, (): void => {
           .mockImplementation();
       });
 
-      it(`should add the comment on the issue`, async (): Promise<void> => {
+      it(`should add the comment on the issue with a special header`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
+        await expect(githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)).rejects.toThrow(
           new Error(`graphql error`)
         );
 
@@ -84,8 +90,70 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
-          comment,
+          comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Stale comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
           id: issueId,
+        });
+      });
+
+      describe(`when the comment header option "commentType" is set to "close"`, (): void => {
+        beforeEach((): void => {
+          commentHeaderOptions = {
+            commentType: ECommentType.CLOSE,
+          };
+        });
+
+        it(`should add the comment on the issue with a special header flagged as a close comment`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Adding the comment`,
+            `value-${comment}`,
+            `whiteBright-on the issue`,
+            `value-${issueId}whiteBright-...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
+            comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Close comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
+            id: issueId,
+          });
+        });
+      });
+
+      describe(`when the comment header option "commentType" is set to "stale"`, (): void => {
+        beforeEach((): void => {
+          commentHeaderOptions = {
+            commentType: ECommentType.STALE,
+          };
+        });
+
+        it(`should add the comment on the issue with a special header flagged as a stale comment`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Adding the comment`,
+            `value-${comment}`,
+            `whiteBright-on the issue`,
+            `value-${issueId}whiteBright-...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
+            comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Stale comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
+            id: issueId,
+          });
         });
       });
 
@@ -97,9 +165,9 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(issueProcessorLoggerErrorSpy).toHaveBeenCalledWith(
@@ -113,9 +181,9 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should annotate about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_COMMENT, {
@@ -128,17 +196,17 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should rethrow`, async (): Promise<void> => {
           expect.assertions(1);
 
-          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
         });
 
         it(`should not increase the statistic regarding the API issues mutations`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await expect(githubApiIssueCommentsService.addComment(issueId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).not.toHaveBeenCalled();
         });
@@ -152,7 +220,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssueCommentsService.addComment(issueId, comment);
+          await githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions);
 
           expect(issueProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -167,7 +235,7 @@ describe(`GithubApiIssueCommentsService`, (): void => {
         it(`should increase the statistic regarding the API issues mutations calls by 1`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiIssueCommentsService.addComment(issueId, comment);
+          await githubApiIssueCommentsService.addComment(issueId, comment, commentHeaderOptions);
 
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(issuesStatisticsServiceIncreaseCalledApiIssuesMutationsCountSpy).toHaveBeenCalledWith();

@@ -5,6 +5,8 @@ import { GithubApiPullRequestCommentsService } from '@github/api/comments/github
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
@@ -40,6 +42,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
     describe(`addComment()`, (): void => {
       let pullRequestId: IUuid;
       let comment: IComment;
+      let commentHeaderOptions: ICommentHeaderOptions;
       let graphqlMock: jest.Mock;
 
       let pullRequestProcessorLoggerInfoSpy: jest.SpyInstance;
@@ -51,6 +54,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
       beforeEach((): void => {
         pullRequestId = faker.datatype.uuid();
         comment = faker.random.words();
+        commentHeaderOptions = {
+          commentType: ECommentType.STALE,
+        };
         graphqlMock = jest.fn().mockRejectedValue(new Error(`graphql error`));
         githubApiPullRequestCommentsService = new GithubApiPullRequestCommentsService(pullRequestProcessor);
 
@@ -66,12 +72,12 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
           .mockImplementation();
       });
 
-      it(`should add the comment on the pull request`, async (): Promise<void> => {
+      it(`should add the comment on the pull request with a special header`, async (): Promise<void> => {
         expect.assertions(7);
 
-        await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
-          new Error(`graphql error`)
-        );
+        await expect(
+          githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+        ).rejects.toThrow(new Error(`graphql error`));
 
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
         expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
@@ -84,8 +90,70 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
         expect(graphqlMock).toHaveBeenCalledTimes(1);
         expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
-          comment,
+          comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Stale comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
           id: pullRequestId,
+        });
+      });
+
+      describe(`when the comment header option "commentType" is set to "close"`, (): void => {
+        beforeEach((): void => {
+          commentHeaderOptions = {
+            commentType: ECommentType.CLOSE,
+          };
+        });
+
+        it(`should add the comment on the pull request with a special header flagged as a close comment`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Adding the comment`,
+            `value-${comment}`,
+            `whiteBright-on the pull request`,
+            `value-${pullRequestId}whiteBright-...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
+            comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Close comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
+            id: pullRequestId,
+          });
+        });
+      });
+
+      describe(`when the comment header option "commentType" is set to "stale"`, (): void => {
+        beforeEach((): void => {
+          commentHeaderOptions = {
+            commentType: ECommentType.STALE,
+          };
+        });
+
+        it(`should add the comment on the pull request with a special header flagged as a stale comment`, async (): Promise<void> => {
+          expect.assertions(7);
+
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
+
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(1);
+          expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledWith(
+            `Adding the comment`,
+            `value-${comment}`,
+            `whiteBright-on the pull request`,
+            `value-${pullRequestId}whiteBright-...`
+          );
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledTimes(1);
+          expect(octokitServiceGetOctokitSpy).toHaveBeenCalledWith();
+          expect(graphqlMock).toHaveBeenCalledTimes(1);
+          expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ADD_COMMENT_MUTATION, {
+            comment: `<!-- SONIA-STALE-COMMENT-HEADER:START -->\r\n<!-- Stale comment -->\r\n<!-- SONIA-STALE-COMMENT-HEADER:END -->\r\n\r\n${comment}`,
+            id: pullRequestId,
+          });
         });
       });
 
@@ -97,9 +165,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should log about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestProcessorLoggerErrorSpy).toHaveBeenCalledWith(
@@ -113,9 +181,9 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should annotate about the error`, async (): Promise<void> => {
           expect.assertions(3);
 
-          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(annotationsServiceErrorSpy).toHaveBeenCalledTimes(1);
           expect(annotationsServiceErrorSpy).toHaveBeenCalledWith(EAnnotationError.FAILED_ADDING_COMMENT, {
@@ -128,17 +196,17 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should rethrow`, async (): Promise<void> => {
           expect.assertions(1);
 
-          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
         });
 
         it(`should not increase the statistic regarding the API pull requests mutations calls`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await expect(githubApiPullRequestCommentsService.addComment(pullRequestId, comment)).rejects.toThrow(
-            new Error(`graphql error`)
-          );
+          await expect(
+            githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions)
+          ).rejects.toThrow(new Error(`graphql error`));
 
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).not.toHaveBeenCalled();
         });
@@ -152,7 +220,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should log about the success of the addition`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment);
+          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions);
 
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenCalledTimes(2);
           expect(pullRequestProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(
@@ -167,7 +235,7 @@ describe(`GithubApiPullRequestCommentsService`, (): void => {
         it(`should increase the statistic regarding the API pull requests mutations calls by 1`, async (): Promise<void> => {
           expect.assertions(2);
 
-          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment);
+          await githubApiPullRequestCommentsService.addComment(pullRequestId, comment, commentHeaderOptions);
 
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledTimes(1);
           expect(pullRequestsStatisticsServiceIncreaseCalledApiPullRequestsMutationsCountSpy).toHaveBeenCalledWith();

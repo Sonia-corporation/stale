@@ -6,6 +6,8 @@ import { IssueCommentsProcessor } from '@core/processing/issues/issue-comments-p
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
+import { ECommentType } from '@utils/enums/comment-type.enum';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IUuid } from '@utils/types/uuid';
 import faker from 'faker';
 import { createHydratedMock } from 'ts-auto-mock';
@@ -180,7 +182,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           });
 
           it(`should add the stale comment on the issue`, async (): Promise<void> => {
-            expect.assertions(4);
+            expect.assertions(6);
 
             await issueCommentsProcessor.processStaleComment();
 
@@ -192,6 +194,10 @@ describe(`IssueCommentsProcessor`, (): void => {
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the stale comment...`);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Stale comment added`);
+            expect(githubApiIssueCommentsServiceAddCommentSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssueCommentsServiceAddCommentSpy).toHaveBeenCalledWith(issueId, `dummy-comment`, {
+              commentType: ECommentType.STALE,
+            } as ICommentHeaderOptions);
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
@@ -350,7 +356,7 @@ describe(`IssueCommentsProcessor`, (): void => {
           });
 
           it(`should add the close comment on the issue`, async (): Promise<void> => {
-            expect.assertions(4);
+            expect.assertions(6);
 
             await issueCommentsProcessor.processCloseComment();
 
@@ -362,6 +368,10 @@ describe(`IssueCommentsProcessor`, (): void => {
             );
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(3, `Adding the close comment...`);
             expect(issueProcessorLoggerInfoSpy).toHaveBeenNthCalledWith(4, `Close comment added`);
+            expect(githubApiIssueCommentsServiceAddCommentSpy).toHaveBeenCalledTimes(1);
+            expect(githubApiIssueCommentsServiceAddCommentSpy).toHaveBeenCalledWith(issueId, `dummy-comment`, {
+              commentType: ECommentType.CLOSE,
+            } as ICommentHeaderOptions);
           });
 
           it(`should increase the added issues comments count by 1`, async (): Promise<void> => {
