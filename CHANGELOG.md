@@ -4,22 +4,16 @@
 
 ### :books: Documentation
 
-- **sidebar:** auto-collapse the categories and allow to hide it ([5b58019](https://github.com/Sonia-corporation/stale/commit/5b5801933f8935923230328d67221adb4269f797))
-
-### :bug: Bug Fixes
-
-- **deps:** update dependency @octokit/graphql-schema to v12.1.0 ([1a095cd](https://github.com/Sonia-corporation/stale/commit/1a095cd3f0f31bf192252226447c0a4edfdb45b9))
-- **deps:** update dependency luxon to v3.0.3 ([aff2930](https://github.com/Sonia-corporation/stale/commit/aff293060a8e9a6a784fc54d35714bee345f952f))
-- **deps:** update docusaurus monorepo to v2.1.0 ([19e0fcd](https://github.com/Sonia-corporation/stale/commit/19e0fcdc8d42203935b3578c2f1ab563a50defe0))
+- **docs:** auto-collapse the categories in the sidebar and add a button to allow to hide it ([5b58019](https://github.com/Sonia-corporation/stale/commit/5b5801933f8935923230328d67221adb4269f797))
 
 ### :rocket: Features
 
 - **issues:** add new input `issue-remove-labels-after-close` ([7d8e170](https://github.com/Sonia-corporation/stale/commit/7d8e17009fae0c4cf76b6a1adf0ef6a2b81b8f29)), closes [#859](https://github.com/Sonia-corporation/stale/issues/859)
   When closing an issue, you can now remove some extra labels.
-  This might specifically handy if you want to remove the stale label to "clean" the closed issue.
+  This might be specifically handy if you want to remove the stale label to "clean" the closed issue.
 - **prs:** add new input `pull-request-remove-labels-after-close` ([87e990b](https://github.com/Sonia-corporation/stale/commit/87e990bb92297e43aefb7695c8082e07be86fa20)), closes [#859](https://github.com/Sonia-corporation/stale/issues/859)
   When closing a pull request, you can now remove some extra labels.
-  This might specifically handy if you want to remove the stale label to "clean" the closed pull request.
+  This might be specifically handy if you want to remove the stale label to "clean" the closed pull request.
 - **logs:** improve the logger messages for the schemas checks ([70f504d](https://github.com/Sonia-corporation/stale/commit/70f504d2ffe15d8a2e5f8b2b720c10c254038a52))
 - **github:** perform a GraphQL schematics validation before processing ([f7b6df6](https://github.com/Sonia-corporation/stale/commit/f7b6df62cd297a8ec56a2271d775ba98efd3bc92)), closes [#855](https://github.com/Sonia-corporation/stale/issues/855)
   This run will check every existing schema to ensure that queries and mutations are valid.
