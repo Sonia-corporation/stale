@@ -48,7 +48,7 @@ export class GithubSchemasService {
     LoggerService.debug(
       `Processing`,
       LoggerService.value(_.size(SCHEMAS)),
-      LoggerFormatService.whiteBright(`GitHub schemas...`)
+      LoggerFormatService.whiteBright(`GitHub schemas to find potential errors...`)
     );
 
     const errors: IErrors = GithubSchemasService._validateAllSchemas();
@@ -76,7 +76,7 @@ export class GithubSchemasService {
       throw new Error(error);
     }
 
-    LoggerService.debug(`All GitHub schemas processed`);
+    LoggerService.debug(`All GitHub schemas processed without finding error`);
   }
 
   private static _validateAllSchemas(): IErrors {
