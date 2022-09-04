@@ -249,6 +249,10 @@ inputs:
     description: 'A list of labels added when the processing close the pull request (multiline).'
     required: false
     default: ''
+  pull-request-remove-labels-after-close:
+    description: 'A list of labels removed when the processing close the pull request (multiline).'
+    required: false
+    default: ''
   pull-request-to-draft-instead-of-stale:
     description: 'Convert the pull request to a draft pull request instead of handling it as a stale candidate.'
     required: false

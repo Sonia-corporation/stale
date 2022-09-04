@@ -48,7 +48,9 @@ export class PullRequestCloseStaleProcessor extends AbstractCloseStaleProcessor<
   }
 
   protected _getExtraLabelsToRemoveName(): string[] {
-    return [];
+    const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
+
+    return pullRequestsInputs.pullRequestRemoveLabelsAfterClose;
   }
 
   protected async _addExtraLabels(targetId: Readonly<IUuid>, labelsId: ReadonlyArray<IUuid>): Promise<void> {

@@ -214,6 +214,8 @@ To help us have a clear vision over the workflow and also for you if you are jus
         - When the input value is not empty, add a comment
       - Check if the action should also add extra labels (coming from the `pull-request-add-labels-after-close` input)
         - When the input value is filled list, add the listed labels
+      - Check if the action should also remove extra labels (coming from the `pull-request-remove-labels-after-close` input)
+        - When the input value is filled list, remove the listed labels
       - Check if the action should also delete the branch (coming from the `pull-request-delete-branch-after-close` input)
         - When the input value is true, delete the branch
 - Check if the pull request last update is older than X days (coming from the `pull-request-days-before-stale`)

@@ -373,6 +373,21 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
 
   /**
    * @description
+   * Define the labels to remove on the pull request when it is closed
+   * @param {ReadonlyArray<string>} labels The labels to remove
+   * @returns {FakePullRequestsProcessor} The class
+   */
+  public setExtraRemovedCloseLabels(labels: ReadonlyArray<string>): FakePullRequestsProcessor {
+    this._inputs = createHydratedMock<IAllInputs>(<IAllInputs>{
+      ...this._inputs,
+      pullRequestRemoveLabelsAfterClose: labels,
+    });
+
+    return this;
+  }
+
+  /**
+   * @description
    * Add a new pull request to the list of pull requests
    * @param {Readonly<Partial<IGithubApiPullRequest>>} pullRequest The pull request to add
    * @returns {FakePullRequestsProcessor} The class

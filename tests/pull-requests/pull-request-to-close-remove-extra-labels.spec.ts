@@ -4,15 +4,15 @@ import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-proce
 import { DateTime } from 'luxon';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Pull request to close add extra labels`, (): void => {
+describe(`Pull request to close remove extra labels`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when the pull request should not have extra labels added when closed`, (): void => {
+  describe(`when the pull request should not have extra labels removed when closed`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [],
         pullRequestDaysBeforeClose: 10,
         pullRequestDaysBeforeStale: 30,
+        pullRequestRemoveLabelsAfterClose: [],
       })
         .addPullRequest({
           labels: {
@@ -55,7 +55,7 @@ describe(`Pull request to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
+    it(`should close the pull request and not remove some extra labels`, async (): Promise<void> => {
       expect.assertions(14);
 
       await pullRequestSut.process();
@@ -71,12 +71,12 @@ describe(`Pull request to close add extra labels`, (): void => {
     });
   });
 
-  describe(`when the pull request should add one more label when closed`, (): void => {
+  describe(`when the pull request should remove one more label when closed`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [`extra-close-label`],
         pullRequestDaysBeforeClose: 10,
         pullRequestDaysBeforeStale: 30,
+        pullRequestRemoveLabelsAfterClose: [`extra-close-label`],
       })
         .addPullRequest({
           labels: {
@@ -119,29 +119,29 @@ describe(`Pull request to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
+    it(`should close the pull request and remove the extra labels`, async (): Promise<void> => {
       expect.assertions(14);
 
       await pullRequestSut.process();
 
       pullRequestSut.expect({
         addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 1,
         alreadyStalePullRequestsCount: 1,
         calledApiPullRequestsMutationsCount: 3,
         calledApiPullRequestsQueriesCount: 3,
         closedPullRequestsCount: 1,
         processedPullRequestsCount: 1,
+        removedPullRequestsLabelsCount: 1,
       });
     });
   });
 
-  describe(`when the pull request should add three more labels when closed`, (): void => {
+  describe(`when the pull request should remove three more labels when closed`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestAddLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
         pullRequestDaysBeforeClose: 10,
         pullRequestDaysBeforeStale: 30,
+        pullRequestRemoveLabelsAfterClose: [`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`],
       })
         .addPullRequest({
           labels: {
@@ -184,19 +184,19 @@ describe(`Pull request to close add extra labels`, (): void => {
         );
     });
 
-    it(`should close the pull request and add the extra labels`, async (): Promise<void> => {
+    it(`should close the pull request and remove the extra labels`, async (): Promise<void> => {
       expect.assertions(14);
 
       await pullRequestSut.process();
 
       pullRequestSut.expect({
         addedPullRequestsCommentsCount: 1,
-        addedPullRequestsLabelsCount: 3,
         alreadyStalePullRequestsCount: 1,
         calledApiPullRequestsMutationsCount: 3,
         calledApiPullRequestsQueriesCount: 5,
         closedPullRequestsCount: 1,
         processedPullRequestsCount: 1,
+        removedPullRequestsLabelsCount: 3,
       });
     });
   });
@@ -249,9 +249,13 @@ describe(`Pull request to close add extra labels`, (): void => {
         );
     });
 
-    describe(`when the pull request should add three more labels when closed`, (): void => {
+    describe(`when the pull request should remove three more labels when closed`, (): void => {
       beforeEach((): void => {
-        pullRequestSut.setExtraAddedCloseLabels([`extra-close-label-1`, `extra-close-label-2`, `extra-close-label-3`]);
+        pullRequestSut.setExtraRemovedCloseLabels([
+          `extra-close-label-1`,
+          `extra-close-label-2`,
+          `extra-close-label-3`,
+        ]);
       });
 
       it(`should close the pull request and not add some extra labels`, async (): Promise<void> => {
@@ -261,11 +265,11 @@ describe(`Pull request to close add extra labels`, (): void => {
 
         pullRequestSut.expect({
           addedPullRequestsCommentsCount: 1,
-          addedPullRequestsLabelsCount: 3,
           alreadyStalePullRequestsCount: 1,
           calledApiPullRequestsQueriesCount: 2,
           closedPullRequestsCount: 1,
           processedPullRequestsCount: 1,
+          removedPullRequestsLabelsCount: 3,
         });
       });
     });
