@@ -133,6 +133,7 @@ To help us have a clear vision over the workflow and also for you if you are jus
 
 ### Initialization
 
+- Check if all GitHub schemas are valid, and stop the processing (failing status) if not
 - Reach and parse the inputs from the job
 - Authenticate to GitHub API by using the `github-token`
 
