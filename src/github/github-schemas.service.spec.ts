@@ -1,4 +1,5 @@
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-issue-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
@@ -47,17 +48,17 @@ describe(`GithubSchemasService`, (): void => {
       expect(loggerServiceDebugSpy).toHaveBeenNthCalledWith(
         1,
         `Processing`,
-        `value-15`,
+        `value-16`,
         `whiteBright-GitHub schemas to find potential errors...`
       );
     });
 
     it(`should validate all the GitHub schemas`, (): void => {
-      expect.assertions(16);
+      expect.assertions(17);
 
       GithubSchemasService.initialize();
 
-      expect(graphqlSchemaValidateSpy).toHaveBeenCalledTimes(15);
+      expect(graphqlSchemaValidateSpy).toHaveBeenCalledTimes(16);
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(1, GITHUB_API_ADD_COMMENT_MUTATION);
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(2, GITHUB_API_ISSUES_QUERY);
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(3, GITHUB_API_CLOSE_PULL_REQUEST_MUTATION);
@@ -76,6 +77,7 @@ describe(`GithubSchemasService`, (): void => {
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(13, GITHUB_API_REMOVE_LABEL_MUTATION);
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(14, GITHUB_API_REMOVE_LABELS_MUTATION);
       expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(15, GITHUB_API_CLOSE_ISSUE_MUTATION);
+      expect(graphqlSchemaValidateSpy).toHaveBeenNthCalledWith(16, GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION);
     });
 
     describe(`when there is no error found on the schemas`, (): void => {

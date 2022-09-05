@@ -4,6 +4,7 @@ import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { IIssuesStatistics } from '@core/statistics/types/issues-statistics';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-issue-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
@@ -216,6 +217,9 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
       });
 
       return Promise.resolve(firstBatchPullRequests);
+    },
+    [GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION](): Promise<void> {
+      return Promise.resolve();
     },
     [GITHUB_API_REMOVE_LABEL_MUTATION](): Promise<void> {
       return Promise.resolve();
