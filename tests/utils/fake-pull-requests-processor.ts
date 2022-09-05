@@ -4,6 +4,7 @@ import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IPullRequestsStatistics } from '@core/statistics/types/pull-requests-statistics';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-pull-request-comment-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
@@ -225,6 +226,9 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_REMOVE_LABELS_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY](): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> {
