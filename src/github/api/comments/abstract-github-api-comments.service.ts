@@ -2,6 +2,8 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-issue-comment-mutation';
+import { GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-pull-request-comment-mutation';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationError } from '@utils/annotations/enums/annotation-error.enum';
@@ -62,9 +64,57 @@ export abstract class AbstractGithubApiCommentsService<
         );
         AnnotationsService.error(EAnnotationError.FAILED_ADDING_COMMENT, {
           file: `abstract-github-api-comments.service.ts`,
-          startLine: 42,
+          startLine: 57,
           title: `Error`,
         });
+
+        throw error;
+      });
+  }
+
+  public removeComment(targetId: Readonly<IUuid>, commentId: Readonly<IUuid>): Promise<void> | never {
+    this.processor.logger.info(
+      `Removing the comment`,
+      LoggerService.value(commentId),
+      LoggerFormatService.whiteBright(`from the ${this.type}`),
+      `${LoggerService.value(targetId)}${LoggerFormatService.whiteBright(`...`)}`
+    );
+
+    return OctokitService.getOctokit()
+      .graphql<unknown>(
+        this.type === `issue`
+          ? GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION
+          : GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION,
+        {
+          id: commentId,
+        }
+      )
+      .then((): void => {
+        this._increaseCalledApiMutationsCount();
+        this.processor.logger.info(
+          LoggerFormatService.green(`Comment`),
+          LoggerService.value(commentId),
+          LoggerFormatService.green(`removed from the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+      })
+      .catch((error: Readonly<Error>): never => {
+        this.processor.logger.error(
+          `Failed to remove the comment`,
+          LoggerService.value(commentId),
+          LoggerFormatService.red(`from the ${this.type}`),
+          LoggerService.value(targetId)
+        );
+        AnnotationsService.error(
+          this.type === `issue`
+            ? EAnnotationError.FAILED_REMOVING_ISSUE_COMMENT
+            : EAnnotationError.FAILED_REMOVING_PULL_REQUEST_COMMENT,
+          {
+            file: `abstract-github-api-comments.service.ts`,
+            startLine: 101,
+            title: `Error`,
+          }
+        );
 
         throw error;
       });
