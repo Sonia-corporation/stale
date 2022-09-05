@@ -200,7 +200,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.labels;
 
     if (totalCount > GithubApiPullRequestsService.labelsPerPullRequest) {
@@ -247,7 +247,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {
@@ -294,7 +294,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.projectCards;
 
     if (totalCount > GithubApiPullRequestsService.projectCardsPerPullRequest) {

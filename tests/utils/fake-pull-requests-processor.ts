@@ -161,7 +161,7 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
       let firstBatchPullRequests: IGithubApiGetPullRequests;
       let secondBatchPullRequests: IGithubApiGetPullRequests | null;
 
-      // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
+      // TODO adapt to handle the multi-type of requests; here it will mock everything to the same value
       if (this._githubApiPullRequests.length > GITHUB_PULL_REQUESTS_PER_PAGE) {
         firstBatchPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {

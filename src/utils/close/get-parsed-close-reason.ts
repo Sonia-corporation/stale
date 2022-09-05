@@ -10,7 +10,7 @@ import _ from 'lodash';
  * @returns {ECloseReason | undefined} The parsed close reason or undefined
  */
 export function getParsedCloseReason(closeReason: Readonly<ICloseReason>): ECloseReason | undefined {
-  // @todo find a way to get rid of this type hack
+  // TODO find a way to get rid of this type hack
   return _.includes([ECloseReason.COMPLETED, ECloseReason.NOT_PLANNED], closeReason)
     ? (closeReason as ECloseReason)
     : undefined;

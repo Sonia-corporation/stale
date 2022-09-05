@@ -104,7 +104,7 @@ export class FakeIssuesProcessor extends AbstractFakeProcessor {
       let firstBatchIssues: IGithubApiGetIssues;
       let secondBatchIssues: IGithubApiGetIssues | null;
 
-      // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
+      // TODO adapt to handle the multi-type of requests; here it will mock everything to the same value
       if (this._githubApiIssues.length > GITHUB_ISSUES_PER_PAGE) {
         firstBatchIssues = createHydratedMock<IGithubApiGetIssues>({
           repository: {

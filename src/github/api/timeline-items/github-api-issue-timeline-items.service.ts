@@ -52,7 +52,7 @@ export class GithubApiIssueTimelineItemsService extends AbstractGithubApiTimelin
             throw new Error(`Could not find a single added label event for the issue ${issueNumber}`);
           }
 
-          // @todo handle the pagination
+          // TODO handle the pagination
           if (filteredCount > pageCount) {
             this.processor.logger.error(
               `Reached the maximum number of added label events supported for now. The pagination support is not yet implemented!`
