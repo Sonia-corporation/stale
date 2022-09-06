@@ -4,6 +4,7 @@ import { IAllInputs } from '@core/inputs/types/all-inputs';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { IPullRequestsStatistics } from '@core/statistics/types/pull-requests-statistics';
 import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-add-comment-mutation';
+import { GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-pull-request-comment-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
@@ -16,8 +17,10 @@ import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
+import { GITHUB_API_PULL_REQUEST_COMMENTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-request-comments-query';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
+import { IGithubApiGetPullRequestComments } from '@github/api/pull-requests/interfaces/github-api-get-pull-request-comments.interface';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
@@ -157,11 +160,30 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
         })
       );
     },
+    [GITHUB_API_PULL_REQUEST_COMMENTS_QUERY](): Promise<IGithubApiGetPullRequestComments> {
+      const firstBatchIssueComments: IGithubApiGetPullRequestComments =
+        createHydratedMock<IGithubApiGetPullRequestComments>({
+          repository: {
+            pullRequest: {
+              comments: {
+                nodes: [],
+                pageInfo: {
+                  endCursor: undefined,
+                  hasNextPage: false,
+                },
+                totalCount: 0,
+              },
+            },
+          },
+        });
+
+      return Promise.resolve(firstBatchIssueComments);
+    },
     [GITHUB_API_PULL_REQUESTS_QUERY]: (): Promise<IGithubApiGetPullRequests> => {
       let firstBatchPullRequests: IGithubApiGetPullRequests;
       let secondBatchPullRequests: IGithubApiGetPullRequests | null;
 
-      // @todo adapt to handle the multi-type of requests; here it will mock everything to the same value
+      // TODO adapt to handle the multi-type of requests; here it will mock everything to the same value
       if (this._githubApiPullRequests.length > GITHUB_PULL_REQUESTS_PER_PAGE) {
         firstBatchPullRequests = createHydratedMock<IGithubApiGetPullRequests>({
           repository: {
@@ -225,6 +247,9 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
       return Promise.resolve();
     },
     [GITHUB_API_REMOVE_LABELS_MUTATION](): Promise<void> {
+      return Promise.resolve();
+    },
+    [GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION](): Promise<void> {
       return Promise.resolve();
     },
     [GITHUB_API_TIMELINE_ITEMS_PULL_REQUEST_LABELED_EVENT_QUERY](): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> {

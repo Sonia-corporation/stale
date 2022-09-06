@@ -4,6 +4,7 @@ import { AbstractCommentsProcessor } from '@core/processing/abstract-comments-pr
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { PullRequestsStatisticsService } from '@core/statistics/pull-requests-statistics.service';
 import { GithubApiPullRequestCommentsService } from '@github/api/comments/github-api-pull-request-comments.service';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 
@@ -35,7 +36,11 @@ export class PullRequestCommentsProcessor extends AbstractCommentsProcessor<Pull
     PullRequestsStatisticsService.getInstance().increaseAddedPullRequestsCommentsCount();
   }
 
-  protected _addComment(itemId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void> {
-    return this.githubApiPullRequestCommentsService$$.addComment(itemId, comment);
+  protected _addComment(
+    itemId: Readonly<IUuid>,
+    comment: Readonly<IComment>,
+    commentHeaderOptions: Readonly<ICommentHeaderOptions>
+  ): Promise<void> {
+    return this.githubApiPullRequestCommentsService$$.addComment(itemId, comment, commentHeaderOptions);
   }
 }

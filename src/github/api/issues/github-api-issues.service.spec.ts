@@ -88,6 +88,7 @@ describe(`GithubApiIssuesService`, (): void => {
       expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_ISSUES_QUERY, {
         afterCursor: undefined,
         assigneesPerIssue: 20,
+        commentsPerIssue: 100,
         issuesPerPage: 20,
         labelsPerIssue: 20,
         owner: `dummy-owner`,

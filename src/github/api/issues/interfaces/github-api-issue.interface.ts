@@ -1,3 +1,4 @@
+import { IGithubApiCommentsPagination } from '@github/api/comments/interfaces/github-api-comments-pagination.interface';
 import { IGithubApiIssueNumber } from '@github/api/issues/github-api-issue-number';
 import { IGithubApiAssigneesPagination } from '@github/api/labels/interfaces/github-api-assignees-pagination.interface';
 import { IGithubApiLabelsPagination } from '@github/api/labels/interfaces/github-api-labels-pagination.interface';
@@ -8,6 +9,7 @@ import { IUuid } from '@utils/types/uuid';
 
 export interface IGithubApiIssue {
   readonly assignees: IGithubApiAssigneesPagination;
+  readonly comments: IGithubApiCommentsPagination;
   readonly createdAt: IIso8601Date;
   readonly id: IUuid;
   readonly labels: IGithubApiLabelsPagination;

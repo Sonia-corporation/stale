@@ -81,7 +81,7 @@ export class CoreInputsService {
       return fallback;
     }
 
-    // @todo find a way to get rid of this type hack
+    // TODO find a way to get rid of this type hack
     return inputValue as unknown as TEnum;
   }
 }

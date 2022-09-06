@@ -4,6 +4,7 @@ import { IssuesStatisticsService } from '@core/statistics/issues-statistics.serv
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_ASSIGNEES_PER_ISSUE } from '@github/api/issues/constants/github-assignees-per-issue';
+import { GITHUB_COMMENTS_PER_ISSUE } from '@github/api/issues/constants/github-comments-per-issue';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
 import { GITHUB_LABELS_PER_ISSUE } from '@github/api/issues/constants/github-labels-per-issue';
 import { GITHUB_PROJECT_CARDS_PER_ISSUE } from '@github/api/issues/constants/github-project-cards-per-issue';
@@ -23,6 +24,7 @@ export class GithubApiIssuesService {
   public static readonly labelsPerIssue = GITHUB_LABELS_PER_ISSUE;
   public static readonly assigneesPerIssue = GITHUB_ASSIGNEES_PER_ISSUE;
   public static readonly projectCardsPerIssue = GITHUB_PROJECT_CARDS_PER_ISSUE;
+  public static readonly commentsPerIssue = GITHUB_COMMENTS_PER_ISSUE;
 
   public static fetchIssues(fromPageId?: Readonly<string>): Promise<IGithubApiGetIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
@@ -31,6 +33,7 @@ export class GithubApiIssuesService {
       .graphql<IGithubApiGetIssues>(GITHUB_API_ISSUES_QUERY, {
         afterCursor: fromPageId,
         assigneesPerIssue: GithubApiIssuesService.assigneesPerIssue,
+        commentsPerIssue: GithubApiIssuesService.commentsPerIssue,
         issuesPerPage: GithubApiIssuesService.issuesPerPage,
         labelsPerIssue: GithubApiIssuesService.labelsPerIssue,
         owner: context.repo.owner,

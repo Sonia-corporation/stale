@@ -81,7 +81,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.projectCards;
 
     if (totalCount > GithubApiIssuesService.projectCardsPerIssue) {
@@ -227,7 +227,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiIssuesService.assigneesPerIssue) {

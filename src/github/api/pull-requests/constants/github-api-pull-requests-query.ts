@@ -1,5 +1,5 @@
 export const GITHUB_API_PULL_REQUESTS_QUERY = `
-  query GetPullRequests($owner: String!, $repository: String!, $pullRequestsPerPage: Int!, $labelsPerPullRequest: Int!, $assigneesPerPullRequest: Int!, $projectCardsPerPullRequest: Int!, $afterCursor: String) {
+  query GetPullRequests($owner: String!, $repository: String!, $pullRequestsPerPage: Int!, $labelsPerPullRequest: Int!, $assigneesPerPullRequest: Int!, $projectCardsPerPullRequest: Int!, $commentsPerPullRequest: Int!, $afterCursor: String) {
     repository(name: $repository, owner: $owner) {
       pullRequests(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $pullRequestsPerPage, after: $afterCursor) {
         pageInfo {
@@ -46,6 +46,17 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
             number
             state
             title
+          }
+          comments(orderBy: {field: UPDATED_AT, direction: DESC}, first: $commentsPerPullRequest) {
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
+            totalCount
+            nodes {
+              body
+              id
+            }
           }
         }
       }

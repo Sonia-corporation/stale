@@ -4,6 +4,7 @@ import { AbstractCommentsProcessor } from '@core/processing/abstract-comments-pr
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { IssuesStatisticsService } from '@core/statistics/issues-statistics.service';
 import { GithubApiIssueCommentsService } from '@github/api/comments/github-api-issue-comments.service';
+import { ICommentHeaderOptions } from '@utils/interfaces/comment-header-options.interface';
 import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 
@@ -35,7 +36,11 @@ export class IssueCommentsProcessor extends AbstractCommentsProcessor<IssueProce
     IssuesStatisticsService.getInstance().increaseAddedIssuesCommentsCount();
   }
 
-  protected _addComment(itemId: Readonly<IUuid>, comment: Readonly<IComment>): Promise<void> {
-    return this.githubApiIssueCommentsService$$.addComment(itemId, comment);
+  protected _addComment(
+    itemId: Readonly<IUuid>,
+    comment: Readonly<IComment>,
+    commentHeaderOptions: Readonly<ICommentHeaderOptions>
+  ): Promise<void> {
+    return this.githubApiIssueCommentsService$$.addComment(itemId, comment, commentHeaderOptions);
   }
 }

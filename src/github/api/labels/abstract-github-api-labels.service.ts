@@ -29,7 +29,7 @@ export abstract class AbstractGithubApiLabelsService<
   /**
    * @description
    * Fetch some labels by name or description
-   * @todo handle the pagination to check the other labels as well
+   * TODO handle the pagination to check the other labels as well
    * @param {Readonly<string>} labelName The name of the label to search for
    * @returns {Promise<IGithubApiGetLabels>} The stale label
    */

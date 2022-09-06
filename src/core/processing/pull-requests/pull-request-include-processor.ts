@@ -84,7 +84,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.projectCards;
 
     if (totalCount > GithubApiPullRequestsService.projectCardsPerPullRequest) {
@@ -233,7 +233,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // TODO handle the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {

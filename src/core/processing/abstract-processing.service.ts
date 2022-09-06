@@ -78,7 +78,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       }
 
       // Expose the item data for debug purpose
-      LoggerService.debug(JSON.stringify(item));
+      this._logItem(item);
 
       // Note: we do not wish to have a blazing fast action
       // The goal is to process a single item at a time
@@ -138,7 +138,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
     const hasReachedQueriesLimit: boolean = this.hasReachedQueriesLimit$$();
 
     if (hasReachedQueriesLimit) {
-      // @todo add the reached count
+      // TODO add the reached count
       LoggerService.info(
         `The limit of ${_.toLower(
           this._itemType
@@ -148,13 +148,13 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       return false;
     }
 
-    // @todo add the reached count versus reached count total
+    // TODO add the reached count versus reached count total
     LoggerService.info(`The limit of API queries calls count is not reached yet, continuing...`);
 
     const hasReachedMutationsLimit: boolean = this.hasReachedMutationsLimit$$();
 
     if (hasReachedMutationsLimit) {
-      // @todo add the reached count
+      // TODO add the reached count
       LoggerService.info(
         `The limit of ${_.toLower(
           this._itemType
@@ -164,7 +164,7 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
       return false;
     }
 
-    // @todo add the reached count versus reached count total
+    // TODO add the reached count versus reached count total
     LoggerService.info(`The limit of API mutations calls count is not reached yet, continuing...`);
 
     LoggerService.info(
@@ -195,13 +195,17 @@ export abstract class AbstractProcessingService<TItems extends IGithubApiGetIssu
   /**
    * @description
    * Allow to check if the items are issues or pull requests
-   * @todo find a better way to check that with pure typings
+   * TODO find a better way to check that with pure typings
    * @param {IGithubApiGetIssues | IGithubApiGetPullRequests} _items The items to check
    * @returns {boolean} Return true when the items are issues
    * @private
    */
   private _isIssueItems(_items: IGithubApiGetIssues | IGithubApiGetPullRequests): _items is IGithubApiGetIssues {
     return this._itemType === `issue`;
+  }
+
+  private _logItem(item: Readonly<IGithubApiIssue | IGithubApiPullRequest>): void {
+    LoggerService.debug(JSON.stringify(item));
   }
 
   /**
