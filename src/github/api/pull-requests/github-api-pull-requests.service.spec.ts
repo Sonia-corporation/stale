@@ -87,7 +87,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
       expect(graphqlMock).toHaveBeenCalledWith(GITHUB_API_PULL_REQUESTS_QUERY, {
         afterCursor: undefined,
         assigneesPerPullRequest: 20,
-        commentsPerPullRequest: 50,
+        commentsPerPullRequest: 100,
         labelsPerPullRequest: 20,
         owner: `dummy-owner`,
         projectCardsPerPullRequest: 20,

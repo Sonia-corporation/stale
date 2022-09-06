@@ -1,1 +1,1 @@
-export const GITHUB_COMMENTS_PER_ISSUE = 50;
+export const GITHUB_COMMENTS_PER_ISSUE = 100;

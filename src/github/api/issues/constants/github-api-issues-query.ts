@@ -43,6 +43,10 @@ export const GITHUB_API_ISSUES_QUERY = `
             title
           }
           comments(orderBy: {field: UPDATED_AT, direction: DESC}, first: $commentsPerIssue) {
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
             totalCount
             nodes {
               body

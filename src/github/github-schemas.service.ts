@@ -2,6 +2,7 @@ import { GITHUB_API_ADD_COMMENT_MUTATION } from '@github/api/comments/constants/
 import { GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-issue-comment-mutation';
 import { GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION } from '@github/api/comments/constants/github-api-remove-pull-request-comment-mutation';
 import { GITHUB_API_CLOSE_ISSUE_MUTATION } from '@github/api/issues/constants/github-api-close-issue-mutation';
+import { GITHUB_API_ISSUE_COMMENTS_QUERY } from '@github/api/issues/constants/github-api-issue-comments-query';
 import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api-issues-query';
 import { GITHUB_API_ADD_LABEL_MUTATION } from '@github/api/labels/constants/github-api-add-label-mutation';
 import { GITHUB_API_ADD_LABELS_MUTATION } from '@github/api/labels/constants/github-api-add-labels-mutation';
@@ -11,6 +12,7 @@ import { GITHUB_API_REMOVE_LABEL_MUTATION } from '@github/api/labels/constants/g
 import { GITHUB_API_REMOVE_LABELS_MUTATION } from '@github/api/labels/constants/github-api-remove-labels-mutation';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
+import { GITHUB_API_PULL_REQUEST_COMMENTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-request-comments-query';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
 import { GITHUB_API_TIMELINE_ITEMS_ISSUE_LABELED_EVENT_QUERY } from '@github/api/timeline-items/constants/github-api-timeline-items-issue-labeled-event-query';
@@ -41,6 +43,8 @@ const SCHEMAS: string[] = [
   GITHUB_API_CLOSE_ISSUE_MUTATION,
   GITHUB_API_REMOVE_ISSUE_COMMENT_MUTATION,
   GITHUB_API_REMOVE_PULL_REQUEST_COMMENT_MUTATION,
+  GITHUB_API_ISSUE_COMMENTS_QUERY,
+  GITHUB_API_PULL_REQUEST_COMMENTS_QUERY,
 ];
 
 export class GithubSchemasService {

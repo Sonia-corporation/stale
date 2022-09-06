@@ -48,6 +48,10 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
             title
           }
           comments(orderBy: {field: UPDATED_AT, direction: DESC}, first: $commentsPerPullRequest) {
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
             totalCount
             nodes {
               body

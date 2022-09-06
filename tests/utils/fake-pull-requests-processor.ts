@@ -17,8 +17,10 @@ import { IGithubApiGetLabel } from '@github/api/labels/interfaces/github-api-get
 import { IGithubApiGetLabels } from '@github/api/labels/interfaces/github-api-get-labels.interface';
 import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-close-pull-request-mutation';
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
+import { GITHUB_API_PULL_REQUEST_COMMENTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-request-comments-query';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
+import { IGithubApiGetPullRequestComments } from '@github/api/pull-requests/interfaces/github-api-get-pull-request-comments.interface';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { IGithubApiPullRequest } from '@github/api/pull-requests/interfaces/github-api-pull-request.interface';
 import { GITHUB_API_DELETE_REFERENCE_MUTATION } from '@github/api/references/constants/github-api-delete-reference-mutation';
@@ -157,6 +159,25 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
           },
         })
       );
+    },
+    [GITHUB_API_PULL_REQUEST_COMMENTS_QUERY](): Promise<IGithubApiGetPullRequestComments> {
+      const firstBatchIssueComments: IGithubApiGetPullRequestComments =
+        createHydratedMock<IGithubApiGetPullRequestComments>({
+          repository: {
+            pullRequest: {
+              comments: {
+                nodes: [],
+                pageInfo: {
+                  endCursor: undefined,
+                  hasNextPage: false,
+                },
+                totalCount: 0,
+              },
+            },
+          },
+        });
+
+      return Promise.resolve(firstBatchIssueComments);
     },
     [GITHUB_API_PULL_REQUESTS_QUERY]: (): Promise<IGithubApiGetPullRequests> => {
       let firstBatchPullRequests: IGithubApiGetPullRequests;
