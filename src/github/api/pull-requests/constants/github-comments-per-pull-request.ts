@@ -1,0 +1,1 @@
+export const GITHUB_COMMENTS_PER_PULL_REQUEST = 50;

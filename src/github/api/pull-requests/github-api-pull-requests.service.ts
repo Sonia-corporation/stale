@@ -4,6 +4,7 @@ import { GITHUB_API_CLOSE_PULL_REQUEST_MUTATION } from '@github/api/pull-request
 import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-requests/constants/github-api-draft-pull-request-mutation';
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_ASSIGNEES_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-assignees-per-pull-request';
+import { GITHUB_COMMENTS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-comments-per-pull-request';
 import { GITHUB_LABELS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-labels-per-pull-request';
 import { GITHUB_PROJECT_CARDS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-project-cards-per-pull-request';
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
@@ -22,6 +23,7 @@ export class GithubApiPullRequestsService {
   public static readonly labelsPerPullRequest = GITHUB_LABELS_PER_PULL_REQUEST;
   public static readonly assigneesPerPullRequest = GITHUB_ASSIGNEES_PER_PULL_REQUEST;
   public static readonly projectCardsPerPullRequest = GITHUB_PROJECT_CARDS_PER_PULL_REQUEST;
+  public static readonly commentsPerPullRequest = GITHUB_COMMENTS_PER_PULL_REQUEST;
 
   public static fetchPullRequests(fromPageId?: Readonly<string>): Promise<IGithubApiGetPullRequests> | never {
     LoggerService.info(`Fetching the pull requests from GitHub...`);
@@ -30,6 +32,7 @@ export class GithubApiPullRequestsService {
       .graphql<IGithubApiGetPullRequests>(GITHUB_API_PULL_REQUESTS_QUERY, {
         afterCursor: fromPageId,
         assigneesPerPullRequest: GithubApiPullRequestsService.assigneesPerPullRequest,
+        commentsPerPullRequest: GithubApiPullRequestsService.commentsPerPullRequest,
         labelsPerPullRequest: GithubApiPullRequestsService.labelsPerPullRequest,
         owner: context.repo.owner,
         projectCardsPerPullRequest: GithubApiPullRequestsService.projectCardsPerPullRequest,
