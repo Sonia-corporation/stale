@@ -127,7 +127,7 @@
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "5.38.1",
     "@vercel/ncc": "0.34.0",
-    "all-contributors-cli": "6.20.5",
+    "all-contributors-cli": "6.24.0",
     "chalk": "5.0.1",
     "commitizen": "4.2.5",
     "concurrently": "7.4.0",
