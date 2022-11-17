@@ -33,7 +33,7 @@ jobs:
           cd documentation
           npm run build
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305 # renovate: tag=v3
+        uses: peaceiris/actions-gh-pages@de7ea6f8efb354206b205ef54722213d99067935 # tag=v3
         with:
           github_token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           publish_dir: ./documentation/build
