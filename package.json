@@ -110,7 +110,7 @@
     "@octokit/graphql-schema": "12.29.0",
     "ansi-styles": "6.1.0",
     "lodash": "4.17.21",
-    "luxon": "3.0.3",
+    "luxon": "3.2.1",
     "terminal-link": "3.0.0",
     "tslib": "2.4.0"
   },
