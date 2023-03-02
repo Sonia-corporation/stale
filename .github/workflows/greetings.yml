@@ -6,7 +6,7 @@ jobs:
   Greetings:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/first-interaction@bd33205aa5c96838e10fd65df0d01efd613677c1 # renovate: tag=v1
+      - uses: actions/first-interaction@32fe40493379a9aa1c43d3aaf0e20b7b2079e3c2 # tag=v1
         with:
           repo-token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           issue-message: |

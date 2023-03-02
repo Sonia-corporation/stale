@@ -30,7 +30,7 @@ jobs:
     needs: [HasLabel]
     steps:
       - name: Checkout master
-        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
         with:
           ref: master
       - name: Reset branch
@@ -47,7 +47,7 @@ jobs:
         run: echo 'The PR should not be created'
       - name: Create PR from develop to master
         if: needs.HasLabel.outputs.HAS_LABEL == 'true'
-        uses: peter-evans/create-pull-request@18f90432bedd2afd6a825469ffd38aa24712a91d # tag=v4
+        uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04 # v4
         with:
           token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           title: 'chore(master): merge develop into master'

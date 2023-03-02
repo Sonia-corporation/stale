@@ -5,14 +5,14 @@ jobs:
   GitHubWebsite:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
-      - uses: actions/setup-node@2fddd8803e2f5c9604345a0b591c3020ee971a93 # tag=v3
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
+      - uses: actions/setup-node@64ed1c7eab4cce3362f8c340dee64e5eaeef8f7c # v3
         with:
           node-version: 16.16.0
           cache: npm
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@fd5de65bc895cf536527842281bea11763fefd77 # tag=v3
+        uses: actions/cache@69d9d449aced6a2ede0bc19182fadc3a0a42d2b0 # v3
         env:
           cache-name: cache-node-modules
         with:
@@ -33,7 +33,7 @@ jobs:
           cd documentation
           npm run build
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@068dc23d9710f1ba62e86896f84735d869951305 # renovate: tag=v3
+        uses: peaceiris/actions-gh-pages@bd8c6b06eba6b3d25d72b7a1767993c0aeee42e7 # v3
         with:
           github_token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           publish_dir: ./documentation/build
@@ -45,7 +45,7 @@ jobs:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
-      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
+      - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # v3
       - name: Install Vercel
         run: |
           npm i vercel
