@@ -30,6 +30,16 @@ This may be very helpful to debug your workflow, before creating a [new issue](h
 
 :::
 
+The minimum permissions are:
+
+- contents: _read_
+
+And based on your configuration, you have a great chance to also need:
+
+- issues: _write_
+- pull-requests: _write_
+- repository-projects: _read_
+
 :::info
 
 Under the hood, the value will be consumed by the [@actions/github](https://github.com/actions/toolkit/tree/main/packages/github), through the [getOctokit method](https://github.com/actions/toolkit/blob/fcb8c4ca798bd0d81a9b07e2f7dffee8397c4707/packages/github/src/github.ts#L15-L20).
