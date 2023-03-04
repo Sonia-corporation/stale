@@ -1,5 +1,13 @@
 # Sonia stale action
 
+# [2.5.0](https://github.com/Sonia-corporation/stale/compare/2.4.0...2.5.0) (2023-03-02)
+
+### :books: Documentation
+
+- **typo:** add missing plural on "pull request" ([35fbd8e](https://github.com/Sonia-corporation/stale/commit/35fbd8e5961d013797a8cd7c441868a7fa95534e))
+- **github-token:** add more details about the required permissions ([#1008](https://github.com/Sonia-corporation/stale/issues/1008)) ([05055f8](https://github.com/Sonia-corporation/stale/commit/05055f842bc3cf405f7fb095636d383037d9e0dd))
+- **github-token:** add more details about the required permissions ([fa002fa](https://github.com/Sonia-corporation/stale/commit/fa002fa1044eb03620b63ed3e49628a88fb41811)), closes [#1006](https://github.com/Sonia-corporation/stale/issues/1006)
+
 # [2.4.0](https://github.com/Sonia-corporation/stale/compare/2.3.2...2.4.0) (2022-09-04)
 
 ### :books: Documentation
