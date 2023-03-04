@@ -122,7 +122,7 @@
     "@types/faker": "5.5.9",
     "@types/jest": "28.1.8",
     "@types/lodash": "4.14.191",
-    "@types/luxon": "3.0.1",
+    "@types/luxon": "3.0.3",
     "@types/node": "14.18.37",
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "5.38.1",
