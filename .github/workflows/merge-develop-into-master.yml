@@ -18,7 +18,7 @@ jobs:
           labels: '["merge-into-master :crown:"]'
       - name: Save has label result
         id: save-has-label
-        run: echo '::set-output name=HAS_LABEL::${{ steps.check_labels.outputs.result }}'
+        run: echo 'HAS_LABEL=${{ steps.check_labels.outputs.result }}' >> $GITHUB_OUTPUT
       - name: Label present
         if: steps.check_labels.outputs.result == 'true'
         run: echo 'The label "merge-into-master :crown:" is present'
