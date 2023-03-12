@@ -1,13 +1,22 @@
-// For a detailed explanation regarding each configuration property, visit:
-// https://jestjs.io/docs/en/configuration.html
+import type { Config } from 'jest';
+
+type IProjectType =
+  | 'integrationIssues'
+  | 'integrationIssuesCi'
+  | 'integrationPullRequests'
+  | 'integrationPullRequestsCi'
+  | 'unit'
+  | 'unitCi';
+
+type IProjectColor = 'red' | 'blue' | 'green';
 
 /**
  * @description
  * Return the Jest configuration for a given project
- * @param {Readonly<string>} type The project type
+ * @param {Readonly<IProjectType>} type The project type
  * @returns {object} The Jest configuration
  */
-const createProject = (type) => {
+function createProject(type: Readonly<IProjectType>): Config {
   return {
     // All imported modules in your tests should be mocked automatically
     automock: false,
@@ -213,13 +222,13 @@ const createProject = (type) => {
     // Whether to use watchman for file crawling
     watchman: true,
   };
-};
+}
 
 /**
- * @param {Readonly<string>} type The project type
+ * @param {Readonly<IProjectType>} type The project type
  * @returns {string[]} A list of test match
  */
-function getTestMatch(type) {
+function getTestMatch(type: Readonly<IProjectType>): string[] {
   return {
     integrationIssues: [
       `<rootDir>/tests/issues/**/*.spec.ts`,
@@ -261,21 +270,23 @@ function getTestMatch(type) {
 }
 
 /**
- * @param {Readonly<string>} type The project type
- * @returns {string} The color of the project
+ * @param {Readonly<IProjectType>} type The project type
+ * @returns {IProjectColor} The color of the project
  */
-function getProjectColor(type) {
-  return {
+function getProjectColor(type: Readonly<IProjectType>): IProjectColor {
+  const projectColorMap: Record<IProjectType, IProjectColor> = {
     integrationIssues: `red`,
     integrationIssuesCi: `red`,
     integrationPullRequests: `blue`,
     integrationPullRequestsCi: `blue`,
     unit: `green`,
     unitCi: `green`,
-  }[type];
+  };
+
+  return projectColorMap[type];
 }
 
-module.exports = {
+const config: Config = {
   projects: [
     createProject(`integrationIssues`),
     createProject(`integrationIssuesCi`),
@@ -285,3 +296,5 @@ module.exports = {
     createProject(`unitCi`),
   ],
 };
+
+export default config;
