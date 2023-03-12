@@ -62,7 +62,7 @@ export class GithubSchemasService {
         LoggerFormatService.red(`GitHub schemas error${errorsCount > 1 ? `s` : ``}`)
       );
 
-      _.forEach(errors, (error: Readonly<typeof errors[number]>): void => {
+      _.forEach(errors, (error: Readonly<(typeof errors)[number]>): void => {
         LoggerService.error(_.toString(error));
       });
 
