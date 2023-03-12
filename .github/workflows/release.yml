@@ -22,7 +22,7 @@ jobs:
           git reset --hard master
       - name: Get current tag
         id: current-tag
-        uses: WyriHaximus/github-action-get-previous-tag@8a0e045f02c0a3a04e1452df58b90fc7e555e950 # renovate: tag=v1.1.0
+        uses: WyriHaximus/github-action-get-previous-tag@385a2a0b6abf6c2efeb95adfac83d96d6f968e0c # v1.3.0
         with:
           fallback: 1.0.0
         env:
@@ -128,7 +128,7 @@ jobs:
           git reset --hard master
       - name: Get latest tag
         id: latest-tag
-        uses: WyriHaximus/github-action-get-previous-tag@8a0e045f02c0a3a04e1452df58b90fc7e555e950 # renovate: tag=v1.1.0
+        uses: WyriHaximus/github-action-get-previous-tag@385a2a0b6abf6c2efeb95adfac83d96d6f968e0c # v1.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.SONIA_BOT_GH_TOKEN }}
       - name: Show current tag
