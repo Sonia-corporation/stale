@@ -95,7 +95,7 @@ jobs:
           cache-name: cache-jest-cc
         with:
           path: .cache-jest
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.ts') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Coverage
@@ -142,7 +142,7 @@ jobs:
           cache-name: cache-jest-integration-issues
         with:
           path: .cache-jest
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.ts') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Test
@@ -192,7 +192,7 @@ jobs:
           cache-name: cache-jest-integration-pull-requests
         with:
           path: .cache-jest
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.ts') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Test
@@ -242,7 +242,7 @@ jobs:
           cache-name: cache-jest-unit
         with:
           path: .cache-jest
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.js') }}
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/jest.config.ts') }}
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Test
