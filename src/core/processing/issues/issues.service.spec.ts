@@ -110,8 +110,8 @@ describe(`IssuesService`, (): void => {
   });
 
   describe(`processBatch()`, (): void => {
-    const mockedIssueProcessor: MockedObjectDeep<typeof IssueProcessor> = jest.mocked(IssueProcessor, true);
-    const mockedIssueLogger: MockedObjectDeep<typeof IssueLogger> = jest.mocked(IssueLogger, true);
+    const mockedIssueProcessor: MockedObjectDeep<typeof IssueProcessor> = jest.mocked(IssueProcessor);
+    const mockedIssueLogger: MockedObjectDeep<typeof IssueLogger> = jest.mocked(IssueLogger);
 
     let githubApiIssuesServiceFetchIssuesSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;

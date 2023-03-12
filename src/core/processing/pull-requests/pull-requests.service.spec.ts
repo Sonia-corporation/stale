@@ -110,11 +110,8 @@ describe(`PullRequestsService`, (): void => {
   });
 
   describe(`processBatch()`, (): void => {
-    const mockedPullRequestProcessor: MockedObjectDeep<typeof PullRequestProcessor> = jest.mocked(
-      PullRequestProcessor,
-      true
-    );
-    const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = jest.mocked(PullRequestLogger, true);
+    const mockedPullRequestProcessor: MockedObjectDeep<typeof PullRequestProcessor> = jest.mocked(PullRequestProcessor);
+    const mockedPullRequestLogger: MockedObjectDeep<typeof PullRequestLogger> = jest.mocked(PullRequestLogger);
 
     let githubApiPullRequestsServiceFetchPullRequestsSpy: jest.SpyInstance;
     let loggerServiceInfoSpy: jest.SpyInstance;
