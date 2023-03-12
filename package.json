@@ -157,7 +157,7 @@
     "moment-timezone": "0.5.41",
     "node-notifier": "10.0.1",
     "prettier": "2.8.4",
-    "rimraf": "3.0.2",
+    "rimraf": "4.4.0",
     "semantic-release": "19.0.5",
     "shx": "0.3.4",
     "ts-auto-mock": "3.6.4",
