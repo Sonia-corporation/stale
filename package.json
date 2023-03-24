@@ -156,7 +156,7 @@
     "lint-staged": "13.2.0",
     "moment-timezone": "0.5.41",
     "node-notifier": "10.0.1",
-    "prettier": "2.8.6",
+    "prettier": "2.8.7",
     "rimraf": "4.4.0",
     "semantic-release": "19.0.5",
     "shx": "0.3.4",
