@@ -14,5 +14,9 @@
   "item.label.Documentation": {
     "message": "Documentation",
     "description": "Navbar item with label Documentation"
+  },
+  "logo.alt": {
+    "message": "Sonia stale action",
+    "description": "The alt text of navbar logo"
   }
 }
