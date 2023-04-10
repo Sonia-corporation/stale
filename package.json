@@ -153,7 +153,7 @@
     "jest-mock": "29.5.0",
     "jest-silent-reporter": "0.5.0",
     "jest-ts-auto-mock": "2.1.0",
-    "lint-staged": "13.2.0",
+    "lint-staged": "13.2.1",
     "moment-timezone": "0.5.43",
     "node-notifier": "10.0.1",
     "prettier": "2.8.6",
