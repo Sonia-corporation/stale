@@ -99,7 +99,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-${{ env.cache-name }}-
       - name: Coverage
-        uses: paambaati/codeclimate-action@ac3f177ece9928d220a8bd1c2f1957926fd3b67e # tag=v3.2.0
+        uses: paambaati/codeclimate-action@b649ad206d2e83dafb9ed130deba698aa1b41d78 # v3.2.0
         with:
           coverageCommand: npm run test:ci:coverage
           debug: true
