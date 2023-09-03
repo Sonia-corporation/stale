@@ -27,10 +27,10 @@
     "npm": "8.19.4"
   },
   "dependencies": {
-    "@docusaurus/core": "2.4.0",
-    "@docusaurus/plugin-ideal-image": "2.4.0",
-    "@docusaurus/preset-classic": "2.4.0",
-    "@docusaurus/theme-search-algolia": "2.4.0",
+    "@docusaurus/core": "2.4.1",
+    "@docusaurus/plugin-ideal-image": "2.4.1",
+    "@docusaurus/preset-classic": "2.4.1",
+    "@docusaurus/theme-search-algolia": "2.4.1",
     "@mdx-js/react": "1.6.22",
     "@sentry/browser": "7.44.2",
     "@sentry/tracing": "7.44.2",
@@ -40,7 +40,7 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
-    "@docusaurus/module-type-aliases": "2.4.0",
+    "@docusaurus/module-type-aliases": "2.4.1",
     "@tsconfig/docusaurus": "1.0.7",
     "@types/fs-extra": "11.0.1",
     "@types/lodash": "4.14.197",
