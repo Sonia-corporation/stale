@@ -123,7 +123,7 @@
     "@types/jest": "29.5.5",
     "@types/lodash": "4.14.199",
     "@types/luxon": "3.2.2",
-    "@types/node": "14.18.62",
+    "@types/node": "14.18.63",
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@typescript-eslint/parser": "5.38.1",
     "@vercel/ncc": "0.38.0",
