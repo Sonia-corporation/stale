@@ -44,7 +44,7 @@
     }
   },
   "engines": {
-    "node": "18.15.0",
+    "node": "18.20.6",
     "npm": "8.19.4"
   },
   "private": false,
