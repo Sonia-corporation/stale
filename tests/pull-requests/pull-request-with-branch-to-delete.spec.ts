@@ -24,9 +24,10 @@ describe(`Pull request with branch to delete`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -38,9 +39,10 @@ describe(`Pull request with branch to delete`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),
@@ -116,9 +118,10 @@ describe(`Pull request with branch to delete`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -130,9 +133,10 @@ describe(`Pull request with branch to delete`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),

@@ -74,9 +74,10 @@ describe(`CoreInputsService`, (): void => {
           issueIgnoreAllProjects: false,
           issueIgnoreAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
-          issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-            includeOffset: false,
-          }),
+          issueIgnoreBeforeCreationDate:
+            DateTime.utc(2020).toISO({
+              includeOffset: false,
+            }) ?? ``,
           issueStaleComment: `dummy-issue-stale-comment`,
           issueStaleLabel: `dummy-issue-stale-label`,
         });

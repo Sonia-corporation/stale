@@ -23,9 +23,10 @@ describe(`Issue stale not updated`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsIssueLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsIssueLabeledEvents> =>
@@ -37,9 +38,10 @@ describe(`Issue stale not updated`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),

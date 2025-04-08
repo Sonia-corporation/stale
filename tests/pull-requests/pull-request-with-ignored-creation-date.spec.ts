@@ -7,13 +7,15 @@ describe(`Pull request with ignored creation date`, (): void => {
   describe(`when the option to ignore based on the creation date has a date older than the pull request creation date`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestIgnoreBeforeCreationDate: DateTime.utc(2021).toISO({
-          includeOffset: false,
-        }),
+        pullRequestIgnoreBeforeCreationDate:
+          DateTime.utc(2021).toISO({
+            includeOffset: false,
+          }) ?? ``,
       }).addPullRequest({
-        createdAt: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        createdAt:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         locked: false,
       });
     });
@@ -34,13 +36,15 @@ describe(`Pull request with ignored creation date`, (): void => {
   describe(`when the option to ignore based on the creation date has a date younger than the pull request creation date`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestIgnoreBeforeCreationDate: DateTime.utc(2019).toISO({
-          includeOffset: false,
-        }),
+        pullRequestIgnoreBeforeCreationDate:
+          DateTime.utc(2019).toISO({
+            includeOffset: false,
+          }) ?? ``,
       }).addPullRequest({
-        createdAt: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        createdAt:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         locked: false,
       });
     });

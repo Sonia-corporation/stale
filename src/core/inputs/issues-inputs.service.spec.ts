@@ -95,9 +95,10 @@ describe(`IssuesInputsService`, (): void => {
         issueIgnoreAnyLabels: [`label-1`, `label-2`],
         issueIgnoreAnyMilestones: [`milestone-1`, `milestone-2`],
         issueIgnoreAnyProjects: [`project-1`, `project-2`],
-        issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        issueIgnoreBeforeCreationDate:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         issueLimitApiMutationsCount: 100,
         issueLimitApiQueriesCount: 100,
         issueOnlyAnyAssignees: [`assignee-1`, `assignee-2`],

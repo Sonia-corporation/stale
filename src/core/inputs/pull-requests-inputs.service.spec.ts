@@ -92,9 +92,10 @@ describe(`PullRequestsInputsService`, (): void => {
         pullRequestIgnoreAnyLabels: [`label-1`, `label-2`],
         pullRequestIgnoreAnyMilestones: [`milestone-1`, `milestone-2`],
         pullRequestIgnoreAnyProjects: [`project-1`, `project-2`],
-        pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        pullRequestIgnoreBeforeCreationDate:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         pullRequestIgnoreDraft: true,
         pullRequestLimitApiMutationsCount: 100,
         pullRequestLimitApiQueriesCount: 100,
