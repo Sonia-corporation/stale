@@ -131,6 +131,7 @@ describe(`IssueStaleProcessor`, (): void => {
       beforeEach((): void => {
         issueStaleLabel = faker.random.word();
         staleLabelId = faker.datatype.uuid();
+        issueId = faker.datatype.uuid();
         issueProcessor = createHydratedMock<IssueProcessor>({
           item: {
             id: issueId,
