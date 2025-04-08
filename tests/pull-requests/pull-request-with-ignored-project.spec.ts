@@ -12,7 +12,7 @@ describe(`Pull request with ignored project`, (): void => {
         pullRequestIgnoreAnyProjects: [`ignored-project`],
       }).addPullRequest({
         locked: false,
-        projects: createHydratedMock<IGithubApiProjectsPagination>({
+        projectsV2: createHydratedMock<IGithubApiProjectsPagination>({
           nodes: [
             createHydratedMock<IGithubApiProject>({
               title: `ignored-project`,

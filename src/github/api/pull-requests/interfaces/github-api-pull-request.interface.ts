@@ -17,7 +17,7 @@ export interface IGithubApiPullRequest {
   readonly locked: boolean;
   readonly milestone?: IGithubApiMilestone;
   readonly number: IGithubApiPullRequestNumber;
-  readonly projects: IGithubApiProjectsPagination;
+  readonly projectsV2: IGithubApiProjectsPagination;
   readonly updatedAt: IIso8601Date;
   readonly url: string;
 }

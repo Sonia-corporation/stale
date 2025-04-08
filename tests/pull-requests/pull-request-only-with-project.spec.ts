@@ -16,7 +16,7 @@ describe(`Pull request only with project`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [],
             totalCount: 0,
           },
@@ -40,7 +40,7 @@ describe(`Pull request only with project`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [
               createHydratedMock<IGithubApiProject>({
                 title: `project-y`,
@@ -76,7 +76,7 @@ describe(`Pull request only with project`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [],
             totalCount: 0,
           },
@@ -100,7 +100,7 @@ describe(`Pull request only with project`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [
               createHydratedMock<IGithubApiProject>({
                 title: `project-y`,

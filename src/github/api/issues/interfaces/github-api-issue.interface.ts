@@ -14,7 +14,7 @@ export interface IGithubApiIssue {
   readonly locked: boolean;
   readonly milestone?: IGithubApiMilestone;
   readonly number: IGithubApiIssueNumber;
-  readonly projects: IGithubApiProjectsPagination;
+  readonly projectsV2: IGithubApiProjectsPagination;
   readonly updatedAt: IIso8601Date;
   readonly url: string;
 }
