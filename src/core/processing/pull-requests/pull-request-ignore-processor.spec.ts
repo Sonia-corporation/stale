@@ -893,9 +893,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IPullRequestsInputs>({
-              pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                includeOffset: false,
-              }),
+              pullRequestIgnoreBeforeCreationDate:
+                DateTime.utc(2020).toISO({
+                  includeOffset: false,
+                }) ?? ``,
             })
           );
         });
@@ -925,9 +926,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorGetCreatedAtSpy.mockReturnValue(DateTime.now());
             pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                  includeOffset: false,
-                }),
+                pullRequestIgnoreBeforeCreationDate:
+                  DateTime.utc(2020).toISO({
+                    includeOffset: false,
+                  }) ?? ``,
               })
             );
           });
@@ -951,9 +953,10 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
             pullRequestProcessorGetCreatedAtSpy.mockReturnValue(DateTime.utc(2019));
             pullRequestsInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IPullRequestsInputs>({
-                pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                  includeOffset: false,
-                }),
+                pullRequestIgnoreBeforeCreationDate:
+                  DateTime.utc(2020).toISO({
+                    includeOffset: false,
+                  }) ?? ``,
               })
             );
           });

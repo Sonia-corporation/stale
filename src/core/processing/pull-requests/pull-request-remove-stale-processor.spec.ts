@@ -190,9 +190,10 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2019).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
@@ -262,9 +263,10 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2021).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2021).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
@@ -364,17 +366,19 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2019).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
                           }),
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2019).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
@@ -444,17 +448,19 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2019).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
                           }),
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2021).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2021).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
@@ -527,17 +533,19 @@ describe(`PullRequestRemoveStaleProcessor`, (): void => {
                       timelineItems: {
                         nodes: [
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2021).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2021).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
                           }),
                           createHydratedMock<IGithubApiTimelineItemsPullRequestLabeledEvent>({
-                            createdAt: DateTime.utc(2019).toISO({
-                              includeOffset: false,
-                            }),
+                            createdAt:
+                              DateTime.utc(2019).toISO({
+                                includeOffset: false,
+                              }) ?? ``,
                             label: {
                               name: `stale`,
                             },
