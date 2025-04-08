@@ -1,6 +1,6 @@
 # Sonia stale action
 
-# [2.6.0](https://github.com/Sonia-corporation/stale/compare/2.5.0...2.6.0) (2025-04-08)
+# [3.0.0](https://github.com/Sonia-corporation/stale/compare/2.5.0...3.0.0) (2025-04-08)
 
 ### :bug: Bug Fixes
 
