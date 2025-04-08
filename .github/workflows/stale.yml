@@ -7,6 +7,7 @@ jobs:
   Stale:
     runs-on: ubuntu-latest
     name: Run stale
+    permissions: write-all
     steps:
       - name: Checkout
         id: checkout
