@@ -105,7 +105,7 @@
     "vercel:pull:ci": "vercel pull --yes"
   },
   "dependencies": {
-    "@actions/core": "1.9.1",
+    "@actions/core": "1.11.1",
     "@actions/github": "5.1.1",
     "@octokit/graphql-schema": "12.29.0",
     "ansi-styles": "6.1.1",
