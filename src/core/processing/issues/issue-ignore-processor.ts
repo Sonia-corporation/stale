@@ -59,15 +59,15 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     return false;
   }
 
-  public hasAllIgnoredProjectCards$$(): boolean {
-    this.processor.logger.info(`Checking if all the project cards on this issue should be ignored...`);
+  public hasAllIgnoredProjects$$(): boolean {
+    this.processor.logger.info(`Checking if all the projects on this issue should be ignored...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (!issuesInputs.issueIgnoreAllProjectCards) {
+    if (!issuesInputs.issueIgnoreAllProjects) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
+        LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECTS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
       );
 
@@ -76,21 +76,21 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECT_CARDS),
+      LoggerService.input(EInputs.ISSUE_IGNORE_ALL_PROJECTS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.item.projectCards.totalCount > 0) {
+    if (this.processor.item.projects.totalCount > 0) {
       this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.processor.item.projectCards.totalCount),
-        LoggerFormatService.whiteBright(`project card${this.processor.item.projectCards.totalCount > 1 ? `s` : ``}`)
+        LoggerService.value(this.processor.item.projects.totalCount),
+        LoggerFormatService.whiteBright(`project${this.processor.item.projects.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
     }
 
-    this.processor.logger.info(`The issue has no project card. Continuing...`);
+    this.processor.logger.info(`The issue has no project. Continuing...`);
 
     return false;
   }
@@ -194,7 +194,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // @todo handle  the pagination
     const { totalCount } = this.processor.item.labels;
 
     if (totalCount > GithubApiIssuesService.labelsPerIssue) {
@@ -241,7 +241,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // @todo handle  the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiIssuesService.assigneesPerIssue) {
@@ -266,21 +266,21 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     return false;
   }
 
-  public hasAnyIgnoredProjectCards$$(): boolean {
-    this.processor.logger.info(`Checking if this issue has one of the ignored project cards...`);
+  public hasAnyIgnoredProjects$$(): boolean {
+    this.processor.logger.info(`Checking if this issue has one of the ignored projects...`);
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
-    const duplicatedProjectCards: string[] = getDuplicates(
-      this._getProjectCardNames(this.processor.item.projectCards.nodes),
-      issuesInputs.issueIgnoreAnyProjectCards
+    const duplicatedProjects: string[] = getDuplicates(
+      this._getProjectTitles(this.processor.item.projects.nodes),
+      issuesInputs.issueIgnoreAnyProjects
     );
-    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectCards);
+    const firstDuplicatedProject: string | undefined = _.head(duplicatedProjects);
 
-    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+    if (!_.isUndefined(firstDuplicatedProject)) {
       this.processor.logger.info(
-        `Containing one of the ignored project cards`,
+        `Containing one of the ignored projects`,
         LoggerFormatService.white(`->`),
-        LoggerService.value(firstDuplicatedProjectCard)
+        LoggerService.value(firstDuplicatedProject)
       );
 
       return true;
@@ -288,27 +288,27 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
-    const { totalCount } = this.processor.item.projectCards;
+    // @todo handle the  pagination
+    const { totalCount } = this.processor.item.projects;
 
-    if (totalCount > GithubApiIssuesService.projectCardsPerIssue) {
+    if (totalCount > GithubApiIssuesService.projectsPerIssue) {
       this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
-          `project card${
+          `project${
             totalCount > 1 ? `s` : ``
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECTS_PAGINATION_NOT_IMPLEMENTED, {
         file: `issue-ignore-processor.ts`,
         startLine: 306,
         title: `Warning`,
       });
     }
 
-    this.processor.logger.info(`Not containing an ignored project card. Continuing...`);
+    this.processor.logger.info(`Not containing an ignored project. Continuing...`);
 
     return false;
   }

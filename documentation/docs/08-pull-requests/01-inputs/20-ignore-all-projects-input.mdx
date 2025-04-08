@@ -1,0 +1,36 @@
+---
+id: pull-request-ignore-all-projects-input
+title: Ignore all pull request projects input
+description: |
+  All the information you need to know about the ignore all pull request projects input.
+  Including a detailed description and an example.
+tags:
+  - Pull requests
+  - Inputs
+  - Projects
+---
+
+### Input {#input}
+
+Name: `pull-request-ignore-all-projects`  
+Type: `boolean`  
+Default value: `false`
+
+### Description {#description}
+
+This input will let you ignore the processing of the pull requests which have at least one project.  
+This can be useful when you link your pull requests with your projects, and you know that you will for sure close or at least process the pull requests very soon.
+
+However, if you are not certain that linking the pull requests with any project will result in the handling for sure of the processing of the pull requests, this input may not suit you.  
+You may prefer to use instead the [ignore any projects input](pull-request-ignore-any-projects-input) to list only some specific projects or not use this input at all.
+
+### Example {#example}
+
+```yml {6}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  pull-request-ignore-all-projects: true
+```

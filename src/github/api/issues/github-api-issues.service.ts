@@ -6,7 +6,7 @@ import { GITHUB_API_ISSUES_QUERY } from '@github/api/issues/constants/github-api
 import { GITHUB_ASSIGNEES_PER_ISSUE } from '@github/api/issues/constants/github-assignees-per-issue';
 import { GITHUB_ISSUES_PER_PAGE } from '@github/api/issues/constants/github-issues-per-page';
 import { GITHUB_LABELS_PER_ISSUE } from '@github/api/issues/constants/github-labels-per-issue';
-import { GITHUB_PROJECT_CARDS_PER_ISSUE } from '@github/api/issues/constants/github-project-cards-per-issue';
+import { GITHUB_PROJECTS_PER_ISSUE } from '@github/api/issues/constants/github-projects-per-issue';
 import { IGithubApiGetIssues } from '@github/api/issues/interfaces/github-api-get-issues.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
@@ -22,7 +22,7 @@ export class GithubApiIssuesService {
   public static readonly issuesPerPage = GITHUB_ISSUES_PER_PAGE;
   public static readonly labelsPerIssue = GITHUB_LABELS_PER_ISSUE;
   public static readonly assigneesPerIssue = GITHUB_ASSIGNEES_PER_ISSUE;
-  public static readonly projectCardsPerIssue = GITHUB_PROJECT_CARDS_PER_ISSUE;
+  public static readonly projectsPerIssue = GITHUB_PROJECTS_PER_ISSUE;
 
   public static fetchIssues(fromPageId?: Readonly<string>): Promise<IGithubApiGetIssues> | never {
     LoggerService.info(`Fetching the issues from GitHub...`);
@@ -34,7 +34,7 @@ export class GithubApiIssuesService {
         issuesPerPage: GithubApiIssuesService.issuesPerPage,
         labelsPerIssue: GithubApiIssuesService.labelsPerIssue,
         owner: context.repo.owner,
-        projectCardsPerIssue: GithubApiIssuesService.projectCardsPerIssue,
+        projectsPerIssue: GithubApiIssuesService.projectsPerIssue,
         repository: context.repo.repo,
       })
       .then((response: Readonly<IGithubApiGetIssues>): IGithubApiGetIssues => {

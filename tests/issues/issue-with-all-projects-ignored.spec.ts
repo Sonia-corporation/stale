@@ -1,22 +1,22 @@
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { FakeIssuesProcessor } from '@tests/utils/fake-issues-processor';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Issue with all project cards ignored`, (): void => {
+describe(`Issue with all projects ignored`, (): void => {
   let issueSut: FakeIssuesProcessor;
 
-  describe(`when an issue should ignore all the project cards`, (): void => {
+  describe(`when an issue should ignore all the projects`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueIgnoreAllProjectCards: true,
+        issueIgnoreAllProjects: true,
       });
     });
 
-    describe(`when there is no project card on the issue`, (): void => {
+    describe(`when there is no project on the issue`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projectCards: {
+          projects: {
             nodes: [],
             totalCount: 0,
           },
@@ -36,12 +36,12 @@ describe(`Issue with all project cards ignored`, (): void => {
       });
     });
 
-    describe(`when there is one project card on the issue`, (): void => {
+    describe(`when there is one project on the issue`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projectCards: {
-            nodes: [createHydratedMock<IGithubApiProjectCard>()],
+          projects: {
+            nodes: [createHydratedMock<IGithubApiProject>()],
             totalCount: 1,
           },
         });

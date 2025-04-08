@@ -4,7 +4,7 @@ import { PullRequestsInputsService } from '@core/inputs/pull-requests-inputs.ser
 import { AbstractIncludeProcessor } from '@core/processing/abstract-include-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { GithubApiPullRequestsService } from '@github/api/pull-requests/github-api-pull-requests.service';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningPullRequest } from '@utils/annotations/enums/annotation-warning-pull-request.enum';
@@ -22,17 +22,17 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
     super(pullRequestProcessor);
   }
 
-  public shouldIncludeAnyWhiteListedProjectCard$$(): boolean {
+  public shouldIncludeAnyWhiteListedProject$$(): boolean {
     this.processor.logger.info(
-      `Checking if this pull request should only be processed based on any of the associated project cards...`
+      `Checking if this pull request should only be processed based on any of the associated projects...`
     );
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
-    if (_.isEmpty(pullRequestsInputs.pullRequestOnlyAnyProjectCards)) {
+    if (_.isEmpty(pullRequestsInputs.pullRequestOnlyAnyProjects)) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_PROJECT_CARDS),
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_PROJECTS),
         LoggerFormatService.whiteBright(
           `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
         )
@@ -43,39 +43,36 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_PROJECT_CARDS),
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_ANY_PROJECTS),
       LoggerFormatService.whiteBright(
         `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
       )
     );
-    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
-    const projectCardsCount: number = projectCards.length;
-    const projectNames: string[] = this._getProjectNames(projectCards);
+    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projectsCount: number = projects.length;
+    const projectNames: string[] = this._getProjectTitles(projects);
 
-    if (projectCardsCount === 0) {
-      this.processor.logger.info(`Not containing any project card. Skipping the processing of this pull request...`);
+    if (projectsCount === 0) {
+      this.processor.logger.info(`Not containing any project. Skipping the processing of this pull request...`);
 
       return false;
     }
 
     this.processor.logger.info(
       `Found`,
-      LoggerService.value(projectCardsCount),
-      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this pull request`),
+      LoggerService.value(projectsCount),
+      LoggerFormatService.whiteBright(`project${projectsCount > 1 ? `s` : ``} on this pull request`),
       LoggerService.value(projectNames)
     );
 
-    const duplicatedProjectNames: string[] = getDuplicates(
-      projectNames,
-      pullRequestsInputs.pullRequestOnlyAnyProjectCards
-    );
-    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectNames);
+    const duplicatedProjectNames: string[] = getDuplicates(projectNames, pullRequestsInputs.pullRequestOnlyAnyProjects);
+    const firstDuplicatedProject: string | undefined = _.head(duplicatedProjectNames);
 
-    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+    if (!_.isUndefined(firstDuplicatedProject)) {
       this.processor.logger.info(
-        `Containing one of the required project card`,
+        `Containing one of the required project`,
         LoggerFormatService.white(`->`),
-        LoggerService.value(firstDuplicatedProjectCard)
+        LoggerService.value(firstDuplicatedProject)
       );
       this.processor.logger.info(`Continuing the processing for this pull request...`);
 
@@ -84,20 +81,20 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
-    const { totalCount } = this.processor.item.projectCards;
+    // @to do handle the pagination
+    const { totalCount } = this.processor.item.projects;
 
-    if (totalCount > GithubApiPullRequestsService.projectCardsPerPullRequest) {
+    if (totalCount > GithubApiPullRequestsService.projectsPerPullRequest) {
       this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
-          `project card${
+          `project${
             totalCount > 1 ? `s` : ``
           } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECTS_PAGINATION_NOT_IMPLEMENTED, {
         file: `pull-request-include-processor.ts`,
         startLine: 90,
         title: `Warning`,
@@ -105,7 +102,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
     }
 
     this.processor.logger.info(
-      `Not containing any of the required project card. Skipping the processing of this pull request...`
+      `Not containing any of the required project. Skipping the processing of this pull request...`
     );
 
     return false;
@@ -233,7 +230,7 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // @todo h andle the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {
@@ -337,17 +334,17 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
     return true;
   }
 
-  public shouldIncludeAnyProjectCard$$(): boolean {
+  public shouldIncludeAnyProject$$(): boolean {
     this.processor.logger.info(
-      `Checking if this pull request should only be processed when having at least one associated project card...`
+      `Checking if this pull request should only be processed when having at least one associated project...`
     );
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
-    if (!pullRequestsInputs.pullRequestOnlyWithProjectCards) {
+    if (!pullRequestsInputs.pullRequestOnlyWithProjects) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS),
+        LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECTS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
       );
 
@@ -356,22 +353,22 @@ export class PullRequestIncludeProcessor extends AbstractIncludeProcessor<PullRe
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS),
+      LoggerService.input(EInputs.PULL_REQUEST_ONLY_WITH_PROJECTS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
-    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
-    const projectCardsCount: number = projectCards.length;
+    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projectsCount: number = projects.length;
 
-    if (projectCardsCount === 0) {
-      this.processor.logger.info(`Not containing any project card. Skipping the processing of this pull request...`);
+    if (projectsCount === 0) {
+      this.processor.logger.info(`Not containing any project. Skipping the processing of this pull request...`);
 
       return false;
     }
 
     this.processor.logger.info(
       `Found`,
-      LoggerService.value(projectCardsCount),
-      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this pull request`)
+      LoggerService.value(projectsCount),
+      LoggerFormatService.whiteBright(`project${projectsCount > 1 ? `s` : ``} on this pull request`)
     );
     this.processor.logger.info(`Continuing the processing for this pull request...`);
 

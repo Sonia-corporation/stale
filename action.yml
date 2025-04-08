@@ -42,21 +42,21 @@ inputs:
     description: 'Only allow the processing of issues that contains one of those assignees (multiline).'
     required: false
     default: ''
-  ## Project cards
-  issue-ignore-all-project-cards:
-    description: 'Allow to ignore the processing of issues that contains any project cards.'
+  ## Projects
+  issue-ignore-all-projects:
+    description: 'Allow to ignore the processing of issues that contains any projects.'
     required: false
     default: 'false'
-  issue-ignore-any-project-cards:
-    description: 'Allow to ignore the processing of issues that contains one of those project cards (multiline).'
+  issue-ignore-any-projects:
+    description: 'Allow to ignore the processing of issues that contains one of those projects (multiline).'
     required: false
     default: ''
-  issue-only-with-project-cards:
-    description: 'Only allow the processing of issues that contains at least one project card.'
+  issue-only-with-projects:
+    description: 'Only allow the processing of issues that contains at least one project.'
     required: false
     default: 'false'
-  issue-only-any-project-cards:
-    description: 'Only allow the processing of issues that contains one of those project cards (multiline).'
+  issue-only-any-projects:
+    description: 'Only allow the processing of issues that contains one of those projects (multiline).'
     required: false
     default: ''
   ## Milestones
@@ -163,21 +163,21 @@ inputs:
     description: 'Only allow the processing of pull requests that contains one of those assignees (multiline).'
     required: false
     default: ''
-  ## Project cards
-  pull-request-ignore-all-project-cards:
-    description: 'Allow to ignore the processing of pull requests that contains any project cards.'
+  ## Projects
+  pull-request-ignore-all-projects:
+    description: 'Allow to ignore the processing of pull requests that contains any projects.'
     required: false
     default: 'false'
-  pull-request-ignore-any-project-cards:
-    description: 'Allow to ignore the processing of pull requests that contains one of those project cards (multiline).'
+  pull-request-ignore-any-projects:
+    description: 'Allow to ignore the processing of pull requests that contains one of those projects (multiline).'
     required: false
     default: ''
-  pull-request-only-with-project-cards:
-    description: 'Only allow the processing of pull requests that contains at least one project card.'
+  pull-request-only-with-projects:
+    description: 'Only allow the processing of pull requests that contains at least one project.'
     required: false
     default: 'false'
-  pull-request-only-any-project-cards:
-    description: 'Only allow the processing of pull requests that contains one of those project cards (multiline).'
+  pull-request-only-any-projects:
+    description: 'Only allow the processing of pull requests that contains one of those projects (multiline).'
     required: false
     default: ''
   ## Milestones

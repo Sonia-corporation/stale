@@ -53,3 +53,8 @@ Thumbs.db
 
 
 .vercel
+
+# .idea
+.idea/sonarlint/*
+
+!package-lock.json

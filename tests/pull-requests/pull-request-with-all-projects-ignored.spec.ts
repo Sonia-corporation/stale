@@ -1,22 +1,22 @@
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { FakePullRequestsProcessor } from '@tests/utils/fake-pull-requests-processor';
 import { createHydratedMock } from 'ts-auto-mock';
 
-describe(`Pull request with all project cards ignored`, (): void => {
+describe(`Pull request with all projects ignored`, (): void => {
   let pullRequestSut: FakePullRequestsProcessor;
 
-  describe(`when a pull request should ignore all the project cards`, (): void => {
+  describe(`when a pull request should ignore all the projects`, (): void => {
     beforeEach((): void => {
       pullRequestSut = new FakePullRequestsProcessor({
-        pullRequestIgnoreAllProjectCards: true,
+        pullRequestIgnoreAllProjects: true,
       });
     });
 
-    describe(`when there is no project card on the pull request`, (): void => {
+    describe(`when there is no project on the pull request`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projectCards: {
+          projects: {
             nodes: [],
             totalCount: 0,
           },
@@ -36,12 +36,12 @@ describe(`Pull request with all project cards ignored`, (): void => {
       });
     });
 
-    describe(`when there is one project card on the pull request`, (): void => {
+    describe(`when there is one project on the pull request`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projectCards: {
-            nodes: [createHydratedMock<IGithubApiProjectCard>()],
+          projects: {
+            nodes: [createHydratedMock<IGithubApiProject>()],
             totalCount: 1,
           },
         });
