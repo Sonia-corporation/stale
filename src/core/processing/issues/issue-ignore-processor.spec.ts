@@ -817,9 +817,10 @@ describe(`IssueIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           issuesInputsServiceGetInputsSpy.mockReturnValue(
             createHydratedMock<IIssuesInputs>({
-              issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                includeOffset: false,
-              }),
+              issueIgnoreBeforeCreationDate:
+                DateTime.utc(2020).toISO({
+                  includeOffset: false,
+                }) ?? ``,
             })
           );
         });
@@ -849,9 +850,10 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.now());
             issuesInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IIssuesInputs>({
-                issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                  includeOffset: false,
-                }),
+                issueIgnoreBeforeCreationDate:
+                  DateTime.utc(2020).toISO({
+                    includeOffset: false,
+                  }) ?? ``,
               })
             );
           });
@@ -875,9 +877,10 @@ describe(`IssueIgnoreProcessor`, (): void => {
             issueProcessorGetCreatedAtSpy.mockReturnValue(DateTime.utc(2019));
             issuesInputsServiceGetInputsSpy.mockReturnValue(
               createHydratedMock<IIssuesInputs>({
-                issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
-                  includeOffset: false,
-                }),
+                issueIgnoreBeforeCreationDate:
+                  DateTime.utc(2020).toISO({
+                    includeOffset: false,
+                  }) ?? ``,
               })
             );
           });
