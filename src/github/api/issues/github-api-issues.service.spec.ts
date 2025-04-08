@@ -39,10 +39,10 @@ describe(`GithubApiIssuesService`, (): void => {
     expect(GithubApiIssuesService.assigneesPerIssue).toBe(20);
   });
 
-  it(`should load 20 project cards per batch`, (): void => {
+  it(`should load 20 projects per batch`, (): void => {
     expect.assertions(1);
 
-    expect(GithubApiIssuesService.projectCardsPerIssue).toBe(20);
+    expect(GithubApiIssuesService.projectsPerIssue).toBe(20);
   });
 
   describe(`fetchIssues()`, (): void => {
@@ -91,7 +91,7 @@ describe(`GithubApiIssuesService`, (): void => {
         issuesPerPage: 20,
         labelsPerIssue: 20,
         owner: `dummy-owner`,
-        projectCardsPerIssue: 20,
+        projectsPerIssue: 20,
         repository: `dummy-repo`,
       });
     });

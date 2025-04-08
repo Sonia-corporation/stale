@@ -47,7 +47,7 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestIgnoreAllMilestones: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_ALL_MILESTONES, {
         required: false,
       }),
-      pullRequestIgnoreAllProjectCards: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECT_CARDS, {
+      pullRequestIgnoreAllProjects: core.getBooleanInput(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECTS, {
         required: false,
       }),
       pullRequestIgnoreAnyAssignees: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_ASSIGNEES, {
@@ -57,7 +57,7 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestIgnoreAnyMilestones: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_MILESTONES, {
         required: false,
       }),
-      pullRequestIgnoreAnyProjectCards: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_PROJECT_CARDS, {
+      pullRequestIgnoreAnyProjects: core.getMultilineInput(EInputs.PULL_REQUEST_IGNORE_ANY_PROJECTS, {
         required: false,
       }),
       pullRequestIgnoreBeforeCreationDate: core.getInput(EInputs.PULL_REQUEST_IGNORE_BEFORE_CREATION_DATE, {
@@ -84,7 +84,7 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestOnlyAnyMilestones: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_MILESTONES, {
         required: false,
       }),
-      pullRequestOnlyAnyProjectCards: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_PROJECT_CARDS, {
+      pullRequestOnlyAnyProjects: core.getMultilineInput(EInputs.PULL_REQUEST_ONLY_ANY_PROJECTS, {
         required: false,
       }),
       pullRequestOnlyWithAssignees: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_ASSIGNEES, {
@@ -93,7 +93,7 @@ export class PullRequestsInputsService extends AbstractInputsService<IPullReques
       pullRequestOnlyWithMilestones: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_MILESTONES, {
         required: false,
       }),
-      pullRequestOnlyWithProjectCards: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_PROJECT_CARDS, {
+      pullRequestOnlyWithProjects: core.getBooleanInput(EInputs.PULL_REQUEST_ONLY_WITH_PROJECTS, {
         required: false,
       }),
       pullRequestProcessing: core.getBooleanInput(EInputs.PULL_REQUEST_PROCESSING, { required: false }),

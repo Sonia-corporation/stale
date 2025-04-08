@@ -1,3 +1,6 @@
+import { IUuid } from '@utils/types/uuid';
+
 export interface IGithubApiProject {
-  readonly name: string;
+  readonly id: IUuid;
+  readonly title: string;
 }

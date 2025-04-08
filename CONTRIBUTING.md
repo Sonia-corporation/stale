@@ -117,7 +117,13 @@ Also, the local version of this stale action is tested also in the CI in every s
 It's very important for us to keep a documentation and a [website](https://sonia-stale-action.vercel.app/docs/introduction) up-to-date.  
 So please, check everything before creating a pull request.  
 You may also need to run the translations scripts (from the documentation package).  
-You can do that by running `npm run write-translations` and `npm run write-translations:french`.
+You can do that by running:
+
+```shell
+cd documentation
+npm run write-translations
+npm run write-translations:french
+```
 
 Note that the CI build step will perform a difference check and will be considered as failing if one is found.  
 Note that we also have a [blog](https://sonia-stale-action.vercel.app/blog) so don't hesitate to suggest a new entry, or create a new [ticket](https://github.com/Sonia-corporation/stale/issues/new?assignees=C0ZEN&labels=blog-request+%3Anewspaper%3A&template=blog_article.md&title=%5BBLOG%5D+).
@@ -148,17 +154,17 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the issue has any of the ignored labels and stop the processing if this is the case (coming from the `issue-ignore-any-labels` input)
 - Check if the issue has an assignee and stop the processing if this is the case (coming from the `issue-ignore-all-assignees` input)
 - Check if the issue has any of the ignored assignees and stop the processing if this is the case (coming from the `issue-ignore-any-assignees` input)
-- Check if the issue has a project card and stop the processing if this is the case (coming from the `issue-ignore-all-project-cards` input)
-- Check if the issue has any of the ignored project cards and stop the processing if this is the case (coming from the `issue-ignore-any-project-cards` input)
+- Check if the issue has a project and stop the processing if this is the case (coming from the `issue-ignore-all-projects` input)
+- Check if the issue has any of the ignored projects and stop the processing if this is the case (coming from the `issue-ignore-any-projects` input)
 - Check if the issue has any of the ignored milestones and stop the processing if this is the case (coming from the `issue-ignore-any-milestones` input)
 - Check if the issue has a milestone and stop the processing if this is the case (coming from the `issue-ignore-all-milestones` input)
 - Check if the issue creation date is before x date and stop the processing if this is the case (coming from the `issue-ignore-before-creation-date` input)
-- Check if the input `issue-only-any-project-cards` contains some project cards. If this is the case and the issue has at least one project card matching linked to it, the processing will continue, else the processing will stop.
+- Check if the input `issue-only-any-projects` contains some projects. If this is the case and the issue has at least one project matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-any-milestones` contains some milestones. If this is the case and the issue has at least one milestone matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-any-assignees` contains some assignees. If this is the case and the issue has at least one assignee matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-with-assignees` contains some assignees. If this is the case and the issue has at least one assignee linked to it, the processing will continue, else the processing will stop.
 - Check if the input `issue-only-with-milestones` contains some milestones. If this is the case and the issue has at least one milestone linked to it, the processing will continue, else the processing will stop.
-- Check if the input `issue-only-with-project-cards` contains some project cards. If this is the case and the issue has at least one project card linked to it, the processing will continue, else the processing will stop.
+- Check if the input `issue-only-with-projects` contains some projects. If this is the case and the issue has at least one project linked to it, the processing will continue, else the processing will stop.
 - Check if the issue has already a stale state (stale label)
   - If the issue has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing
@@ -193,18 +199,18 @@ To help us have a clear vision over the workflow and also for you if you are jus
 - Check if the pull request has any of the ignored labels and stop the processing if this is the case (coming from the `pull-request-ignore-any-labels` input)
 - Check if the pull request has an assignee and stop the processing if this is the case (coming from the `pull-request-ignore-all-assignees` input)
 - Check if the pull request has any of the ignored assignees and stop the processing if this is the case (coming from the `pull-request-ignore-any-assignees` input)
-- Check if the pull request has a project card and stop the processing if this is the case (coming from the `pull-request-ignore-all-project-cards` input)
-- Check if the pull request has any of the ignored project cards and stop the processing if this is the case (coming from the `pull-request-ignore-any-project-cards` input)
+- Check if the pull request has a project and stop the processing if this is the case (coming from the `pull-request-ignore-all-projects` input)
+- Check if the pull request has any of the ignored projects and stop the processing if this is the case (coming from the `pull-request-ignore-any-projects` input)
 - Check if the pull request has any of the ignored milestones and stop the processing if this is the case (coming from the `pull-request-ignore-any-milestones` input)
 - Check if the pull request has a milestone and stop the processing if this is the case (coming from the `pull request-ignore-all-milestones` input)
 - Check if the pull request creation date is before x date and stop the processing if this is the case (coming from the `pull-request-ignore-before-creation-date` input)
 - Check if the pull request is a draft and stop the processing if this is the case (coming from the `pull-request-ignore-draft` input)
-- Check if the input `pull-request-only-any-project-cards` contains some project cards. If this is the case and the pull request has at least one project card matching linked to it, the processing will continue, else the processing will stop.
+- Check if the input `pull-request-only-any-projects` contains some projects. If this is the case and the pull request has at least one project matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-any-milestones` contains some milestones. If this is the case and the pull request has at least one milestone matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-any-assignees` contains some assignees. If this is the case and the pull request has at least one assignee matching linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-with-assignees` contains some assignees. If this is the case and the pull request has at least one assignee linked to it, the processing will continue, else the processing will stop.
 - Check if the input `pull-request-only-with-milestones` contains some milestones. If this is the case and the pull request has at least one milestone linked to it, the processing will continue, else the processing will stop.
-- Check if the input `pull-request-only-with-project-cards` contains some project cards. If this is the case and the pull request has at least one project card linked to it, the processing will continue, else the processing will stop.
+- Check if the input `pull-request-only-with-projects` contains some projects. If this is the case and the pull request has at least one project linked to it, the processing will continue, else the processing will stop.
 - Check if the pull request has already a stale state (stale label)
   - If the pull request has a stale label, check if it was updated after the addition of the stale label
     - If it was updated, remove the stale state (stale label) and stop the processing

@@ -1,7 +1,7 @@
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import _ from 'lodash';
 
@@ -21,24 +21,24 @@ export abstract class AbstractIncludeProcessor<
     this.processor.logger.info(`Checking if this ${this.type} should be included in the processing...`);
 
     return (
-      this.shouldIncludeAnyWhiteListedProjectCard$$() &&
+      this.shouldIncludeAnyWhiteListedProject$$() &&
       this.shouldIncludeAnyWhiteListedMilestone$$() &&
       this.shouldIncludeAnyWhiteListedAssignee$$() &&
       this.shouldIncludeAnyAssignee$$() &&
       this.shouldIncludeAnyMilestone$$() &&
-      this.shouldIncludeAnyProjectCard$$()
+      this.shouldIncludeAnyProject$$()
     );
   }
 
-  protected _getProjectNames(projectCards: ReadonlyArray<IGithubApiProjectCard>): string[] {
-    return _.map(projectCards, (projectCard: Readonly<IGithubApiProjectCard>): string => projectCard.project.name);
+  protected _getProjectTitles(projects: ReadonlyArray<IGithubApiProject>): string[] {
+    return _.map(projects, (project: Readonly<IGithubApiProject>): string => project.title);
   }
 
   protected _getAssigneeNames(assignees: ReadonlyArray<IGithubApiAssignee>): string[] {
     return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
   }
 
-  public abstract shouldIncludeAnyWhiteListedProjectCard$$(): boolean;
+  public abstract shouldIncludeAnyWhiteListedProject$$(): boolean;
 
   public abstract shouldIncludeAnyWhiteListedMilestone$$(): boolean;
 
@@ -48,5 +48,5 @@ export abstract class AbstractIncludeProcessor<
 
   public abstract shouldIncludeAnyMilestone$$(): boolean;
 
-  public abstract shouldIncludeAnyProjectCard$$(): boolean;
+  public abstract shouldIncludeAnyProject$$(): boolean;
 }

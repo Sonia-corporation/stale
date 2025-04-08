@@ -1,5 +1,5 @@
 export const GITHUB_API_ISSUES_QUERY = `
-  query GetIssues($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $assigneesPerIssue: Int!, $projectCardsPerIssue: Int!, $afterCursor: String) {
+  query GetIssues($owner: String!, $repository: String!, $issuesPerPage: Int!, $labelsPerIssue: Int!, $assigneesPerIssue: Int!, $projectsPerIssue: Int!, $afterCursor: String) {
     repository(name: $repository, owner: $owner) {
       issues(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $issuesPerPage, after: $afterCursor) {
         pageInfo {
@@ -27,13 +27,11 @@ export const GITHUB_API_ISSUES_QUERY = `
               login
             }
           }
-          projectCards(first: $projectCardsPerIssue) {
+          projectsV2(first: $projectsPerIssue) {
             totalCount
             nodes {
               id
-              project {
-                name
-              }
+              title
             }
           }
           milestone {

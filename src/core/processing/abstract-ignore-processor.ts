@@ -2,7 +2,7 @@ import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { PullRequestProcessor } from '@core/processing/pull-requests/pull-request-processor';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
 import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.interface';
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import _ from 'lodash';
 
@@ -27,8 +27,8 @@ export abstract class AbstractIgnoreProcessor<
       this.hasAnyIgnoredLabels$$() ||
       this.hasAllIgnoredAssignees$$() ||
       this.hasAnyIgnoredAssignees$$() ||
-      this.hasAllIgnoredProjectCards$$() ||
-      this.hasAnyIgnoredProjectCards$$() ||
+      this.hasAllIgnoredProjects$$() ||
+      this.hasAnyIgnoredProjects$$() ||
       this.hasAnyIgnoredMilestones$$() ||
       this.hasAllIgnoredMilestones$$() ||
       this.hasIgnoredCreationDate$$()
@@ -58,8 +58,8 @@ export abstract class AbstractIgnoreProcessor<
     return _.map(assignees, (assignee: Readonly<IGithubApiAssignee>): string => assignee.login);
   }
 
-  protected _getProjectCardNames(projectCards: ReadonlyArray<IGithubApiProjectCard>): string[] {
-    return _.map(projectCards, (projectCard: Readonly<IGithubApiProjectCard>): string => projectCard.project.name);
+  protected _getProjectTitles(projects: ReadonlyArray<IGithubApiProject>): string[] {
+    return _.map(projects, (project: Readonly<IGithubApiProject>): string => project.title);
   }
 
   private _isLocked(): boolean {
@@ -68,7 +68,7 @@ export abstract class AbstractIgnoreProcessor<
 
   public abstract hasAllIgnoredAssignees$$(): boolean;
 
-  public abstract hasAllIgnoredProjectCards$$(): boolean;
+  public abstract hasAllIgnoredProjects$$(): boolean;
 
   public abstract hasIgnoredCreationDate$$(): boolean;
 
@@ -78,7 +78,7 @@ export abstract class AbstractIgnoreProcessor<
 
   public abstract hasAnyIgnoredAssignees$$(): boolean;
 
-  public abstract hasAnyIgnoredProjectCards$$(): boolean;
+  public abstract hasAnyIgnoredProjects$$(): boolean;
 
   public abstract hasAnyIgnoredMilestones$$(): boolean;
 
