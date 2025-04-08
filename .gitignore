@@ -55,6 +55,7 @@ Thumbs.db
 .vercel
 
 # .idea
+.idea/material_theme_project_new.xml
 .idea/sonarlint/*
 
 !package-lock.json
