@@ -135,6 +135,7 @@ describe(`PullRequestStaleProcessor`, (): void => {
       beforeEach((): void => {
         pullRequestStaleLabel = faker.random.word();
         staleLabelId = faker.datatype.uuid();
+        pullRequestId = faker.datatype.uuid();
         pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
           item: {
             id: pullRequestId,
