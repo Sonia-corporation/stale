@@ -48,7 +48,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
         `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
       )
     );
-    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projects: IGithubApiProject[] = this.processor.item.projectsV2.nodes;
     const projectsCount: number = projects.length;
     const projectTitles: string[] = this._getProjectTitles(projects);
 
@@ -82,7 +82,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.item.projects;
+    const { totalCount } = this.processor.item.projectsV2;
 
     if (totalCount > GithubApiIssuesService.projectsPerIssue) {
       this.processor.logger.warning(
@@ -350,7 +350,7 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
       LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECTS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
-    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projects: IGithubApiProject[] = this.processor.item.projectsV2.nodes;
     const projectsCount: number = projects.length;
 
     if (projectsCount === 0) {

@@ -12,7 +12,7 @@ describe(`Issue with ignored project`, (): void => {
         issueIgnoreAnyProjects: [`ignored-project`],
       }).addIssue({
         locked: false,
-        projects: createHydratedMock<IGithubApiProjectsPagination>({
+        projectsV2: createHydratedMock<IGithubApiProjectsPagination>({
           nodes: [
             createHydratedMock<IGithubApiProject>({
               title: `ignored-project`,

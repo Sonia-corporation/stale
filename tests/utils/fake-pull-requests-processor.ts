@@ -67,7 +67,7 @@ export class FakePullRequestsProcessor extends AbstractFakeProcessor {
       },
       locked: faker.datatype.boolean(),
       number: faker.datatype.number(),
-      projects: {
+      projectsV2: {
         nodes: [
           {
             id: faker.datatype.uuid(),

@@ -16,7 +16,7 @@ describe(`Pull request with all projects ignored`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [],
             totalCount: 0,
           },
@@ -40,7 +40,7 @@ describe(`Pull request with all projects ignored`, (): void => {
       beforeEach((): void => {
         pullRequestSut.addPullRequest({
           locked: false,
-          projects: {
+          projectsV2: {
             nodes: [createHydratedMock<IGithubApiProject>()],
             totalCount: 1,
           },

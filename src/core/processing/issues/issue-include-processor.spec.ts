@@ -352,7 +352,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [],
                   totalCount: 0,
                 },
@@ -397,7 +397,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project`,
@@ -470,7 +470,7 @@ describe(`IssueIncludeProcessor`, (): void => {
             beforeEach((): void => {
               issueProcessor = createHydratedMock<IssueProcessor>({
                 item: {
-                  projects: {
+                  projectsV2: {
                     nodes: [
                       createHydratedMock<IGithubApiProject>({
                         title: `dummy-project`,
@@ -627,7 +627,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project-1`,
@@ -703,7 +703,7 @@ describe(`IssueIncludeProcessor`, (): void => {
             beforeEach((): void => {
               issueProcessor = createHydratedMock<IssueProcessor>({
                 item: {
-                  projects: {
+                  projectsV2: {
                     nodes: [
                       createHydratedMock<IGithubApiProject>({
                         title: `dummy-project-1`,
@@ -2252,7 +2252,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [],
                   totalCount: 0,
                 },
@@ -2290,7 +2290,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project`,
@@ -2346,7 +2346,7 @@ describe(`IssueIncludeProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project-1`,

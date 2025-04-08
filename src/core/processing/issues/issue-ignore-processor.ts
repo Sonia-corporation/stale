@@ -80,11 +80,11 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.item.projects.totalCount > 0) {
+    if (this.processor.item.projectsV2.totalCount > 0) {
       this.processor.logger.info(
         `The issue has`,
-        LoggerService.value(this.processor.item.projects.totalCount),
-        LoggerFormatService.whiteBright(`project${this.processor.item.projects.totalCount > 1 ? `s` : ``}`)
+        LoggerService.value(this.processor.item.projectsV2.totalCount),
+        LoggerFormatService.whiteBright(`project${this.processor.item.projectsV2.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
@@ -271,7 +271,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
     const duplicatedProjects: string[] = getDuplicates(
-      this._getProjectTitles(this.processor.item.projects.nodes),
+      this._getProjectTitles(this.processor.item.projectsV2.nodes),
       issuesInputs.issueIgnoreAnyProjects
     );
     const firstDuplicatedProject: string | undefined = _.head(duplicatedProjects);
@@ -289,7 +289,7 @@ export class IssueIgnoreProcessor extends AbstractIgnoreProcessor<IssueProcessor
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the  pagination
-    const { totalCount } = this.processor.item.projects;
+    const { totalCount } = this.processor.item.projectsV2;
 
     if (totalCount > GithubApiIssuesService.projectsPerIssue) {
       this.processor.logger.warning(

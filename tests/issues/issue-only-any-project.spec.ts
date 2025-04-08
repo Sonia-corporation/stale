@@ -17,7 +17,7 @@ describe(`Issue any of the required project`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projects: createHydratedMock<IGithubApiProjectsPagination>({
+          projectsV2: createHydratedMock<IGithubApiProjectsPagination>({
             nodes: [],
           }),
         });
@@ -40,7 +40,7 @@ describe(`Issue any of the required project`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projects: createHydratedMock<IGithubApiProjectsPagination>({
+          projectsV2: createHydratedMock<IGithubApiProjectsPagination>({
             nodes: [
               createHydratedMock<IGithubApiProject>({
                 title: `project-y`,
@@ -67,7 +67,7 @@ describe(`Issue any of the required project`, (): void => {
       beforeEach((): void => {
         issueSut.addIssue({
           locked: false,
-          projects: createHydratedMock<IGithubApiProjectsPagination>({
+          projectsV2: createHydratedMock<IGithubApiProjectsPagination>({
             nodes: [
               createHydratedMock<IGithubApiProject>({
                 title: `project-x`,

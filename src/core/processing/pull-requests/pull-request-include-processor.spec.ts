@@ -356,7 +356,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [],
                   totalCount: 0,
                 },
@@ -401,7 +401,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project`,
@@ -474,7 +474,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
             beforeEach((): void => {
               pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
                 item: {
-                  projects: {
+                  projectsV2: {
                     nodes: [
                       createHydratedMock<IGithubApiProject>({
                         title: `dummy-project`,
@@ -631,7 +631,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project-1`,
@@ -707,7 +707,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
             beforeEach((): void => {
               pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
                 item: {
-                  projects: {
+                  projectsV2: {
                     nodes: [
                       createHydratedMock<IGithubApiProject>({
                         title: `dummy-project-1`,
@@ -2279,7 +2279,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [],
                   totalCount: 0,
                 },
@@ -2317,7 +2317,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project`,
@@ -2373,7 +2373,7 @@ describe(`PullRequestIncludeProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `dummy-project-1`,

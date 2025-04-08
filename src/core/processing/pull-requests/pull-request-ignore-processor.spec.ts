@@ -759,7 +759,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   totalCount: 0,
                 },
               },
@@ -789,7 +789,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   totalCount: 1,
                 },
               },
@@ -1702,7 +1702,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
             item: {
-              projects: {
+              projectsV2: {
                 nodes: [
                   createHydratedMock<IGithubApiProject>({
                     title: `ignored-project`,
@@ -1745,7 +1745,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
             item: {
-              projects: {
+              projectsV2: {
                 nodes: [
                   createHydratedMock<IGithubApiProject>({
                     title: `not-ignored-project`,
@@ -1777,7 +1777,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `not-ignored-project`,
@@ -1829,7 +1829,7 @@ describe(`PullRequestIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             pullRequestProcessor = createHydratedMock<PullRequestProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `not-ignored-project`,
