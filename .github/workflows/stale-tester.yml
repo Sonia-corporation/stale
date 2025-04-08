@@ -9,6 +9,7 @@ jobs:
   Stale:
     runs-on: ubuntu-latest
     name: Run dry-run stale # Test to run the current local stale action in dry-run mode (to detect possible issues)
+    permissions: write-all
     steps:
       - name: Checkout
         id: checkout
