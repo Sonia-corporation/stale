@@ -1,5 +1,23 @@
 # Sonia stale action
 
+# [2.6.0](https://github.com/Sonia-corporation/stale/compare/2.5.0...2.6.0) (2025-04-08)
+
+### :bug: Bug Fixes
+
+- **deps:** update dependency luxon to v3.3.0 ([8af9a02](https://github.com/Sonia-corporation/stale/commit/8af9a024ff82b262e3ffc72d0b182b6ff4b30ab6))
+- **deps:** update docusaurus monorepo to v2.4.3 (patch) ([#1152](https://github.com/Sonia-corporation/stale/issues/1152)) ([40879fc](https://github.com/Sonia-corporation/stale/commit/40879fcd33a417b6e65009c54fb113b0a5f18b10))
+  Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### :rocket: Features
+
+- **projects-v2:** drop support for project cards and add support for projects v2 ([7cbe664](https://github.com/Sonia-corporation/stale/commit/7cbe664f339c636030b01aeb740dd213eda440f0))
+  Note: a migration guide was [written](https://sonia-stale-action.vercel.app/docs/migrations/migration-to-projects-v2).
+
+### BREAKING CHANGES
+
+- **projects-v2:** All inputs including the word "-card(s)" were renamed without it.
+  For example, "issue-ignore-all-project-cards" is now called "issue-ignore-all-projects".
+
 # [2.5.0](https://github.com/Sonia-corporation/stale/compare/2.4.0...2.5.0) (2023-03-02)
 
 ### :books: Documentation
