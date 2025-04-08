@@ -7,13 +7,15 @@ describe(`Issue with ignored creation date`, (): void => {
   describe(`when the option to ignore based on the creation date has a date older than the issue creation date`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueIgnoreBeforeCreationDate: DateTime.utc(2021).toISO({
-          includeOffset: false,
-        }),
+        issueIgnoreBeforeCreationDate:
+          DateTime.utc(2021).toISO({
+            includeOffset: false,
+          }) ?? ``,
       }).addIssue({
-        createdAt: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        createdAt:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         locked: false,
       });
     });
@@ -34,13 +36,15 @@ describe(`Issue with ignored creation date`, (): void => {
   describe(`when the option to ignore based on the creation date has a date younger than the issue creation date`, (): void => {
     beforeEach((): void => {
       issueSut = new FakeIssuesProcessor({
-        issueIgnoreBeforeCreationDate: DateTime.utc(2019).toISO({
-          includeOffset: false,
-        }),
+        issueIgnoreBeforeCreationDate:
+          DateTime.utc(2019).toISO({
+            includeOffset: false,
+          }) ?? ``,
       }).addIssue({
-        createdAt: DateTime.utc(2020).toISO({
-          includeOffset: false,
-        }),
+        createdAt:
+          DateTime.utc(2020).toISO({
+            includeOffset: false,
+          }) ?? ``,
         locked: false,
       });
     });

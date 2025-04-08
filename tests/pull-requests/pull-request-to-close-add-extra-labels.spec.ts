@@ -24,9 +24,10 @@ describe(`Pull request to close add extra labels`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -38,9 +39,10 @@ describe(`Pull request to close add extra labels`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),
@@ -88,9 +90,10 @@ describe(`Pull request to close add extra labels`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -102,9 +105,10 @@ describe(`Pull request to close add extra labels`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),
@@ -153,9 +157,10 @@ describe(`Pull request to close add extra labels`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -167,9 +172,10 @@ describe(`Pull request to close add extra labels`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),
@@ -218,9 +224,10 @@ describe(`Pull request to close add extra labels`, (): void => {
             totalCount: 1,
           },
           locked: false,
-          updatedAt: DateTime.utc(2021).toISO({
-            includeOffset: false,
-          }), // No update since last stale
+          updatedAt:
+            DateTime.utc(2021).toISO({
+              includeOffset: false,
+            }) ?? ``, // No update since last stale
         })
         .mockTimelineItemsPullRequestLabeledEventQuery(
           (): Promise<IGithubApiTimelineItemsPullRequestLabeledEvents> =>
@@ -232,9 +239,10 @@ describe(`Pull request to close add extra labels`, (): void => {
                       filteredCount: 1,
                       nodes: [
                         {
-                          createdAt: DateTime.utc(2021).toISO({
-                            includeOffset: false,
-                          }), // Last stale
+                          createdAt:
+                            DateTime.utc(2021).toISO({
+                              includeOffset: false,
+                            }) ?? ``, // Last stale
                           label: createHydratedMock<IGithubApiLabel>({
                             name: `stale`,
                           }),

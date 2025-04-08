@@ -62,7 +62,7 @@
           "private-static-method",
           "public-abstract-field",
           "protected-abstract-field",
-          "private-abstract-field",
+          "abstract-field",
           "public-instance-field",
           "protected-instance-field",
           "private-instance-field",
@@ -74,7 +74,7 @@
           "private-instance-method",
           "public-abstract-method",
           "protected-abstract-method",
-          "private-abstract-method"
+          "abstract-method"
         ]
       }
     ],

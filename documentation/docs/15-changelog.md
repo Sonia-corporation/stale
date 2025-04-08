@@ -14,8 +14,7 @@ tags:
 ### :bug: Bug Fixes {#bug-bug-fixes}
 
 - **deps:** update dependency luxon to v3.3.0 ([8af9a02](https://github.com/Sonia-corporation/stale/commit/8af9a024ff82b262e3ffc72d0b182b6ff4b30ab6))
-- **deps:** update docusaurus monorepo to v2.4.3 (patch) ([#1152](https://github.com/Sonia-corporation/stale/issues/1152)) ([40879fc](https://github.com/Sonia-corporation/stale/commit/40879fcd33a417b6e65009c54fb113b0a5f18b10))  
-  Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+- **deps:** update docusaurus monorepo to v2.4.3 (patch) ([#1152](https://github.com/Sonia-corporation/stale/issues/1152)) ([40879fc](https://github.com/Sonia-corporation/stale/commit/40879fcd33a417b6e65009c54fb113b0a5f18b10))
 
 ### :rocket: Features {#rocket-features}
 
@@ -158,8 +157,7 @@ tags:
 
 ### :bug: Bug Fixes {#bug-bug-fixes-3}
 
-- **deps:** update dependency prism-react-renderer to v1.3.3 ([#686](https://github.com/Sonia-corporation/stale/issues/686)) ([873bda5](https://github.com/Sonia-corporation/stale/commit/873bda5366f01b74c5b65d4ee07bdc31cd4d1f1c))  
-  Co-authored-by: Renovate Bot <bot@renovateapp.com>
+- **deps:** update dependency prism-react-renderer to v1.3.3 ([#686](https://github.com/Sonia-corporation/stale/issues/686)) ([873bda5](https://github.com/Sonia-corporation/stale/commit/873bda5366f01b74c5b65d4ee07bdc31cd4d1f1c))
 
 # [1.57.0](https://github.com/Sonia-corporation/stale/compare/1.56.0...1.57.0) (2022-04-18)
 
@@ -334,8 +332,7 @@ tags:
 
 ### :bug: Bug Fixes {#bug-bug-fixes-7}
 
-- **deps:** update dependency prism-react-renderer to v1.3.1 ([#425](https://github.com/Sonia-corporation/stale/issues/425)) ([f4eae39](https://github.com/Sonia-corporation/stale/commit/f4eae3925b8e696997e11c65e8e3fa45b75cfac8))  
-  Co-authored-by: Renovate Bot <bot@renovateapp.com>
+- **deps:** update dependency prism-react-renderer to v1.3.1 ([#425](https://github.com/Sonia-corporation/stale/issues/425)) ([f4eae39](https://github.com/Sonia-corporation/stale/commit/f4eae3925b8e696997e11c65e8e3fa45b75cfac8))
 
 ## [1.43.1](https://github.com/Sonia-corporation/stale/compare/1.43.0...1.43.1) (2022-02-09) {#1431-2022-02-09}
 
@@ -435,9 +432,7 @@ tags:
 
 ### :bug: Bug Fixes {#bug-bug-fixes-10}
 
-- **deps:** update docusaurus monorepo to v2.0.0-beta.15 (patch) ([#358](https://github.com/Sonia-corporation/stale/issues/358)) ([5bfd537](https://github.com/Sonia-corporation/stale/commit/5bfd537ce39437b0e833ebff60ed7013c8bae109))  
-  Co-authored-by: Renovate Bot <bot@renovateapp.com>  
-  Co-authored-by: TESTELIN Geoffrey <geoffrey.testelin@gmail.com>
+- **deps:** update docusaurus monorepo to v2.0.0-beta.15 (patch) ([#358](https://github.com/Sonia-corporation/stale/issues/358)) ([5bfd537](https://github.com/Sonia-corporation/stale/commit/5bfd537ce39437b0e833ebff60ed7013c8bae109))
 
 ### :rocket: Features {#rocket-features-23}
 
