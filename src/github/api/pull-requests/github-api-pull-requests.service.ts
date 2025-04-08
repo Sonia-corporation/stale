@@ -5,7 +5,7 @@ import { GITHUB_API_DRAFT_PULL_REQUEST_MUTATION } from '@github/api/pull-request
 import { GITHUB_API_PULL_REQUESTS_QUERY } from '@github/api/pull-requests/constants/github-api-pull-requests-query';
 import { GITHUB_ASSIGNEES_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-assignees-per-pull-request';
 import { GITHUB_LABELS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-labels-per-pull-request';
-import { GITHUB_PROJECT_CARDS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-project-cards-per-pull-request';
+import { GITHUB_PROJECTS_PER_PULL_REQUEST } from '@github/api/pull-requests/constants/github-projects-per-pull-request';
 import { GITHUB_PULL_REQUESTS_PER_PAGE } from '@github/api/pull-requests/constants/github-pull-requests-per-page';
 import { IGithubApiGetPullRequests } from '@github/api/pull-requests/interfaces/github-api-get-pull-requests.interface';
 import { OctokitService } from '@github/octokit/octokit.service';
@@ -21,7 +21,7 @@ export class GithubApiPullRequestsService {
   public static readonly pullRequestsPerPage = GITHUB_PULL_REQUESTS_PER_PAGE;
   public static readonly labelsPerPullRequest = GITHUB_LABELS_PER_PULL_REQUEST;
   public static readonly assigneesPerPullRequest = GITHUB_ASSIGNEES_PER_PULL_REQUEST;
-  public static readonly projectCardsPerPullRequest = GITHUB_PROJECT_CARDS_PER_PULL_REQUEST;
+  public static readonly projectsPerPullRequest = GITHUB_PROJECTS_PER_PULL_REQUEST;
 
   public static fetchPullRequests(fromPageId?: Readonly<string>): Promise<IGithubApiGetPullRequests> | never {
     LoggerService.info(`Fetching the pull requests from GitHub...`);
@@ -32,7 +32,7 @@ export class GithubApiPullRequestsService {
         assigneesPerPullRequest: GithubApiPullRequestsService.assigneesPerPullRequest,
         labelsPerPullRequest: GithubApiPullRequestsService.labelsPerPullRequest,
         owner: context.repo.owner,
-        projectCardsPerPullRequest: GithubApiPullRequestsService.projectCardsPerPullRequest,
+        projectsPerPullRequest: GithubApiPullRequestsService.projectsPerPullRequest,
         pullRequestsPerPage: GithubApiPullRequestsService.pullRequestsPerPage,
         repository: context.repo.repo,
       })

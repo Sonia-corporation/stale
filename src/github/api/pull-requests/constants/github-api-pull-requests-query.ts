@@ -1,5 +1,5 @@
 export const GITHUB_API_PULL_REQUESTS_QUERY = `
-  query GetPullRequests($owner: String!, $repository: String!, $pullRequestsPerPage: Int!, $labelsPerPullRequest: Int!, $assigneesPerPullRequest: Int!, $projectCardsPerPullRequest: Int!, $afterCursor: String) {
+  query GetPullRequests($owner: String!, $repository: String!, $pullRequestsPerPage: Int!, $labelsPerPullRequest: Int!, $assigneesPerPullRequest: Int!, $projectsPerPullRequest: Int!, $afterCursor: String) {
     repository(name: $repository, owner: $owner) {
       pullRequests(orderBy: {field: UPDATED_AT, direction: DESC}, states: OPEN, first: $pullRequestsPerPage, after: $afterCursor) {
         pageInfo {
@@ -28,13 +28,11 @@ export const GITHUB_API_PULL_REQUESTS_QUERY = `
               login
             }
           }
-          projectCards(first: $projectCardsPerPullRequest) {
+          projectsV2(first: $projectsPerPullRequest) {
             totalCount
             nodes {
               id
-              project {
-                name
-              }
+              title
             }
           }
           headRef {

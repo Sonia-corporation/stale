@@ -71,7 +71,7 @@ describe(`CoreInputsService`, (): void => {
           issueDaysBeforeStale: 666,
           issueIgnoreAllAssignees: false,
           issueIgnoreAllLabels: false,
-          issueIgnoreAllProjectCards: false,
+          issueIgnoreAllProjects: false,
           issueIgnoreAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
           issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
@@ -189,7 +189,7 @@ describe(`CoreInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(7, `issue-ignore-all-labels`);
       });
 
-      it(`should log the issue ignore all project cards input`, (): void => {
+      it(`should log the issue ignore all projects input`, (): void => {
         expect.assertions(4);
 
         CoreInputsService.logInputs(groupName, inputs);
@@ -198,11 +198,11 @@ describe(`CoreInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           8,
           `white-├──`,
-          `input-issue-ignore-all-project-cards`,
+          `input-issue-ignore-all-projects`,
           `value-false`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(13);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `issue-ignore-all-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(8, `issue-ignore-all-projects`);
       });
 
       it(`should log the issue ignore any assignees input`, (): void => {

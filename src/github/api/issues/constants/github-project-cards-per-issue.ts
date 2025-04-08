@@ -1,1 +1,0 @@
-export const GITHUB_PROJECT_CARDS_PER_ISSUE = 20;

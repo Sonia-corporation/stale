@@ -90,11 +90,11 @@ describe(`IssuesInputsService`, (): void => {
         issueIgnoreAllAssignees: true,
         issueIgnoreAllLabels: true,
         issueIgnoreAllMilestones: true,
-        issueIgnoreAllProjectCards: true,
+        issueIgnoreAllProjects: true,
         issueIgnoreAnyAssignees: [`assignee-1`, `assignee-2`],
         issueIgnoreAnyLabels: [`label-1`, `label-2`],
         issueIgnoreAnyMilestones: [`milestone-1`, `milestone-2`],
-        issueIgnoreAnyProjectCards: [`project-card-1`, `project-card-2`],
+        issueIgnoreAnyProjects: [`project-1`, `project-2`],
         issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
           includeOffset: false,
         }),
@@ -102,10 +102,10 @@ describe(`IssuesInputsService`, (): void => {
         issueLimitApiQueriesCount: 100,
         issueOnlyAnyAssignees: [`assignee-1`, `assignee-2`],
         issueOnlyAnyMilestones: [`milestone-1`, `milestone-2`],
-        issueOnlyAnyProjectCards: [`project-card-1`, `project-card-2`],
+        issueOnlyAnyProjects: [`project-1`, `project-2`],
         issueOnlyWithAssignees: true,
         issueOnlyWithMilestones: true,
-        issueOnlyWithProjectCards: true,
+        issueOnlyWithProjects: true,
         issueProcessing: true,
         issueRemoveLabelsAfterClose: [`extra-removed-close-label-1`, `extra-removed-close-label-2`],
         issueRemoveLabelsAfterStale: [`extra-removed-stale-label-1`, `extra-removed-stale-label-2`],
@@ -230,14 +230,14 @@ describe(`IssuesInputsService`, (): void => {
       expect(service.inputs$$?.issueIgnoreAllMilestones).toBeFalse();
     });
 
-    it(`should get the issue-ignore-all-project-cards input, parse it and set it`, (): void => {
+    it(`should get the issue-ignore-all-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(8);
-      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(4, `issue-ignore-all-project-cards`, { required: false });
-      expect(service.inputs$$?.issueIgnoreAllProjectCards).toBeFalse();
+      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(4, `issue-ignore-all-projects`, { required: false });
+      expect(service.inputs$$?.issueIgnoreAllProjects).toBeFalse();
     });
 
     it(`should get the issue-ignore-any-assignees input, parse it and set it`, (): void => {
@@ -279,18 +279,18 @@ describe(`IssuesInputsService`, (): void => {
       ]);
     });
 
-    it(`should get the issue-ignore-any-project-cards input, parse it and set it`, (): void => {
+    it(`should get the issue-ignore-any-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(6, `issue-ignore-any-project-cards`, {
+      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(6, `issue-ignore-any-projects`, {
         required: false,
       });
-      expect(service.inputs$$?.issueIgnoreAnyProjectCards).toStrictEqual([
-        `dummy-issue-ignore-any-project-cards-1`,
-        `dummy-issue-ignore-any-project-cards-2`,
+      expect(service.inputs$$?.issueIgnoreAnyProjects).toStrictEqual([
+        `dummy-issue-ignore-any-projects-1`,
+        `dummy-issue-ignore-any-projects-2`,
       ]);
     });
 
@@ -354,16 +354,16 @@ describe(`IssuesInputsService`, (): void => {
       ]);
     });
 
-    it(`should get the issue-only-any-project-cards input, parse it and set it`, (): void => {
+    it(`should get the issue-only-any-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(9, `issue-only-any-project-cards`, { required: false });
-      expect(service.inputs$$?.issueOnlyAnyProjectCards).toStrictEqual([
-        `dummy-issue-only-any-project-cards-1`,
-        `dummy-issue-only-any-project-cards-2`,
+      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(9, `issue-only-any-projects`, { required: false });
+      expect(service.inputs$$?.issueOnlyAnyProjects).toStrictEqual([
+        `dummy-issue-only-any-projects-1`,
+        `dummy-issue-only-any-projects-2`,
       ]);
     });
 
@@ -387,14 +387,14 @@ describe(`IssuesInputsService`, (): void => {
       expect(service.inputs$$?.issueOnlyWithMilestones).toBeFalse();
     });
 
-    it(`should get the issue-only-with-project-cards input, parse it and set it`, (): void => {
+    it(`should get the issue-only-with-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(8);
-      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(7, `issue-only-with-project-cards`, { required: false });
-      expect(service.inputs$$?.issueOnlyWithProjectCards).toBeFalse();
+      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(7, `issue-only-with-projects`, { required: false });
+      expect(service.inputs$$?.issueOnlyWithProjects).toBeFalse();
     });
 
     it(`should get the issue-processing input, parse it and set it`, (): void => {
@@ -472,23 +472,20 @@ describe(`IssuesInputsService`, (): void => {
         issueIgnoreAllAssignees: false,
         issueIgnoreAllLabels: false,
         issueIgnoreAllMilestones: false,
-        issueIgnoreAllProjectCards: false,
+        issueIgnoreAllProjects: false,
         issueIgnoreAnyAssignees: [`dummy-issue-ignore-any-assignees-1`, `dummy-issue-ignore-any-assignees-2`],
         issueIgnoreAnyLabels: [`dummy-issue-ignore-any-labels-1`, `dummy-issue-ignore-any-labels-2`],
         issueIgnoreAnyMilestones: [`dummy-issue-ignore-any-milestones-1`, `dummy-issue-ignore-any-milestones-2`],
-        issueIgnoreAnyProjectCards: [
-          `dummy-issue-ignore-any-project-cards-1`,
-          `dummy-issue-ignore-any-project-cards-2`,
-        ],
+        issueIgnoreAnyProjects: [`dummy-issue-ignore-any-projects-1`, `dummy-issue-ignore-any-projects-2`],
         issueIgnoreBeforeCreationDate: `dummy-issue-ignore-before-creation-date`,
         issueLimitApiMutationsCount: 666,
         issueLimitApiQueriesCount: 666,
         issueOnlyAnyAssignees: [`dummy-issue-only-any-assignees-1`, `dummy-issue-only-any-assignees-2`],
         issueOnlyAnyMilestones: [`dummy-issue-only-any-milestones-1`, `dummy-issue-only-any-milestones-2`],
-        issueOnlyAnyProjectCards: [`dummy-issue-only-any-project-cards-1`, `dummy-issue-only-any-project-cards-2`],
+        issueOnlyAnyProjects: [`dummy-issue-only-any-projects-1`, `dummy-issue-only-any-projects-2`],
         issueOnlyWithAssignees: false,
         issueOnlyWithMilestones: false,
-        issueOnlyWithProjectCards: false,
+        issueOnlyWithProjects: false,
         issueProcessing: false,
         issueRemoveLabelsAfterClose: [
           `dummy-issue-remove-labels-after-close-1`,
@@ -538,11 +535,11 @@ describe(`IssuesInputsService`, (): void => {
           issueIgnoreAllAssignees: false,
           issueIgnoreAllLabels: false,
           issueIgnoreAllMilestones: false,
-          issueIgnoreAllProjectCards: false,
+          issueIgnoreAllProjects: false,
           issueIgnoreAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           issueIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
           issueIgnoreAnyMilestones: [`dummy-milestone-1`, `dummy-milestone-2`],
-          issueIgnoreAnyProjectCards: [`dummy-project-card-1`, `dummy-project-card-2`],
+          issueIgnoreAnyProjects: [`dummy-project-1`, `dummy-project-2`],
           issueIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
             includeOffset: false,
           }),
@@ -550,10 +547,10 @@ describe(`IssuesInputsService`, (): void => {
           issueLimitApiQueriesCount: 666,
           issueOnlyAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           issueOnlyAnyMilestones: [`dummy-milestone-1`, `dummy-milestone-2`],
-          issueOnlyAnyProjectCards: [`dummy-project-card-1`, `dummy-project-card-2`],
+          issueOnlyAnyProjects: [`dummy-project-1`, `dummy-project-2`],
           issueOnlyWithAssignees: false,
           issueOnlyWithMilestones: false,
-          issueOnlyWithProjectCards: false,
+          issueOnlyWithProjects: false,
           issueProcessing: false,
           issueRemoveLabelsAfterClose: [`dummy-extra-removed-close-label-1`, `dummy-extra-removed-close-label-2`],
           issueRemoveLabelsAfterStale: [`dummy-extra-removed-stale-label-1`, `dummy-extra-removed-stale-label-2`],
@@ -706,7 +703,7 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `issue-ignore-all-milestones`);
       });
 
-      it(`should log the issue ignore all project cards input`, (): void => {
+      it(`should log the issue ignore all projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -715,11 +712,11 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           10,
           `white-├──`,
-          `input-issue-ignore-all-project-cards`,
+          `input-issue-ignore-all-projects`,
           `value-false`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(28);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `issue-ignore-all-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `issue-ignore-all-projects`);
       });
 
       it(`should log the issue ignore any assignees input`, (): void => {
@@ -770,7 +767,7 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(13, `issue-ignore-any-milestones`);
       });
 
-      it(`should log the issue ignore any project cards input`, (): void => {
+      it(`should log the issue ignore any projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -779,11 +776,11 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           14,
           `white-├──`,
-          `input-issue-ignore-any-project-cards`,
-          `value-dummy-project-card-1,dummy-project-card-2`
+          `input-issue-ignore-any-projects`,
+          `value-dummy-project-1,dummy-project-2`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(28);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `issue-ignore-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `issue-ignore-any-projects`);
       });
 
       it(`should log the issue ignore before creation date input`, (): void => {
@@ -866,7 +863,7 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(19, `issue-only-any-milestones`);
       });
 
-      it(`should log the issue only any project cards input`, (): void => {
+      it(`should log the issue only any projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -875,11 +872,11 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           20,
           `white-├──`,
-          `input-issue-only-any-project-cards`,
-          `value-dummy-project-card-1,dummy-project-card-2`
+          `input-issue-only-any-projects`,
+          `value-dummy-project-1,dummy-project-2`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(28);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(20, `issue-only-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(20, `issue-only-any-projects`);
       });
 
       it(`should log the issue only with assignees input`, (): void => {
@@ -914,7 +911,7 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(22, `issue-only-with-milestones`);
       });
 
-      it(`should log the issue only with project cards input`, (): void => {
+      it(`should log the issue only with projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -923,11 +920,11 @@ describe(`IssuesInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           23,
           `white-├──`,
-          `input-issue-only-with-project-cards`,
+          `input-issue-only-with-projects`,
           `value-false`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(28);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(23, `issue-only-with-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(23, `issue-only-with-projects`);
       });
 
       it(`should log the issue processing input`, (): void => {

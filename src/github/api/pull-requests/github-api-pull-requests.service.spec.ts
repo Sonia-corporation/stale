@@ -38,10 +38,10 @@ describe(`GithubApiPullRequestsService`, (): void => {
     expect(GithubApiPullRequestsService.assigneesPerPullRequest).toBe(20);
   });
 
-  it(`should load 20 project cards per batch`, (): void => {
+  it(`should load 20 projects per batch`, (): void => {
     expect.assertions(1);
 
-    expect(GithubApiPullRequestsService.projectCardsPerPullRequest).toBe(20);
+    expect(GithubApiPullRequestsService.projectsPerPullRequest).toBe(20);
   });
 
   describe(`fetchPullRequests()`, (): void => {
@@ -89,7 +89,7 @@ describe(`GithubApiPullRequestsService`, (): void => {
         assigneesPerPullRequest: 20,
         labelsPerPullRequest: 20,
         owner: `dummy-owner`,
-        projectCardsPerPullRequest: 20,
+        projectsPerPullRequest: 20,
         pullRequestsPerPage: 20,
         repository: `dummy-repo`,
       });

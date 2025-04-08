@@ -63,15 +63,15 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     return false;
   }
 
-  public hasAllIgnoredProjectCards$$(): boolean {
-    this.processor.logger.info(`Checking if all the project cards on this pull request should be ignored...`);
+  public hasAllIgnoredProjects$$(): boolean {
+    this.processor.logger.info(`Checking if all the projects on this pull request should be ignored...`);
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
 
-    if (!pullRequestsInputs.pullRequestIgnoreAllProjectCards) {
+    if (!pullRequestsInputs.pullRequestIgnoreAllProjects) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECT_CARDS),
+        LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECTS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
       );
 
@@ -80,21 +80,21 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECT_CARDS),
+      LoggerService.input(EInputs.PULL_REQUEST_IGNORE_ALL_PROJECTS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
 
-    if (this.processor.item.projectCards.totalCount > 0) {
+    if (this.processor.item.projects.totalCount > 0) {
       this.processor.logger.info(
         `The pull request has`,
-        LoggerService.value(this.processor.item.projectCards.totalCount),
-        LoggerFormatService.whiteBright(`project card${this.processor.item.projectCards.totalCount > 1 ? `s` : ``}`)
+        LoggerService.value(this.processor.item.projects.totalCount),
+        LoggerFormatService.whiteBright(`project${this.processor.item.projects.totalCount > 1 ? `s` : ``}`)
       );
 
       return true;
     }
 
-    this.processor.logger.info(`The pull request has no project card. Continuing...`);
+    this.processor.logger.info(`The pull request has no project. Continuing...`);
 
     return false;
   }
@@ -200,7 +200,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // @todo handle  the pagination
     const { totalCount } = this.processor.item.labels;
 
     if (totalCount > GithubApiPullRequestsService.labelsPerPullRequest) {
@@ -247,7 +247,7 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
+    // @todo handle  the pagination
     const { totalCount } = this.processor.item.assignees;
 
     if (totalCount > GithubApiPullRequestsService.assigneesPerPullRequest) {
@@ -272,21 +272,21 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
     return false;
   }
 
-  public hasAnyIgnoredProjectCards$$(): boolean {
-    this.processor.logger.info(`Checking if this pull request has one of the ignored project cards...`);
+  public hasAnyIgnoredProjects$$(): boolean {
+    this.processor.logger.info(`Checking if this pull request has one of the ignored projects...`);
 
     const pullRequestsInputs: IPullRequestsInputs = PullRequestsInputsService.getInstance().getInputs();
-    const duplicatedProjectCards: string[] = getDuplicates(
-      this._getProjectCardNames(this.processor.item.projectCards.nodes),
-      pullRequestsInputs.pullRequestIgnoreAnyProjectCards
+    const duplicatedProjects: string[] = getDuplicates(
+      this._getProjectTitles(this.processor.item.projects.nodes),
+      pullRequestsInputs.pullRequestIgnoreAnyProjects
     );
-    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectCards);
+    const firstDuplicatedProject: string | undefined = _.head(duplicatedProjects);
 
-    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+    if (!_.isUndefined(firstDuplicatedProject)) {
       this.processor.logger.info(
-        `Containing one of the ignored project cards`,
+        `Containing one of the ignored projects`,
         LoggerFormatService.white(`->`),
-        LoggerService.value(firstDuplicatedProjectCard)
+        LoggerService.value(firstDuplicatedProject)
       );
 
       return true;
@@ -294,27 +294,27 @@ export class PullRequestIgnoreProcessor extends AbstractIgnoreProcessor<PullRequ
 
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
-    // @todo handle the pagination
-    const { totalCount } = this.processor.item.projectCards;
+    // @todo handle the  pagination
+    const { totalCount } = this.processor.item.projects;
 
-    if (totalCount > GithubApiPullRequestsService.projectCardsPerPullRequest) {
+    if (totalCount > GithubApiPullRequestsService.projectsPerPullRequest) {
       this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
-          `project card${
+          `project${
             totalCount > 1 ? `s` : ``
           } attached on this pull request. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+      AnnotationsService.warning(EAnnotationWarningPullRequest.TOO_MANY_PROJECTS_PAGINATION_NOT_IMPLEMENTED, {
         file: `pull-request-ignore-processor.ts`,
         startLine: 312,
         title: `Warning`,
       });
     }
 
-    this.processor.logger.info(`Not containing an ignored project card. Continuing...`);
+    this.processor.logger.info(`Not containing an ignored project. Continuing...`);
 
     return false;
   }

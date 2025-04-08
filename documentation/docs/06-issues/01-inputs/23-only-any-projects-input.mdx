@@ -1,0 +1,35 @@
+---
+id: issue-only-any-projects-input
+title: Issue only any projects input
+description: |
+  All the information you need to know about the issue only any projects input.
+  Including a detailed description and an example.
+tags:
+  - Issues
+  - Inputs
+  - Projects
+---
+
+### Input {#input}
+
+Name: `issue-only-any-projects`  
+Type: `string[]`  
+Default value: `[]`
+
+### Description {#description}
+
+This input will let you process only the issues that are linked to a project which is white-listed with this input.  
+This can be useful when you use the projects for triage.
+
+### Example {#example}
+
+```yml {6-8}
+# ...
+name: Stale
+id: stale
+uses: sonia-corporation/stale@latest
+with:
+  issue-only-any-projects: |
+    project-x
+    project-y
+```

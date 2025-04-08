@@ -1,0 +1,1 @@
+export const GITHUB_PROJECTS_PER_PULL_REQUEST = 20;

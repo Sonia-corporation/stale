@@ -87,11 +87,11 @@ describe(`PullRequestsInputsService`, (): void => {
         pullRequestIgnoreAllAssignees: true,
         pullRequestIgnoreAllLabels: true,
         pullRequestIgnoreAllMilestones: true,
-        pullRequestIgnoreAllProjectCards: true,
+        pullRequestIgnoreAllProjects: true,
         pullRequestIgnoreAnyAssignees: [`assignee-1`, `assignee-2`],
         pullRequestIgnoreAnyLabels: [`label-1`, `label-2`],
         pullRequestIgnoreAnyMilestones: [`milestone-1`, `milestone-2`],
-        pullRequestIgnoreAnyProjectCards: [`project-card-1`, `project-card-2`],
+        pullRequestIgnoreAnyProjects: [`project-1`, `project-2`],
         pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
           includeOffset: false,
         }),
@@ -100,10 +100,10 @@ describe(`PullRequestsInputsService`, (): void => {
         pullRequestLimitApiQueriesCount: 100,
         pullRequestOnlyAnyAssignees: [`assignee-1`, `assignee-2`],
         pullRequestOnlyAnyMilestones: [`milestone-1`, `milestone-2`],
-        pullRequestOnlyAnyProjectCards: [`project-card-1`, `project-card-2`],
+        pullRequestOnlyAnyProjects: [`project-1`, `project-2`],
         pullRequestOnlyWithAssignees: true,
         pullRequestOnlyWithMilestones: true,
-        pullRequestOnlyWithProjectCards: true,
+        pullRequestOnlyWithProjects: true,
         pullRequestProcessing: true,
         pullRequestRemoveLabelsAfterClose: [`extra-removed-close-label-1`, `extra-removed-close-label-2`],
         pullRequestRemoveLabelsAfterStale: [`extra-removed-stale-label-1`, `extra-removed-stale-label-2`],
@@ -230,16 +230,16 @@ describe(`PullRequestsInputsService`, (): void => {
       expect(service.inputs$$?.pullRequestIgnoreAllMilestones).toBeFalse();
     });
 
-    it(`should get the pull-request-ignore-all-project-cards input, parse it and set it`, (): void => {
+    it(`should get the pull-request-ignore-all-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(5, `pull-request-ignore-all-project-cards`, {
+      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(5, `pull-request-ignore-all-projects`, {
         required: false,
       });
-      expect(service.inputs$$?.pullRequestIgnoreAllProjectCards).toBeFalse();
+      expect(service.inputs$$?.pullRequestIgnoreAllProjects).toBeFalse();
     });
 
     it(`should get the pull-request-ignore-any-assignees input, parse it and set it`, (): void => {
@@ -287,18 +287,18 @@ describe(`PullRequestsInputsService`, (): void => {
       ]);
     });
 
-    it(`should get the pull-request-ignore-any-project-cards input, parse it and set it`, (): void => {
+    it(`should get the pull-request-ignore-any-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(6, `pull-request-ignore-any-project-cards`, {
+      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(6, `pull-request-ignore-any-projects`, {
         required: false,
       });
-      expect(service.inputs$$?.pullRequestIgnoreAnyProjectCards).toStrictEqual([
-        `dummy-pull-request-ignore-any-project-cards-1`,
-        `dummy-pull-request-ignore-any-project-cards-2`,
+      expect(service.inputs$$?.pullRequestIgnoreAnyProjects).toStrictEqual([
+        `dummy-pull-request-ignore-any-projects-1`,
+        `dummy-pull-request-ignore-any-projects-2`,
       ]);
     });
 
@@ -382,18 +382,18 @@ describe(`PullRequestsInputsService`, (): void => {
       ]);
     });
 
-    it(`should get the pull-request-only-any-project-cards input, parse it and set it`, (): void => {
+    it(`should get the pull-request-only-any-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetMultilineInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(9, `pull-request-only-any-project-cards`, {
+      expect(coreGetMultilineInputSpy).toHaveBeenNthCalledWith(9, `pull-request-only-any-projects`, {
         required: false,
       });
-      expect(service.inputs$$?.pullRequestOnlyAnyProjectCards).toStrictEqual([
-        `dummy-pull-request-only-any-project-cards-1`,
-        `dummy-pull-request-only-any-project-cards-2`,
+      expect(service.inputs$$?.pullRequestOnlyAnyProjects).toStrictEqual([
+        `dummy-pull-request-only-any-projects-1`,
+        `dummy-pull-request-only-any-projects-2`,
       ]);
     });
 
@@ -421,16 +421,16 @@ describe(`PullRequestsInputsService`, (): void => {
       expect(service.inputs$$?.pullRequestOnlyWithMilestones).toBeFalse();
     });
 
-    it(`should get the pull-request-only-with-project-cards input, parse it and set it`, (): void => {
+    it(`should get the pull-request-only-with-projects input, parse it and set it`, (): void => {
       expect.assertions(3);
 
       service.setInputs();
 
       expect(coreGetBooleanInputSpy).toHaveBeenCalledTimes(11);
-      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(9, `pull-request-only-with-project-cards`, {
+      expect(coreGetBooleanInputSpy).toHaveBeenNthCalledWith(9, `pull-request-only-with-projects`, {
         required: false,
       });
-      expect(service.inputs$$?.pullRequestOnlyWithProjectCards).toBeFalse();
+      expect(service.inputs$$?.pullRequestOnlyWithProjects).toBeFalse();
     });
 
     it(`should get the pull-request-processing input, parse it and set it`, (): void => {
@@ -528,7 +528,7 @@ describe(`PullRequestsInputsService`, (): void => {
         pullRequestIgnoreAllAssignees: false,
         pullRequestIgnoreAllLabels: false,
         pullRequestIgnoreAllMilestones: false,
-        pullRequestIgnoreAllProjectCards: false,
+        pullRequestIgnoreAllProjects: false,
         pullRequestIgnoreAnyAssignees: [
           `dummy-pull-request-ignore-any-assignees-1`,
           `dummy-pull-request-ignore-any-assignees-2`,
@@ -541,9 +541,9 @@ describe(`PullRequestsInputsService`, (): void => {
           `dummy-pull-request-ignore-any-milestones-1`,
           `dummy-pull-request-ignore-any-milestones-2`,
         ],
-        pullRequestIgnoreAnyProjectCards: [
-          `dummy-pull-request-ignore-any-project-cards-1`,
-          `dummy-pull-request-ignore-any-project-cards-2`,
+        pullRequestIgnoreAnyProjects: [
+          `dummy-pull-request-ignore-any-projects-1`,
+          `dummy-pull-request-ignore-any-projects-2`,
         ],
         pullRequestIgnoreBeforeCreationDate: `dummy-pull-request-ignore-before-creation-date`,
         pullRequestIgnoreDraft: false,
@@ -557,13 +557,13 @@ describe(`PullRequestsInputsService`, (): void => {
           `dummy-pull-request-only-any-milestones-1`,
           `dummy-pull-request-only-any-milestones-2`,
         ],
-        pullRequestOnlyAnyProjectCards: [
-          `dummy-pull-request-only-any-project-cards-1`,
-          `dummy-pull-request-only-any-project-cards-2`,
+        pullRequestOnlyAnyProjects: [
+          `dummy-pull-request-only-any-projects-1`,
+          `dummy-pull-request-only-any-projects-2`,
         ],
         pullRequestOnlyWithAssignees: false,
         pullRequestOnlyWithMilestones: false,
-        pullRequestOnlyWithProjectCards: false,
+        pullRequestOnlyWithProjects: false,
         pullRequestProcessing: false,
         pullRequestRemoveLabelsAfterClose: [
           `dummy-pull-request-remove-labels-after-close-1`,
@@ -614,11 +614,11 @@ describe(`PullRequestsInputsService`, (): void => {
           pullRequestIgnoreAllAssignees: false,
           pullRequestIgnoreAllLabels: false,
           pullRequestIgnoreAllMilestones: false,
-          pullRequestIgnoreAllProjectCards: false,
+          pullRequestIgnoreAllProjects: false,
           pullRequestIgnoreAnyAssignees: [`dummy-assignee-1`, `dummy-assignee-2`],
           pullRequestIgnoreAnyLabels: [`dummy-label-1`, `dummy-label-2`],
           pullRequestIgnoreAnyMilestones: [`dummy-milestone-1`, `dummy-milestone-2`],
-          pullRequestIgnoreAnyProjectCards: [`dummy-project-card-1`, `dummy-project-card-2`],
+          pullRequestIgnoreAnyProjects: [`dummy-project-1`, `dummy-project-2`],
           pullRequestIgnoreBeforeCreationDate: DateTime.utc(2020).toISO({
             includeOffset: false,
           }),
@@ -627,10 +627,10 @@ describe(`PullRequestsInputsService`, (): void => {
           pullRequestLimitApiQueriesCount: 666,
           pullRequestOnlyAnyAssignees: [`assignee-1`, `assignee-2`],
           pullRequestOnlyAnyMilestones: [`milestone-1`, `milestone-2`],
-          pullRequestOnlyAnyProjectCards: [`project-card-1`, `project-card-2`],
+          pullRequestOnlyAnyProjects: [`project-1`, `project-2`],
           pullRequestOnlyWithAssignees: false,
           pullRequestOnlyWithMilestones: false,
-          pullRequestOnlyWithProjectCards: false,
+          pullRequestOnlyWithProjects: false,
           pullRequestProcessing: false,
           pullRequestRemoveLabelsAfterClose: [`dummy-extra-removed-close-label-1`, `dummy-extra-removed-close-label-2`],
           pullRequestRemoveLabelsAfterStale: [`dummy-extra-removed-stale-label-1`, `dummy-extra-removed-stale-label-2`],
@@ -784,7 +784,7 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(9, `pull-request-ignore-all-milestones`);
       });
 
-      it(`should log the pull request ignore all project cards input`, (): void => {
+      it(`should log the pull request ignore all projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -793,11 +793,11 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           10,
           `white-├──`,
-          `input-pull-request-ignore-all-project-cards`,
+          `input-pull-request-ignore-all-projects`,
           `value-false`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `pull-request-ignore-all-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(10, `pull-request-ignore-all-projects`);
       });
 
       it(`should log the pull request ignore any assignees input`, (): void => {
@@ -848,7 +848,7 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(13, `pull-request-ignore-any-milestones`);
       });
 
-      it(`should log the pull request ignore any project cards input`, (): void => {
+      it(`should log the pull request ignore any projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -857,11 +857,11 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           14,
           `white-├──`,
-          `input-pull-request-ignore-any-project-cards`,
-          `value-dummy-project-card-1,dummy-project-card-2`
+          `input-pull-request-ignore-any-projects`,
+          `value-dummy-project-1,dummy-project-2`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `pull-request-ignore-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(14, `pull-request-ignore-any-projects`);
       });
 
       it(`should log the pull request ignore before creation date input`, (): void => {
@@ -960,7 +960,7 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(20, `pull-request-only-any-milestones`);
       });
 
-      it(`should log the pull request only any project cards input`, (): void => {
+      it(`should log the pull request only any projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -969,11 +969,11 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           21,
           `white-├──`,
-          `input-pull-request-only-any-project-cards`,
-          `value-project-card-1,project-card-2`
+          `input-pull-request-only-any-projects`,
+          `value-project-1,project-2`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(21, `pull-request-only-any-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(21, `pull-request-only-any-projects`);
       });
 
       it(`should log the pull request only with assignees input`, (): void => {
@@ -1008,7 +1008,7 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(23, `pull-request-only-with-milestones`);
       });
 
-      it(`should log the pull request only with project cards input`, (): void => {
+      it(`should log the pull request only with projects input`, (): void => {
         expect.assertions(4);
 
         service.logInputs();
@@ -1017,11 +1017,11 @@ describe(`PullRequestsInputsService`, (): void => {
         expect(loggerServiceInfoSpy).toHaveBeenNthCalledWith(
           24,
           `white-├──`,
-          `input-pull-request-only-with-project-cards`,
+          `input-pull-request-only-with-projects`,
           `value-false`
         );
         expect(loggerServiceInputSpy).toHaveBeenCalledTimes(30);
-        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(24, `pull-request-only-with-project-cards`);
+        expect(loggerServiceInputSpy).toHaveBeenNthCalledWith(24, `pull-request-only-with-projects`);
       });
 
       it(`should log the pull request processing input`, (): void => {

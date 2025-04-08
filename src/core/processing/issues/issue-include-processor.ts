@@ -5,7 +5,7 @@ import { AbstractIncludeProcessor } from '@core/processing/abstract-include-proc
 import { IssueProcessor } from '@core/processing/issues/issue-processor';
 import { GithubApiIssuesService } from '@github/api/issues/github-api-issues.service';
 import { IGithubApiAssignee } from '@github/api/labels/interfaces/github-api-assignee.interface';
-import { IGithubApiProjectCard } from '@github/api/projects/interfaces/github-api-project-card.interface';
+import { IGithubApiProject } from '@github/api/projects/interfaces/github-api-project.interface';
 import { AnnotationsService } from '@utils/annotations/annotations.service';
 import { EAnnotationWarningIssue } from '@utils/annotations/enums/annotation-warning-issue.enum';
 import { getDuplicates } from '@utils/arrays/get-duplicates';
@@ -22,17 +22,17 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
     super(issueProcessor);
   }
 
-  public shouldIncludeAnyWhiteListedProjectCard$$(): boolean {
+  public shouldIncludeAnyWhiteListedProject$$(): boolean {
     this.processor.logger.info(
-      `Checking if this issue should only be processed based on any of the associated project cards...`
+      `Checking if this issue should only be processed based on any of the associated projects...`
     );
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (_.isEmpty(issuesInputs.issueOnlyAnyProjectCards)) {
+    if (_.isEmpty(issuesInputs.issueOnlyAnyProjects)) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS),
+        LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECTS),
         LoggerFormatService.whiteBright(
           `is empty. This feature is considered as disabled, and so, ignored. Continuing...`
         )
@@ -43,36 +43,36 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECT_CARDS),
+      LoggerService.input(EInputs.ISSUE_ONLY_ANY_PROJECTS),
       LoggerFormatService.whiteBright(
         `is set. This feature is considered as enabled, and so, may alter the processing. Checking...`
       )
     );
-    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
-    const projectCardsCount: number = projectCards.length;
-    const projectNames: string[] = this._getProjectNames(projectCards);
+    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projectsCount: number = projects.length;
+    const projectTitles: string[] = this._getProjectTitles(projects);
 
-    if (projectCardsCount === 0) {
-      this.processor.logger.info(`Not containing any project card. Skipping the processing of this issue...`);
+    if (projectsCount === 0) {
+      this.processor.logger.info(`Not containing any project. Skipping the processing of this issue...`);
 
       return false;
     }
 
     this.processor.logger.info(
       `Found`,
-      LoggerService.value(projectCardsCount),
-      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this issue`),
-      LoggerService.value(projectNames)
+      LoggerService.value(projectsCount),
+      LoggerFormatService.whiteBright(`project${projectsCount > 1 ? `s` : ``} on this issue`),
+      LoggerService.value(projectTitles)
     );
 
-    const duplicatedProjectNames: string[] = getDuplicates(projectNames, issuesInputs.issueOnlyAnyProjectCards);
-    const firstDuplicatedProjectCard: string | undefined = _.head(duplicatedProjectNames);
+    const duplicatedProjectNames: string[] = getDuplicates(projectTitles, issuesInputs.issueOnlyAnyProjects);
+    const firstDuplicatedProject: string | undefined = _.head(duplicatedProjectNames);
 
-    if (!_.isUndefined(firstDuplicatedProjectCard)) {
+    if (!_.isUndefined(firstDuplicatedProject)) {
       this.processor.logger.info(
-        `Containing one of the required project card`,
+        `Containing one of the required project`,
         LoggerFormatService.white(`->`),
-        LoggerService.value(firstDuplicatedProjectCard)
+        LoggerService.value(firstDuplicatedProject)
       );
       this.processor.logger.info(`Continuing the processing for this issue...`);
 
@@ -82,28 +82,26 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
     this.processor.logger.debug(`Note: in case of issue, we may need to use a RegExp to ignore sensitivity`);
 
     // @todo handle the pagination
-    const { totalCount } = this.processor.item.projectCards;
+    const { totalCount } = this.processor.item.projects;
 
-    if (totalCount > GithubApiIssuesService.projectCardsPerIssue) {
+    if (totalCount > GithubApiIssuesService.projectsPerIssue) {
       this.processor.logger.warning(
         `Found`,
         LoggerService.value(_.toString(totalCount)),
         LoggerFormatService.whiteBright(
-          `project card${
+          `project${
             totalCount > 1 ? `s` : ``
           } attached on this issue. The pagination support is not yet implemented and may cause a mismatch!`
         )
       );
-      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECT_CARDS_PAGINATION_NOT_IMPLEMENTED, {
+      AnnotationsService.warning(EAnnotationWarningIssue.TOO_MANY_PROJECTS_PAGINATION_NOT_IMPLEMENTED, {
         file: `issue-include-processor.ts`,
         startLine: 87,
         title: `Warning`,
       });
     }
 
-    this.processor.logger.info(
-      `Not containing any of the required project card. Skipping the processing of this issue...`
-    );
+    this.processor.logger.info(`Not containing any of the required project. Skipping the processing of this issue...`);
 
     return false;
   }
@@ -330,17 +328,17 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
     return true;
   }
 
-  public shouldIncludeAnyProjectCard$$(): boolean {
+  public shouldIncludeAnyProject$$(): boolean {
     this.processor.logger.info(
-      `Checking if this issue should only be processed when having at least one associated project card...`
+      `Checking if this issue should only be processed when having at least one associated project...`
     );
 
     const issuesInputs: IIssuesInputs = IssuesInputsService.getInstance().getInputs();
 
-    if (!issuesInputs.issueOnlyWithProjectCards) {
+    if (!issuesInputs.issueOnlyWithProjects) {
       this.processor.logger.info(
         `The input`,
-        LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECT_CARDS),
+        LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECTS),
         LoggerFormatService.whiteBright(`is disabled. Continuing...`)
       );
 
@@ -349,22 +347,22 @@ export class IssueIncludeProcessor extends AbstractIncludeProcessor<IssueProcess
 
     this.processor.logger.info(
       `The input`,
-      LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECT_CARDS),
+      LoggerService.input(EInputs.ISSUE_ONLY_WITH_PROJECTS),
       LoggerFormatService.whiteBright(`is enabled. Checking...`)
     );
-    const projectCards: IGithubApiProjectCard[] = this.processor.item.projectCards.nodes;
-    const projectCardsCount: number = projectCards.length;
+    const projects: IGithubApiProject[] = this.processor.item.projects.nodes;
+    const projectsCount: number = projects.length;
 
-    if (projectCardsCount === 0) {
-      this.processor.logger.info(`Not containing any project card. Skipping the processing of this issue...`);
+    if (projectsCount === 0) {
+      this.processor.logger.info(`Not containing any project. Skipping the processing of this issue...`);
 
       return false;
     }
 
     this.processor.logger.info(
       `Found`,
-      LoggerService.value(projectCardsCount),
-      LoggerFormatService.whiteBright(`project card${projectCardsCount > 1 ? `s` : ``} on this issue`)
+      LoggerService.value(projectsCount),
+      LoggerFormatService.whiteBright(`project${projectsCount > 1 ? `s` : ``} on this issue`)
     );
     this.processor.logger.info(`Continuing the processing for this issue...`);
 
