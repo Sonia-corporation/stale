@@ -692,7 +692,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   totalCount: 0,
                 },
               },
@@ -719,7 +719,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   totalCount: 1,
                 },
               },
@@ -1596,7 +1596,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
             item: {
-              projects: {
+              projectsV2: {
                 nodes: [
                   createHydratedMock<IGithubApiProject>({
                     title: `ignored-project`,
@@ -1637,7 +1637,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
         beforeEach((): void => {
           issueProcessor = createHydratedMock<IssueProcessor>({
             item: {
-              projects: {
+              projectsV2: {
                 nodes: [
                   createHydratedMock<IGithubApiProject>({
                     title: `not-ignored-project`,
@@ -1667,7 +1667,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `not-ignored-project`,
@@ -1719,7 +1719,7 @@ describe(`IssueIgnoreProcessor`, (): void => {
           beforeEach((): void => {
             issueProcessor = createHydratedMock<IssueProcessor>({
               item: {
-                projects: {
+                projectsV2: {
                   nodes: [
                     createHydratedMock<IGithubApiProject>({
                       title: `not-ignored-project`,
