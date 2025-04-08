@@ -112,7 +112,7 @@
     "lodash": "4.17.21",
     "luxon": "3.3.0",
     "terminal-link": "3.0.0",
-    "tslib": "2.4.1"
+    "tslib": "2.8.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
