@@ -108,7 +108,7 @@
     "@actions/core": "1.9.1",
     "@actions/github": "5.1.1",
     "@octokit/graphql-schema": "12.29.0",
-    "ansi-styles": "6.1.1",
+    "ansi-styles": "6.2.1",
     "lodash": "4.17.21",
     "luxon": "3.3.0",
     "terminal-link": "3.0.0",
