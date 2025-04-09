@@ -130,7 +130,7 @@
     "all-contributors-cli": "6.26.1",
     "chalk": "5.4.1",
     "commitizen": "4.3.1",
-    "concurrently": "7.6.0",
+    "concurrently": "8.2.2",
     "cross-env": "7.0.3",
     "cz-customizable": "7.4.0",
     "cz-customizable-ghooks": "2.0.0",
