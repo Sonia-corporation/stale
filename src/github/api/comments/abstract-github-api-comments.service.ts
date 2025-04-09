@@ -11,7 +11,7 @@ import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 
 export abstract class AbstractGithubApiCommentsService<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {
     super(processor);
