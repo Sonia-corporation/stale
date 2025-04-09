@@ -10,7 +10,7 @@ import { DateTime } from 'luxon';
 
 export abstract class AbstractProcessor<
   TItem extends IGithubApiIssue | IGithubApiPullRequest,
-  TLogger extends IssueLogger | PullRequestLogger
+  TLogger extends IssueLogger | PullRequestLogger,
 > {
   public abstract readonly type: 'issue' | 'pull request';
   public readonly item: TItem;

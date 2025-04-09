@@ -10,7 +10,7 @@ import { LoggerService } from '@utils/loggers/logger.service';
 import { IUuid } from '@utils/types/uuid';
 
 export abstract class AbstractGithubApiReferencesService<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {
     super(processor);

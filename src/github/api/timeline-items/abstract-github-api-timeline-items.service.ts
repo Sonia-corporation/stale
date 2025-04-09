@@ -3,7 +3,7 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
 import { AbstractGithubApiService } from '@github/api/abstract-github-api.service';
 
 export abstract class AbstractGithubApiTimelineItemsService<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {
     super(processor);

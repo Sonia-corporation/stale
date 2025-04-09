@@ -3,7 +3,7 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 
 export abstract class AbstractRemoveStaleProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);
