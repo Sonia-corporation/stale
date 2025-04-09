@@ -8,7 +8,7 @@ import { IComment } from '@utils/types/comment';
 import { IUuid } from '@utils/types/uuid';
 
 export abstract class AbstractCommentsProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);

@@ -12,7 +12,7 @@ import { IUuid } from '@utils/types/uuid';
 import _ from 'lodash';
 
 export abstract class AbstractExtraLabelsProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);

@@ -272,9 +272,8 @@ describe(`GithubApiPullRequestTimelineItemsService`, (): void => {
           it(`should return the added labels events`, async (): Promise<void> => {
             expect.assertions(1);
 
-            const result = await githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(
-              pullRequestNumber
-            );
+            const result =
+              await githubApiPullRequestTimelineItemsService.fetchPullRequestAddedLabels(pullRequestNumber);
 
             expect(result).toStrictEqual(githubApiTimelineItemsPullRequestLabeledEvents);
           });

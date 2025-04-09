@@ -7,7 +7,7 @@ import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import _ from 'lodash';
 
 export abstract class AbstractIgnoreProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);
