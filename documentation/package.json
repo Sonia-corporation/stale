@@ -23,8 +23,8 @@
     "generate-changelog": "node scripts/generate-changelog.mjs"
   },
   "engines": {
-    "node": "18.15.0",
-    "npm": "9.5.0"
+    "node": "20.19.0",
+    "npm": "10.8.2"
   },
   "dependencies": {
     "@docusaurus/core": "3.7.0",
