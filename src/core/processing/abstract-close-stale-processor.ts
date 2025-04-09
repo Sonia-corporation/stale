@@ -5,7 +5,7 @@ import { PullRequestProcessor } from '@core/processing/pull-requests/pull-reques
 import { IUuid } from '@utils/types/uuid';
 
 export abstract class AbstractCloseStaleProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractExtraLabelsProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);

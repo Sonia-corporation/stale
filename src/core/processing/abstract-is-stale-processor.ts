@@ -4,7 +4,7 @@ import { IGithubApiLabel } from '@github/api/labels/interfaces/github-api-label.
 import { AbstractProcessor } from '@utils/processors/abstract-processor';
 
 export abstract class AbstractIsStaleProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);

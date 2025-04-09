@@ -20,7 +20,7 @@ import { IUuid } from '@utils/types/uuid';
 import { context } from '@actions/github';
 
 export abstract class AbstractGithubApiLabelsService<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractGithubApiService<TProcessor> {
   protected constructor(processor: TProcessor) {
     super(processor);

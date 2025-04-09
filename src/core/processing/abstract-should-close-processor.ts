@@ -8,7 +8,7 @@ import { AbstractProcessor } from '@utils/processors/abstract-processor';
 import { DateTime } from 'luxon';
 
 export abstract class AbstractShouldCloseProcessor<
-  TProcessor extends IssueProcessor | PullRequestProcessor
+  TProcessor extends IssueProcessor | PullRequestProcessor,
 > extends AbstractProcessor<TProcessor> {
   protected constructor(processor: Readonly<TProcessor>) {
     super(processor);
