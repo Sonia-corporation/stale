@@ -95,7 +95,7 @@
     "contributors:check": "all-contributors check",
     "contributors:generate": "all-contributors generate",
     "concurrently": "concurrently --kill-others-on-fail --prefix '[{name}][{time}]' --timestamp-format 'HH:mm:ss'",
-    "prepare": "husky install",
+    "prepare": "ts-patch install -s && husky install",
     "pre-commit": "lint-staged",
     "commit-msg": "cross-env LOGGING_LEVEL=debug cz-customizable-ghooks",
     "post-commit": "git update-index --again",
@@ -108,11 +108,11 @@
     "@actions/core": "1.11.1",
     "@actions/github": "6.0.0",
     "@octokit/graphql-schema": "14.58.0",
-    "ansi-styles": "6.1.1",
+    "ansi-styles": "5.2.0",
     "lodash": "4.17.21",
     "luxon": "3.6.1",
-    "terminal-link": "3.0.0",
-    "tslib": "2.4.1"
+    "terminal-link": "2.1.1",
+    "tslib": "2.8.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
@@ -163,8 +163,8 @@
     "ts-auto-mock": "3.7.4",
     "ts-jest": "29.3.1",
     "ts-node-dev": "2.0.0",
+    "ts-patch": "3.3.0",
     "tsconfig-paths": "4.2.0",
-    "ttypescript": "1.5.15",
     "typescript": "5.8.3",
     "vercel": "41.5.0",
     "xregexp": "5.1.2"

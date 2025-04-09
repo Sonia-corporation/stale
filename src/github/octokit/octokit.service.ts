@@ -1,5 +1,5 @@
 import { CommonInputsService } from '@core/inputs/common-inputs.service';
-import * as github from '@actions/github';
+import { getOctokit } from '@actions/github';
 import { GitHub } from '@actions/github/lib/utils';
 
 export class OctokitService {
@@ -12,7 +12,7 @@ export class OctokitService {
   }
 
   public static setOctokit(): InstanceType<typeof GitHub> {
-    OctokitService.octokit$$ = github.getOctokit(CommonInputsService.getInstance().getInputs().githubToken);
+    OctokitService.octokit$$ = getOctokit(CommonInputsService.getInstance().getInputs().githubToken);
 
     return OctokitService.octokit$$;
   }
