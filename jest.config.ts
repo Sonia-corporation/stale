@@ -81,12 +81,7 @@ function createProject(type: Readonly<IProjectType>): Config {
     // globalTeardown: undefined,
 
     // A set of global variables that need to be available in all test environments
-    globals: {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      'ts-jest': {
-        compiler: `ttypescript`,
-      },
-    },
+    globals: {},
 
     maxConcurrency: 5,
 
@@ -204,7 +199,12 @@ function createProject(type: Readonly<IProjectType>): Config {
     // A map from regular expressions to paths to transformers
     transform: {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      '^.+\\.ts?$': `ts-jest`,
+      '^.+\\.ts?$': [
+        `ts-jest`,
+        {
+          compiler: `ts-patch/compiler`,
+        },
+      ],
     },
 
     // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
