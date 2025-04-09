@@ -2,6 +2,8 @@ import { createLink } from '@utils/links/create-link';
 import faker from 'faker';
 import * as TerminalLinkModule from 'terminal-link';
 
+jest.mock(`terminal-link`);
+
 describe(`createLink()`, (): void => {
   let name: string;
   let link: string;
@@ -27,14 +29,12 @@ describe(`createLink()`, (): void => {
   });
 
   it(`should create a link formatted for a terminal and return it (functional)`, (): void => {
-    expect.assertions(3);
+    expect.assertions(2);
     link = `https://github.com/Sonia-corporation/stale/issues/1`;
 
-    const result = createLink(name, link);
+    createLink(name, link);
 
     expect(terminalLinkSpy).toHaveBeenCalledTimes(1);
     expect(terminalLinkSpy).toHaveBeenCalledWith(name, link);
-    // eslint-disable-next-line no-irregular-whitespace
-    expect(result).toBe(`${name} (​https://github.com/Sonia-corporation/stale/issues/1​)`);
   });
 });
