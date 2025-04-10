@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[1875],{9205:t=>{t.exports=JSON.parse('{"metadata":{"permalink":"/stale/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":4,"blogDescription":"The blog containing the important updates and information to know about this action.","blogTitle":"Sonia stale action blog"}}')}}]);

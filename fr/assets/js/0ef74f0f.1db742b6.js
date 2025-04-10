@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[5451],{3199:e=>{e.exports=JSON.parse('{"authors":[{"name":"Geoffrey \\"C0ZEN\\" Testelin","title":"Cr\xe9ateur et mainteneur de cette action GitHub Stale","url":"https://github.com/C0ZEN","imageURL":"https://github.com/C0ZEN.png","key":"C0ZEN","page":null,"count":4}]}')}}]);

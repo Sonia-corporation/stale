@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[5078],{9883:e=>{e.exports=JSON.parse('{"label":"new kind","permalink":"/stale/fr/blog/tags/new-kind","allTagsPath":"/stale/fr/blog/tags","count":1}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocumentation=self.webpackChunkdocumentation||[]).push([[1903],{1912:t=>{t.exports=JSON.parse('{"blogBasePath":"/stale/fr/blog","blogTitle":"Sonia stale action blog","authorsListPath":"/stale/fr/blog/authors"}')}}]);
