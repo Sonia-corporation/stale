@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Check labels
         id: check_labels
-        uses: shioyang/check-pr-labels-on-push-action@ac674473adfe36c785eee0926fee822ac9e2bf38 # v1.0.9
+        uses: shioyang/check-pr-labels-on-push-action@542fcf6f8dbad68c61bcbd4d1bce1531caf31c30 # v1.0.12
         with:
           github-token: ${{ secrets.SONIA_BOT_GH_TOKEN }}
           labels: '["merge-into-master :crown:"]'
