@@ -117,7 +117,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "8.1.0",
+    "@semantic-release/github": "10.3.5",
     "@sonia-corporation/conventional-changelog": "1.3.0",
     "@types/faker": "5.5.9",
     "@types/jest": "29.5.14",
