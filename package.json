@@ -136,7 +136,7 @@
     "cz-customizable-ghooks": "2.0.0",
     "eslint": "8.52.0",
     "eslint-config-google": "0.14.0",
-    "eslint-config-prettier": "10.1.1",
+    "eslint-config-prettier": "10.1.5",
     "eslint-config-recommended": "4.1.0",
     "eslint-import-resolver-typescript": "3.6.3",
     "eslint-plugin-import": "2.29.1",
