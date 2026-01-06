@@ -1,5 +1,16 @@
 # Sonia stale action
 
+# [3.1.0](https://github.com/Sonia-corporation/stale/compare/3.0.0...3.1.0) (2025-04-10)
+
+### :books: Documentation
+
+- **analytics:** configure vercel analytics for the docs ([6dd3b68](https://github.com/Sonia-corporation/stale/commit/6dd3b68bc8aef924ea0b0add8fd3b3c883961234))
+- **docusaurus:** migrate to v3 ([516123b](https://github.com/Sonia-corporation/stale/commit/516123b6021cb1206a458615c27f93307043368c))
+
+### :rocket: Features
+
+- **node:** migrate the action to node 20 ([3224964](https://github.com/Sonia-corporation/stale/commit/322496413536654f06359e59a516da4a05569925))
+
 # [3.0.0](https://github.com/Sonia-corporation/stale/compare/2.5.0...3.0.0) (2025-04-08)
 
 ### :bug: Bug Fixes
