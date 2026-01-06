@@ -8,3 +8,4 @@
 /dataSources.local.xml
 # Custom plugins
 /discord.xml
+/copilot.data.migration.ask2agent.xml
